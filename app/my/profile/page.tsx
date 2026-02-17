@@ -8,7 +8,6 @@ export default function ProfilePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [savingPassword, setSavingPassword] = useState(false)
   const [profile, setProfile] = useState<any>(null)
   const [formData, setFormData] = useState({
     affiliation: '',
@@ -52,55 +51,51 @@ export default function ProfilePage() {
     setSaving(true)
 
     try {
-      const res = await fetch('/api/account/profile', {
+      // 1. 프로필 정보 수정
+      const profileRes = await fetch('/api/account/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
 
-      if (res.ok) {
-        alert('프로필이 수정되었습니다')
-        loadProfile()
-      } else {
-        const data = await res.json()
+      if (!profileRes.ok) {
+        const data = await profileRes.json()
         alert(data.error || '프로필 수정 실패')
+        setSaving(false)
+        return
       }
-    } catch (err) {
-      console.error('Profile update error:', err)
-      alert('오류가 발생했습니다')
-    } finally {
-      setSaving(false)
-    }
-  }
 
-  const handlePasswordChange = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSavingPassword(true)
+      // 2. 비밀번호 변경 (입력된 경우에만)
+      if (passwordData.currentPassword || passwordData.newPassword || passwordData.confirmPassword) {
+        const passwordRes = await fetch('/api/account/password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(passwordData),
+        })
 
-    try {
-      const res = await fetch('/api/account/password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(passwordData),
-      })
+        const passwordResData = await passwordRes.json()
 
-      const data = await res.json()
+        if (!passwordRes.ok) {
+          alert(passwordResData.error || '비밀번호 변경 실패')
+          setSaving(false)
+          return
+        }
 
-      if (res.ok) {
-        alert('비밀번호가 변경되었습니다')
+        // 비밀번호 변경 성공 시 필드 초기화
         setPasswordData({
           currentPassword: '',
           newPassword: '',
           confirmPassword: '',
         })
-      } else {
-        alert(data.error || '비밀번호 변경 실패')
       }
+
+      alert('저장되었습니다')
+      loadProfile()
     } catch (err) {
-      console.error('Password change error:', err)
+      console.error('Save error:', err)
       alert('오류가 발생했습니다')
     } finally {
-      setSavingPassword(false)
+      setSaving(false)
     }
   }
 
@@ -121,7 +116,7 @@ export default function ProfilePage() {
           <p className="text-gray-600">소속과 전화번호를 수정할 수 있습니다</p>
         </div>
 
-        {/* 프로필 폼 */}
+        {/* 프로필 수정 폼 (통합) */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* 이름 (수정 불가) */}
@@ -182,6 +177,50 @@ export default function ProfilePage() {
               />
             </div>
 
+            {/* 현재 비밀번호 */}
+            <div>
+              <label className="block text-sm font-medium mb-1">현재 비밀번호</label>
+              <input
+                type="password"
+                value={passwordData.currentPassword}
+                onChange={(e) =>
+                  setPasswordData({ ...passwordData, currentPassword: e.target.value })
+                }
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="비밀번호를 변경하려면 입력하세요"
+              />
+            </div>
+
+            {/* 새 비밀번호 */}
+            <div>
+              <label className="block text-sm font-medium mb-1">새 비밀번호</label>
+              <input
+                type="password"
+                value={passwordData.newPassword}
+                onChange={(e) =>
+                  setPasswordData({ ...passwordData, newPassword: e.target.value })
+                }
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="새 비밀번호 (최소 6자)"
+                minLength={6}
+              />
+            </div>
+
+            {/* 새 비밀번호 확인 */}
+            <div>
+              <label className="block text-sm font-medium mb-1">새 비밀번호 확인</label>
+              <input
+                type="password"
+                value={passwordData.confirmPassword}
+                onChange={(e) =>
+                  setPasswordData({ ...passwordData, confirmPassword: e.target.value })
+                }
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="새 비밀번호를 다시 입력하세요"
+                minLength={6}
+              />
+            </div>
+
             {/* 버튼 */}
             <div className="flex gap-4 pt-4">
               <Link
@@ -196,74 +235,6 @@ export default function ProfilePage() {
                 className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400"
               >
                 {saving ? '저장 중...' : '저장'}
-              </button>
-            </div>
-          </form>
-        </div>
-
-        {/* 비밀번호 변경 */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">🔒 비밀번호 변경</h2>
-          <form onSubmit={handlePasswordChange} className="space-y-4">
-            {/* 현재 비밀번호 */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                현재 비밀번호 *
-              </label>
-              <input
-                type="password"
-                value={passwordData.currentPassword}
-                onChange={(e) =>
-                  setPasswordData({ ...passwordData, currentPassword: e.target.value })
-                }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="현재 비밀번호를 입력하세요"
-                required
-              />
-            </div>
-
-            {/* 새 비밀번호 */}
-            <div>
-              <label className="block text-sm font-medium mb-1">새 비밀번호 *</label>
-              <input
-                type="password"
-                value={passwordData.newPassword}
-                onChange={(e) =>
-                  setPasswordData({ ...passwordData, newPassword: e.target.value })
-                }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="새 비밀번호 (최소 6자)"
-                required
-                minLength={6}
-              />
-            </div>
-
-            {/* 새 비밀번호 확인 */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                새 비밀번호 확인 *
-              </label>
-              <input
-                type="password"
-                value={passwordData.confirmPassword}
-                onChange={(e) =>
-                  setPasswordData({ ...passwordData, confirmPassword: e.target.value })
-                }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="새 비밀번호를 다시 입력하세요"
-                required
-                minLength={6}
-              />
-            </div>
-
-            {/* 버튼 */}
-            <div className="pt-4">
-              <button
-                type="submit"
-                disabled={savingPassword}
-                className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-green-400"
-              >
-                {savingPassword ? '변경 중...' : '비밀번호 변경'}
               </button>
             </div>
           </form>
