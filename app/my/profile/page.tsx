@@ -35,8 +35,8 @@ export default function ProfilePage() {
         const data = await res.json()
         setProfile(data.profile)
         setFormData({
-          affiliation: data.profile.affiliation,
-          phone: data.profile.phone,
+          affiliation: data.profile?.affiliation || '',
+          phone: data.profile?.phone || '',
         })
       }
     } catch (err) {
