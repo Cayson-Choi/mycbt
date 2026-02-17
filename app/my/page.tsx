@@ -37,18 +37,18 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-lg">로딩 중...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-lg dark:text-white">로딩 중...</div>
       </div>
     )
   }
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="text-red-600 mb-4">데이터를 불러올 수 없습니다</div>
-          <Link href="/" className="text-blue-600 hover:underline">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
+          <div className="text-red-600 dark:text-red-400 mb-4">데이터를 불러올 수 없습니다</div>
+          <Link href="/" className="text-blue-600 dark:text-blue-400 hover:underline">
             홈으로 돌아가기
           </Link>
         </div>
@@ -62,69 +62,69 @@ export default function MyPage() {
       : data.attempts.filter((a: any) => a.exam_id === filter)
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">마이페이지</h1>
-          <p className="text-gray-600">내 응시 기록과 통계를 확인하세요</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">마이페이지</h1>
+          <p className="text-gray-600 dark:text-gray-400">내 응시 기록과 통계를 확인하세요</p>
         </div>
 
         {/* 전체 통계 */}
         <div className="grid md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">총 응시</div>
-            <div className="text-3xl font-bold text-blue-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">총 응시</div>
+            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
               {data.stats.total_attempts}회
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">평균 점수</div>
-            <div className="text-3xl font-bold text-green-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">평균 점수</div>
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400">
               {data.stats.avg_score}점
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">최고 점수</div>
-            <div className="text-3xl font-bold text-purple-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">최고 점수</div>
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
               {data.stats.max_score}점
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">합격 횟수</div>
-            <div className="text-3xl font-bold text-orange-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">합격 횟수</div>
+            <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
               {data.stats.pass_count}회
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">합격률</div>
-            <div className="text-3xl font-bold text-red-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">합격률</div>
+            <div className="text-3xl font-bold text-red-600 dark:text-red-400">
               {data.stats.pass_rate}%
             </div>
           </div>
         </div>
 
         {/* 시험별 통계 */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">📊 시험별 성적</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
+          <h2 className="text-xl font-bold mb-4 dark:text-white">📊 시험별 성적</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {data.exam_stats.map((exam: any) => (
-              <div key={exam.exam_id} className="border rounded-lg p-4">
-                <div className="font-semibold text-lg mb-2">{exam.exam_name}</div>
+              <div key={exam.exam_id} className="border dark:border-gray-600 rounded-lg p-4">
+                <div className="font-semibold text-lg mb-2 dark:text-white">{exam.exam_name}</div>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">응시 횟수:</span>
-                    <span className="font-medium">{exam.attempt_count}회</span>
+                    <span className="text-gray-600 dark:text-gray-400">응시 횟수:</span>
+                    <span className="font-medium dark:text-gray-200">{exam.attempt_count}회</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">평균 점수:</span>
-                    <span className="font-medium text-green-600">
+                    <span className="text-gray-600 dark:text-gray-400">평균 점수:</span>
+                    <span className="font-medium text-green-600 dark:text-green-400">
                       {exam.avg_score}점
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">최고 점수:</span>
-                    <span className="font-medium text-purple-600">
+                    <span className="text-gray-600 dark:text-gray-400">최고 점수:</span>
+                    <span className="font-medium text-purple-600 dark:text-purple-400">
                       {exam.max_score}점
                     </span>
                   </div>
@@ -135,16 +135,16 @@ export default function MyPage() {
         </div>
 
         {/* 응시 기록 필터 */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">📝 응시 기록</h2>
+            <h2 className="text-xl font-bold dark:text-white">📝 응시 기록</h2>
             <div className="flex gap-2">
               <button
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 rounded ${
                   filter === 'all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 전체
@@ -155,8 +155,8 @@ export default function MyPage() {
                   onClick={() => setFilter(exam.exam_id)}
                   className={`px-4 py-2 rounded ${
                     filter === exam.exam_id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   }`}
                 >
                   {exam.exam_name}
@@ -171,14 +171,14 @@ export default function MyPage() {
               {filteredAttempts.map((attempt: any) => (
                 <div
                   key={attempt.id}
-                  className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                  className="border dark:border-gray-600 rounded-lg p-4 hover:shadow-md dark:hover:shadow-gray-700 transition-shadow"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <div className="font-semibold text-lg">
+                      <div className="font-semibold text-lg dark:text-white">
                         {attempt.exam_name}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
                         {new Date(attempt.submitted_at).toLocaleString('ko-KR')}
                       </div>
                     </div>
@@ -186,8 +186,8 @@ export default function MyPage() {
                       <div
                         className={`text-3xl font-bold ${
                           attempt.total_score >= 60
-                            ? 'text-green-600'
-                            : 'text-red-600'
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-red-600 dark:text-red-400'
                         }`}
                       >
                         {attempt.total_score}점
@@ -195,8 +195,8 @@ export default function MyPage() {
                       <div
                         className={`text-sm font-semibold ${
                           attempt.total_score >= 60
-                            ? 'text-green-600'
-                            : 'text-red-600'
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-red-600 dark:text-red-400'
                         }`}
                       >
                         {attempt.total_score >= 60 ? '합격' : '불합격'}
@@ -209,16 +209,16 @@ export default function MyPage() {
                     {attempt.subject_scores.map((subject: any) => (
                       <div
                         key={subject.subject_id}
-                        className="bg-gray-50 rounded p-2"
+                        className="bg-gray-50 dark:bg-gray-700 rounded p-2"
                       >
-                        <div className="text-xs text-gray-600 mb-1">
+                        <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
                           {subject.subjects?.name}
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-semibold text-blue-600">
+                          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
                             {subject.subject_score}점
                           </span>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
                             {subject.subject_correct}/{subject.subject_questions}
                           </span>
                         </div>
@@ -230,7 +230,7 @@ export default function MyPage() {
                   <div className="flex gap-2">
                     <Link
                       href={`/exam/result/${attempt.id}`}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white text-center rounded hover:bg-blue-700"
+                      className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-center rounded hover:bg-blue-700 dark:hover:bg-blue-600"
                     >
                       상세 결과 보기
                     </Link>
@@ -239,7 +239,7 @@ export default function MyPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center text-gray-500 py-8">
+            <div className="text-center text-gray-500 dark:text-gray-400 py-8">
               응시 기록이 없습니다
             </div>
           )}
@@ -249,19 +249,19 @@ export default function MyPage() {
         <div className="grid md:grid-cols-3 gap-4">
           <Link
             href="/"
-            className="px-6 py-3 bg-gray-600 text-white text-center rounded-lg hover:bg-gray-700"
+            className="px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
           >
             홈으로
           </Link>
           <Link
             href="/my/profile"
-            className="px-6 py-3 bg-blue-600 text-white text-center rounded-lg hover:bg-blue-700"
+            className="px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
           >
             👤 프로필 수정
           </Link>
           <Link
             href="/my/wrong-answers"
-            className="px-6 py-3 bg-red-600 text-white text-center rounded-lg hover:bg-red-700"
+            className="px-6 py-3 bg-red-600 dark:bg-red-500 text-white text-center rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
           >
             ❌ 오답노트
           </Link>

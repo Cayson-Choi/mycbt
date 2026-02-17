@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
+import MathText from '@/components/MathText'
 
 export default function ExamAttemptPage({
   params,
@@ -198,7 +199,10 @@ export default function ExamAttemptPage({
                 </div>
                 <div className="flex-1">
                   <div className="text-sm text-gray-600 mb-2">{question.subject_name}</div>
-                  <div className="text-lg font-medium mb-4">{question.question_text}</div>
+                  <MathText
+                    text={question.question_text}
+                    className="text-lg font-medium mb-4 block"
+                  />
 
                   {question.image_url && (
                     <img
@@ -226,7 +230,8 @@ export default function ExamAttemptPage({
                           className="mt-1"
                         />
                         <span className="flex-1">
-                          {choice}. {question[`choice_${choice}`]}
+                          {choice}.{' '}
+                          <MathText text={question[`choice_${choice}`]} />
                         </span>
                       </label>
                     ))}

@@ -56,12 +56,12 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-8">
-      <h1 className="text-2xl font-bold text-center mb-6">회원가입</h1>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
+      <h1 className="text-2xl font-bold text-center mb-6 dark:text-white">회원가입</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
+          <label htmlFor="name" className="block text-sm font-medium mb-1 dark:text-gray-200">
             이름
           </label>
           <input
@@ -69,12 +69,12 @@ export default function SignupPage() {
             id="name"
             name="name"
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
+          <label htmlFor="email" className="block text-sm font-medium mb-1 dark:text-gray-200">
             이메일
           </label>
           <input
@@ -82,12 +82,12 @@ export default function SignupPage() {
             id="email"
             name="email"
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
+          <label htmlFor="password" className="block text-sm font-medium mb-1 dark:text-gray-200">
             비밀번호
           </label>
           <input
@@ -96,14 +96,14 @@ export default function SignupPage() {
             name="password"
             required
             minLength={6}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           />
         </div>
 
         <div>
           <label
             htmlFor="passwordConfirm"
-            className="block text-sm font-medium mb-1"
+            className="block text-sm font-medium mb-1 dark:text-gray-200"
           >
             비밀번호 확인
           </label>
@@ -113,14 +113,14 @@ export default function SignupPage() {
             name="passwordConfirm"
             required
             minLength={6}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           />
         </div>
 
         <div>
           <label
             htmlFor="affiliation"
-            className="block text-sm font-medium mb-1"
+            className="block text-sm font-medium mb-1 dark:text-gray-200"
           >
             소속
           </label>
@@ -128,7 +128,7 @@ export default function SignupPage() {
             id="affiliation"
             name="affiliation"
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           >
             <option value="">선택하세요</option>
             <option value="교수">교수</option>
@@ -139,7 +139,7 @@ export default function SignupPage() {
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium mb-1 dark:text-gray-200">
             전화번호 (선택)
           </label>
           <input
@@ -147,12 +147,12 @@ export default function SignupPage() {
             id="phone"
             name="phone"
             placeholder="010-1234-5678"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           />
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
             {error}
           </div>
         )}
@@ -160,15 +160,15 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-blue-600 dark:bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? '처리 중...' : '가입하기'}
         </button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
         이미 계정이 있으신가요?{' '}
-        <Link href="/login" className="text-blue-600 hover:underline">
+        <Link href="/login" className="text-blue-600 dark:text-blue-400 hover:underline">
           로그인
         </Link>
       </p>

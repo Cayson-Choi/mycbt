@@ -45,41 +45,41 @@ export default async function AdminPage() {
     .order('id')
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             👨‍💼 관리자 페이지
           </h1>
-          <p className="text-gray-600">시스템 관리 및 설정</p>
+          <p className="text-gray-600 dark:text-gray-400">시스템 관리 및 설정</p>
         </div>
 
         {/* 통계 카드 */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">전체 회원</div>
-            <div className="text-3xl font-bold text-blue-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">전체 회원</div>
+            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
               {totalUsers || 0}명
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">전체 문제</div>
-            <div className="text-3xl font-bold text-green-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">전체 문제</div>
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400">
               {totalQuestions || 0}개
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-1">총 응시</div>
-            <div className="text-3xl font-bold text-purple-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">총 응시</div>
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
               {totalAttempts || 0}회
             </div>
           </div>
         </div>
 
         {/* 시험별 문제 수 */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">📚 시험별 문제 현황</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
+          <h2 className="text-xl font-bold mb-4 dark:text-white">📚 시험별 문제 현황</h2>
           <div className="space-y-3">
             {exams?.map((exam) => (
               <ExamQuestionCount key={exam.id} examId={exam.id} examName={exam.name} />
@@ -91,15 +91,15 @@ export default async function AdminPage() {
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           <Link
             href="/admin/questions"
-            className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
                 <span className="text-2xl">📝</span>
               </div>
               <div>
-                <h3 className="font-bold text-lg">문제 관리</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-bold text-lg dark:text-white">문제 관리</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   문제 추가, 수정, 삭제
                 </p>
               </div>
@@ -108,15 +108,15 @@ export default async function AdminPage() {
 
           <Link
             href="/admin/users"
-            className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center">
                 <span className="text-2xl">👥</span>
               </div>
               <div>
-                <h3 className="font-bold text-lg">회원 관리</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-bold text-lg dark:text-white">회원 관리</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   회원 목록, 권한 관리
                 </p>
               </div>
@@ -128,7 +128,7 @@ export default async function AdminPage() {
         <div>
           <Link
             href="/"
-            className="inline-block px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            className="inline-block px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
           >
             홈으로
           </Link>
@@ -147,9 +147,9 @@ async function ExamQuestionCount({ examId, examName }: { examId: number; examNam
     .eq('exam_id', examId)
 
   return (
-    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-      <span className="font-medium">{examName}</span>
-      <span className="text-blue-600 font-semibold">{count || 0}개</span>
+    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+      <span className="font-medium dark:text-gray-200">{examName}</span>
+      <span className="text-blue-600 dark:text-blue-400 font-semibold">{count || 0}개</span>
     </div>
   )
 }

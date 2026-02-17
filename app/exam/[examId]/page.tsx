@@ -75,18 +75,18 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-lg">로딩 중...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-lg dark:text-white">로딩 중...</div>
       </div>
     )
   }
 
   if (error && !exam) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md">
-          <div className="text-red-600 mb-4">{error}</div>
-          <Link href="/" className="text-blue-600 hover:underline">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-md border dark:border-gray-700">
+          <div className="text-red-600 dark:text-red-400 mb-4">{error}</div>
+          <Link href="/" className="text-blue-600 dark:text-blue-400 hover:underline">
             홈으로 돌아가기
           </Link>
         </div>
@@ -97,47 +97,47 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
   const totalQuestions = subjects.reduce((sum, s) => sum + s.questions_per_attempt, 0)
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-3xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-3xl font-bold text-center mb-8">{exam?.name} 모의고사</h1>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
+          <h1 className="text-3xl font-bold text-center mb-8 dark:text-white">{exam?.name} 모의고사</h1>
 
           <div className="space-y-6 mb-8">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h2 className="font-bold text-lg mb-4">📋 시험 정보</h2>
+            <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-6">
+              <h2 className="font-bold text-lg mb-4 dark:text-white">📋 시험 정보</h2>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">총 문항 수:</span>
-                  <span className="font-semibold">{totalQuestions}문항</span>
+                  <span className="text-gray-600 dark:text-gray-400">총 문항 수:</span>
+                  <span className="font-semibold dark:text-gray-200">{totalQuestions}문항</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">시험 시간:</span>
-                  <span className="font-semibold">60분</span>
+                  <span className="text-gray-600 dark:text-gray-400">시험 시간:</span>
+                  <span className="font-semibold dark:text-gray-200">60분</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">합격 기준:</span>
-                  <span className="font-semibold">60점 이상</span>
+                  <span className="text-gray-600 dark:text-gray-400">합격 기준:</span>
+                  <span className="font-semibold dark:text-gray-200">60점 이상</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="font-bold text-lg mb-4">📚 과목 구성</h2>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+              <h2 className="font-bold text-lg mb-4 dark:text-white">📚 과목 구성</h2>
               <div className="space-y-2">
                 {subjects.map((subject, index) => (
                   <div key={subject.id} className="flex justify-between text-sm">
-                    <span className="text-gray-700">
+                    <span className="text-gray-700 dark:text-gray-300">
                       {index + 1}. {subject.name}
                     </span>
-                    <span className="text-gray-600">{subject.questions_per_attempt}문항</span>
+                    <span className="text-gray-600 dark:text-gray-400">{subject.questions_per_attempt}문항</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-              <h2 className="font-bold text-lg mb-3">⚠️ 주의사항</h2>
-              <ul className="space-y-2 text-sm text-gray-700">
+            <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg p-6">
+              <h2 className="font-bold text-lg mb-3 dark:text-white">⚠️ 주의사항</h2>
+              <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                 <li>• 시험 시작 후 60분 이내에 제출해야 합니다</li>
                 <li>• 시간이 초과되면 자동으로 만료됩니다</li>
                 <li>• 한 번에 하나의 시험만 응시할 수 있습니다</li>
@@ -148,7 +148,7 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+            <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-4">
               {error}
             </div>
           )}
@@ -156,14 +156,14 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
           <div className="flex gap-4">
             <Link
               href="/"
-              className="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-center hover:bg-gray-50"
+              className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-center hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200"
             >
               취소
             </Link>
             <button
               onClick={handleStart}
               disabled={starting}
-              className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {starting ? '시작 중...' : '시험 시작'}
             </button>

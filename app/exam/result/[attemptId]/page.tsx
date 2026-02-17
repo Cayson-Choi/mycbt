@@ -3,6 +3,7 @@
 import { useEffect, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import MathText from '@/components/MathText'
 
 export default function ExamResultPage({
   params,
@@ -172,9 +173,10 @@ export default function ExamResultPage({
                       </span>
                     </div>
 
-                    <div className="text-lg font-medium mb-4">
-                      {question.question_text}
-                    </div>
+                    <MathText
+                      text={question.question_text}
+                      className="text-lg font-medium mb-4 block"
+                    />
 
                     {question.image_url && (
                       <img
@@ -208,7 +210,8 @@ export default function ExamResultPage({
                                 <span className="text-red-600 font-bold">✗</span>
                               )}
                               <span>
-                                {choice}. {question[`choice_${choice}`]}
+                                {choice}.{' '}
+                                <MathText text={question[`choice_${choice}`]} />
                               </span>
                             </div>
                           </div>
@@ -218,7 +221,10 @@ export default function ExamResultPage({
 
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <div className="font-semibold text-blue-900 mb-1">해설</div>
-                      <div className="text-blue-800">{question.explanation}</div>
+                      <MathText
+                        text={question.explanation}
+                        className="text-blue-800"
+                      />
                     </div>
                   </div>
                 </div>

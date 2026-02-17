@@ -102,57 +102,57 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-lg">로딩 중...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-lg dark:text-white">로딩 중...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-2xl mx-auto px-4">
         {/* 헤더 */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">👤 프로필 수정</h1>
-          <p className="text-gray-600">소속과 전화번호를 수정할 수 있습니다</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">👤 프로필 수정</h1>
+          <p className="text-gray-600 dark:text-gray-400">소속과 전화번호를 수정할 수 있습니다</p>
         </div>
 
         {/* 프로필 수정 폼 (통합) */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* 이름 (수정 불가) */}
             <div>
-              <label className="block text-sm font-medium mb-1">이름</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">이름</label>
               <input
                 type="text"
                 value={profile?.name || ''}
                 disabled
-                className="w-full px-3 py-2 border rounded bg-gray-100 cursor-not-allowed"
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed"
               />
-              <p className="text-xs text-gray-500 mt-1">이름은 수정할 수 없습니다</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">이름은 수정할 수 없습니다</p>
             </div>
 
             {/* 이메일 (수정 불가) */}
             <div>
-              <label className="block text-sm font-medium mb-1">이메일</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">이메일</label>
               <input
                 type="email"
                 value={profile?.email || ''}
                 disabled
-                className="w-full px-3 py-2 border rounded bg-gray-100 cursor-not-allowed"
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed"
               />
-              <p className="text-xs text-gray-500 mt-1">이메일은 수정할 수 없습니다</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">이메일은 수정할 수 없습니다</p>
             </div>
 
             {/* 소속 (수정 가능) */}
             <div>
-              <label className="block text-sm font-medium mb-1">소속 *</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">소속 *</label>
               <select
                 value={formData.affiliation}
                 onChange={(e) =>
                   setFormData({ ...formData, affiliation: e.target.value })
                 }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 required
               >
                 <option value="">선택하세요</option>
@@ -165,14 +165,14 @@ export default function ProfilePage() {
 
             {/* 전화번호 (수정 가능) */}
             <div>
-              <label className="block text-sm font-medium mb-1">전화번호 *</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">전화번호 *</label>
               <input
                 type="tel"
                 value={formData.phone}
                 onChange={(e) =>
                   setFormData({ ...formData, phone: e.target.value })
                 }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 placeholder="010-1234-5678"
                 required
               />
@@ -180,28 +180,28 @@ export default function ProfilePage() {
 
             {/* 현재 비밀번호 */}
             <div>
-              <label className="block text-sm font-medium mb-1">현재 비밀번호</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">현재 비밀번호</label>
               <input
                 type="password"
                 value={passwordData.currentPassword}
                 onChange={(e) =>
                   setPasswordData({ ...passwordData, currentPassword: e.target.value })
                 }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 placeholder="비밀번호를 변경하려면 입력하세요"
               />
             </div>
 
             {/* 새 비밀번호 */}
             <div>
-              <label className="block text-sm font-medium mb-1">새 비밀번호</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">새 비밀번호</label>
               <input
                 type="password"
                 value={passwordData.newPassword}
                 onChange={(e) =>
                   setPasswordData({ ...passwordData, newPassword: e.target.value })
                 }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 placeholder="새 비밀번호 (최소 6자)"
                 minLength={6}
               />
@@ -209,14 +209,14 @@ export default function ProfilePage() {
 
             {/* 새 비밀번호 확인 */}
             <div>
-              <label className="block text-sm font-medium mb-1">새 비밀번호 확인</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">새 비밀번호 확인</label>
               <input
                 type="password"
                 value={passwordData.confirmPassword}
                 onChange={(e) =>
                   setPasswordData({ ...passwordData, confirmPassword: e.target.value })
                 }
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 placeholder="새 비밀번호를 다시 입력하세요"
                 minLength={6}
               />
@@ -226,7 +226,7 @@ export default function ProfilePage() {
             <div className="flex gap-4 pt-4">
               <Link
                 href="/my"
-                className="flex-1 px-6 py-3 bg-gray-600 text-white text-center rounded-lg hover:bg-gray-700"
+                className="flex-1 px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
               >
                 취소
               </Link>
@@ -235,8 +235,8 @@ export default function ProfilePage() {
                 disabled={saving}
                 className={`flex-1 px-6 py-3 text-white rounded-lg ${
                   saveSuccess
-                    ? 'bg-green-600 hover:bg-green-700'
-                    : 'bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400'
+                    ? 'bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600'
+                    : 'bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 disabled:bg-blue-400 dark:disabled:bg-blue-600'
                 }`}
               >
                 {saving ? '저장 중...' : saveSuccess ? '✓ 저장 완료' : '저장'}
@@ -246,14 +246,14 @@ export default function ProfilePage() {
         </div>
 
         {/* 회원 탈퇴 링크 */}
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h3 className="font-semibold text-red-900 mb-2">회원 탈퇴</h3>
-          <p className="text-sm text-red-800 mb-3">
+        <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-4">
+          <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">회원 탈퇴</h3>
+          <p className="text-sm text-red-800 dark:text-red-300 mb-3">
             탈퇴 시 모든 개인정보와 응시 기록이 삭제됩니다.
           </p>
           <Link
             href="/my/withdraw"
-            className="inline-block px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+            className="inline-block px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded hover:bg-red-700 dark:hover:bg-red-600 text-sm"
           >
             회원 탈퇴하기
           </Link>
