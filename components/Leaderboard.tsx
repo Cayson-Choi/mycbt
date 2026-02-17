@@ -46,7 +46,7 @@ export default function Leaderboard({ examId, examName }: LeaderboardProps) {
     if (!status) return null
 
     if (status === 'NEW') {
-      return null
+      return <span className="text-xs font-bold text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">NEW</span>
     } else if (status === '▲') {
       return <span className="text-green-600 font-bold">▲</span>
     } else if (status === '▼') {
