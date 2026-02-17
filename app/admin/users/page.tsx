@@ -199,7 +199,7 @@ export default function AdminUsersPage() {
                 <div key={affiliation} className="bg-white rounded-lg shadow-sm p-4">
                   <div className="text-sm text-gray-600 mb-1">{affiliation}</div>
                   <div className="text-2xl font-bold text-green-600 flex items-center gap-2">
-                    <span>{count}명</span>
+                    <span>{count as number}명</span>
                     <div className="flex items-center gap-1">
                       {stats.signups > 0 && (
                         <span className="text-red-600 text-lg">▲{stats.signups}</span>
