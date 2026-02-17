@@ -23,10 +23,25 @@ export default function SignupPage() {
       phone: formData.get('phone') as string,
     }
 
+    // 필수 항목 검증
+    if (!data.name.trim() || !data.email.trim() || !data.password || !data.affiliation || !data.phone.trim()) {
+      setError('모든 항목을 입력해주세요')
+      setLoading(false)
+      return
+    }
+
     // 비밀번호 확인
     const passwordConfirm = formData.get('passwordConfirm') as string
     if (data.password !== passwordConfirm) {
       setError('비밀번호가 일치하지 않습니다')
+      setLoading(false)
+      return
+    }
+
+    // 전화번호 형식 검증
+    const phoneRegex = /^010-\d{4}-\d{4}$/
+    if (!phoneRegex.test(data.phone.trim())) {
+      setError('전화번호는 010-xxxx-xxxx 형식으로 입력해주세요')
       setLoading(false)
       return
     }
@@ -140,13 +155,15 @@ export default function SignupPage() {
 
         <div>
           <label htmlFor="phone" className="block text-sm font-medium mb-1 dark:text-gray-200">
-            전화번호 (선택)
+            전화번호
           </label>
           <input
             type="tel"
             id="phone"
             name="phone"
+            required
             placeholder="010-1234-5678"
+            pattern="010-\d{4}-\d{4}"
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           />
         </div>
