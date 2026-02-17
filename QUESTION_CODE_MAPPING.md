@@ -70,10 +70,10 @@
 | 코드 | 과목명 | 설명 |
 |------|--------|------|
 | FR | 소방원론 | Fire fundamentals |
-| FL | 소방유체역학 | Fluid |
+| FD | 소방유체역학 | Fluid Dynamics |
 | FE | 소방전기 | Fire Electrical |
 | FM | 소방기계 | Fire Mechanical |
-| FL | 소방관계법규 | Fire Law |
+| FG | 소방관계법규 | Fire reGulations |
 
 ### 기타 분야 - 추후 추가
 
