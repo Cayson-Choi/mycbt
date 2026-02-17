@@ -246,18 +246,24 @@ export default function MyPage() {
         </div>
 
         {/* 하단 버튼 */}
-        <div className="flex gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           <Link
             href="/"
-            className="flex-1 px-6 py-3 bg-gray-600 text-white text-center rounded-lg hover:bg-gray-700"
+            className="px-6 py-3 bg-gray-600 text-white text-center rounded-lg hover:bg-gray-700"
           >
             홈으로
           </Link>
           <Link
-            href="/my/wrong-answers"
-            className="flex-1 px-6 py-3 bg-red-600 text-white text-center rounded-lg hover:bg-red-700"
+            href="/my/profile"
+            className="px-6 py-3 bg-blue-600 text-white text-center rounded-lg hover:bg-blue-700"
           >
-            ❌ 오답노트 보기
+            👤 프로필 수정
+          </Link>
+          <Link
+            href="/my/wrong-answers"
+            className="px-6 py-3 bg-red-600 text-white text-center rounded-lg hover:bg-red-700"
+          >
+            ❌ 오답노트
           </Link>
         </div>
       </div>
