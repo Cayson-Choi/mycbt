@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+export const runtime = 'nodejs'
+
 export async function POST(request: Request) {
   const { email, password } = await request.json()
 
