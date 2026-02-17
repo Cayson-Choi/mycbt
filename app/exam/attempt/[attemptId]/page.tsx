@@ -323,7 +323,7 @@ export default function ExamAttemptPage({
       <ConfirmDialog
         open={confirmType === 'quit'}
         title="시험 중단"
-        message="시험을 중단하시겠습니까?\n작성한 답안은 저장되지 않습니다."
+        message={"시험을 중단하시겠습니까?\n작성한 답안은 저장되지 않습니다."}
         confirmText="중단하기"
         confirmColor="red"
         onConfirm={() => {
@@ -348,7 +348,7 @@ export default function ExamAttemptPage({
       <ConfirmDialog
         open={confirmType === 'submit'}
         title="시험 제출"
-        message="시험을 제출하시겠습니까?\n제출 후에는 수정할 수 없습니다."
+        message={"시험을 제출하시겠습니까?\n제출 후에는 수정할 수 없습니다."}
         confirmText="제출"
         confirmColor="green"
         onConfirm={doSubmit}
