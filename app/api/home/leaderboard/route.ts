@@ -81,13 +81,55 @@ export async function GET(request: Request) {
       console.error('Yesterday Top5 query error:', yesterdayError)
     }
 
-    const yesterdayTop5 = yesterdayTop5Raw?.map((item: any) => ({
-      rank: item.rank,
-      user_id: item.user_id,
-      name: item.user_name_display,
-      score: item.score,
-      submitted_at: item.submitted_at,
-    })) || []
+    let yesterdayTop5: Array<{ rank: number; user_id: string; name: string; score: number; submitted_at: string }> = []
+
+    if (yesterdayTop5Raw && yesterdayTop5Raw.length > 0) {
+      // 스냅샷 데이터 사용
+      yesterdayTop5 = yesterdayTop5Raw.map((item: any) => ({
+        rank: item.rank,
+        user_id: item.user_id,
+        name: item.user_name_display,
+        score: item.score,
+        submitted_at: item.submitted_at,
+      }))
+    } else {
+      // Fallback: 스냅샷이 없으면 daily_best_scores에서 어제 데이터 직접 조회
+      const { data: yesterdayFallbackRaw, error: fallbackError } = await supabase
+        .from('daily_best_scores')
+        .select('user_id, best_score, best_submitted_at')
+        .eq('kst_date', yesterdayKst)
+        .eq('exam_id', examId)
+        .order('best_score', { ascending: false })
+        .order('best_submitted_at', { ascending: true })
+        .limit(5)
+
+      if (fallbackError) {
+        console.error('Yesterday fallback query error:', fallbackError)
+      }
+
+      if (yesterdayFallbackRaw && yesterdayFallbackRaw.length > 0) {
+        const userIds = yesterdayFallbackRaw.map((item) => item.user_id)
+        const adminSupabase = createAdminClient()
+        const { data: profiles } = await adminSupabase
+          .from('profiles')
+          .select('id, name')
+          .in('id', userIds)
+
+        const profileMap = new Map(profiles?.map((p) => [p.id, p]) || [])
+
+        for (let i = 0; i < yesterdayFallbackRaw.length; i++) {
+          const item = yesterdayFallbackRaw[i]
+          const profile = profileMap.get(item.user_id)
+          yesterdayTop5.push({
+            rank: i + 1,
+            user_id: item.user_id,
+            name: profile?.name || '알 수 없음',
+            score: item.best_score,
+            submitted_at: item.best_submitted_at,
+          })
+        }
+      }
+    }
 
     // 4. 오늘 Top5 각 사용자에게 NEW/▲▼ 계산
     const yesterdayUserIds = new Set(yesterdayTop5.map((u) => u.user_id))
