@@ -124,6 +124,7 @@ export default function AdminQuestionsPage() {
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const handleDelete = async (id: number) => {
     setPendingDeleteId(id)
@@ -133,6 +134,7 @@ export default function AdminQuestionsPage() {
   const confirmDelete = async () => {
     if (!pendingDeleteId) return
     setShowDeleteConfirm(false)
+    setDeleteError(null)
 
     try {
       const res = await fetch(`/api/admin/questions/${pendingDeleteId}`, {
@@ -143,10 +145,11 @@ export default function AdminQuestionsPage() {
         loadQuestions()
       } else {
         const data = await res.json()
-        console.error('Delete failed:', data.error || '삭제 실패')
+        setDeleteError(data.error || '삭제에 실패했습니다')
       }
     } catch (err) {
       console.error('Delete error:', err)
+      setDeleteError('삭제 중 오류가 발생했습니다')
     } finally {
       setPendingDeleteId(null)
     }
@@ -180,17 +183,39 @@ export default function AdminQuestionsPage() {
 
   const confirmBulkDelete = async () => {
     setShowBulkDeleteConfirm(false)
+    setDeleteError(null)
 
     try {
-      const deletePromises = Array.from(selectedQuestions).map((id) =>
-        fetch(`/api/admin/questions/${id}`, { method: 'DELETE' })
+      const results = await Promise.all(
+        Array.from(selectedQuestions).map(async (id) => {
+          const res = await fetch(`/api/admin/questions/${id}`, { method: 'DELETE' })
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({ error: '삭제 실패' }))
+            return { id, ok: false, error: data.error }
+          }
+          return { id, ok: true, error: null }
+        })
       )
 
-      await Promise.all(deletePromises)
-      setSelectedQuestions(new Set())
+      const failed = results.filter((r) => !r.ok)
+      const succeeded = results.filter((r) => r.ok)
+
+      if (failed.length > 0) {
+        const reason = failed[0].error || '삭제에 실패했습니다'
+        setDeleteError(
+          failed.length === results.length
+            ? `${failed.length}개 문제 삭제 실패: ${reason}`
+            : `${succeeded.length}개 삭제 성공, ${failed.length}개 실패: ${reason}`
+        )
+      }
+
+      // 성공한 항목만 선택 해제
+      const failedIds = new Set(failed.map((r) => r.id))
+      setSelectedQuestions(failedIds.size > 0 ? failedIds : new Set())
       loadQuestions()
     } catch (err) {
       console.error('Bulk delete error:', err)
+      setDeleteError('삭제 중 오류가 발생했습니다')
     }
   }
 
@@ -236,6 +261,19 @@ export default function AdminQuestionsPage() {
             </button>
           </div>
         </div>
+
+        {/* 삭제 오류 메시지 */}
+        {deleteError && (
+          <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg flex items-center justify-between">
+            <span className="text-red-700 dark:text-red-300">{deleteError}</span>
+            <button
+              onClick={() => setDeleteError(null)}
+              className="text-red-500 hover:text-red-700 dark:hover:text-red-300 ml-4"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* 필터 및 검색 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
