@@ -1078,6 +1078,47 @@ function BulkUploadModal({
   const [uploadType, setUploadType] = useState<'json' | 'csv'>('json')
   const [textInput, setTextInput] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null)
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // 파일 확장자 확인
+    const fileName = file.name.toLowerCase()
+    const isJson = fileName.endsWith('.json')
+    const isCsv = fileName.endsWith('.csv')
+
+    if (!isJson && !isCsv) {
+      alert('JSON 또는 CSV 파일만 업로드 가능합니다')
+      return
+    }
+
+    // 파일 크기 체크 (10MB 제한)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('파일 크기는 10MB 이하여야 합니다')
+      return
+    }
+
+    try {
+      const text = await file.text()
+      setTextInput(text)
+      setSelectedFileName(file.name)
+
+      // 파일 타입에 맞게 자동 선택
+      if (isJson) {
+        setUploadType('json')
+      } else if (isCsv) {
+        setUploadType('csv')
+      }
+
+      // 파일 input 초기화 (같은 파일 재선택 가능하도록)
+      e.target.value = ''
+    } catch (err) {
+      console.error('File read error:', err)
+      alert('파일을 읽는 중 오류가 발생했습니다')
+    }
+  }
 
   const handleUpload = async () => {
     if (!textInput.trim()) {
@@ -1230,10 +1271,51 @@ function BulkUploadModal({
             </p>
           </div>
 
+          {/* 파일 선택 버튼 */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              파일 업로드 (선택사항)
+            </label>
+            <div className="flex items-center gap-3">
+              <label
+                htmlFor="bulk-file-upload"
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg cursor-pointer hover:bg-indigo-700 inline-flex items-center gap-2"
+              >
+                📁 파일 선택
+              </label>
+              <input
+                id="bulk-file-upload"
+                type="file"
+                accept=".json,.csv"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+              {selectedFileName && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">
+                    ✓ {selectedFileName}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setSelectedFileName(null)
+                      setTextInput('')
+                    }}
+                    className="text-sm text-red-600 hover:text-red-700"
+                  >
+                    제거
+                  </button>
+                </div>
+              )}
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              JSON 또는 CSV 파일을 선택하면 자동으로 내용이 로드됩니다 (최대 10MB)
+            </p>
+          </div>
+
           {/* 입력 영역 */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">
-              {uploadType === 'json' ? 'JSON' : 'CSV'} 데이터 입력
+              {uploadType === 'json' ? 'JSON' : 'CSV'} 데이터 입력 (직접 입력 또는 파일 선택)
             </label>
             <textarea
               value={textInput}
@@ -1242,8 +1324,8 @@ function BulkUploadModal({
               rows={12}
               placeholder={
                 uploadType === 'json'
-                  ? 'JSON 배열을 입력하세요...'
-                  : 'CSV 데이터를 입력하세요 (첫 줄은 헤더)...'
+                  ? 'JSON 배열을 입력하거나 위에서 파일을 선택하세요...'
+                  : 'CSV 데이터를 입력하거나 위에서 파일을 선택하세요 (첫 줄은 헤더)...'
               }
             />
           </div>
