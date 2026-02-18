@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 
 // 관리자 권한 확인 헬퍼
 async function checkAdmin(supabase: any) {
@@ -179,6 +180,10 @@ export async function PUT(request: Request) {
     if (error) {
       console.error('Exam update error:', error)
       return NextResponse.json({ error: '수정 실패: ' + error.message }, { status: 500 })
+    }
+
+    if (is_published !== undefined) {
+      revalidatePath('/')
     }
 
     return NextResponse.json({ success: true, message: '수정되었습니다' })
