@@ -177,17 +177,16 @@ async function ExamQuestionCount({ examId, examName }: { examId: number; examNam
 
   return (
     <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between mb-1">
         <span className="font-medium dark:text-gray-200">{examName}</span>
-        <span className="text-blue-600 dark:text-blue-400 font-semibold">{count || 0}개</span>
+        <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">{count || 0}개</span>
       </div>
       {subjectCounts.length > 0 && (
-        <div className="mt-2 ml-4 space-y-1">
+        <div className="flex flex-wrap gap-x-4 gap-y-0.5 ml-1 text-xs text-gray-500 dark:text-gray-400">
           {subjectCounts.map((sc) => (
-            <div key={sc.name} className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-              <span>{sc.name}</span>
-              <span>{sc.count}개</span>
-            </div>
+            <span key={sc.name}>
+              {sc.name} <span className="font-medium">{sc.count}</span>
+            </span>
           ))}
         </div>
       )}

@@ -119,38 +119,31 @@ export default function ExamSettingsSection({ exams }: Props) {
         설정 출제 문항 수 설정
       </h2>
 
-      <div className="space-y-6">
+      <div className="space-y-3">
         {exams.map((exam) => {
           const examSubjects = getSubjectsForExam(exam.id)
           if (examSubjects.length === 0) return null
 
           return (
-            <div key={exam.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+            <div key={exam.id} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
                 {exam.name}
               </h3>
-              <div className="space-y-2">
+              <div className="flex flex-wrap gap-x-5 gap-y-1.5">
                 {examSubjects.map((subject) => (
                   <div
                     key={subject.id}
-                    className="flex items-center gap-3 text-sm"
+                    className="flex items-center gap-1.5 text-xs"
                   >
-                    <span className="flex-1 text-gray-700 dark:text-gray-300">
-                      {subject.name}
-                    </span>
-                    <span className="text-gray-400 dark:text-gray-500 text-xs whitespace-nowrap">
-                      (문제 은행: {subject.total_questions}개)
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        min={0}
-                        value={editValues[subject.id] ?? subject.questions_per_attempt}
-                        onChange={(e) => handleChange(subject.id, e.target.value)}
-                        className="w-20 px-2 py-1 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-sm"
-                      />
-                      <span className="text-gray-500 dark:text-gray-400 text-xs">문항</span>
-                    </div>
+                    <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
+                    <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
+                    <input
+                      type="number"
+                      min={0}
+                      value={editValues[subject.id] ?? subject.questions_per_attempt}
+                      onChange={(e) => handleChange(subject.id, e.target.value)}
+                      className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
+                    />
                   </div>
                 ))}
               </div>
