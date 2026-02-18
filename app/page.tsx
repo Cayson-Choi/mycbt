@@ -93,7 +93,7 @@ function ExamIcon({ index }: { index: number }) {
 
 export default async function Home() {
   const supabase = await createClient()
-  const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at').order('id')
+  const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at, creator_name, creator_title').order('id')
 
   return (
     <div>
@@ -157,7 +157,9 @@ export default async function Home() {
               </div>
               <h3 className="text-xl font-bold mb-1">{exam.name}</h3>
               <p className="text-sm text-white/70 mb-5">
-                {examCardDescriptions[index % examCardDescriptions.length]}
+                {exam.exam_mode === 'OFFICIAL' && exam.creator_name
+                  ? `${exam.creator_name}${exam.creator_title ? `(${exam.creator_title})` : ''}`
+                  : examCardDescriptions[index % examCardDescriptions.length]}
               </p>
               <div className="flex items-center text-sm font-medium text-white/90 group-hover:text-white transition-colors">
                 시험 응시하기
