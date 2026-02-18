@@ -37,12 +37,19 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
 
   useEffect(() => {
     if (!activeExamId) return
-    setLoading(true)
-    fetch(`/api/home/leaderboard?exam_id=${activeExamId}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((d) => setData(d))
-      .catch(() => setData(null))
-      .finally(() => setLoading(false))
+
+    const fetchLeaderboard = (showLoading: boolean) => {
+      if (showLoading) setLoading(true)
+      fetch(`/api/home/leaderboard?exam_id=${activeExamId}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((d) => setData(d))
+        .catch(() => setData(null))
+        .finally(() => { if (showLoading) setLoading(false) })
+    }
+
+    fetchLeaderboard(true)
+    const interval = setInterval(() => fetchLeaderboard(false), 10000)
+    return () => clearInterval(interval)
   }, [activeExamId])
 
   if (exams.length === 0) return null
