@@ -123,19 +123,16 @@ export default function ExamResultPage({
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-semibold dark:text-white">{subject.subjects?.name}</span>
                   <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                    {subject.subject_score}점
+                    {subject.subject_correct} / {subject.subject_questions}
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-4">
                     <div
                       className="bg-blue-600 dark:bg-blue-500 h-4 rounded-full transition-all"
-                      style={{ width: `${isOfficial ? Math.min(subject.subject_score, 100) : subject.subject_score}%` }}
+                      style={{ width: `${subject.subject_questions > 0 ? (subject.subject_correct / subject.subject_questions) * 100 : 0}%` }}
                     />
                   </div>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {subject.subject_correct} / {subject.subject_questions}
-                  </span>
                 </div>
               </div>
             ))}
