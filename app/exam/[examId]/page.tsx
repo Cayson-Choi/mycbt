@@ -236,21 +236,22 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
               </div>
             </div>
 
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
-              <h2 className="font-bold text-lg mb-4 dark:text-white">과목 구성</h2>
-              <div className="space-y-2">
-                {subjects.map((subject, index) => (
-                  <div key={subject.id} className="flex justify-between text-sm">
-                    <span className="text-gray-700 dark:text-gray-300">
-                      {index + 1}. {subject.name}
-                    </span>
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {isOfficial ? (officialBySubject[subject.id] ?? subject.questions_per_attempt) : subject.questions_per_attempt}문항
-                    </span>
-                  </div>
-                ))}
+            {/* 과목 구성 (공식 시험은 1과목이므로 숨김) */}
+            {!isOfficial && (
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+                <h2 className="font-bold text-lg mb-4 dark:text-white">과목 구성</h2>
+                <div className="space-y-2">
+                  {subjects.map((subject, index) => (
+                    <div key={subject.id} className="flex justify-between text-sm">
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {index + 1}. {subject.name}
+                      </span>
+                      <span className="text-gray-600 dark:text-gray-400">{subject.questions_per_attempt}문항</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* 공식 시험 주의사항 */}
             {isOfficial && (
