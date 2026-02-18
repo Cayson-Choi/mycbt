@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
 
@@ -11,16 +10,12 @@ interface MobileNavProps {
 
 export default function MobileNav({ user }: MobileNavProps) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
   const [loggingOut, setLoggingOut] = useState(false)
 
   const handleLogout = async () => {
     setLoggingOut(true)
-    await new Promise(resolve => setTimeout(resolve, 0))
     await fetch('/api/auth/logout', { method: 'POST' })
-    setOpen(false)
-    router.push('/')
-    router.refresh()
+    window.location.href = '/'
   }
 
   return (
