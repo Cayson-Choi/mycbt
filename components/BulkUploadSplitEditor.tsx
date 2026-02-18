@@ -153,9 +153,9 @@ export default function BulkUploadSplitEditor({
         const parsed = JSON.parse(cleaned)
         return Array.isArray(parsed) ? parsed : [parsed]
       } catch {
-        // LaTeX 백슬래시 자동 수정 후 재시도
+        // 문자열 내 실제 줄바꿈 제거 + LaTeX 백슬래시 자동 수정 후 재시도
         try {
-          const fixed = fixLatexBackslashes(cleaned)
+          const fixed = fixLatexBackslashes(cleaned.replace(/\r?\n/g, ' '))
           const parsed = JSON.parse(fixed)
           return Array.isArray(parsed) ? parsed : [parsed]
         } catch {
