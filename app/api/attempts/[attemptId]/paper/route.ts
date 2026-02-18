@@ -37,7 +37,7 @@ export async function GET(
     // 3. exam 정보 조회
     const { data: exam } = await supabase
       .from('exams')
-      .select('name')
+      .select('name, exam_mode, duration_minutes')
       .eq('id', attempt.exam_id)
       .single()
 
@@ -52,6 +52,7 @@ export async function GET(
           id,
           question_code,
           question_text,
+          question_type,
           choice_1,
           choice_2,
           choice_3,
@@ -75,34 +76,41 @@ export async function GET(
     // 5. 기존 답안 조회 (이어풀기를 위해)
     const { data: savedAnswers } = await supabase
       .from('attempt_items')
-      .select('question_id, selected')
+      .select('question_id, selected, answer_text')
       .eq('attempt_id', attemptId)
 
     // 답안을 question_id로 매핑
     const answersMap = new Map()
     savedAnswers?.forEach((item) => {
-      answersMap.set(item.question_id, item.selected)
+      answersMap.set(item.question_id, item)
     })
 
     // 6. 응답 데이터 구성 (정답 제외!)
-    const questions = attemptQuestions?.map((aq: any) => ({
-      seq: aq.seq,
-      question_id: aq.questions.id,
-      question_code: aq.questions.question_code,
-      question_text: aq.questions.question_text,
-      choice_1: aq.questions.choice_1,
-      choice_2: aq.questions.choice_2,
-      choice_3: aq.questions.choice_3,
-      choice_4: aq.questions.choice_4,
-      image_url: aq.questions.image_url,
-      subject_name: (aq.questions.subjects as any)?.name || '',
-      selected: answersMap.get(aq.questions.id) || null, // 저장된 답안
-    }))
+    const questions = attemptQuestions?.map((aq: any) => {
+      const saved = answersMap.get(aq.questions.id)
+      return {
+        seq: aq.seq,
+        question_id: aq.questions.id,
+        question_code: aq.questions.question_code,
+        question_text: aq.questions.question_text,
+        question_type: aq.questions.question_type || 'CHOICE',
+        choice_1: aq.questions.choice_1,
+        choice_2: aq.questions.choice_2,
+        choice_3: aq.questions.choice_3,
+        choice_4: aq.questions.choice_4,
+        image_url: aq.questions.image_url,
+        subject_name: (aq.questions.subjects as any)?.name || '',
+        selected: saved?.selected || null, // 저장된 객관식 답안
+        answer_text: saved?.answer_text || null, // 저장된 주관식 답안
+      }
+    })
 
     return NextResponse.json({
       attempt_id: attempt.id,
       exam_id: attempt.exam_id,
       exam_name: exam?.name,
+      exam_mode: exam?.exam_mode || 'PRACTICE',
+      duration_minutes: exam?.duration_minutes || 60,
       status: attempt.status,
       started_at: attempt.started_at,
       expires_at: attempt.expires_at,

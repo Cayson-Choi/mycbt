@@ -19,11 +19,12 @@ export async function PUT(
     }
 
     // 2. 요청 데이터
-    const { question_id, selected } = await request.json()
+    const body = await request.json()
+    const { question_id, selected, answer_text } = body
 
-    if (!question_id || selected === undefined) {
+    if (!question_id || (selected === undefined && answer_text === undefined)) {
       return NextResponse.json(
-        { error: 'question_id와 selected가 필요합니다' },
+        { error: 'question_id와 답안이 필요합니다' },
         { status: 400 }
       )
     }
@@ -57,12 +58,19 @@ export async function PUT(
     }
 
     // 4. 답안 저장 (upsert)
+    const upsertData: any = {
+      attempt_id: attemptId,
+      question_id: question_id,
+    }
+    if (answer_text !== undefined) {
+      upsertData.answer_text = answer_text
+    }
+    if (selected !== undefined) {
+      upsertData.selected = selected
+    }
+
     const { error: saveError } = await supabase.from('attempt_items').upsert(
-      {
-        attempt_id: attemptId,
-        question_id: question_id,
-        selected: selected,
-      },
+      upsertData,
       {
         onConflict: 'attempt_id,question_id',
       }

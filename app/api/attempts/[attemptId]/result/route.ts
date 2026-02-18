@@ -32,8 +32,11 @@ export async function GET(
         total_questions,
         total_correct,
         total_score,
+        violation_count,
+        grading_status,
         exams (
-          name
+          name,
+          exam_mode
         )
       `
       )
@@ -86,6 +89,7 @@ export async function GET(
           id,
           question_code,
           question_text,
+          question_type,
           choice_1,
           choice_2,
           choice_3,
@@ -94,6 +98,7 @@ export async function GET(
           explanation,
           image_url,
           subject_id,
+          points,
           subjects (
             name
           )
@@ -106,7 +111,7 @@ export async function GET(
     // 5. 학생 답안 조회
     const { data: studentAnswers } = await supabase
       .from('attempt_items')
-      .select('question_id, selected, is_correct')
+      .select('question_id, selected, is_correct, answer_text, awarded_points, grading_status')
       .eq('attempt_id', attemptId)
 
     const answersMap = new Map()
@@ -121,6 +126,7 @@ export async function GET(
         seq: q.seq,
         question_id: q.questions.id,
         question_text: q.questions.question_text,
+        question_type: q.questions.question_type || 'CHOICE',
         choice_1: q.questions.choice_1,
         choice_2: q.questions.choice_2,
         choice_3: q.questions.choice_3,
@@ -129,8 +135,12 @@ export async function GET(
         explanation: q.questions.explanation,
         image_url: q.questions.image_url,
         subject_name: (q.questions.subjects as any)?.name || '',
+        points: q.questions.points || 1,
         student_answer: studentAnswer?.selected || null,
-        is_correct: studentAnswer?.is_correct || false,
+        student_answer_text: studentAnswer?.answer_text || null,
+        is_correct: studentAnswer?.is_correct ?? null,
+        awarded_points: studentAnswer?.awarded_points ?? null,
+        grading_status: studentAnswer?.grading_status || 'AUTO',
       }
     })
 
@@ -138,6 +148,9 @@ export async function GET(
       attempt_id: attempt.id,
       exam_id: attempt.exam_id,
       exam_name: (attempt.exams as any)?.name || '',
+      exam_mode: (attempt.exams as any)?.exam_mode || 'PRACTICE',
+      violation_count: attempt.violation_count || 0,
+      grading_status: attempt.grading_status || 'COMPLETED',
       status: attempt.status,
       started_at: attempt.started_at,
       submitted_at: attempt.submitted_at,

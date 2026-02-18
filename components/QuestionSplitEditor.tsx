@@ -30,25 +30,30 @@ interface QuestionSplitEditorProps {
   question?: any
   onClose: () => void
   onSuccess: () => void
+  lockedExam?: { id: number; name: string }
 }
 
 export default function QuestionSplitEditor({
   question,
   onClose,
   onSuccess,
+  lockedExam,
 }: QuestionSplitEditorProps) {
   const [formData, setFormData] = useState({
     question_code: question?.question_code || '',
-    exam_id: question?.exam_id || 1,
+    exam_id: question?.exam_id || lockedExam?.id || 1,
     subject_id: question?.subject_id || 1,
     question_text: question?.question_text || '',
+    question_type: question?.question_type || 'CHOICE',
     choice_1: question?.choice_1 || '',
     choice_2: question?.choice_2 || '',
     choice_3: question?.choice_3 || '',
     choice_4: question?.choice_4 || '',
     answer: question?.answer || 1,
+    answer_text: question?.answer_text || '',
     explanation: question?.explanation || '',
     image_url: question?.image_url || '',
+    points: question?.points || 1,
   })
   const [subjects, setSubjects] = useState<any[]>([])
   const [uploadingImage, setUploadingImage] = useState(false)
@@ -66,16 +71,19 @@ export default function QuestionSplitEditor({
   // Track initial form data for dirty check
   const initialFormRef = useRef(JSON.stringify({
     question_code: question?.question_code || '',
-    exam_id: question?.exam_id || 1,
+    exam_id: question?.exam_id || lockedExam?.id || 1,
     subject_id: question?.subject_id || 1,
     question_text: question?.question_text || '',
+    question_type: question?.question_type || 'CHOICE',
     choice_1: question?.choice_1 || '',
     choice_2: question?.choice_2 || '',
     choice_3: question?.choice_3 || '',
     choice_4: question?.choice_4 || '',
     answer: question?.answer || 1,
+    answer_text: question?.answer_text || '',
     explanation: question?.explanation || '',
     image_url: question?.image_url || '',
+    points: question?.points || 1,
   }))
 
   const isDirty = JSON.stringify(formData) !== initialFormRef.current
@@ -325,9 +333,16 @@ export default function QuestionSplitEditor({
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
 
-    if (!formData.question_text || !formData.choice_1 || !formData.choice_2 || !formData.choice_3 || !formData.choice_4) {
-      alert('필수 항목을 모두 입력해주세요')
+    if (!formData.question_text) {
+      alert('문제 내용을 입력해주세요')
       return
+    }
+
+    if (formData.question_type === 'CHOICE') {
+      if (!formData.choice_1 || !formData.choice_2 || !formData.choice_3 || !formData.choice_4) {
+        alert('모든 선택지를 입력해주세요')
+        return
+      }
     }
 
     if (!savedQuestionId && !formData.question_code) {
@@ -372,7 +387,7 @@ export default function QuestionSplitEditor({
     }
   }
 
-  const examName = formData.exam_id === 1 ? '전기기능사' : formData.exam_id === 2 ? '전기산업기사' : '전기기사'
+  const examName = lockedExam ? lockedExam.name : formData.exam_id === 1 ? '전기기능사' : formData.exam_id === 2 ? '전기산업기사' : '전기기사'
   const subjectName = subjects.find((s) => s.id === formData.subject_id)?.name || '과목'
 
   return (
@@ -539,6 +554,7 @@ export default function QuestionSplitEditor({
             handleImageUrlChange={handleImageUrlChange}
             handleImagePaste={handleImagePaste}
             handleSubmit={handleSubmit}
+            lockedExam={lockedExam}
           />
         </div>
 
@@ -612,6 +628,7 @@ function EditPanel({
   handleImageUrlChange,
   handleImagePaste,
   handleSubmit,
+  lockedExam,
 }: {
   formData: any
   setFormData: (fn: any) => void
@@ -627,6 +644,7 @@ function EditPanel({
   handleImageUrlChange: (value: string) => void
   handleImagePaste: (e: React.ClipboardEvent) => void
   handleSubmit: (e?: React.FormEvent) => void
+  lockedExam?: { id: number; name: string }
 }) {
   const inputStyle: React.CSSProperties = {
     width: '100%',
@@ -702,22 +720,24 @@ function EditPanel({
                 </span>
               )}
             </div>
-            <button
-              type="button"
-              onClick={handleAutoGenerateCode}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '6px',
-                border: 'none',
-                backgroundColor: '#4f46e5',
-                color: '#ffffff',
-                cursor: 'pointer',
-                fontSize: '13px',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              자동 생성
-            </button>
+            {!lockedExam && (
+              <button
+                type="button"
+                onClick={handleAutoGenerateCode}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  backgroundColor: '#4f46e5',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                자동 생성
+              </button>
+            )}
           </div>
           {lastUsedCode && (
             <p style={{ fontSize: '12px', color: '#9ca3af', margin: '4px 0' }}>
@@ -749,15 +769,24 @@ function EditPanel({
       {/* Exam Select */}
       <div>
         <label style={labelStyle}>시험 *</label>
-        <select
-          value={formData.exam_id}
-          onChange={(e) => update('exam_id', parseInt(e.target.value))}
-          style={inputStyle}
-        >
-          <option value={1}>전기기능사</option>
-          <option value={2}>전기산업기사</option>
-          <option value={3}>전기기사</option>
-        </select>
+        {lockedExam ? (
+          <input
+            type="text"
+            value={lockedExam.name}
+            disabled
+            style={{ ...inputStyle, opacity: 0.7, cursor: 'not-allowed' }}
+          />
+        ) : (
+          <select
+            value={formData.exam_id}
+            onChange={(e) => update('exam_id', parseInt(e.target.value))}
+            style={inputStyle}
+          >
+            <option value={1}>전기기능사</option>
+            <option value={2}>전기산업기사</option>
+            <option value={3}>전기기사</option>
+          </select>
+        )}
       </div>
 
       {/* Subject Select */}
@@ -780,6 +809,53 @@ function EditPanel({
           )}
         </select>
       </div>
+
+      {/* Question Type - lockedExam일 때만 표시 */}
+      {lockedExam && (
+        <div>
+          <label style={labelStyle}>문제 유형 *</label>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {([
+              { value: 'CHOICE', label: '객관식' },
+              { value: 'SHORT_ANSWER', label: '단답형' },
+              { value: 'ESSAY', label: '서술형' },
+            ] as const).map((opt) => (
+              <label
+                key={opt.value}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: `2px solid ${formData.question_type === opt.value
+                    ? '#2563eb'
+                    : isDark ? '#4b5563' : '#d1d5db'}`,
+                  backgroundColor: formData.question_type === opt.value
+                    ? isDark ? 'rgba(37, 99, 235, 0.2)' : '#dbeafe'
+                    : 'transparent',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: formData.question_type === opt.value ? 600 : 400,
+                  color: formData.question_type === opt.value
+                    ? isDark ? '#93c5fd' : '#1d4ed8'
+                    : isDark ? '#d1d5db' : '#374151',
+                }}
+              >
+                <input
+                  type="radio"
+                  name="question_type"
+                  value={opt.value}
+                  checked={formData.question_type === opt.value}
+                  onChange={() => update('question_type', opt.value)}
+                  style={{ display: 'none' }}
+                />
+                {opt.label}
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Question Text */}
       <div>
@@ -876,39 +952,88 @@ function EditPanel({
         )}
       </div>
 
-      {/* Choices */}
-      {[1, 2, 3, 4].map((n) => (
-        <div key={n}>
-          <label style={labelStyle}>선택지 {n} *</label>
-          <input
-            type="text"
-            value={formData[`choice_${n}` as keyof typeof formData]}
-            onChange={(e) => update(`choice_${n}`, e.target.value)}
-            style={{
-              ...inputStyle,
-              borderColor: formData.answer === n
-                ? isDark ? '#22c55e' : '#16a34a'
-                : inputStyle.borderColor,
-            }}
-            required
-          />
-        </div>
-      ))}
+      {/* Choices - CHOICE 유형일 때만 */}
+      {formData.question_type === 'CHOICE' && (
+        <>
+          {[1, 2, 3, 4].map((n) => (
+            <div key={n}>
+              <label style={labelStyle}>선택지 {n} *</label>
+              <input
+                type="text"
+                value={formData[`choice_${n}` as keyof typeof formData]}
+                onChange={(e) => update(`choice_${n}`, e.target.value)}
+                style={{
+                  ...inputStyle,
+                  borderColor: formData.answer === n
+                    ? isDark ? '#22c55e' : '#16a34a'
+                    : inputStyle.borderColor,
+                }}
+                required
+              />
+            </div>
+          ))}
 
-      {/* Answer Select */}
-      <div>
-        <label style={labelStyle}>정답 *</label>
-        <select
-          value={formData.answer}
-          onChange={(e) => update('answer', parseInt(e.target.value))}
-          style={inputStyle}
-        >
-          <option value={1}>1번</option>
-          <option value={2}>2번</option>
-          <option value={3}>3번</option>
-          <option value={4}>4번</option>
-        </select>
-      </div>
+          {/* Answer Select */}
+          <div>
+            <label style={labelStyle}>정답 *</label>
+            <select
+              value={formData.answer}
+              onChange={(e) => update('answer', parseInt(e.target.value))}
+              style={inputStyle}
+            >
+              <option value={1}>1번</option>
+              <option value={2}>2번</option>
+              <option value={3}>3번</option>
+              <option value={4}>4번</option>
+            </select>
+          </div>
+        </>
+      )}
+
+      {/* Answer Text - 주관식일 때만 */}
+      {formData.question_type !== 'CHOICE' && (
+        <div>
+          <label style={labelStyle}>참고 정답</label>
+          {formData.question_type === 'SHORT_ANSWER' ? (
+            <input
+              type="text"
+              value={formData.answer_text}
+              onChange={(e) => update('answer_text', e.target.value)}
+              style={inputStyle}
+              placeholder="채점 참고용 정답 (선택)"
+            />
+          ) : (
+            <textarea
+              value={formData.answer_text}
+              onChange={(e) => update('answer_text', e.target.value)}
+              style={{ ...inputStyle, resize: 'vertical', minHeight: '80px' }}
+              rows={4}
+              placeholder="채점 참고용 모범답안 (선택)"
+            />
+          )}
+          <p style={{ fontSize: '11px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '4px' }}>
+            관리자 수동 채점 시 참고용으로 사용됩니다
+          </p>
+        </div>
+      )}
+
+      {/* Points (배점) - lockedExam일 때만 표시 */}
+      {lockedExam && (
+        <div>
+          <label style={labelStyle}>배점</label>
+          <input
+            type="number"
+            min={1}
+            max={100}
+            value={formData.points}
+            onChange={(e) => update('points', parseInt(e.target.value) || 1)}
+            style={{ ...inputStyle, width: '120px' }}
+          />
+          <p style={{ fontSize: '11px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '4px' }}>
+            공식 시험 배점 (기본 1점)
+          </p>
+        </div>
+      )}
 
       {/* Explanation */}
       <div>
@@ -1053,6 +1178,20 @@ function PreviewPanel({
                     {formData.question_code}
                   </span>
                 )}
+                {formData.points > 1 && (
+                  <span
+                    style={{
+                      fontSize: '11px',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      backgroundColor: isDark ? 'rgba(234, 179, 8, 0.2)' : '#fef9c3',
+                      color: isDark ? '#fbbf24' : '#a16207',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {formData.points}점
+                  </span>
+                )}
               </div>
 
               {/* Subject name */}
@@ -1099,63 +1238,101 @@ function PreviewPanel({
                 </div>
               )}
 
-              {/* Choices */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {[1, 2, 3, 4].map((choice) => {
-                  const choiceText = formData[`choice_${choice}` as keyof typeof formData]
-                  if (!choiceText) return null
-                  const isCorrect = formData.answer === choice
-                  return (
-                    <div
-                      key={choice}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '12px',
-                        padding: '14px',
-                        borderRadius: '8px',
-                        border: `2px solid ${
-                          isCorrect
-                            ? isDark ? '#22c55e' : '#16a34a'
-                            : isDark ? '#374151' : '#e5e7eb'
-                        }`,
-                        backgroundColor: isCorrect
-                          ? isDark ? 'rgba(34, 197, 94, 0.1)' : '#f0fdf4'
-                          : isDark ? 'rgba(55, 65, 81, 0.3)' : '#ffffff',
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        checked={isCorrect}
-                        readOnly
-                        style={{ marginTop: '2px', accentColor: '#22c55e' }}
-                      />
-                      <span
+              {/* Choices or Subjective indicator */}
+              {formData.question_type === 'CHOICE' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[1, 2, 3, 4].map((choice) => {
+                    const choiceText = formData[`choice_${choice}` as keyof typeof formData]
+                    if (!choiceText) return null
+                    const isCorrect = formData.answer === choice
+                    return (
+                      <div
+                        key={choice}
                         style={{
-                          flex: 1,
-                          fontSize: '15px',
-                          color: isDark ? '#e5e7eb' : '#111827',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '12px',
+                          padding: '14px',
+                          borderRadius: '8px',
+                          border: `2px solid ${
+                            isCorrect
+                              ? isDark ? '#22c55e' : '#16a34a'
+                              : isDark ? '#374151' : '#e5e7eb'
+                          }`,
+                          backgroundColor: isCorrect
+                            ? isDark ? 'rgba(34, 197, 94, 0.1)' : '#f0fdf4'
+                            : isDark ? 'rgba(55, 65, 81, 0.3)' : '#ffffff',
                         }}
                       >
-                        {choice}.{' '}
-                        <MathText text={normalizeLineBreaks(String(choiceText))} />
-                        {isCorrect && (
-                          <span
-                            style={{
-                              marginLeft: '8px',
-                              fontSize: '12px',
-                              fontWeight: 600,
-                              color: isDark ? '#4ade80' : '#16a34a',
-                            }}
-                          >
-                            (정답)
-                          </span>
-                        )}
-                      </span>
+                        <input
+                          type="radio"
+                          checked={isCorrect}
+                          readOnly
+                          style={{ marginTop: '2px', accentColor: '#22c55e' }}
+                        />
+                        <span
+                          style={{
+                            flex: 1,
+                            fontSize: '15px',
+                            color: isDark ? '#e5e7eb' : '#111827',
+                          }}
+                        >
+                          {choice}.{' '}
+                          <MathText text={normalizeLineBreaks(String(choiceText))} />
+                          {isCorrect && (
+                            <span
+                              style={{
+                                marginLeft: '8px',
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                color: isDark ? '#4ade80' : '#16a34a',
+                              }}
+                            >
+                              (정답)
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    padding: '16px',
+                    borderRadius: '8px',
+                    border: `2px dashed ${isDark ? '#4b5563' : '#d1d5db'}`,
+                    backgroundColor: isDark ? 'rgba(55, 65, 81, 0.3)' : '#f9fafb',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div style={{
+                    fontSize: '14px',
+                    color: isDark ? '#9ca3af' : '#6b7280',
+                    marginBottom: formData.answer_text ? '8px' : 0,
+                  }}>
+                    {formData.question_type === 'SHORT_ANSWER' ? '단답형 주관식' : '서술형 주관식'}
+                    {' '} - 학생이 직접 답안을 작성합니다
+                  </div>
+                  {formData.answer_text && (
+                    <div style={{
+                      fontSize: '13px',
+                      color: isDark ? '#d1d5db' : '#374151',
+                      padding: '8px',
+                      borderRadius: '6px',
+                      backgroundColor: isDark ? 'rgba(34, 197, 94, 0.1)' : '#f0fdf4',
+                      border: `1px solid ${isDark ? '#22c55e40' : '#bbf7d0'}`,
+                      textAlign: 'left',
+                      whiteSpace: 'pre-wrap',
+                    }}>
+                      <span style={{ fontSize: '11px', fontWeight: 600, color: isDark ? '#4ade80' : '#16a34a' }}>
+                        참고 정답:
+                      </span>{' '}
+                      {formData.answer_text}
                     </div>
-                  )
-                })}
-              </div>
+                  )}
+                </div>
+              )}
 
               {/* Explanation */}
               {formData.explanation && (

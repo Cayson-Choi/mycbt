@@ -35,22 +35,33 @@ export async function PUT(
       exam_id,
       subject_id,
       question_text,
+      question_type,
       choice_1,
       choice_2,
       choice_3,
       choice_4,
       answer,
+      answer_text,
       explanation,
       image_url,
+      points,
     } = body
 
+    const qType = question_type || 'CHOICE'
+
     // 유효성 검사
-    if (!question_text || !choice_1 || !choice_2 || !choice_3 || !choice_4) {
+    if (!question_text) {
       return NextResponse.json({ error: '필수 항목이 누락되었습니다' }, { status: 400 })
     }
 
-    if (!answer || answer < 1 || answer > 4) {
-      return NextResponse.json({ error: '정답은 1~4 중 하나여야 합니다' }, { status: 400 })
+    if (qType === 'CHOICE') {
+      if (!choice_1 || !choice_2 || !choice_3 || !choice_4) {
+        return NextResponse.json({ error: '모든 선택지를 입력해주세요' }, { status: 400 })
+      }
+
+      if (!answer || answer < 1 || answer > 4) {
+        return NextResponse.json({ error: '정답은 1~4 중 하나여야 합니다' }, { status: 400 })
+      }
     }
 
     // 문제 코드 중복 체크 (변경된 경우)
@@ -73,13 +84,16 @@ export async function PUT(
     // 문제 수정 (모든 필드 업데이트 가능)
     const updateData: any = {
       question_text,
-      choice_1,
-      choice_2,
-      choice_3,
-      choice_4,
-      answer,
+      question_type: qType,
+      choice_1: qType === 'CHOICE' ? choice_1 : (choice_1 || ''),
+      choice_2: qType === 'CHOICE' ? choice_2 : (choice_2 || ''),
+      choice_3: qType === 'CHOICE' ? choice_3 : (choice_3 || ''),
+      choice_4: qType === 'CHOICE' ? choice_4 : (choice_4 || ''),
+      answer: qType === 'CHOICE' ? answer : (answer || null),
+      answer_text: answer_text || null,
       explanation: explanation || '',
       image_url: image_url || null,
+      points: points || 1,
     }
 
     // 문제 코드, 시험, 과목도 변경 가능

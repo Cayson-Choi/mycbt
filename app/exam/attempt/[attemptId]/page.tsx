@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState, useCallback, use, memo } from 'react'
+import { useEffect, useState, useCallback, useRef, use, memo } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import MathText from '@/components/MathText'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import FullscreenEnforcer from '@/components/FullscreenEnforcer'
 
 // --- ExamTimer: isolated timer component so ticks don't re-render the question list ---
 function ExamTimer({ expiresAt, onExpire }: { expiresAt: string; onExpire: () => void }) {
@@ -49,13 +50,19 @@ const QuestionCard = memo(function QuestionCard({
   question,
   index,
   selectedAnswer,
+  answerText,
   onAnswer,
+  onAnswerText,
 }: {
   question: any
   index: number
   selectedAnswer: number | undefined
+  answerText: string | undefined
   onAnswer: (questionId: number, choice: number) => void
+  onAnswerText: (questionId: number, text: string) => void
 }) {
+  const questionType = question.question_type || 'CHOICE'
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border dark:border-gray-700">
       <div className="flex items-start gap-4 mb-4">
@@ -63,7 +70,14 @@ const QuestionCard = memo(function QuestionCard({
           {index + 1}
         </div>
         <div className="flex-1">
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">{question.subject_name}</div>
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <span>{question.subject_name}</span>
+            {questionType !== 'CHOICE' && (
+              <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">
+                {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
+              </span>
+            )}
+          </div>
           <MathText
             text={question.question_text}
             className="text-lg font-medium mb-4 block dark:text-white"
@@ -82,30 +96,48 @@ const QuestionCard = memo(function QuestionCard({
             </div>
           )}
 
-          <div className="space-y-3">
-            {[1, 2, 3, 4].map((choice) => (
-              <label
-                key={choice}
-                className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                  selectedAnswer === choice
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
-                    : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name={`question-${question.question_id}`}
-                  checked={selectedAnswer === choice}
-                  onChange={() => onAnswer(question.question_id, choice)}
-                  className="mt-1"
-                />
-                <span className="flex-1 dark:text-gray-200">
-                  {choice}.{' '}
-                  <MathText text={question[`choice_${choice}`]} />
-                </span>
-              </label>
-            ))}
-          </div>
+          {questionType === 'CHOICE' ? (
+            <div className="space-y-3">
+              {[1, 2, 3, 4].map((choice) => (
+                <label
+                  key={choice}
+                  className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
+                    selectedAnswer === choice
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
+                      : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name={`question-${question.question_id}`}
+                    checked={selectedAnswer === choice}
+                    onChange={() => onAnswer(question.question_id, choice)}
+                    className="mt-1"
+                  />
+                  <span className="flex-1 dark:text-gray-200">
+                    {choice}.{' '}
+                    <MathText text={question[`choice_${choice}`]} />
+                  </span>
+                </label>
+              ))}
+            </div>
+          ) : questionType === 'SHORT_ANSWER' ? (
+            <input
+              type="text"
+              value={answerText || ''}
+              onChange={(e) => onAnswerText(question.question_id, e.target.value)}
+              placeholder="답을 입력하세요"
+              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none bg-white dark:bg-gray-700 dark:text-white"
+            />
+          ) : (
+            <textarea
+              value={answerText || ''}
+              onChange={(e) => onAnswerText(question.question_id, e.target.value)}
+              placeholder="답안을 작성하세요"
+              rows={5}
+              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none bg-white dark:bg-gray-700 dark:text-white resize-vertical"
+            />
+          )}
         </div>
       </div>
     </div>
@@ -248,9 +280,11 @@ export default function ExamAttemptPage({
 
   const [paper, setPaper] = useState<any>(null)
   const [answers, setAnswers] = useState<Map<number, number>>(new Map())
+  const [textAnswers, setTextAnswers] = useState<Map<number, string>>(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [timeExpired, setTimeExpired] = useState(false)
+  const [examMode, setExamMode] = useState<string>('PRACTICE')
 
   useEffect(() => {
     loadPaper()
@@ -267,15 +301,21 @@ export default function ExamAttemptPage({
 
       const data = await res.json()
       setPaper(data)
+      setExamMode(data.exam_mode || 'PRACTICE')
 
       // 기존 답안 로드
       const newAnswers = new Map<number, number>()
+      const newTextAnswers = new Map<number, string>()
       data.questions.forEach((q: any) => {
         if (q.selected) {
           newAnswers.set(q.question_id, q.selected)
         }
+        if (q.answer_text) {
+          newTextAnswers.set(q.question_id, q.answer_text)
+        }
       })
       setAnswers(newAnswers)
+      setTextAnswers(newTextAnswers)
 
       setLoading(false)
     } catch (err) {
@@ -298,6 +338,32 @@ export default function ExamAttemptPage({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question_id: questionId, selected: choice }),
     }).catch(err => console.error('답안 저장 실패:', err))
+  }, [attemptId])
+
+  // 주관식 답안 저장 (debounced)
+  const textSaveTimers = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map())
+  const handleAnswerText = useCallback((questionId: number, text: string) => {
+    // UI 즉시 업데이트
+    setTextAnswers((prev) => {
+      const next = new Map(prev)
+      next.set(questionId, text)
+      return next
+    })
+
+    // 기존 타이머 클리어
+    const existing = textSaveTimers.current.get(questionId)
+    if (existing) clearTimeout(existing)
+
+    // 500ms 디바운스 후 서버 저장
+    const timer = setTimeout(() => {
+      fetch(`/api/attempts/${attemptId}/answer`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question_id: questionId, answer_text: text }),
+      }).catch(err => console.error('답안 저장 실패:', err))
+      textSaveTimers.current.delete(questionId)
+    }, 500)
+    textSaveTimers.current.set(questionId, timer)
   }, [attemptId])
 
   const handleExpire = useCallback(() => {
@@ -332,62 +398,80 @@ export default function ExamAttemptPage({
     )
   }
 
-  const answeredCount = answers.size
+  // 객관식 답안 + 주관식 답안(비어있지 않은) 합산
+  const answeredCount = (() => {
+    let count = answers.size
+    textAnswers.forEach((text, qid) => {
+      if (text.trim() && !answers.has(qid)) count++
+    })
+    return count
+  })()
   const totalCount = paper?.questions.length || 0
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* 상단 고정 바 */}
-      <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 fixed top-0 left-0 right-0 z-50 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 py-3">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-lg font-bold dark:text-white">{paper.exam_name}</h1>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
-                답안: {answeredCount} / {totalCount}
+    <FullscreenEnforcer attemptId={attemptId} enabled={examMode === 'OFFICIAL'}>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* 상단 고정 바 */}
+        <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 fixed top-0 left-0 right-0 z-50 shadow-sm">
+          <div className="max-w-5xl mx-auto px-4 py-3">
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-bold dark:text-white">{paper.exam_name}</h1>
+                  {examMode === 'OFFICIAL' && (
+                    <span className="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-semibold">
+                      공식
+                    </span>
+                  )}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+                  답안: {answeredCount} / {totalCount}
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <ExamTimer expiresAt={paper.expires_at} onExpire={handleExpire} />
-              <QuitButton />
+              <div className="flex items-center gap-3">
+                <ExamTimer expiresAt={paper.expires_at} onExpire={handleExpire} />
+                <QuitButton />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* 문제 */}
-      <div className="max-w-5xl mx-auto px-4 py-8 pt-24">
-        <div className="space-y-8">
-          {paper.questions.map((question: any, index: number) => (
-            <QuestionCard
-              key={question.question_id}
-              question={question}
-              index={index}
-              selectedAnswer={answers.get(question.question_id)}
-              onAnswer={handleAnswer}
-            />
-          ))}
+        {/* 문제 */}
+        <div className="max-w-5xl mx-auto px-4 py-8 pt-24">
+          <div className="space-y-8">
+            {paper.questions.map((question: any, index: number) => (
+              <QuestionCard
+                key={question.question_id}
+                question={question}
+                index={index}
+                selectedAnswer={answers.get(question.question_id)}
+                answerText={textAnswers.get(question.question_id)}
+                onAnswer={handleAnswer}
+                onAnswerText={handleAnswerText}
+              />
+            ))}
+          </div>
+
+          {/* 제출 버튼 */}
+          <SubmitSection
+            answeredCount={answeredCount}
+            totalCount={totalCount}
+            attemptId={attemptId}
+            onError={handleError}
+          />
         </div>
 
-        {/* 제출 버튼 */}
-        <SubmitSection
-          answeredCount={answeredCount}
-          totalCount={totalCount}
-          attemptId={attemptId}
-          onError={handleError}
+        {/* 시간 만료 안내 */}
+        <ConfirmDialog
+          open={timeExpired}
+          title="시험 시간 종료"
+          message="시험 시간이 종료되었습니다."
+          confirmText="확인"
+          cancelText="확인"
+          onConfirm={() => router.push('/')}
+          onCancel={() => router.push('/')}
         />
       </div>
-
-      {/* 시간 만료 안내 */}
-      <ConfirmDialog
-        open={timeExpired}
-        title="시험 시간 종료"
-        message="시험 시간이 종료되었습니다."
-        confirmText="확인"
-        cancelText="확인"
-        onConfirm={() => router.push('/')}
-        onCancel={() => router.push('/')}
-      />
-    </div>
+    </FullscreenEnforcer>
   )
 }
