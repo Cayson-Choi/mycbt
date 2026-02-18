@@ -138,23 +138,51 @@ export default function BulkUploadSplitEditor({
     return cleaned
   }
 
-  // LaTeX 백슬래시(\frac, \tau 등)를 JSON 이스케이프(\\frac, \\tau)로 자동 변환
-  const fixLatexBackslashes = (text: string): string => {
-    // 1) 이미 정상인 JSON 이스케이프를 임시 치환하여 보호
-    let fixed = text.replace(/\\\\/g, '\x00DBL\x00')
-    fixed = fixed.replace(/\\"/g, '\x00QUOTE\x00')
-    fixed = fixed.replace(/\\n/g, '\x00NL\x00')
-    fixed = fixed.replace(/\\\//g, '\x00SLASH\x00')
-    fixed = fixed.replace(/\\(u[0-9a-fA-F]{4})/g, '\x00U$1\x00')
-    // 2) 남은 백슬래시는 LaTeX이므로 이중 이스케이프
-    fixed = fixed.replace(/\\/g, '\\\\')
-    // 3) 보호했던 시퀀스 복원
-    fixed = fixed.replace(/\x00DBL\x00/g, '\\\\')
-    fixed = fixed.replace(/\x00QUOTE\x00/g, '\\"')
-    fixed = fixed.replace(/\x00NL\x00/g, '\\n')
-    fixed = fixed.replace(/\x00SLASH\x00/g, '\\/')
-    fixed = fixed.replace(/\x00U([0-9a-fA-F]{4})\x00/g, '\\u$1')
-    return fixed
+  // JSON 문자열 내부의 LaTeX 백슬래시를 자동 이스케이프
+  // 문자 단위로 파싱하여 문자열 안의 백슬래시만 정확히 처리
+  const fixJsonBackslashesInStrings = (text: string): string => {
+    const result: string[] = []
+    let i = 0
+    let inString = false
+
+    while (i < text.length) {
+      const ch = text[i]
+
+      if (!inString) {
+        result.push(ch)
+        if (ch === '"') inString = true
+        i++
+      } else {
+        if (ch === '\\') {
+          const next = text[i + 1]
+          if (next === undefined) {
+            result.push('\\\\')
+            i++
+          } else if (next === '"' || next === '\\' || next === '/') {
+            // 이미 유효한 JSON 이스케이프 → 유지
+            result.push(ch, next)
+            i += 2
+          } else if (next === 'u' && /^[0-9a-fA-F]{4}/.test(text.substring(i + 2, i + 6))) {
+            // 유니코드 이스케이프 \uXXXX → 유지
+            result.push(text.substring(i, i + 6))
+            i += 6
+          } else {
+            // 나머지 (\frac, \times, \alpha, \n, \t 등) → LaTeX로 취급, 이중 이스케이프
+            result.push('\\\\')
+            i++
+          }
+        } else if (ch === '"') {
+          result.push(ch)
+          inString = false
+          i++
+        } else {
+          result.push(ch)
+          i++
+        }
+      }
+    }
+
+    return result.join('')
   }
 
   const parseQuestions = (text: string, type: 'json' | 'csv'): any[] | null => {
@@ -165,13 +193,21 @@ export default function BulkUploadSplitEditor({
         const parsed = JSON.parse(cleaned)
         return Array.isArray(parsed) ? parsed : [parsed]
       } catch {
-        // 문자열 내 실제 줄바꿈 제거 + LaTeX 백슬래시 자동 수정 후 재시도
+        // JSON 문자열 내부 백슬래시 자동 수정 후 재시도
         try {
-          const fixed = fixLatexBackslashes(cleaned.replace(/\r?\n/g, ' '))
+          const fixed = fixJsonBackslashesInStrings(cleaned)
           const parsed = JSON.parse(fixed)
           return Array.isArray(parsed) ? parsed : [parsed]
-        } catch {
-          alert('잘못된 JSON 형식입니다')
+        } catch (e: any) {
+          const msg = e?.message || ''
+          const posMatch = msg.match(/position\s+(\d+)/)
+          if (posMatch) {
+            const pos = parseInt(posMatch[1])
+            const around = cleaned.substring(Math.max(0, pos - 30), pos + 30)
+            alert(`JSON 파싱 오류 (위치 ${pos} 부근):\n"...${around}..."\n\n오류: ${msg}`)
+          } else {
+            alert(`잘못된 JSON 형식입니다\n\n${msg}`)
+          }
           return null
         }
       }
