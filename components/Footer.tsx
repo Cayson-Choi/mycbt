@@ -15,7 +15,6 @@ export default function Footer() {
               </div>
               <span className="text-white font-bold">화성폴리텍대학 스마트 전기과</span>
             </div>
-            <p className="text-sm">자격시험 CBT 학습 시스템</p>
           </div>
           <div className="text-sm text-center md:text-right">
             <p>&copy; {currentYear} 화성폴리텍대학 스마트 전기과. Powered by CAYSON TECH</p>
