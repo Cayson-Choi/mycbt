@@ -239,6 +239,7 @@ export default function OfficialExamsPage() {
                     <span>시간: {exam.duration_minutes}분</span>
                     <span>문제: {exam.question_count}개</span>
                     <span>응시: {exam.attempt_count}명</span>
+                    <span>비밀번호: <span className="font-mono font-semibold text-gray-800 dark:text-gray-200">{exam.password}</span></span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

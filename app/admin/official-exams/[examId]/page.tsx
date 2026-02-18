@@ -190,6 +190,11 @@ export default function OfficialExamDetailPage({
   const [showEditor, setShowEditor] = useState(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
 
+  // 시험 설정 수정 상태
+  const [editingSettings, setEditingSettings] = useState(false)
+  const [settingsForm, setSettingsForm] = useState({ password: '', duration_minutes: 60 })
+  const [savingSettings, setSavingSettings] = useState(false)
+
   // 시험 정보 + 결과 동시 로드
   useEffect(() => {
     loadAll()
@@ -316,6 +321,36 @@ export default function OfficialExamDetailPage({
     }
   }
 
+  const handleSaveSettings = async () => {
+    setSavingSettings(true)
+    try {
+      const res = await fetch('/api/admin/official-exams', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          exam_id: parseInt(examId),
+          password: settingsForm.password,
+          duration_minutes: settingsForm.duration_minutes,
+        }),
+      })
+      if (res.ok) {
+        setExam((prev: any) => ({
+          ...prev,
+          password: settingsForm.password,
+          duration_minutes: settingsForm.duration_minutes,
+        }))
+        setEditingSettings(false)
+      } else {
+        const data = await res.json()
+        alert(data.error || '저장 실패')
+      }
+    } catch {
+      alert('오류가 발생했습니다')
+    } finally {
+      setSavingSettings(false)
+    }
+  }
+
   const handleEditorClose = () => {
     setShowEditor(false)
     setEditorQuestion(undefined)
@@ -380,9 +415,22 @@ export default function OfficialExamDetailPage({
                 공식 시험
               </span>
             </div>
-            <p className="text-gray-600 dark:text-gray-400">
-              시험 시간: {exam?.duration_minutes}분
-            </p>
+            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+              <span>시험 시간: {exam?.duration_minutes}분</span>
+              <span>비밀번호: <span className="font-mono font-semibold text-gray-800 dark:text-gray-200">{exam?.password}</span></span>
+              <button
+                onClick={() => {
+                  setSettingsForm({
+                    password: exam?.password || '',
+                    duration_minutes: exam?.duration_minutes || 60,
+                  })
+                  setEditingSettings(true)
+                }}
+                className="text-blue-600 dark:text-blue-400 hover:underline text-xs font-medium"
+              >
+                설정 변경
+              </button>
+            </div>
           </div>
           <Link
             href="/admin/official-exams"
@@ -391,6 +439,48 @@ export default function OfficialExamDetailPage({
             목록으로
           </Link>
         </div>
+
+        {/* 설정 변경 폼 */}
+        {editingSettings && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6 border dark:border-gray-700">
+            <h2 className="text-lg font-bold mb-4 dark:text-white">시험 설정 변경</h2>
+            <div className="flex gap-4 items-end">
+              <div>
+                <label className="block text-sm font-medium mb-1 dark:text-gray-200">비밀번호</label>
+                <input
+                  type="text"
+                  value={settingsForm.password}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, password: e.target.value })}
+                  className="px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm w-48"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 dark:text-gray-200">시험 시간(분)</label>
+                <input
+                  type="number"
+                  value={settingsForm.duration_minutes}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, duration_minutes: parseInt(e.target.value) || 60 })}
+                  min={1}
+                  max={300}
+                  className="px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm w-24"
+                />
+              </div>
+              <button
+                onClick={handleSaveSettings}
+                disabled={savingSettings}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+              >
+                {savingSettings ? '저장 중...' : '저장'}
+              </button>
+              <button
+                onClick={() => setEditingSettings(false)}
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* 탭 */}
         <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
