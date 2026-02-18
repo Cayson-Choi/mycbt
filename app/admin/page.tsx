@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import ResetAttemptsSection from '@/components/ResetAttemptsSection'
 import DuplicateQuestionsSection from '@/components/DuplicateQuestionsSection'
+import ExamSettingsSection from '@/components/ExamSettingsSection'
 
 export default async function AdminPage() {
   const supabase = await createClient()
@@ -88,6 +89,9 @@ export default async function AdminPage() {
             ))}
           </div>
         </div>
+
+        {/* 출제 문항 수 설정 */}
+        <ExamSettingsSection exams={exams || []} />
 
         {/* 중복 문제 관리 */}
         <DuplicateQuestionsSection />
