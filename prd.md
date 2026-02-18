@@ -1,6 +1,6 @@
 # 전기 자격시험 CBT - 요구사항 명세서 (PRD)
 
-> 최종 업데이트: 2026-02-17 | 상태: 전체 구현 완료
+> 최종 업데이트: 2026-02-19 | 상태: 전체 구현 완료
 
 ## 0) 서비스 한 줄
 학생이 컴퓨터로 전기 자격시험 문제를 풀고, 서버가 채점해서 점수와 오늘/어제 랭킹을 보여주는 CBT 사이트.
@@ -73,11 +73,17 @@
 | email | 이메일 |
 | affiliation | 소속 (교수/전기반/소방반/신중년) |
 | phone | 전화번호 |
+| student_id | 학번 (OFFICIAL 시험 응시 시 필수) |
 | is_admin | 관리자 여부 |
 | created_at, updated_at | 타임스탬프 |
 
 ### 4-2) exams / subjects
-**exams**: id(PK), name
+**exams**: id(PK), name, exam_mode(PRACTICE/OFFICIAL), password, duration_minutes, is_published, creator_name, creator_title
+
+- `exam_mode`: PRACTICE(연습) / OFFICIAL(공식 시험)
+- `is_published`: OFFICIAL 시험 게시 상태 (false=비게시, true=게시 중). PRACTICE는 무관.
+- `password`: OFFICIAL 모드 시험 접근 비밀번호
+- `duration_minutes`: 시험 시간(분), 기본 60분
 
 **subjects**: id(PK), exam_id(FK), name, questions_per_attempt, order_no
 
@@ -108,6 +114,7 @@
 | expires_at | started_at + 60분 |
 | submitted_at (nullable) | |
 | total_questions, total_correct, total_score | |
+| violation_count | 이탈 횟수 (OFFICIAL 모드) |
 
 ### 4-5) attempt_questions (시험지 스냅샷)
 - attempt_id(FK), seq(1..N), question_id(FK)
@@ -169,13 +176,14 @@
 - 로그인 여부, 내 attempt인지, status 확인, 만료 전인지(expires_at > now)
 
 ### 8-1) 시험 시작 ✅
-`POST /api/attempts/start` (입력: exam_id)
+`POST /api/attempts/start` (입력: exam_id, password?)
 1. IN_PROGRESS 확인 (시험 종류 상관없이)
 2. 있으면: 만료 전이면 attempt_id 반환(이어풀기), 만료면 EXPIRED 처리
-3. 23:00~23:59 KST면 새 시험 거절
-4. 새 attempt 생성 (started_at, expires_at=+60분)
-5. 과목 설정대로 랜덤 문제 추출 → attempt_questions 저장
-6. attempt_id 반환
+3. OFFICIAL 모드: is_published 체크 (비게시면 차단) + 비밀번호 검증 + 학번 필수
+4. PRACTICE 모드: 23:00~23:59 KST면 새 시험 거절
+5. 새 attempt 생성 (started_at, expires_at=+duration_minutes분)
+6. PRACTICE: 과목 설정대로 랜덤 문제 추출 / OFFICIAL: 전체 활성 문제 id순
+7. attempt_questions 저장 → attempt_id 반환
 
 ### 8-2) 시험지 조회 ✅
 `GET /api/attempts/:attemptId/paper`
@@ -220,13 +228,16 @@
 - `GET /api/admin/users` - 회원 목록 + 통계
 - `PATCH/DELETE /api/admin/users/:id` - 권한 변경/삭제
 - `POST /api/upload/image` - 이미지 업로드
+- `GET/POST/PUT/DELETE /api/admin/official-exams` - 공식 시험 CRUD + 게시/비게시(is_published) 토글
 
 ---
 
 ## 9) 프론트 화면
 
 ### 홈 ✅
-- 시험 선택 (기능사/산업기사/기사)
+- 시험 선택 (기능사/산업기사/기사 + 게시된 공식 시험)
+- 시험 카드 실시간 갱신 (10초 폴링, ExamCards 클라이언트 컴포넌트)
+- OFFICIAL 시험은 is_published=true인 것만 노출
 - 버튼 상태: IN_PROGRESS → "이어하기" / 23~24시 → "시작 불가" / 그 외 → "시험 시작"
 - 오늘/어제 Top5 + 내 순위
 
@@ -237,7 +248,7 @@
 
 ### 결과 화면 ✅
 - 점수/오답/해설 (제출 후)
-- 과목별 점수 표시
+- 과목별 성적: 정답 개수로 표시 (예: 1 / 5), 정답률 기반 프로그레스바
 
 ### 마이페이지 ✅
 - 응시 기록 (SUBMITTED: 점수, EXPIRED: "미제출(시간초과)")
@@ -265,6 +276,14 @@
 - 관리자 권한 부여/해제
 - 회원 삭제
 - 드롭다운 필터 + 페이지네이션
+
+### 공식 시험 관리 ✅
+- 공식 시험 생성 (이름, 비밀번호, 시간 설정)
+- 문제 출제 (개별 추가, 객관식/주관식/서술형)
+- 게시/비게시 토글 (is_published)
+- 게시 시 홈페이지 즉시 노출, 비게시 시 즉시 숨김 (revalidatePath + 클라이언트 폴링)
+- 비게시 상태에서 직접 URL 접속해도 시험 시작 차단
+- 응시자 답안 조회 및 주관식 수동 채점
 
 ---
 

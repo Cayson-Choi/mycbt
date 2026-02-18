@@ -1,7 +1,7 @@
 # 현재 개발 상태
 
 ## 최종 업데이트
-2026-02-17
+2026-02-19
 
 ## 완료된 기능
 
@@ -25,9 +25,10 @@
 - [x] 답안 실시간 저장 (서버 저장)
 - [x] 이어풀기 (새로고침/재접속 시 복원)
 - [x] 제출/채점 (서버 채점, 과목별 점수)
-- [x] 시험 결과 화면 (정답/오답, 해설, 과목별 점수)
+- [x] 시험 결과 화면 (정답/오답, 해설, 과목별 정답 개수 표시)
 - [x] 23:00~23:59 KST 신규 시험 시작 금지
 - [x] 60분 시간 제한, 만료 처리
+- [x] 홈페이지 시험 카드 실시간 갱신 (10초 폴링)
 
 ### 4. 랭킹 시스템 ✅
 - [x] 오늘 Top5 (daily_best_scores)
@@ -55,12 +56,23 @@
   - [x] 소속별 통계 (인라인 뱃지, 오늘 증감)
   - [x] 드롭다운 필터 + 페이지네이션 (20명씩)
 
+### 7. 공식 시험 (OFFICIAL) ✅
+- [x] 공식 시험 생성/수정/삭제
+- [x] 문제 출제 (객관식/주관식/서술형)
+- [x] 게시/비게시 토글 (is_published)
+- [x] 비게시 시험 홈페이지 숨김 + 직접 URL 접근 차단
+- [x] 게시 상태 변경 시 홈페이지 즉시 반영 (revalidatePath + 클라이언트 폴링)
+- [x] 비밀번호 기반 접근 제어
+- [x] 학번 필수 확인
+- [x] 이탈 감지 (violation_count)
+- [x] 응시자 답안 조회 및 주관식 수동 채점
+
 ## 프로젝트 구조
 
 ```
 app/
 ├── layout.tsx              # 루트 레이아웃 (Header, Footer, ThemeProvider)
-├── page.tsx                # 홈 (시험 선택 + 리더보드)
+├── page.tsx                # 홈 (시험 선택 + 리더보드, ExamCards 클라이언트 폴링)
 ├── globals.css             # 전역 스타일 + 애니메이션
 ├── (auth)/
 │   ├── login/page.tsx
@@ -68,7 +80,8 @@ app/
 ├── admin/
 │   ├── page.tsx            # 관리자 대시보드
 │   ├── questions/page.tsx  # 문제 관리
-│   └── users/page.tsx      # 회원 관리
+│   ├── users/page.tsx      # 회원 관리
+│   └── official-exams/     # 공식 시험 관리 (목록, 상세, 응시자 답안)
 ├── exam/
 │   ├── [examId]/page.tsx        # 시험 시작 화면
 │   ├── attempt/[attemptId]/     # 문제 풀이
@@ -78,7 +91,7 @@ app/
 │   ├── profile/page.tsx    # 프로필 수정
 │   ├── withdraw/page.tsx   # 회원 탈퇴
 │   └── wrong-answers/page.tsx  # 오답 노트
-└── api/                    # 21개 API 라우트
+└── api/                    # API 라우트
     ├── auth/               # 로그인/가입/로그아웃
     ├── account/            # 프로필/비밀번호/탈퇴
     ├── admin/              # 문제/회원 관리 (관리자 전용)
@@ -93,7 +106,8 @@ components/
 ├── Footer.tsx              # 푸터
 ├── ThemeProvider.tsx        # 다크모드 프로바이더
 ├── ThemeToggle.tsx          # 다크모드 토글 버튼
-├── Leaderboard.tsx          # 랭킹 컴포넌트
+├── Leaderboard.tsx          # 랭킹 컴포넌트 (10초 폴링)
+├── ExamCards.tsx            # 시험 카드 목록 (10초 폴링, 게시 상태 실시간 반영)
 ├── LogoutButton.tsx         # 로그아웃 버튼
 ├── MathText.tsx             # 수학 표기법 렌더링
 ├── QuestionSplitEditor.tsx  # 문제 편집 분할 뷰 (lazy loaded)

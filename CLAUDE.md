@@ -46,10 +46,10 @@
 /app              - Next.js App Router
   /api            - API Routes (21개 엔드포인트)
   /(auth)         - 인증 관련 페이지 (로그인, 회원가입)
-  /admin          - 관리자 페이지 (문제관리, 회원관리)
+  /admin          - 관리자 페이지 (문제관리, 회원관리, 공식시험관리)
   /exam           - 시험 관련 페이지 (시작, 풀이, 결과)
   /my             - 마이페이지 (기록, 프로필, 오답노트, 탈퇴)
-/components       - 재사용 컴포넌트
+/components       - 재사용 컴포넌트 (ExamCards, Leaderboard 등 클라이언트 폴링)
 /lib/supabase     - Supabase 클라이언트 (client, server, admin)
 /types            - TypeScript 타입 정의
 ```
@@ -57,7 +57,7 @@
 ## DB 테이블 요약
 
 1. **profiles** - 회원 정보
-2. **exams** - 시험 종류 (기능사/산업기사/기사)
+2. **exams** - 시험 종류 (기능사/산업기사/기사, exam_mode: PRACTICE/OFFICIAL, is_published: 게시 상태)
 3. **subjects** - 과목 설정 (과목당 문항 수 포함)
 4. **questions** - 문제 은행 (정답 포함, 프론트 노출 금지)
 5. **attempts** - 시험 응시 기록
