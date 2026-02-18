@@ -28,7 +28,7 @@ export async function GET() {
     // 시험 + 과목 + questions_per_attempt 조회
     const { data: exams, error: examsError } = await supabase
       .from('exams')
-      .select('id, name')
+      .select('id, name, exam_mode, duration_minutes')
       .order('id')
 
     if (examsError) {
@@ -103,48 +103,86 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { subjects } = body as {
-      subjects: { id: number; questions_per_attempt: number }[]
+    const { subjects, exams: examUpdates } = body as {
+      subjects?: { id: number; questions_per_attempt: number }[]
+      exams?: { id: number; duration_minutes: number }[]
     }
 
-    if (!Array.isArray(subjects) || subjects.length === 0) {
-      return NextResponse.json({ error: '수정할 과목 정보가 없습니다' }, { status: 400 })
+    if ((!Array.isArray(subjects) || subjects.length === 0) && (!Array.isArray(examUpdates) || examUpdates.length === 0)) {
+      return NextResponse.json({ error: '수정할 정보가 없습니다' }, { status: 400 })
     }
 
-    // 유효성 검사
-    for (const s of subjects) {
-      if (typeof s.id !== 'number' || typeof s.questions_per_attempt !== 'number') {
-        return NextResponse.json({ error: '잘못된 데이터 형식입니다' }, { status: 400 })
+    // 과목 유효성 검사
+    if (subjects && subjects.length > 0) {
+      for (const s of subjects) {
+        if (typeof s.id !== 'number' || typeof s.questions_per_attempt !== 'number') {
+          return NextResponse.json({ error: '잘못된 데이터 형식입니다' }, { status: 400 })
+        }
+        if (!Number.isInteger(s.questions_per_attempt) || s.questions_per_attempt < 0) {
+          return NextResponse.json(
+            { error: '출제 문항 수는 0 이상의 정수여야 합니다' },
+            { status: 400 }
+          )
+        }
       }
-      if (!Number.isInteger(s.questions_per_attempt) || s.questions_per_attempt < 0) {
-        return NextResponse.json(
-          { error: '출제 문항 수는 0 이상의 정수여야 합니다' },
-          { status: 400 }
-        )
+    }
+
+    // 시험 시간 유효성 검사
+    if (examUpdates && examUpdates.length > 0) {
+      for (const e of examUpdates) {
+        if (typeof e.id !== 'number' || typeof e.duration_minutes !== 'number') {
+          return NextResponse.json({ error: '잘못된 데이터 형식입니다' }, { status: 400 })
+        }
+        if (!Number.isInteger(e.duration_minutes) || e.duration_minutes < 1 || e.duration_minutes > 300) {
+          return NextResponse.json(
+            { error: '시험 시간은 1~300분이어야 합니다' },
+            { status: 400 }
+          )
+        }
       }
     }
 
     const adminSupabase = createAdminClient()
 
     // 각 과목 업데이트
-    for (const s of subjects) {
-      const { error } = await adminSupabase
-        .from('subjects')
-        .update({ questions_per_attempt: s.questions_per_attempt })
-        .eq('id', s.id)
+    if (subjects && subjects.length > 0) {
+      for (const s of subjects) {
+        const { error } = await adminSupabase
+          .from('subjects')
+          .update({ questions_per_attempt: s.questions_per_attempt })
+          .eq('id', s.id)
 
-      if (error) {
-        console.error(`Subject ${s.id} update error:`, error)
-        return NextResponse.json(
-          { error: `과목 ID ${s.id} 업데이트 실패` },
-          { status: 500 }
-        )
+        if (error) {
+          console.error(`Subject ${s.id} update error:`, error)
+          return NextResponse.json(
+            { error: `과목 ID ${s.id} 업데이트 실패` },
+            { status: 500 }
+          )
+        }
+      }
+    }
+
+    // 시험 시간 업데이트
+    if (examUpdates && examUpdates.length > 0) {
+      for (const e of examUpdates) {
+        const { error } = await adminSupabase
+          .from('exams')
+          .update({ duration_minutes: e.duration_minutes })
+          .eq('id', e.id)
+
+        if (error) {
+          console.error(`Exam ${e.id} duration update error:`, error)
+          return NextResponse.json(
+            { error: `시험 ID ${e.id} 시간 업데이트 실패` },
+            { status: 500 }
+          )
+        }
       }
     }
 
     return NextResponse.json({
-      message: '출제 문항 수가 저장되었습니다',
-      updated_count: subjects.length,
+      message: '설정이 저장되었습니다',
+      updated_count: (subjects?.length || 0) + (examUpdates?.length || 0),
     })
   } catch (error) {
     console.error('Exam settings PUT error:', error)

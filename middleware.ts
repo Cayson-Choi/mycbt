@@ -42,11 +42,18 @@ export async function middleware(request: NextRequest) {
 
   // ★ getSession()은 쿠키에서 로컬로 읽음 (네트워크 요청 없음, ~0ms)
   // getUser()는 Supabase 서버로 HTTP 요청 (~200-500ms)
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  const user = session?.user ?? null
+  let user = null
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    user = session?.user ?? null
+  } catch {
+    // 리프레시 토큰 만료 등 인증 에러 → 로그인 페이지로
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
 
   // 보호된 페이지: 로그인 필요
   const protectedPaths = ['/exam', '/my', '/admin']

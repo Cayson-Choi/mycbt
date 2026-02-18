@@ -6,6 +6,7 @@ interface Exam {
   id: number
   name: string
   exam_mode?: string
+  duration_minutes?: number
 }
 
 interface Subject {
@@ -24,6 +25,8 @@ interface Props {
 export default function ExamSettingsSection({ exams }: Props) {
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [editValues, setEditValues] = useState<Record<number, number>>({})
+  const [durationValues, setDurationValues] = useState<Record<number, number>>({})
+  const [examDurations, setExamDurations] = useState<Record<number, number>>({})
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [result, setResult] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
@@ -44,6 +47,14 @@ export default function ExamSettingsSection({ exams }: Props) {
           values[s.id] = s.questions_per_attempt
         }
         setEditValues(values)
+
+        // 시험 시간 초기값 설정
+        const durations: Record<number, number> = {}
+        for (const e of data.exams || []) {
+          durations[e.id] = e.duration_minutes || 60
+        }
+        setDurationValues(durations)
+        setExamDurations(durations)
       }
     } catch {
       setResult({ type: 'error', message: '설정을 불러오는데 실패했습니다' })
@@ -59,8 +70,19 @@ export default function ExamSettingsSection({ exams }: Props) {
     setResult(null)
   }
 
+  const handleDurationChange = (examId: number, value: string) => {
+    const num = value === '' ? 60 : parseInt(value, 10)
+    if (isNaN(num) || num < 1) return
+    setDurationValues((prev) => ({ ...prev, [examId]: num }))
+    setResult(null)
+  }
+
   const hasChanges = () => {
-    return subjects.some((s) => editValues[s.id] !== s.questions_per_attempt)
+    const subjectChanged = subjects.some((s) => editValues[s.id] !== s.questions_per_attempt)
+    const durationChanged = Object.keys(durationValues).some(
+      (id) => durationValues[parseInt(id)] !== examDurations[parseInt(id)]
+    )
+    return subjectChanged || durationChanged
   }
 
   const handleSave = async () => {
@@ -72,7 +94,11 @@ export default function ExamSettingsSection({ exams }: Props) {
         .filter((s) => editValues[s.id] !== s.questions_per_attempt)
         .map((s) => ({ id: s.id, questions_per_attempt: editValues[s.id] }))
 
-      if (changedSubjects.length === 0) {
+      const changedExams = Object.keys(durationValues)
+        .filter((id) => durationValues[parseInt(id)] !== examDurations[parseInt(id)])
+        .map((id) => ({ id: parseInt(id), duration_minutes: durationValues[parseInt(id)] }))
+
+      if (changedSubjects.length === 0 && changedExams.length === 0) {
         setResult({ type: 'error', message: '변경된 항목이 없습니다' })
         setSaving(false)
         return
@@ -81,7 +107,10 @@ export default function ExamSettingsSection({ exams }: Props) {
       const res = await fetch('/api/admin/exam-settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subjects: changedSubjects }),
+        body: JSON.stringify({
+          subjects: changedSubjects.length > 0 ? changedSubjects : undefined,
+          exams: changedExams.length > 0 ? changedExams : undefined,
+        }),
       })
 
       const data = await res.json()
@@ -144,23 +173,37 @@ export default function ExamSettingsSection({ exams }: Props) {
                   공식 시험은 등록된 모든 활성 문제가 출제됩니다.
                 </p>
               ) : (
-                <div className="flex flex-wrap gap-x-5 gap-y-1.5">
-                  {examSubjects.map((subject) => (
-                    <div
-                      key={subject.id}
-                      className="flex items-center gap-1.5 text-xs"
-                    >
-                      <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
-                      <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
-                      <input
-                        type="number"
-                        min={0}
-                        value={editValues[subject.id] ?? subject.questions_per_attempt}
-                        onChange={(e) => handleChange(subject.id, e.target.value)}
-                        className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
-                      />
-                    </div>
-                  ))}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs">
+                    <span className="text-gray-700 dark:text-gray-300">시험 시간</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={300}
+                      value={durationValues[exam.id] ?? 60}
+                      onChange={(e) => handleDurationChange(exam.id, e.target.value)}
+                      className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
+                    />
+                    <span className="text-gray-400 dark:text-gray-500">분</span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                    {examSubjects.map((subject) => (
+                      <div
+                        key={subject.id}
+                        className="flex items-center gap-1.5 text-xs"
+                      >
+                        <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
+                        <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
+                        <input
+                          type="number"
+                          min={0}
+                          value={editValues[subject.id] ?? subject.questions_per_attempt}
+                          onChange={(e) => handleChange(subject.id, e.target.value)}
+                          className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

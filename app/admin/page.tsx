@@ -39,7 +39,7 @@ export default async function AdminPage() {
 
   const { data: exams } = await supabase
     .from('exams')
-    .select('id, name, exam_mode')
+    .select('id, name, exam_mode, duration_minutes')
     .order('id')
 
   return (

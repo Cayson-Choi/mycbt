@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import AuthListener from "@/components/AuthListener";
 
 export const metadata: Metadata = {
   title: "스마트 전기과 - 화성폴리텍대학",
@@ -44,6 +45,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AuthListener />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
