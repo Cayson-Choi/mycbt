@@ -44,7 +44,7 @@ export default async function AdminPage() {
 
   const { data: exams } = await supabase
     .from('exams')
-    .select('id, name')
+    .select('id, name, exam_mode')
     .order('id')
 
   return (
@@ -100,7 +100,7 @@ export default async function AdminPage() {
         <ResetAttemptsSection exams={exams || []} />
 
         {/* 관리 메뉴 */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <Link
             href="/admin/questions"
             className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
@@ -130,6 +130,23 @@ export default async function AdminPage() {
                 <h3 className="font-bold text-lg dark:text-white">회원 관리</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   회원 목록, 권한 관리
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/official-exams"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-red-100 dark:bg-red-900/50 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">🎓</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg dark:text-white">공식 시험 관리</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  중간고사/기말고사 출제, 결과 조회
                 </p>
               </div>
             </div>
