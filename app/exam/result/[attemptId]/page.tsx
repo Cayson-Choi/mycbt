@@ -81,7 +81,10 @@ export default function ExamResultPage({
               {result.total_score}점
             </div>
             <div className="text-gray-600 dark:text-gray-400">
-              {result.total_correct} / {result.total_questions} 문제 정답
+              {isOfficial
+                ? `${result.total_score} / ${result.questions.reduce((sum: number, q: any) => sum + (q.points || 1), 0)}점`
+                : `${result.total_correct} / ${result.total_questions} 문제 정답`
+              }
             </div>
             {result.grading_status === 'PENDING_MANUAL' && (
               <div className="mt-3 inline-block px-4 py-2 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 rounded-lg text-sm font-semibold">

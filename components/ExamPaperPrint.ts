@@ -91,7 +91,7 @@ export function printExamPaperFromResult(data: any) {
 <div class="score-box">
   <div>총점</div>
   <div class="score">${data.total_score}점</div>
-  <div style="font-size:13px; color:#666;">정답 ${data.total_correct} / ${data.total_questions}문항</div>
+  <div style="font-size:13px; color:#666;">${data.total_score} / ${data.questions.reduce((s: number, q: any) => s + (q.points || 1), 0)}점</div>
 </div>
 <h2 style="font-size:16px; border-bottom:1px solid #ccc; padding-bottom:6px;">문제 및 답안</h2>
 ${questionsHtml}

@@ -178,7 +178,7 @@ export default function AdminAttemptDetailPage({
               {result.total_score}점
             </div>
             <div className="text-gray-600 dark:text-gray-400">
-              {result.total_correct} / {result.total_questions} 정답
+              {result.total_score} / {result.questions.reduce((sum: number, q: any) => sum + (q.points || 1), 0)}점
             </div>
             <div
               className={`px-3 py-1 rounded-full text-sm font-bold ${
