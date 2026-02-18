@@ -150,10 +150,39 @@ async function ExamQuestionCount({ examId, examName }: { examId: number; examNam
     .select('*', { count: 'exact', head: true })
     .eq('exam_id', examId)
 
+  const { data: subjects } = await supabase
+    .from('subjects')
+    .select('id, name')
+    .eq('exam_id', examId)
+    .order('order_no')
+
+  const subjectCounts = await Promise.all(
+    (subjects || []).map(async (s) => {
+      const { count: cnt } = await supabase
+        .from('questions')
+        .select('*', { count: 'exact', head: true })
+        .eq('exam_id', examId)
+        .eq('subject_id', s.id)
+      return { name: s.name, count: cnt || 0 }
+    })
+  )
+
   return (
-    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-      <span className="font-medium dark:text-gray-200">{examName}</span>
-      <span className="text-blue-600 dark:text-blue-400 font-semibold">{count || 0}개</span>
+    <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+      <div className="flex justify-between items-center">
+        <span className="font-medium dark:text-gray-200">{examName}</span>
+        <span className="text-blue-600 dark:text-blue-400 font-semibold">{count || 0}개</span>
+      </div>
+      {subjectCounts.length > 0 && (
+        <div className="mt-2 ml-4 space-y-1">
+          {subjectCounts.map((sc) => (
+            <div key={sc.name} className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+              <span>{sc.name}</span>
+              <span>{sc.count}개</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
