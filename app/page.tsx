@@ -93,7 +93,7 @@ function ExamIcon({ index }: { index: number }) {
 
 export default async function Home() {
   const supabase = await createClient()
-  const { data: exams } = await supabase.from('exams').select('*').order('id')
+  const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at').order('id')
 
   return (
     <div>
@@ -144,9 +144,16 @@ export default async function Home() {
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                   <ExamIcon index={index} />
                 </div>
-                <span className="text-xs bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
-                  60분
-                </span>
+                <div className="flex items-center gap-2">
+                  {exam.exam_mode === 'OFFICIAL' && (
+                    <span className="text-xs bg-red-500/80 px-2 py-1 rounded-full font-semibold">
+                      공식 시험
+                    </span>
+                  )}
+                  <span className="text-xs bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                    {exam.duration_minutes || 60}분
+                  </span>
+                </div>
               </div>
               <h3 className="text-xl font-bold mb-1">{exam.name}</h3>
               <p className="text-sm text-white/70 mb-5">

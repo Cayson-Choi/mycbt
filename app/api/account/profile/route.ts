@@ -18,7 +18,7 @@ export async function GET() {
 
     const { data: profile, error } = await supabase
       .from('profiles')
-      .select('id, name, affiliation, phone, created_at')
+      .select('id, name, affiliation, phone, student_id, created_at')
       .eq('id', user.id)
       .single()
 
@@ -52,7 +52,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 })
     }
 
-    const { affiliation, phone } = await request.json()
+    const { affiliation, phone, student_id } = await request.json()
 
     // 유효성 검사
     if (!affiliation || !phone) {
@@ -60,12 +60,14 @@ export async function PUT(request: Request) {
     }
 
     // 프로필 업데이트 (이름과 이메일은 수정 불가)
+    const updateData: any = { affiliation, phone }
+    if (student_id !== undefined) {
+      updateData.student_id = student_id || null
+    }
+
     const { data: updatedProfile, error } = await supabase
       .from('profiles')
-      .update({
-        affiliation,
-        phone,
-      })
+      .update(updateData)
       .eq('id', user.id)
       .select()
       .single()

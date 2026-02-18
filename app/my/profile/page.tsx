@@ -13,6 +13,7 @@ export default function ProfilePage() {
   const [formData, setFormData] = useState({
     affiliation: '',
     phone: '',
+    student_id: '',
   })
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -38,6 +39,7 @@ export default function ProfilePage() {
         setFormData({
           affiliation: data.profile?.affiliation || '',
           phone: data.profile?.phone || '',
+          student_id: data.profile?.student_id || '',
         })
       }
     } catch (err) {
@@ -161,6 +163,21 @@ export default function ProfilePage() {
                 <option value="소방반">소방반</option>
                 <option value="신중년">신중년</option>
               </select>
+            </div>
+
+            {/* 학번 (수정 가능) */}
+            <div>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">학번</label>
+              <input
+                type="text"
+                value={formData.student_id}
+                onChange={(e) =>
+                  setFormData({ ...formData, student_id: e.target.value })
+                }
+                className="w-full px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="학번을 입력하세요"
+              />
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">공식 시험 응시 시 필수입니다</p>
             </div>
 
             {/* 전화번호 (수정 가능) */}

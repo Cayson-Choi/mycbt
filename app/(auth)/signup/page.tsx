@@ -31,6 +31,7 @@ export default function SignupPage() {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
       name: formData.get('name') as string,
+      student_id: (formData.get('student_id') as string) || '',
       affiliation: formData.get('affiliation') as string,
       phone: formData.get('phone') as string,
     }
@@ -97,6 +98,20 @@ export default function SignupPage() {
             required
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
           />
+        </div>
+
+        <div>
+          <label htmlFor="student_id" className="block text-sm font-medium mb-1 dark:text-gray-200">
+            학번
+          </label>
+          <input
+            type="text"
+            id="student_id"
+            name="student_id"
+            placeholder="학번을 입력하세요"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">선택사항 (공식 시험 응시 시 필요)</p>
         </div>
 
         <div>

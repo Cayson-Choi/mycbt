@@ -13,6 +13,8 @@ export type AttemptStatus = 'IN_PROGRESS' | 'SUBMITTED' | 'EXPIRED'
 
 export type Affiliation = '교수' | '전기반' | '소방반' | '신중년'
 
+export type ExamMode = 'PRACTICE' | 'OFFICIAL'
+
 export interface Database {
   public: {
     Tables: {
@@ -23,6 +25,7 @@ export interface Database {
           affiliation: Affiliation | null
           phone: string | null
           is_admin: boolean
+          student_id: string | null
           created_at: string
           updated_at: string
         }
@@ -32,6 +35,7 @@ export interface Database {
           affiliation?: Affiliation | null
           phone?: string | null
           is_admin?: boolean
+          student_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -41,6 +45,7 @@ export interface Database {
           affiliation?: Affiliation | null
           phone?: string | null
           is_admin?: boolean
+          student_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -49,16 +54,25 @@ export interface Database {
         Row: {
           id: number
           name: string
+          exam_mode: ExamMode
+          password: string | null
+          duration_minutes: number
           created_at: string
         }
         Insert: {
           id?: number
           name: string
+          exam_mode?: ExamMode
+          password?: string | null
+          duration_minutes?: number
           created_at?: string
         }
         Update: {
           id?: number
           name?: string
+          exam_mode?: ExamMode
+          password?: string | null
+          duration_minutes?: number
           created_at?: string
         }
       }
@@ -153,6 +167,7 @@ export interface Database {
           total_questions: number
           total_correct: number | null
           total_score: number | null
+          violation_count: number
           created_at: string
           updated_at: string
         }
@@ -167,6 +182,7 @@ export interface Database {
           total_questions: number
           total_correct?: number | null
           total_score?: number | null
+          violation_count?: number
           created_at?: string
           updated_at?: string
         }
@@ -181,6 +197,7 @@ export interface Database {
           total_questions?: number
           total_correct?: number | null
           total_score?: number | null
+          violation_count?: number
           created_at?: string
           updated_at?: string
         }

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 interface Exam {
   id: number
   name: string
+  exam_mode?: string
 }
 
 interface Subject {
@@ -124,29 +125,44 @@ export default function ExamSettingsSection({ exams }: Props) {
           const examSubjects = getSubjectsForExam(exam.id)
           if (examSubjects.length === 0) return null
 
+          const isOfficial = exam.exam_mode === 'OFFICIAL'
+
           return (
             <div key={exam.id} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                {exam.name}
-              </h3>
-              <div className="flex flex-wrap gap-x-5 gap-y-1.5">
-                {examSubjects.map((subject) => (
-                  <div
-                    key={subject.id}
-                    className="flex items-center gap-1.5 text-xs"
-                  >
-                    <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
-                    <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
-                    <input
-                      type="number"
-                      min={0}
-                      value={editValues[subject.id] ?? subject.questions_per_attempt}
-                      onChange={(e) => handleChange(subject.id, e.target.value)}
-                      className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
-                    />
-                  </div>
-                ))}
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
+                  {exam.name}
+                </h3>
+                {isOfficial && (
+                  <span className="text-[10px] bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded font-medium">
+                    공식 - 전체 출제
+                  </span>
+                )}
               </div>
+              {isOfficial ? (
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  공식 시험은 등록된 모든 활성 문제가 출제됩니다.
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                  {examSubjects.map((subject) => (
+                    <div
+                      key={subject.id}
+                      className="flex items-center gap-1.5 text-xs"
+                    >
+                      <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
+                      <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
+                      <input
+                        type="number"
+                        min={0}
+                        value={editValues[subject.id] ?? subject.questions_per_attempt}
+                        onChange={(e) => handleChange(subject.id, e.target.value)}
+                        className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )
         })}

@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
-  const { email, password, name, affiliation, phone } = await request.json()
+  const { email, password, name, student_id, affiliation, phone } = await request.json()
 
   const supabase = await createClient()
 
@@ -31,6 +31,7 @@ export async function POST(request: Request) {
     const { error: profileError } = await supabase.from('profiles').insert({
       id: authData.user.id,
       name,
+      student_id: student_id || null,
       affiliation,
       phone,
       is_admin: false,
