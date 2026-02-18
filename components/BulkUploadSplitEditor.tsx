@@ -3,6 +3,18 @@
 import { useEffect, useState, useCallback } from 'react'
 import MathText from '@/components/MathText'
 
+// Base64 data URL → Blob 변환
+function dataUrlToBlob(dataUrl: string): Blob {
+  const [header, base64] = dataUrl.split(',')
+  const mime = header.match(/:(.*?);/)?.[1] || 'image/png'
+  const binary = atob(base64)
+  const array = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) {
+    array[i] = binary.charCodeAt(i)
+  }
+  return new Blob([array], { type: mime })
+}
+
 // PDF에서 추출한 텍스트의 불필요한 줄바꿈을 정리
 // 단독 \n → 공백, \n\n (빈 줄) → 유지
 function normalizeLineBreaks(text: string): string {
@@ -227,10 +239,45 @@ export default function BulkUploadSplitEditor({
         questions = parsed
       }
 
+      // img_data (Base64) → Storage 업로드 → image_url 변환
+      const processedQuestions = questions.map((q) => ({ ...q }))
+      const imgUploadTargets = processedQuestions
+        .map((q, i) => ({ q, i }))
+        .filter(({ q }) => q.img_data && q.img_data.startsWith('data:image/'))
+
+      if (imgUploadTargets.length > 0) {
+        let uploaded = 0
+        for (const { q, i } of imgUploadTargets) {
+          try {
+            const blob = dataUrlToBlob(q.img_data)
+            const file = new File([blob], `bulk-${Date.now()}-${i}.png`, { type: blob.type || 'image/png' })
+            const fd = new FormData()
+            fd.append('file', file)
+
+            const imgRes = await fetch('/api/upload/image', {
+              method: 'POST',
+              body: fd,
+            })
+
+            if (imgRes.ok) {
+              const imgData = await imgRes.json()
+              processedQuestions[i].image_url = imgData.url
+              uploaded++
+            }
+          } catch (err) {
+            console.error(`Image upload failed for question ${i + 1}:`, err)
+          }
+          delete processedQuestions[i].img_data
+        }
+        if (uploaded > 0) {
+          console.log(`${uploaded}/${imgUploadTargets.length} images uploaded`)
+        }
+      }
+
       const res = await fetch('/api/admin/questions/bulk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ questions }),
+        body: JSON.stringify({ questions: processedQuestions }),
       })
 
       if (res.ok) {
@@ -595,7 +642,8 @@ function InputPanel({
     "choice_4": "V = I + R",
     "answer": 1,
     "explanation": "옴의 법칙: V = I × R",
-    "image_url": ""
+    "image_url": "",
+    "img_data": "data:image/png;base64,..."
   }
 ]`
             : `exam,subject,question_text,choice_1,choice_2,choice_3,choice_4,answer,explanation,image_url
@@ -605,7 +653,8 @@ function InputPanel({
           * exam: "전기기능사" / "전기산업기사" / "전기기사"<br />
           * subject: 과목명 (전기이론, 전기기기 등)<br />
           * answer: 1~4 중 정답 번호<br />
-          * question_code는 자동 생성됩니다
+          * question_code는 자동 생성됩니다<br />
+          * img_data: Base64 이미지 (업로드 시 자동으로 Storage에 저장)
         </p>
       </div>
 
@@ -969,7 +1018,7 @@ function EditListPanel({
                   <div style={{ fontSize: '12px', color: isDark ? '#6b7280' : '#9ca3af' }}>
                     정답: {q.answer}번 | 선택지: {[q.choice_1, q.choice_2, q.choice_3, q.choice_4].filter(Boolean).length}개
                     {q.explanation ? ' | 해설 있음' : ''}
-                    {q.image_url ? ' | 이미지 있음' : ''}
+                    {q.image_url ? ' | 이미지 있음' : q.img_data ? ' | 이미지(Base64)' : ''}
                   </div>
                 </div>
               )}
@@ -1157,10 +1206,10 @@ function BulkPreviewPanel({
                   </div>
 
                   {/* Image */}
-                  {q.image_url && (
+                  {(q.image_url || q.img_data) && (
                     <div style={{ marginBottom: '14px' }}>
                       <img
-                        src={q.image_url}
+                        src={q.image_url || q.img_data}
                         alt="문제 이미지"
                         style={{
                           maxWidth: '100%',

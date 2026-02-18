@@ -3,6 +3,18 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import MathText from '@/components/MathText'
 
+// Base64 data URL → Blob 변환
+function dataUrlToBlob(dataUrl: string): Blob {
+  const [header, base64] = dataUrl.split(',')
+  const mime = header.match(/:(.*?);/)?.[1] || 'image/png'
+  const binary = atob(base64)
+  const array = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) {
+    array[i] = binary.charCodeAt(i)
+  }
+  return new Blob([array], { type: mime })
+}
+
 // PDF에서 추출한 텍스트의 불필요한 줄바꿈을 정리
 function normalizeLineBreaks(text: string): string {
   if (!text) return text
@@ -237,6 +249,79 @@ export default function QuestionSplitEditor({
     }
   }
 
+  // Base64/Blob → Storage 업로드 공통 함수
+  const uploadImageBlob = async (blob: Blob) => {
+    if (blob.size > 5 * 1024 * 1024) {
+      alert('이미지 크기는 5MB 이하여야 합니다')
+      return
+    }
+
+    try {
+      setUploadingImage(true)
+      const file = new File([blob], `paste-${Date.now()}.png`, { type: blob.type || 'image/png' })
+      const uploadFormData = new FormData()
+      uploadFormData.append('file', file)
+
+      const res = await fetch('/api/upload/image', {
+        method: 'POST',
+        body: uploadFormData,
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        setFormData((prev) => ({ ...prev, image_url: data.url }))
+      } else {
+        const data = await res.json()
+        alert(data.error || '이미지 업로드 실패')
+      }
+    } catch (err) {
+      console.error('Image upload error:', err)
+      alert('이미지 업로드 중 오류가 발생했습니다')
+    } finally {
+      setUploadingImage(false)
+    }
+  }
+
+  // 이미지 URL 입력 변경 (Base64 data URL 자동 감지 → 업로드)
+  const handleImageUrlChange = (value: string) => {
+    if (value.startsWith('data:image/')) {
+      try {
+        const blob = dataUrlToBlob(value)
+        uploadImageBlob(blob)
+      } catch {
+        alert('Base64 이미지 데이터가 올바르지 않습니다')
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, image_url: value }))
+    }
+  }
+
+  // 클립보드 이미지 붙여넣기
+  const handleImagePaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items
+    if (!items) return
+
+    for (const item of Array.from(items)) {
+      if (item.type.startsWith('image/')) {
+        e.preventDefault()
+        const blob = item.getAsFile()
+        if (blob) uploadImageBlob(blob)
+        return
+      }
+    }
+
+    const text = e.clipboardData?.getData('text')
+    if (text && text.startsWith('data:image/')) {
+      e.preventDefault()
+      try {
+        const blob = dataUrlToBlob(text)
+        uploadImageBlob(blob)
+      } catch {
+        // 파싱 실패 시 텍스트로 입력
+      }
+    }
+  }
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
 
@@ -451,6 +536,8 @@ export default function QuestionSplitEditor({
             isDark={isDark}
             handleAutoGenerateCode={handleAutoGenerateCode}
             handleImageUpload={handleImageUpload}
+            handleImageUrlChange={handleImageUrlChange}
+            handleImagePaste={handleImagePaste}
             handleSubmit={handleSubmit}
           />
         </div>
@@ -522,6 +609,8 @@ function EditPanel({
   isDark,
   handleAutoGenerateCode,
   handleImageUpload,
+  handleImageUrlChange,
+  handleImagePaste,
   handleSubmit,
 }: {
   formData: any
@@ -535,6 +624,8 @@ function EditPanel({
   isDark: boolean
   handleAutoGenerateCode: () => void
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
+  handleImageUrlChange: (value: string) => void
+  handleImagePaste: (e: React.ClipboardEvent) => void
   handleSubmit: (e?: React.FormEvent) => void
 }) {
   const inputStyle: React.CSSProperties = {
@@ -711,9 +802,10 @@ function EditPanel({
         <input
           type="text"
           value={formData.image_url}
-          onChange={(e) => update('image_url', e.target.value)}
+          onChange={(e) => handleImageUrlChange(e.target.value)}
+          onPaste={handleImagePaste}
           style={{ ...inputStyle, marginBottom: '8px' }}
-          placeholder="이미지 URL을 직접 입력하거나 아래에서 파일 업로드"
+          placeholder="URL 입력, Base64 붙여넣기, 또는 Ctrl+V로 이미지 붙여넣기"
         />
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <label
@@ -757,7 +849,7 @@ function EditPanel({
           )}
         </div>
         <p style={{ fontSize: '11px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '6px' }}>
-          선택사항, 최대 5MB
+          선택사항, 최대 5MB | Ctrl+V로 클립보드 이미지 붙여넣기 | Base64 data URL 자동 업로드
         </p>
         {formData.image_url && (
           <div
