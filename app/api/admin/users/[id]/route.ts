@@ -44,19 +44,29 @@ export async function PATCH(
     // 관리자 클라이언트로 권한 업데이트
     const adminSupabase = createAdminClient()
 
-    const { data: updatedUser, error: updateError } = await adminSupabase
-      .from('profiles')
-      .update({ is_admin })
-      .eq('id', id)
-      .select()
-      .single()
+    // profiles + app_metadata 동시 업데이트
+    const [profileResult, metadataResult] = await Promise.all([
+      adminSupabase
+        .from('profiles')
+        .update({ is_admin })
+        .eq('id', id)
+        .select()
+        .single(),
+      adminSupabase.auth.admin.updateUserById(id, {
+        app_metadata: { is_admin },
+      }),
+    ])
 
-    if (updateError) {
-      console.error('User update error:', updateError)
+    if (profileResult.error) {
+      console.error('User update error:', profileResult.error)
       return NextResponse.json({ error: '권한 변경 실패' }, { status: 500 })
     }
 
-    return NextResponse.json({ user: updatedUser })
+    if (metadataResult.error) {
+      console.error('Metadata update error:', metadataResult.error)
+    }
+
+    return NextResponse.json({ user: profileResult.data })
   } catch (error) {
     console.error('Admin user PATCH error:', error)
     return NextResponse.json({ error: '서버 오류' }, { status: 500 })

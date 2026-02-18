@@ -6,17 +6,23 @@ import ThemeToggle from './ThemeToggle'
 export default async function Header() {
   const supabase = await createClient()
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
-  let profile = null
+  let profile: { name: string; affiliation: string | null; is_admin: boolean } | null = null
   if (user) {
     const { data } = await supabase
       .from('profiles')
-      .select('name, affiliation, is_admin')
+      .select('name, affiliation')
       .eq('id', user.id)
       .single()
-    profile = data
+    if (data) {
+      profile = {
+        ...data,
+        is_admin: !!user.app_metadata?.is_admin,
+      }
+    }
   }
 
   return (

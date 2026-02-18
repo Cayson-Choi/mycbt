@@ -7,8 +7,9 @@ export async function GET() {
 
     // 로그인 확인
     const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
     if (!user) {
       return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 })
@@ -38,32 +39,43 @@ export async function GET() {
       return NextResponse.json({ error: '데이터 조회 실패' }, { status: 500 })
     }
 
-    // 2. 각 응시의 과목별 점수 조회
-    const attemptsWithSubjects = await Promise.all(
-      (attempts || []).map(async (attempt) => {
-        const { data: subjectScores } = await supabase
-          .from('attempt_subject_scores')
-          .select(
-            `
-            subject_id,
-            subject_score,
-            subject_correct,
-            subject_questions,
-            subjects (
-              name
-            )
-          `
-          )
-          .eq('attempt_id', attempt.id)
-          .order('subject_id')
+    // 2. 모든 응시의 과목별 점수를 한번에 조회 (N+1 방지)
+    const attemptIds = (attempts || []).map(a => a.id)
+    let allSubjectScores: any[] = []
 
-        return {
-          ...attempt,
-          exam_name: (attempt.exams as any)?.name || '알 수 없음',
-          subject_scores: subjectScores || [],
-        }
-      })
-    )
+    if (attemptIds.length > 0) {
+      const { data } = await supabase
+        .from('attempt_subject_scores')
+        .select(
+          `
+          attempt_id,
+          subject_id,
+          subject_score,
+          subject_correct,
+          subject_questions,
+          subjects (
+            name
+          )
+        `
+        )
+        .in('attempt_id', attemptIds)
+        .order('subject_id')
+      allSubjectScores = data || []
+    }
+
+    // attempt_id별로 그룹핑
+    const scoresByAttempt = new Map<string, any[]>()
+    for (const score of allSubjectScores) {
+      const list = scoresByAttempt.get(score.attempt_id) || []
+      list.push(score)
+      scoresByAttempt.set(score.attempt_id, list)
+    }
+
+    const attemptsWithSubjects = (attempts || []).map(attempt => ({
+      ...attempt,
+      exam_name: (attempt.exams as any)?.name || '알 수 없음',
+      subject_scores: scoresByAttempt.get(attempt.id) || [],
+    }))
 
     // 3. 통계 계산
     const totalAttempts = attempts?.length || 0

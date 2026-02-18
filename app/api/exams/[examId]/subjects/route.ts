@@ -19,7 +19,9 @@ export async function GET(
       return NextResponse.json({ error: '과목을 불러올 수 없습니다' }, { status: 500 })
     }
 
-    return NextResponse.json(subjects || [])
+    const response = NextResponse.json(subjects || [])
+    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120')
+    return response
   } catch (error) {
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })
   }

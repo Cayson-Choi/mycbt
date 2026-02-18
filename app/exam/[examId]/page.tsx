@@ -58,33 +58,31 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
 
   const loadExamInfo = async (id: string) => {
     try {
-      // 시험 정보 조회
-      const examRes = await fetch(`/api/exams/${id}`)
+      // 시험 정보 + 과목 + 문제 수 병렬 조회
+      const [examRes, subjectsRes, qRes] = await Promise.all([
+        fetch(`/api/exams/${id}`),
+        fetch(`/api/exams/${id}/subjects`),
+        fetch(`/api/exams/${id}/question-count`),
+      ])
+
       if (!examRes.ok) {
         setError('시험 정보를 불러올 수 없습니다')
         setLoading(false)
         return
       }
+
       const examData = await examRes.json()
       setExam(examData)
 
-      // 과목 정보 조회
-      const subjectsRes = await fetch(`/api/exams/${id}/subjects`)
       if (subjectsRes.ok) {
         const subjectsData = await subjectsRes.json()
         setSubjects(subjectsData)
       }
 
-      // 공식 시험: 실제 문제 수 조회 (questions_per_attempt가 아닌 실제 등록된 활성 문제 수)
-      if (examData.exam_mode === 'OFFICIAL') {
-        try {
-          const qRes = await fetch(`/api/exams/${id}/question-count`)
-          if (qRes.ok) {
-            const qData = await qRes.json()
-            setOfficialQuestionCount(qData.count)
-            setOfficialBySubject(qData.bySubject || {})
-          }
-        } catch {}
+      if (examData.exam_mode === 'OFFICIAL' && qRes.ok) {
+        const qData = await qRes.json()
+        setOfficialQuestionCount(qData.count)
+        setOfficialBySubject(qData.bySubject || {})
       }
 
       setLoading(false)

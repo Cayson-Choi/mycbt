@@ -10,21 +10,16 @@ export default async function AdminPage() {
 
   // 로그인 확인
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   if (!user) {
     redirect('/login?redirect=/admin')
   }
 
-  // 관리자 권한 확인
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile?.is_admin) {
+  // 관리자 권한 확인 (app_metadata에서 읽음, DB 쿼리 없음)
+  if (!user.app_metadata?.is_admin) {
     redirect('/')
   }
 

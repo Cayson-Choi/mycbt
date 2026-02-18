@@ -2,9 +2,22 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request,
-  })
+  const { pathname } = request.nextUrl
+
+  // 공개 페이지는 인증 체크 없이 바로 통과
+  const publicPaths = ['/', '/login', '/register', '/signup']
+  const isPublic = publicPaths.includes(pathname)
+
+  // API 라우트 중 공개 API도 바로 통과
+  const publicApiPaths = ['/api/home/leaderboard', '/api/exams', '/api/auth']
+  const isPublicApi = publicApiPaths.some(p => pathname.startsWith(p))
+
+  if (isPublic || isPublicApi) {
+    return NextResponse.next()
+  }
+
+  // 보호된 경로만 인증 체크
+  let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,9 +31,7 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
-          supabaseResponse = NextResponse.next({
-            request,
-          })
+          supabaseResponse = NextResponse.next({ request })
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           )
@@ -29,33 +40,30 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // 세션 갱신 (중요!)
+  // ★ getSession()은 쿠키에서 로컬로 읽음 (네트워크 요청 없음, ~0ms)
+  // getUser()는 Supabase 서버로 HTTP 요청 (~200-500ms)
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  // 로그인이 필요한 페이지 보호
+  const user = session?.user ?? null
+
+  // 보호된 페이지: 로그인 필요
   const protectedPaths = ['/exam', '/my', '/admin']
   const isProtectedPath = protectedPaths.some(path =>
-    request.nextUrl.pathname.startsWith(path)
+    pathname.startsWith(path)
   )
 
   if (isProtectedPath && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    url.searchParams.set('redirectTo', request.nextUrl.pathname)
+    url.searchParams.set('redirectTo', pathname)
     return NextResponse.redirect(url)
   }
 
-  // 관리자 페이지 보호
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', user!.id)
-      .single()
-
-    if (!profile?.is_admin) {
+  // 관리자 페이지: app_metadata.is_admin 체크 (DB 쿼리 없음, ~0ms)
+  if (pathname.startsWith('/admin') && user) {
+    if (!user.app_metadata?.is_admin) {
       return NextResponse.redirect(new URL('/', request.url))
     }
   }

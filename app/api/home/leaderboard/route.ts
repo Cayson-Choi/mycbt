@@ -14,77 +14,99 @@ export async function GET(request: Request) {
 
     // 현재 로그인한 사용자 확인
     const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
-    // 오늘 날짜 (KST)
+    // 오늘/어제 날짜 (KST)
     const now = new Date()
-    const kstOffset = 9 * 60 // KST는 UTC+9
+    const kstOffset = 9 * 60
     const kstNow = new Date(now.getTime() + kstOffset * 60 * 1000)
-    const todayKst = kstNow.toISOString().split('T')[0] // YYYY-MM-DD
-
-    // 어제 날짜 (KST)
+    const todayKst = kstNow.toISOString().split('T')[0]
     const yesterdayKst = new Date(kstNow.getTime() - 24 * 60 * 60 * 1000)
       .toISOString()
       .split('T')[0]
 
-    // 1. 오늘 Top5 조회 (daily_best_scores - RLS: 누구나 조회 가능)
-    const { data: todayTop5Raw, error: todayError } = await supabase
-      .from('daily_best_scores')
-      .select('user_id, best_score, best_submitted_at')
-      .eq('kst_date', todayKst)
-      .eq('exam_id', examId)
-      .order('best_score', { ascending: false })
-      .order('best_submitted_at', { ascending: true })
-      .limit(5)
+    // ★ 오늘 Top5 + 어제 Top5 동시 조회 (병렬)
+    const [todayResult, yesterdayResult] = await Promise.all([
+      supabase
+        .from('daily_best_scores')
+        .select('user_id, best_score, best_submitted_at')
+        .eq('kst_date', todayKst)
+        .eq('exam_id', examId)
+        .order('best_score', { ascending: false })
+        .order('best_submitted_at', { ascending: true })
+        .limit(5),
+      supabase
+        .from('daily_leaderboard_snapshots')
+        .select('rank, user_id, user_name_display, score, submitted_at')
+        .eq('kst_date', yesterdayKst)
+        .eq('exam_id', examId)
+        .order('rank')
+        .limit(5),
+    ])
 
-    if (todayError) {
-      console.error('Today Top5 query error:', todayError)
+    const todayTop5Raw = todayResult.data
+    const yesterdayTop5Raw = yesterdayResult.data
+
+    // ★ 프로필 조회 + 어제 fallback + 내 점수 병렬
+    const adminSupabase = createAdminClient()
+    const todayUserIds = todayTop5Raw?.map((item) => item.user_id) || []
+
+    const needYesterdayFallback = !yesterdayTop5Raw || yesterdayTop5Raw.length === 0
+
+    const parallelQueries: any[] = [
+      // 오늘 Top5 프로필
+      todayUserIds.length > 0
+        ? adminSupabase.from('profiles').select('id, name, affiliation').in('id', todayUserIds)
+        : Promise.resolve({ data: [] }),
+    ]
+
+    if (needYesterdayFallback) {
+      parallelQueries.push(
+        supabase
+          .from('daily_best_scores')
+          .select('user_id, best_score, best_submitted_at')
+          .eq('kst_date', yesterdayKst)
+          .eq('exam_id', examId)
+          .order('best_score', { ascending: false })
+          .order('best_submitted_at', { ascending: true })
+          .limit(5)
+      )
     }
 
-    // 2. 프로필 정보 일괄 조회 (profiles RLS는 본인만 허용이므로 admin 클라이언트 필요)
-    const todayTop5 = []
-    if (todayTop5Raw && todayTop5Raw.length > 0) {
-      const userIds = todayTop5Raw.map((item) => item.user_id)
-      const adminSupabase = createAdminClient()
-      const { data: profiles } = await adminSupabase
-        .from('profiles')
-        .select('id, name, affiliation')
-        .in('id', userIds)
+    if (user) {
+      parallelQueries.push(
+        supabase
+          .from('daily_best_scores')
+          .select('best_score, best_submitted_at')
+          .eq('kst_date', todayKst)
+          .eq('exam_id', examId)
+          .eq('user_id', user.id)
+          .single()
+      )
+    }
 
-      const profileMap = new Map(profiles?.map((p) => [p.id, p]) || [])
+    const parallelResults = await Promise.all(parallelQueries)
 
-      for (let i = 0; i < todayTop5Raw.length; i++) {
-        const item = todayTop5Raw[i]
-        const profile = profileMap.get(item.user_id)
-        todayTop5.push({
-          rank: i + 1,
-          user_id: item.user_id,
-          name: profile?.name || '알 수 없음',
-          affiliation: profile?.affiliation || '',
-          score: item.best_score,
-          submitted_at: item.best_submitted_at,
-        })
+    // 오늘 Top5 조립
+    const profileMap = new Map<string, any>(parallelResults[0].data?.map((p: any) => [p.id, p]) || [])
+    const todayTop5 = (todayTop5Raw || []).map((item, i) => {
+      const profile = profileMap.get(item.user_id)
+      return {
+        rank: i + 1,
+        user_id: item.user_id,
+        name: profile?.name || '알 수 없음',
+        affiliation: profile?.affiliation || '',
+        score: item.best_score,
+        submitted_at: item.best_submitted_at,
       }
-    }
+    })
 
-    // 3. 어제 Top5 조회 (daily_leaderboard_snapshots - RLS: 누구나 조회 가능)
-    const { data: yesterdayTop5Raw, error: yesterdayError } = await supabase
-      .from('daily_leaderboard_snapshots')
-      .select('rank, user_id, user_name_display, score, submitted_at')
-      .eq('kst_date', yesterdayKst)
-      .eq('exam_id', examId)
-      .order('rank')
-      .limit(5)
-
-    if (yesterdayError) {
-      console.error('Yesterday Top5 query error:', yesterdayError)
-    }
-
+    // 어제 Top5 조립
     let yesterdayTop5: Array<{ rank: number; user_id: string; name: string; score: number; submitted_at: string }> = []
 
-    if (yesterdayTop5Raw && yesterdayTop5Raw.length > 0) {
-      // 스냅샷 데이터 사용
+    if (!needYesterdayFallback && yesterdayTop5Raw) {
       yesterdayTop5 = yesterdayTop5Raw.map((item: any) => ({
         rank: item.rank,
         user_id: item.user_id,
@@ -92,101 +114,55 @@ export async function GET(request: Request) {
         score: item.score,
         submitted_at: item.submitted_at,
       }))
-    } else {
-      // Fallback: 스냅샷이 없으면 daily_best_scores에서 어제 데이터 직접 조회
-      const { data: yesterdayFallbackRaw, error: fallbackError } = await supabase
-        .from('daily_best_scores')
-        .select('user_id, best_score, best_submitted_at')
-        .eq('kst_date', yesterdayKst)
-        .eq('exam_id', examId)
-        .order('best_score', { ascending: false })
-        .order('best_submitted_at', { ascending: true })
-        .limit(5)
-
-      if (fallbackError) {
-        console.error('Yesterday fallback query error:', fallbackError)
-      }
-
-      if (yesterdayFallbackRaw && yesterdayFallbackRaw.length > 0) {
-        const userIds = yesterdayFallbackRaw.map((item) => item.user_id)
-        const adminSupabase = createAdminClient()
-        const { data: profiles } = await adminSupabase
+    } else if (needYesterdayFallback) {
+      const fallbackRaw = parallelResults[1].data
+      if (fallbackRaw && fallbackRaw.length > 0) {
+        const fallbackUserIds = fallbackRaw.map((item: any) => item.user_id)
+        const { data: fallbackProfiles } = await adminSupabase
           .from('profiles')
           .select('id, name')
-          .in('id', userIds)
+          .in('id', fallbackUserIds)
+        const fallbackProfileMap = new Map(fallbackProfiles?.map((p: any) => [p.id, p]) || [])
 
-        const profileMap = new Map(profiles?.map((p) => [p.id, p]) || [])
-
-        for (let i = 0; i < yesterdayFallbackRaw.length; i++) {
-          const item = yesterdayFallbackRaw[i]
-          const profile = profileMap.get(item.user_id)
-          yesterdayTop5.push({
-            rank: i + 1,
-            user_id: item.user_id,
-            name: profile?.name || '알 수 없음',
-            score: item.best_score,
-            submitted_at: item.best_submitted_at,
-          })
-        }
+        yesterdayTop5 = fallbackRaw.map((item: any, i: number) => ({
+          rank: i + 1,
+          user_id: item.user_id,
+          name: fallbackProfileMap.get(item.user_id)?.name || '알 수 없음',
+          score: item.best_score,
+          submitted_at: item.best_submitted_at,
+        }))
       }
     }
 
-    // 4. 오늘 Top5 각 사용자에게 NEW/▲▼ 계산
+    // NEW/▲▼ 계산
     const yesterdayUserIds = new Set(yesterdayTop5.map((u) => u.user_id))
     const yesterdayRankMap = new Map(yesterdayTop5.map((u) => [u.user_id, u.rank]))
 
-    const todayTop5WithStatus = todayTop5.map((user) => {
-      let status = null
-      let rankChange = null
-
-      if (!yesterdayUserIds.has(user.user_id)) {
-        // 어제 Top5에 없었으면 NEW
-        status = 'NEW'
-      } else {
-        // 어제 순위와 비교
-        const yesterdayRank = yesterdayRankMap.get(user.user_id)
-        if (yesterdayRank) {
-          rankChange = yesterdayRank - user.rank // 양수면 상승, 음수면 하락
-
-          if (rankChange > 0) {
-            status = '▲' // 상승
-          } else if (rankChange < 0) {
-            status = '▼' // 하락
-          } else {
-            status = '=' // 유지
-          }
-        }
+    const todayTop5WithStatus = todayTop5.map((u) => {
+      if (!yesterdayUserIds.has(u.user_id)) {
+        return { ...u, status: 'NEW', rank_change: null }
       }
-
+      const yesterdayRank = yesterdayRankMap.get(u.user_id)
+      if (!yesterdayRank) return { ...u, status: null, rank_change: null }
+      const rankChange = yesterdayRank - u.rank
       return {
-        ...user,
-        status,
+        ...u,
+        status: rankChange > 0 ? '▲' : rankChange < 0 ? '▼' : '=',
         rank_change: rankChange,
       }
     })
 
-    // 5. 로그인한 사용자의 오늘 순위 조회
+    // 내 순위
     let myRank = null
     let myScore = null
 
     if (user) {
-      // 오늘 내 점수
-      const { data: myBest, error: myBestError } = await supabase
-        .from('daily_best_scores')
-        .select('best_score, best_submitted_at')
-        .eq('kst_date', todayKst)
-        .eq('exam_id', examId)
-        .eq('user_id', user.id)
-        .single()
+      const myResultIndex = needYesterdayFallback ? 2 : 1
+      const myBestResult = parallelResults[myResultIndex]
+      const myBest = myBestResult?.data
 
-      if (myBestError) {
-        console.error('My best score query error:', myBestError)
-      }
-
-      if (myBest) {
+      if (myBest && !myBestResult.error) {
         myScore = myBest.best_score
-
-        // 내 순위 계산 (내 점수보다 높은 사람 수 + 1)
         const { count } = await supabase
           .from('daily_best_scores')
           .select('*', { count: 'exact', head: true })
@@ -195,18 +171,21 @@ export async function GET(request: Request) {
           .or(
             `best_score.gt.${myScore},and(best_score.eq.${myScore},best_submitted_at.lt.${myBest.best_submitted_at})`
           )
-
         myRank = (count || 0) + 1
       }
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       exam_id: parseInt(examId),
       today_top5: todayTop5WithStatus,
       yesterday_top5: yesterdayTop5,
       my_rank: myRank,
       my_score: myScore,
     })
+
+    // ★ 30초 캐시 (브라우저 + CDN)
+    response.headers.set('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=60')
+    return response
   } catch (error) {
     console.error('Leaderboard error:', error)
     return NextResponse.json({ error: '서버 오류가 발생했습니다' }, { status: 500 })

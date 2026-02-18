@@ -1,8 +1,15 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import Leaderboard from '@/components/Leaderboard'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
+
+function getStaticSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
 
 const examCardStyles = [
   'from-blue-300 to-blue-500',
@@ -32,7 +39,7 @@ const floatClasses = [
 ]
 
 export default async function Home() {
-  const supabase = await createClient()
+  const supabase = getStaticSupabase()
   const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at, creator_name, creator_title').order('id')
 
   const practiceExams = exams?.filter(e => e.exam_mode !== 'OFFICIAL') || []

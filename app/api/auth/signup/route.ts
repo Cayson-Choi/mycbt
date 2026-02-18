@@ -1,4 +1,3 @@
-import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
@@ -7,28 +6,31 @@ export const runtime = 'nodejs'
 export async function POST(request: Request) {
   const { email, password, name, student_id, affiliation, phone } = await request.json()
 
-  const supabase = await createClient()
+  const adminSupabase = createAdminClient()
 
-  // 1. 회원가입
-  const { data: authData, error: authError } = await supabase.auth.signUp({
+  // 1. 회원가입 (adminClient로 생성 → 이메일 인증 자동 완료)
+  const { data: authData, error: authError } = await adminSupabase.auth.admin.createUser({
     email,
     password,
-    options: {
-      data: {
-        name,
-        affiliation,
-        phone,
-      },
+    email_confirm: true,
+    user_metadata: {
+      name,
+      affiliation,
+      phone,
     },
   })
 
   if (authError) {
-    return NextResponse.json({ error: authError.message }, { status: 400 })
+    let message = authError.message
+    if (message.includes('already been registered')) {
+      message = '이미 가입된 이메일입니다'
+    }
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 
   // 2. 프로필 생성
   if (authData.user) {
-    const { error: profileError } = await supabase.from('profiles').insert({
+    const { error: profileError } = await adminSupabase.from('profiles').insert({
       id: authData.user.id,
       name,
       student_id: student_id || null,
@@ -46,7 +48,6 @@ export async function POST(request: Request) {
 
     // 3. 오늘 날짜 통계 업데이트 (KST 기준)
     try {
-      const adminSupabase = createAdminClient()
       const now = new Date()
       const nowKST = new Date(now.getTime() + 9 * 60 * 60 * 1000)
       const todayDateStr = nowKST.toISOString().split('T')[0]

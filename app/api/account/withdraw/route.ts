@@ -10,7 +10,7 @@ export async function POST() {
     const supabase = await createClient()
     const adminClient = createAdminClient()
 
-    // 1. 본인 확인
+    // 1. 본인 확인 (getUser로 서버 검증)
     const {
       data: { user },
     } = await supabase.auth.getUser()
@@ -21,24 +21,34 @@ export async function POST() {
 
     const userId = user.id
 
-    // 2. daily_best_scores에서 오늘 레코드 삭제 (오늘 랭킹에서 즉시 제외)
-    const now = new Date()
-    const kstOffset = 9 * 60 // KST는 UTC+9
-    const kstDate = new Date(now.getTime() + kstOffset * 60 * 1000)
-    const todayKST = kstDate.toISOString().split('T')[0] // YYYY-MM-DD
+    // 관리자는 탈퇴 불가
+    const { data: profile } = await adminClient
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', userId)
+      .single()
 
-    const { error: deleteBestScoresError } = await supabase
+    if (profile?.is_admin) {
+      return NextResponse.json({ error: '관리자는 회원탈퇴가 불가능합니다. 먼저 관리자 권한을 해제해주세요.' }, { status: 403 })
+    }
+
+    // ★ 이하 모든 삭제는 adminClient 사용 (RLS 우회)
+    // 본인 확인은 위에서 완료했으므로 안전
+
+    // 2. daily_best_scores 삭제
+    const now = new Date()
+    const kstOffset = 9 * 60
+    const kstDate = new Date(now.getTime() + kstOffset * 60 * 1000)
+    const todayKST = kstDate.toISOString().split('T')[0]
+
+    await adminClient
       .from('daily_best_scores')
       .delete()
       .eq('user_id', userId)
       .eq('kst_date', todayKST)
 
-    if (deleteBestScoresError) {
-      console.error('Delete daily_best_scores error:', deleteBestScoresError)
-    }
-
-    // 3. daily_leaderboard_snapshots 익명 처리 (어제 스냅샷)
-    const { error: anonymizeSnapshotsError } = await supabase
+    // 3. daily_leaderboard_snapshots 익명 처리
+    await adminClient
       .from('daily_leaderboard_snapshots')
       .update({
         user_id: null,
@@ -46,13 +56,8 @@ export async function POST() {
       })
       .eq('user_id', userId)
 
-    if (anonymizeSnapshotsError) {
-      console.error('Anonymize snapshots error:', anonymizeSnapshotsError)
-    }
-
-    // 4. 개인 응시 데이터 삭제 (개인정보 보호)
-    // 먼저 사용자의 모든 attempt ID 조회
-    const { data: userAttempts } = await supabase
+    // 4. 개인 응시 데이터 삭제
+    const { data: userAttempts } = await adminClient
       .from('attempts')
       .select('id')
       .eq('user_id', userId)
@@ -60,49 +65,14 @@ export async function POST() {
     const attemptIds = userAttempts?.map((a) => a.id) || []
 
     if (attemptIds.length > 0) {
-      // attempt_items 삭제
-      const { error: deleteItemsError } = await supabase
-        .from('attempt_items')
-        .delete()
-        .in('attempt_id', attemptIds)
-
-      if (deleteItemsError) {
-        console.error('Delete attempt_items error:', deleteItemsError)
-      }
-
-      // subject_scores 삭제
-      const { error: deleteScoresError } = await supabase
-        .from('subject_scores')
-        .delete()
-        .in('attempt_id', attemptIds)
-
-      if (deleteScoresError) {
-        console.error('Delete subject_scores error:', deleteScoresError)
-      }
-
-      // attempt_questions 삭제
-      const { error: deleteQuestionsError } = await supabase
-        .from('attempt_questions')
-        .delete()
-        .in('attempt_id', attemptIds)
-
-      if (deleteQuestionsError) {
-        console.error('Delete attempt_questions error:', deleteQuestionsError)
-      }
-
-      // attempts 삭제
-      const { error: deleteAttemptsError } = await supabase
-        .from('attempts')
-        .delete()
-        .eq('user_id', userId)
-
-      if (deleteAttemptsError) {
-        console.error('Delete attempts error:', deleteAttemptsError)
-      }
+      await adminClient.from('attempt_items').delete().in('attempt_id', attemptIds)
+      await adminClient.from('subject_scores').delete().in('attempt_id', attemptIds)
+      await adminClient.from('attempt_questions').delete().in('attempt_id', attemptIds)
+      await adminClient.from('attempts').delete().eq('user_id', userId)
     }
 
     // 5. profiles 삭제
-    const { error: deleteProfileError } = await supabase
+    const { error: deleteProfileError } = await adminClient
       .from('profiles')
       .delete()
       .eq('id', userId)
@@ -112,7 +82,7 @@ export async function POST() {
       return NextResponse.json({ error: '프로필 삭제 실패' }, { status: 500 })
     }
 
-    // 6. auth.users 삭제 (관리자 클라이언트 사용)
+    // 6. auth.users 삭제
     const { error: deleteUserError } = await adminClient.auth.admin.deleteUser(userId)
 
     if (deleteUserError) {
