@@ -873,7 +873,7 @@ export default function OfficialExamDetailPage({
                             {r.total_score}점
                           </span>
                           {r.grading_status === 'PENDING_MANUAL' && (
-                            <span className="ml-1.5 text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-1.5 py-0.5 rounded font-medium whitespace-nowrap">
+                            <span className="ml-1.5 text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-1 py-1 rounded font-medium leading-tight" style={{ writingMode: 'vertical-rl' }}>
                               채점대기
                             </span>
                           )}
