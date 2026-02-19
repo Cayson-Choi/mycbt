@@ -65,7 +65,7 @@ ${referenceInstruction}학생 답안의 정확성과 핵심 내용 포함 여부
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'http://localhost:3000',
+        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'https://cayson.co.kr',
         'X-Title': 'CBT Grading System',
       },
       body: JSON.stringify({

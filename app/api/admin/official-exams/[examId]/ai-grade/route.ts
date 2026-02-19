@@ -3,6 +3,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { gradeSubjectiveAnswer } from '@/lib/openrouter'
 import { NextResponse } from 'next/server'
 
+// Vercel 서버리스 함수 타임아웃 설정 (최대 300초, Hobby 플랜은 60초)
+export const maxDuration = 300
+
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
