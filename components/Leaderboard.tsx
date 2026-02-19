@@ -226,7 +226,7 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
                           </span>
                         </div>
                         <div>
-                          <div className="text-base lg:text-lg font-bold text-white">
+                          <div className="text-xl lg:text-2xl font-bold text-white">
                             {first.name}
                           </div>
                           <div className="text-[11px] lg:text-xs text-yellow-300/70">
@@ -236,9 +236,9 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
                       </div>
                       <div className="flex items-center gap-2">
                         {getStatusBadge(first.status, first.rank_change)}
-                        <div className="text-xl lg:text-2xl font-black text-amber-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                        <div className="text-2xl lg:text-3xl font-black text-amber-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                           {first.score}
-                          <span className="text-xs lg:text-sm text-amber-300/70">점</span>
+                          <span className="text-sm lg:text-base text-amber-300/70">점</span>
                         </div>
                       </div>
                     </div>
