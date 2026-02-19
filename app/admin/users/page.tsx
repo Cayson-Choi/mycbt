@@ -346,83 +346,77 @@ export default function AdminUsersPage() {
               {renderPagination() && <div className="px-6 pb-4">{renderPagination()}</div>}
 
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full text-xs">
                   <thead className="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        이름
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        소속
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        이메일
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-                        <div>전화</div><div>번호</div>
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300">
-                        <div>응시</div><div>횟수</div>
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        구분
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        가입일
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300">
-                        <div>권한</div><div>관리</div>
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300">
-                        <div>계정</div><div>관리</div>
-                      </th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center" style={{ writingMode: 'vertical-rl' }}>이름</th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center" style={{ writingMode: 'vertical-rl' }}>소속</th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center" style={{ writingMode: 'vertical-rl' }}>이메일</th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center"><div>전화</div><div>번호</div></th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center"><div>응시</div><div>횟수</div></th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center" style={{ writingMode: 'vertical-rl' }}>구분</th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center" style={{ writingMode: 'vertical-rl' }}>가입일</th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center"><div>권한</div><div>관리</div></th>
+                      <th className="px-2 py-2 font-medium text-gray-500 dark:text-gray-300 text-center"><div>계정</div><div>관리</div></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
                     {paginatedUsers.map((user) => (
                       <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                        <td className="px-4 py-4 text-sm text-gray-900 dark:text-gray-100 whitespace-nowrap">
+                        <td className="px-2 py-3 text-gray-900 dark:text-gray-100 text-center font-medium" style={{ writingMode: 'vertical-rl' }}>
                           {user.name}
                         </td>
-                        <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                        <td className="px-2 py-3 text-gray-600 dark:text-gray-400 text-center" style={{ writingMode: 'vertical-rl' }}>
                           {user.affiliation}
                         </td>
-                        <td className="px-4 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        <td className="px-2 py-3 text-gray-900 dark:text-gray-100">
                           <div>{user.email.split('@')[0]}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">@{user.email.split('@')[1]}</div>
+                          <div className="text-gray-500 dark:text-gray-400" style={{ fontSize: '10px' }}>@{user.email.split('@')[1]}</div>
                         </td>
-                        <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
-                          {user.phone || '-'}
+                        <td className="px-2 py-3 text-gray-600 dark:text-gray-400 text-center">
+                          {user.phone ? (() => {
+                            const parts = user.phone.replace(/[^0-9]/g, '')
+                            if (parts.length === 11) {
+                              return (
+                                <>
+                                  <div>{parts.slice(0, 3)}</div>
+                                  <div>-{parts.slice(3, 7)}</div>
+                                  <div>-{parts.slice(7)}</div>
+                                </>
+                              )
+                            }
+                            return user.phone
+                          })() : '-'}
                         </td>
-                        <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400 text-center">
+                        <td className="px-2 py-3 text-gray-600 dark:text-gray-400 text-center">
                           {user.attempt_count}회
                         </td>
-                        <td className="px-4 py-4 text-sm text-center">
+                        <td className="px-2 py-3 text-center">
                           {user.is_admin ? (
-                            <span className="inline-block w-14 text-center bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 px-2 py-1 rounded text-xs font-medium">
+                            <span className="inline-block bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 px-1 py-1 rounded font-medium leading-tight" style={{ writingMode: 'vertical-rl' }}>
                               관리자
                             </span>
                           ) : (
-                            <span className="inline-block w-14 text-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded text-xs font-medium">
+                            <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-1 py-1 rounded font-medium leading-tight" style={{ writingMode: 'vertical-rl' }}>
                               일반
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        <td className="px-2 py-3 text-gray-600 dark:text-gray-400 text-center">
                           {(() => {
                             const d = new Date(user.created_at)
                             return (
                               <>
                                 <div>{d.getFullYear()}</div>
-                                <div className="text-xs">{d.getMonth() + 1}.{d.getDate()}</div>
+                                <div>{d.getMonth() + 1}.{d.getDate()}</div>
                               </>
                             )
                           })()}
                         </td>
-                        <td className="px-4 py-4 text-sm text-center">
+                        <td className="px-2 py-3 text-center">
                           <button
                             onClick={() => toggleAdmin(user.id, user.is_admin)}
-                            className={`px-1 py-1.5 rounded text-xs font-medium leading-tight ${
+                            className={`px-1 py-1.5 rounded font-medium leading-tight ${
                               user.is_admin
                                 ? 'bg-yellow-600 dark:bg-yellow-500 text-white hover:bg-yellow-700 dark:hover:bg-yellow-600'
                                 : 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600'
@@ -432,10 +426,11 @@ export default function AdminUsersPage() {
                             {user.is_admin ? '권한해제' : '관리자부여'}
                           </button>
                         </td>
-                        <td className="px-4 py-4 text-sm text-center">
+                        <td className="px-2 py-3 text-center">
                           <button
                             onClick={() => deleteUser(user.id, user.name)}
-                            className="px-3 py-1 bg-red-600 dark:bg-red-500 text-white rounded text-xs font-medium hover:bg-red-700 dark:hover:bg-red-600"
+                            className="px-1 py-1.5 bg-red-600 dark:bg-red-500 text-white rounded font-medium hover:bg-red-700 dark:hover:bg-red-600 leading-tight"
+                            style={{ writingMode: 'vertical-rl' }}
                           >
                             삭제
                           </button>
