@@ -32,7 +32,7 @@ export default async function Home() {
         {/* Light overlay */}
         <div className="absolute inset-0" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 lg:pt-10 pb-16 lg:pb-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 lg:pt-10 pb-16 lg:pb-20">
           {/* Compact hero text */}
           <div className="text-center mb-4">
             <h1 className="text-4xl lg:text-5xl font-extrabold text-white mb-3 leading-tight tracking-tight hero-text-stroke">
