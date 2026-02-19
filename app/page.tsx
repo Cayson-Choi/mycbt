@@ -26,8 +26,8 @@ export default async function Home() {
       <section className="relative overflow-hidden">
         {/* Background image */}
         <div
-          className="absolute inset-0 bg-no-repeat bg-[length:380%_auto] lg:bg-cover"
-          style={{ backgroundImage: "url('/hero-bg.png')", backgroundPosition: 'center -120px' }}
+          className="absolute inset-0 bg-no-repeat bg-[length:380%_auto] lg:bg-cover bg-[position:53%_-120px] lg:bg-[position:center_-120px]"
+          style={{ backgroundImage: "url('/hero-bg.png')" }}
         />
         {/* Light overlay */}
         <div className="absolute inset-0" />
