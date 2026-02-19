@@ -127,9 +127,9 @@ export default function MyPage() {
         </div>
 
         {/* 응시 기록 필터 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <h2 className="text-xl font-bold dark:text-white">📝 응시 기록</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <h2 className="text-lg font-bold dark:text-white">📝 응시 기록</h2>
             <div className="flex gap-2 flex-wrap">
               <button
                 onClick={() => setFilter('all')}
@@ -235,7 +235,7 @@ export default function MyPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+            <div className="text-center text-gray-500 dark:text-gray-400 py-3 text-sm">
               응시 기록이 없습니다
             </div>
           )}
