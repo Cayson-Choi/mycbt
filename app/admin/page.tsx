@@ -53,24 +53,20 @@ export default async function AdminPage() {
           <p className="text-gray-600 dark:text-gray-400">시스템 관리 및 설정</p>
         </div>
 
-        {/* 통계 카드 */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">전체 회원</div>
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-              {totalUsers || 0}명
+        {/* 통계 */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <span className="text-sm text-gray-600 dark:text-gray-400">전체 회원</span>
+              <span className="text-sm font-bold text-blue-700 dark:text-blue-300">{totalUsers || 0}명</span>
             </div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">전체 문제</div>
-            <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-              {totalQuestions || 0}개
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
+              <span className="text-sm text-gray-600 dark:text-gray-400">전체 문제</span>
+              <span className="text-sm font-bold text-green-700 dark:text-green-300">{totalQuestions || 0}개</span>
             </div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">총 응시</div>
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-              {totalAttempts || 0}회
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-200 dark:border-purple-800">
+              <span className="text-sm text-gray-600 dark:text-gray-400">총 응시</span>
+              <span className="text-sm font-bold text-purple-700 dark:text-purple-300">{totalAttempts || 0}회</span>
             </div>
           </div>
         </div>
