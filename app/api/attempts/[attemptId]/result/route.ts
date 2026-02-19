@@ -112,7 +112,7 @@ export async function GET(
     // 5. 학생 답안 조회
     const { data: studentAnswers } = await supabase
       .from('attempt_items')
-      .select('question_id, selected, is_correct, answer_text, awarded_points, grading_status')
+      .select('question_id, selected, is_correct, answer_text, awarded_points, grading_status, ai_feedback')
       .eq('attempt_id', attemptId)
 
     const answersMap = new Map()
@@ -142,6 +142,7 @@ export async function GET(
         is_correct: studentAnswer?.is_correct ?? null,
         awarded_points: studentAnswer?.awarded_points ?? null,
         grading_status: studentAnswer?.grading_status || 'AUTO',
+        ai_feedback: studentAnswer?.ai_feedback || null,
       }
     })
 

@@ -284,6 +284,14 @@ export default function ExamResultPage({
                               {question.student_answer_text || '(미작성)'}
                             </div>
                           </div>
+                          {question.ai_feedback && (
+                            <div className="p-3 border-2 border-orange-300 dark:border-orange-600 rounded-lg bg-orange-50 dark:bg-orange-900/20">
+                              <div className="text-xs font-semibold text-orange-700 dark:text-orange-300 mb-1">AI 채점 이유</div>
+                              <div className="text-sm dark:text-gray-200 whitespace-pre-wrap">
+                                {question.ai_feedback}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
 
