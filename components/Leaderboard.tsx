@@ -186,7 +186,7 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
         <p className="text-white hero-subtext-stroke">지금 도전해서 이름을 올리세요</p>
       </div>
 
-      <div className="mb-[5.5rem]" />
+      <div className="mb-12 lg:mb-[5.5rem]" />
       {/* Content */}
       {loading ? (
         <div className="text-center text-gray-400 py-16">
