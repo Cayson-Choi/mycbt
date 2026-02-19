@@ -241,8 +241,8 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
                   {rest.length > 0 && (() => {
                     const user = rest[restIndex % rest.length]
                     return (
-                      <div key={user.rank} className="px-3 pb-3 pt-2 lg:px-4 lg:pb-4 lg:pt-3 animate-fade-in">
-                        <div className="rounded-xl p-2.5 lg:p-3.5 flex items-center justify-between">
+                      <div key={user.rank} className="px-3 pb-1.5 pt-1 lg:px-4 lg:pb-3 lg:pt-2 animate-fade-in">
+                        <div className="rounded-xl p-1.5 lg:p-2.5 flex items-center justify-between">
                           <div className="flex items-center gap-2.5 lg:gap-3">
                             <div
                               className={`w-8 h-8 lg:w-10 lg:h-10 rounded-lg lg:rounded-xl flex items-center justify-center ${getRankBadge(user.rank)}`}
