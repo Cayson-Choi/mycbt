@@ -184,33 +184,33 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
               {first ? (
                 <>
                   {/* 1st place highlight */}
-                  <div className="bg-gradient-to-r from-yellow-900 via-gray-900 to-yellow-900 rounded-t-2xl p-5 gold-glow relative">
-                    <div className="absolute -top-8 -left-4">
-                      <span className="crown-bounce inline-block text-6xl">
+                  <div className="bg-gradient-to-r from-yellow-900 via-gray-900 to-yellow-900 rounded-t-2xl p-3 lg:p-5 gold-glow relative">
+                    <div className="absolute -top-6 -left-3 lg:-top-8 lg:-left-4">
+                      <span className="crown-bounce inline-block text-4xl lg:text-6xl">
                         &#x1F451;
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg pulse-gold">
-                          <span className="text-yellow-900 text-xl font-black">
+                      <div className="flex items-center gap-3 lg:gap-4">
+                        <div className="w-11 h-11 lg:w-14 lg:h-14 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg pulse-gold">
+                          <span className="text-yellow-900 text-lg lg:text-xl font-black">
                             1
                           </span>
                         </div>
                         <div>
-                          <div className="text-xl font-bold text-white">
+                          <div className="text-base lg:text-xl font-bold text-white">
                             {first.name}
                           </div>
-                          <div className="text-sm text-yellow-300/70">
+                          <div className="text-xs lg:text-sm text-yellow-300/70">
                             {first.affiliation}
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 lg:gap-3">
                         {getStatusBadge(first.status, first.rank_change)}
-                        <div className="text-3xl font-black text-yellow-400">
+                        <div className="text-2xl lg:text-3xl font-black text-yellow-400">
                           {first.score}
-                          <span className="text-lg text-yellow-400/70">점</span>
+                          <span className="text-sm lg:text-lg text-yellow-400/70">점</span>
                         </div>
                       </div>
                     </div>
@@ -218,17 +218,17 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
 
                   {/* 2nd~5th */}
                   {rest.length > 0 && (
-                    <div className="px-4 pb-4 pt-3 space-y-2">
+                    <div className="px-3 pb-3 pt-2 lg:px-4 lg:pb-4 lg:pt-3 space-y-1.5 lg:space-y-2">
                       {rest.map((user) => (
                         <div
                           key={user.rank}
-                          className="rounded-xl p-3.5 flex items-center justify-between hover:bg-gray-800 transition-colors"
+                          className="rounded-xl p-2.5 lg:p-3.5 flex items-center justify-between hover:bg-gray-800 transition-colors"
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2.5 lg:gap-3">
                             <div
-                              className={`w-10 h-10 rounded-xl flex items-center justify-center ${getRankBadge(user.rank)}`}
+                              className={`w-8 h-8 lg:w-10 lg:h-10 rounded-lg lg:rounded-xl flex items-center justify-center ${getRankBadge(user.rank)}`}
                             >
-                              <span className="text-sm font-black">
+                              <span className="text-xs lg:text-sm font-black">
                                 {user.rank}
                               </span>
                             </div>
@@ -245,14 +245,14 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2 lg:gap-3">
                             {getStatusBadge(user.status, user.rank_change)}
                             <span
-                              className={`text-xl font-bold ${user.rank <= 3 ? 'text-white' : 'text-gray-300'}`}
+                              className={`text-lg lg:text-xl font-bold ${user.rank <= 3 ? 'text-white' : 'text-gray-300'}`}
                             >
                               {user.score}
                               <span
-                                className={`text-sm ${user.rank <= 3 ? 'text-gray-400' : 'text-gray-500'}`}
+                                className={`text-xs lg:text-sm ${user.rank <= 3 ? 'text-gray-400' : 'text-gray-500'}`}
                               >
                                 점
                               </span>
