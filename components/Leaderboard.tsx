@@ -283,9 +283,9 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
                   })()}
                 </>
               ) : (
-                <div className="p-12 text-center">
+                <div className="p-5 text-center">
                   <svg
-                    className="w-12 h-12 mx-auto mb-3 text-gray-600"
+                    className="w-10 h-10 mx-auto mb-2 text-gray-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
