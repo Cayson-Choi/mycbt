@@ -860,19 +860,21 @@ export default function OfficialExamDetailPage({
                         <td className="px-4 py-3 text-sm dark:text-gray-200">
                           {r.affiliation || '-'}
                         </td>
-                        <td className="px-4 py-3 text-sm">
+                        <td className="px-4 py-3 text-sm whitespace-nowrap">
                           <span
                             className={`font-bold ${
-                              r.total_score >= 60
-                                ? 'text-green-600 dark:text-green-400'
-                                : 'text-red-600 dark:text-red-400'
+                              r.grading_status === 'PENDING_MANUAL'
+                                ? 'text-yellow-600 dark:text-yellow-400'
+                                : r.total_score >= 60
+                                  ? 'text-green-600 dark:text-green-400'
+                                  : 'text-red-600 dark:text-red-400'
                             }`}
                           >
                             {r.total_score}점
                           </span>
                           {r.grading_status === 'PENDING_MANUAL' && (
-                            <span className="ml-1.5 text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-1.5 py-0.5 rounded font-medium">
-                              채점 대기
+                            <span className="ml-1.5 text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-1.5 py-0.5 rounded font-medium whitespace-nowrap">
+                              대기
                             </span>
                           )}
                         </td>
