@@ -231,33 +231,33 @@ export default function AdminQuestionsPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* 헤더 */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               📝 문제 관리
             </h1>
             <p className="text-gray-600 dark:text-gray-400">문제 추가, 수정, 삭제</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {selectedQuestions.size > 0 && (
               <button
                 onClick={handleBulkDelete}
-                className="px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
+                className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600 text-sm"
               >
                 선택 삭제 ({selectedQuestions.size})
               </button>
             )}
             <button
               onClick={() => setShowBulkUpload(true)}
-              className="px-6 py-3 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600"
+              className="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 text-sm"
             >
-              📤 일괄 문제 추가
+              📤 일괄 추가
             </button>
             <button
               onClick={() => setShowAddForm(true)}
-              className="px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 text-sm"
             >
-              + 개별 문제 추가
+              + 개별 추가
             </button>
           </div>
         </div>

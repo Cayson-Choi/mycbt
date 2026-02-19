@@ -25,6 +25,7 @@ export async function GET() {
         started_at,
         submitted_at,
         total_score,
+        grading_status,
         exams (
           name
         )

@@ -71,7 +71,7 @@ export default function MyPage() {
         </div>
 
         {/* 전체 통계 */}
-        <div className="grid md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700">
             <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">총 응시</div>
             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
@@ -136,12 +136,12 @@ export default function MyPage() {
 
         {/* 응시 기록 필터 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <h2 className="text-xl font-bold dark:text-white">📝 응시 기록</h2>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-4 py-2 rounded ${
+                className={`px-4 py-2 rounded text-sm ${
                   filter === 'all'
                     ? 'bg-blue-600 dark:bg-blue-500 text-white'
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
@@ -153,7 +153,7 @@ export default function MyPage() {
                 <button
                   key={exam.exam_id}
                   onClick={() => setFilter(exam.exam_id)}
-                  className={`px-4 py-2 rounded ${
+                  className={`px-4 py-2 rounded text-sm ${
                     filter === exam.exam_id
                       ? 'bg-blue-600 dark:bg-blue-500 text-white'
                       : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
@@ -185,27 +185,31 @@ export default function MyPage() {
                     <div className="text-right">
                       <div
                         className={`text-3xl font-bold ${
-                          attempt.total_score >= 60
-                            ? 'text-green-600 dark:text-green-400'
-                            : 'text-red-600 dark:text-red-400'
+                          attempt.grading_status === 'PENDING_MANUAL'
+                            ? 'text-yellow-600 dark:text-yellow-400'
+                            : attempt.total_score >= 60
+                              ? 'text-green-600 dark:text-green-400'
+                              : 'text-red-600 dark:text-red-400'
                         }`}
                       >
-                        {attempt.total_score}점
+                        {attempt.grading_status === 'PENDING_MANUAL' ? `${attempt.total_score}점` : `${attempt.total_score}점`}
                       </div>
                       <div
                         className={`text-sm font-semibold ${
-                          attempt.total_score >= 60
-                            ? 'text-green-600 dark:text-green-400'
-                            : 'text-red-600 dark:text-red-400'
+                          attempt.grading_status === 'PENDING_MANUAL'
+                            ? 'text-yellow-600 dark:text-yellow-400'
+                            : attempt.total_score >= 60
+                              ? 'text-green-600 dark:text-green-400'
+                              : 'text-red-600 dark:text-red-400'
                         }`}
                       >
-                        {attempt.total_score >= 60 ? '합격' : '불합격'}
+                        {attempt.grading_status === 'PENDING_MANUAL' ? '채점 대기' : attempt.total_score >= 60 ? '합격' : '불합격'}
                       </div>
                     </div>
                   </div>
 
                   {/* 과목별 점수 */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-3">
                     {attempt.subject_scores.map((subject: any) => (
                       <div
                         key={subject.subject_id}
@@ -246,22 +250,22 @@ export default function MyPage() {
         </div>
 
         {/* 하단 버튼 */}
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/"
-            className="px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+            className="flex-1 px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
           >
             홈으로
           </Link>
           <Link
             href="/my/profile"
-            className="px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+            className="flex-1 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
           >
             👤 프로필 수정
           </Link>
           <Link
             href="/my/wrong-answers"
-            className="px-6 py-3 bg-red-600 dark:bg-red-500 text-white text-center rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
+            className="flex-1 px-6 py-3 bg-red-600 dark:bg-red-500 text-white text-center rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
           >
             ❌ 오답노트
           </Link>

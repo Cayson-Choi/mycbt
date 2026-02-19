@@ -145,7 +145,7 @@ export default function OfficialExamsPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-5xl mx-auto px-4">
         {/* 헤더 */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               공식 시험 관리
@@ -157,13 +157,13 @@ export default function OfficialExamsPage() {
           <div className="flex gap-3">
             <Link
               href="/admin"
-              className="px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+              className="px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 text-sm"
             >
               관리자 홈
             </Link>
             <button
               onClick={() => setShowForm(!showForm)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
             >
               {showForm ? '취소' : '새 시험 생성'}
             </button>
@@ -260,9 +260,9 @@ export default function OfficialExamsPage() {
               href={`/admin/official-exams/${exam.id}`}
               className="block bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border dark:border-gray-700 hover:shadow-md transition-shadow"
             >
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-2 flex-wrap">
                     <h3 className="text-lg font-bold dark:text-white">{exam.name}</h3>
                     <span className="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-semibold">
                       공식
@@ -277,14 +277,14 @@ export default function OfficialExamsPage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex gap-3 text-sm text-gray-600 dark:text-gray-400 flex-wrap">
                     <span>시간: {exam.duration_minutes}분</span>
                     <span>문제: {exam.question_count}개</span>
                     <span>응시: {exam.attempt_count}명</span>
                     <span>비밀번호: <span className="font-mono font-semibold text-gray-800 dark:text-gray-200">{exam.password}</span></span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={(e) => handleTogglePublish(e, exam.id, exam.is_published)}
                     disabled={togglingId === exam.id}
@@ -304,7 +304,7 @@ export default function OfficialExamsPage() {
                     {deletingId === exam.id ? '삭제 중...' : '삭제'}
                   </button>
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-gray-400 hidden sm:block"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

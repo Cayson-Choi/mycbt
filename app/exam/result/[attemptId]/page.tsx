@@ -93,15 +93,21 @@ export default function ExamResultPage({
             )}
           </div>
 
-          <div
-            className={`inline-block px-6 py-3 rounded-full text-xl font-bold ${
-              passed
-                ? 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300'
-                : 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
-            }`}
-          >
-            {passed ? '합격' : '불합격'}
-          </div>
+          {result.grading_status === 'PENDING_MANUAL' ? (
+            <div className="inline-block px-6 py-3 rounded-full text-xl font-bold bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">
+              채점 대기
+            </div>
+          ) : (
+            <div
+              className={`inline-block px-6 py-3 rounded-full text-xl font-bold ${
+                passed
+                  ? 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300'
+                  : 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
+              }`}
+            >
+              {passed ? '합격' : '불합격'}
+            </div>
+          )}
 
           <div className="mt-6 text-sm text-gray-600 dark:text-gray-400">
             제출 시간: {new Date(result.submitted_at).toLocaleString('ko-KR')}
@@ -299,23 +305,23 @@ export default function ExamResultPage({
         )}
 
         {/* 하단 버튼 */}
-        <div className="mt-8 flex gap-4 flex-wrap">
+        <div className="mt-8 flex flex-col sm:flex-row gap-3">
           <Link
             href="/"
-            className="flex-1 min-w-[120px] px-6 py-3 bg-gray-600 text-white text-center rounded-lg hover:bg-gray-700"
+            className="flex-1 px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
           >
             홈으로
           </Link>
           <Link
             href="/my"
-            className="flex-1 min-w-[120px] px-6 py-3 bg-purple-600 text-white text-center rounded-lg hover:bg-purple-700"
+            className="flex-1 px-6 py-3 bg-purple-600 dark:bg-purple-500 text-white text-center rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600"
           >
             마이페이지
           </Link>
           {!isOfficial && (
             <Link
               href={`/exam/${result.exam_id}`}
-              className="flex-1 min-w-[120px] px-6 py-3 bg-blue-600 text-white text-center rounded-lg hover:bg-blue-700"
+              className="flex-1 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
             >
               다시 응시
             </Link>

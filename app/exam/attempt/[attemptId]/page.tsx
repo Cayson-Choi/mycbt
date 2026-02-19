@@ -228,7 +228,7 @@ function SubmitSection({
   return (
     <>
       <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border dark:border-gray-700">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
           <div className="text-gray-600 dark:text-gray-400">
             {answeredCount === totalCount
               ? '모든 문제를 풀었습니다'
@@ -237,7 +237,7 @@ function SubmitSection({
           <button
             onClick={handleSubmitClick}
             disabled={submitting}
-            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="w-full sm:w-auto px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             {submitting ? '제출 중...' : '시험 제출'}
           </button>
@@ -415,11 +415,11 @@ export default function ExamAttemptPage({
         <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 fixed top-0 left-0 right-0 z-50 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 py-3">
             <div className="flex justify-between items-center">
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-lg font-bold dark:text-white">{paper.exam_name}</h1>
+                  <h1 className="text-base sm:text-lg font-bold dark:text-white truncate">{paper.exam_name}</h1>
                   {examMode === 'OFFICIAL' && (
-                    <span className="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-semibold">
+                    <span className="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-semibold shrink-0">
                       공식
                     </span>
                   )}

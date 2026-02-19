@@ -142,17 +142,17 @@ export default function WrongAnswersPage() {
                     {index + 1}
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-sm bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <span className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
                         {item.exam_name}
                       </span>
-                      <span className="text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
+                      <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
                         {item.subject_name}
                       </span>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         {item.question_code}
                       </span>
-                      <span className="text-sm text-gray-400 dark:text-gray-500">
+                      <span className="text-xs text-gray-400 dark:text-gray-500">
                         {new Date(item.attempt_date).toLocaleDateString('ko-KR')}
                       </span>
                     </div>

@@ -362,7 +362,7 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
             </div>
           )}
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="/"
               className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-center hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200"
@@ -385,14 +385,14 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
               <>
                 <button
                   onClick={() => router.push(`/exam/attempt/${activeAttempt.attempt_id}`)}
-                  className="flex-1 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium"
+                  className="flex-1 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium text-sm"
                 >
                   {activeAttempt.exam_name} 이어풀기
                 </button>
                 <button
                   onClick={handleAbandonAndStart}
                   disabled={starting || (isOfficial && needStudentId)}
-                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm"
                 >
                   {starting ? '시작 중...' : '중단하고 새 시험'}
                 </button>

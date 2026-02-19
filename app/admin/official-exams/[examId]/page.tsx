@@ -190,6 +190,11 @@ export default function OfficialExamDetailPage({
   const [showEditor, setShowEditor] = useState(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
 
+  // AI 채점 상태
+  const [gradingMode, setGradingMode] = useState<'manual' | 'ai'>('manual')
+  const [aiGrading, setAiGrading] = useState(false)
+  const [aiResult, setAiResult] = useState<{ totalGraded: number; studentsGraded: number; totalFailed: number } | null>(null)
+
   // 시험 설정 수정 상태
   const [editingSettings, setEditingSettings] = useState(false)
   const [settingsForm, setSettingsForm] = useState({ password: '', duration_minutes: 60 })
@@ -351,6 +356,40 @@ export default function OfficialExamDetailPage({
     }
   }
 
+  const handleAiGrade = async () => {
+    const pendingCount = results.filter((r) => r.grading_status === 'PENDING_MANUAL').length
+    if (pendingCount === 0) {
+      alert('채점 대기 중인 시험이 없습니다')
+      return
+    }
+    if (!confirm(`AI 자동 채점을 시작하시겠습니까?\n대상: ${pendingCount}건\n\n* AI 채점은 참고용이며, 이후 수동으로 수정할 수 있습니다.`)) {
+      return
+    }
+
+    setAiGrading(true)
+    setAiResult(null)
+    try {
+      const res = await fetch(`/api/admin/official-exams/${examId}/ai-grade`, {
+        method: 'POST',
+      })
+      const data = await res.json()
+      if (res.ok && data.success) {
+        setAiResult({
+          totalGraded: data.totalGraded,
+          studentsGraded: data.studentsGraded,
+          totalFailed: data.totalFailed,
+        })
+        loadResults()
+      } else {
+        alert(data.error || 'AI 채점 중 오류가 발생했습니다')
+      }
+    } catch {
+      alert('AI 채점 요청 중 오류가 발생했습니다')
+    } finally {
+      setAiGrading(false)
+    }
+  }
+
   const handleEditorClose = () => {
     setShowEditor(false)
     setEditorQuestion(undefined)
@@ -405,17 +444,17 @@ export default function OfficialExamDetailPage({
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* 헤더 */}
-        <div className="flex justify-between items-start mb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 {exam?.name}
               </h1>
               <span className="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-1 rounded-full font-semibold">
                 공식 시험
               </span>
             </div>
-            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 flex-wrap">
               <span>시험 시간: {exam?.duration_minutes}분</span>
               <span>비밀번호: <span className="font-mono font-semibold text-gray-800 dark:text-gray-200">{exam?.password}</span></span>
               <button
@@ -434,7 +473,7 @@ export default function OfficialExamDetailPage({
           </div>
           <Link
             href="/admin/official-exams"
-            className="px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+            className="px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 text-sm shrink-0"
           >
             목록으로
           </Link>
@@ -444,14 +483,14 @@ export default function OfficialExamDetailPage({
         {editingSettings && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6 border dark:border-gray-700">
             <h2 className="text-lg font-bold mb-4 dark:text-white">시험 설정 변경</h2>
-            <div className="flex gap-4 items-end">
+            <div className="flex flex-wrap gap-4 items-end">
               <div>
                 <label className="block text-sm font-medium mb-1 dark:text-gray-200">비밀번호</label>
                 <input
                   type="text"
                   value={settingsForm.password}
                   onChange={(e) => setSettingsForm({ ...settingsForm, password: e.target.value })}
-                  className="px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm w-48"
+                  className="px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm w-full sm:w-48"
                 />
               </div>
               <div>
@@ -465,19 +504,21 @@ export default function OfficialExamDetailPage({
                   className="px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm w-24"
                 />
               </div>
-              <button
-                onClick={handleSaveSettings}
-                disabled={savingSettings}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
-              >
-                {savingSettings ? '저장 중...' : '저장'}
-              </button>
-              <button
-                onClick={() => setEditingSettings(false)}
-                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
-              >
-                취소
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSaveSettings}
+                  disabled={savingSettings}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+                >
+                  {savingSettings ? '저장 중...' : '저장'}
+                </button>
+                <button
+                  onClick={() => setEditingSettings(false)}
+                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
+                >
+                  취소
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -633,7 +674,7 @@ export default function OfficialExamDetailPage({
         {activeTab === 'results' && (
           <div>
             {/* 버튼 */}
-            <div className="flex justify-end gap-3 mb-4">
+            <div className="flex justify-end gap-3 mb-4 flex-wrap">
               <button
                 onClick={() => loadResults()}
                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
@@ -649,8 +690,70 @@ export default function OfficialExamDetailPage({
               </button>
             </div>
 
+            {/* AI 채점 영역 */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-4 border dark:border-gray-700">
+              <div className="flex items-center gap-3 mb-3 flex-wrap">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">채점 방식:</span>
+                <label className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="gradingMode"
+                    value="manual"
+                    checked={gradingMode === 'manual'}
+                    onChange={() => setGradingMode('manual')}
+                    className="text-blue-600"
+                  />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">수동 채점</span>
+                </label>
+                <label className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="gradingMode"
+                    value="ai"
+                    checked={gradingMode === 'ai'}
+                    onChange={() => setGradingMode('ai')}
+                    className="text-blue-600"
+                  />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">AI 자동 채점</span>
+                </label>
+              </div>
+              {gradingMode === 'ai' && (
+                <div className="flex items-center gap-3 flex-wrap">
+                  {(() => {
+                    const pendingCount = results.filter((r) => r.grading_status === 'PENDING_MANUAL').length
+                    return (
+                      <button
+                        onClick={handleAiGrade}
+                        disabled={aiGrading || pendingCount === 0}
+                        className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 disabled:opacity-50 text-sm font-medium"
+                      >
+                        {aiGrading
+                          ? 'AI 채점 중...'
+                          : pendingCount > 0
+                            ? `AI 채점 시작 (대기 ${pendingCount}건)`
+                            : 'AI 채점 대기 건 없음'}
+                      </button>
+                    )
+                  })()}
+                  {aiGrading && (
+                    <span className="text-sm text-gray-500 dark:text-gray-400 animate-pulse">
+                      AI 채점 진행 중... 잠시 기다려주세요
+                    </span>
+                  )}
+                  {aiResult && !aiGrading && (
+                    <span className="text-sm text-green-600 dark:text-green-400 font-medium">
+                      AI 채점 완료! {aiResult.totalGraded}건 채점, {aiResult.studentsGraded}명
+                      {aiResult.totalFailed > 0 && (
+                        <span className="text-red-500 ml-2">({aiResult.totalFailed}건 실패)</span>
+                      )}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
             {/* 통계 */}
-            <div className="grid grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border dark:border-gray-700 text-center">
                 <div className="text-sm text-gray-600 dark:text-gray-400">응시자</div>
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
