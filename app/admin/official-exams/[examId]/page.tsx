@@ -861,7 +861,7 @@ export default function OfficialExamDetailPage({
                           {r.affiliation || '-'}
                         </td>
                         <td className="px-4 py-3 text-sm whitespace-nowrap">
-                          <div className="flex items-center gap-1.5">
+                          <div>
                             <span
                               className={`font-bold ${
                                 r.grading_status === 'PENDING_MANUAL'
@@ -874,9 +874,9 @@ export default function OfficialExamDetailPage({
                               {r.total_score}점
                             </span>
                             {r.grading_status === 'PENDING_MANUAL' && (
-                              <span className="text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-1 py-1 rounded font-medium leading-tight" style={{ writingMode: 'vertical-rl' }}>
+                              <div className="text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-1 py-0.5 rounded font-medium mt-1 text-center">
                                 채점대기
-                              </span>
+                              </div>
                             )}
                           </div>
                         </td>
