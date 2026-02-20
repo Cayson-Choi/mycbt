@@ -1,7 +1,7 @@
 # 현재 개발 상태
 
 ## 최종 업데이트
-2026-02-19
+2026-02-20
 
 ## 완료된 기능
 
@@ -66,6 +66,8 @@
 - [x] 학번 필수 확인
 - [x] 이탈 감지 (violation_count)
 - [x] 응시자 답안 조회 및 주관식 수동 채점
+- [x] AI 자동 채점 (OpenRouter API, 주관식/서술형)
+- [x] AI 채점 결과 피드백 표시
 
 ## 프로젝트 구조
 
@@ -110,13 +112,24 @@ components/
 ├── ExamCards.tsx            # 시험 카드 목록 (10초 폴링, 게시 상태 실시간 반영)
 ├── LogoutButton.tsx         # 로그아웃 버튼
 ├── MathText.tsx             # 수학 표기법 렌더링
+├── MobileNav.tsx            # 모바일 네비게이션
+├── AuthListener.tsx         # 인증 상태 리스너
+├── Butterfly.tsx            # 나비 애니메이션
+├── ConfirmDialog.tsx        # 확인 다이얼로그
+├── FullscreenEnforcer.tsx   # 전체화면 강제 (OFFICIAL 모드)
+├── ExamSettingsSection.tsx  # 시험 설정 관리
+├── ResetAttemptsSection.tsx # 응시 기록 초기화
+├── DuplicateQuestionsSection.tsx # 중복 문제 관리
 ├── QuestionSplitEditor.tsx  # 문제 편집 분할 뷰 (lazy loaded)
 └── BulkUploadSplitEditor.tsx # 일괄 업로드 분할 뷰 (lazy loaded)
 
-lib/supabase/
-├── client.ts               # 브라우저용 Supabase 클라이언트
-├── server.ts               # 서버용 Supabase 클라이언트 (쿠키 기반)
-└── admin.ts                # 관리자용 Supabase 클라이언트 (service_role, 서버 전용)
+lib/
+├── supabase/
+│   ├── client.ts               # 브라우저용 Supabase 클라이언트
+│   ├── server.ts               # 서버용 Supabase 클라이언트 (쿠키 기반)
+│   └── admin.ts                # 관리자용 Supabase 클라이언트 (service_role, 서버 전용)
+├── openrouter.ts               # OpenRouter AI 채점 (주관식/서술형)
+└── question-code-mapping.ts    # 문제코드 매핑 유틸
 ```
 
 ## 최적화 현황

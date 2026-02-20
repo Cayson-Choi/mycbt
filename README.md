@@ -10,10 +10,11 @@ npm install
 ```
 
 ### 2. 환경 변수 설정
-`.env.local` 파일을 생성하고 Supabase 정보를 입력하세요:
+`.env.local` 파일을 생성하고 필요한 정보를 입력하세요:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+OPENROUTER_API_KEY=your-openrouter-api-key
 ```
 
 ### 3. 개발 서버 실행
@@ -32,6 +33,9 @@ npm run dev
 - ✅ KST 기준 일별 집계
 - ✅ 동시 1개 시험만 가능
 - ✅ 23:00~23:59 신규 시험 제한
+- ✅ 공식 시험 (비밀번호, 이탈 감지)
+- ✅ 주관식/서술형 문제 지원
+- ✅ AI 자동 채점 (OpenRouter API)
 
 ## 기술 스택
 

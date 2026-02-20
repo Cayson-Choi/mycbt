@@ -73,9 +73,12 @@ ________________________________________
 •	id(PK)
 •	question_code(UNIQUE) ✅ 이미지 파일 이름과 연결되는 고유번호
 •	exam_id, subject_id
+•	question_type (MULTIPLE_CHOICE / SHORT_ANSWER / ESSAY, 기본 MULTIPLE_CHOICE)
 •	question_text
-•	choice_1~choice_4
-•	answer(정답 1~4) ❌ 프론트에 절대 보내면 안 됨
+•	choice_1~choice_4 (객관식용)
+•	answer(정답 1~4, 객관식용) ❌ 프론트에 절대 보내면 안 됨
+•	answer_text (주관식/서술형 참고 정답, nullable)
+•	points (배점, 기본 1)
 •	explanation(해설) ✅ 제출 후만 공개
 •	image_url(nullable) ✅ DB는 image_url로 통일
 •	is_active(bool, soft delete)
@@ -86,6 +89,7 @@ ________________________________________
 •	user_id(FK)
 •	exam_id(FK)
 •	status: IN_PROGRESS / SUBMITTED / EXPIRED
+•	grading_status: PENDING / GRADING / COMPLETED (AI 채점 진행 상태)
 •	started_at
 •	expires_at (= started_at + 60분)
 •	submitted_at(nullable)
@@ -111,8 +115,12 @@ ________________________________________
 4-6) attempt_items (학생이 고른 답 + 정오답)
 •	attempt_id
 •	question_id
-•	selected(1~4, nullable)
+•	selected(1~4, nullable, 객관식용)
+•	answer_text (주관식/서술형 답안 텍스트, nullable)
 •	is_correct(nullable)
+•	awarded_points (AI/수동 채점 부여 점수, nullable)
+•	grading_status (PENDING / AI_GRADED / MANUAL_GRADED, nullable)
+•	ai_feedback (AI 채점 피드백, nullable)
 •	PK(attempt_id, question_id)
 ________________________________________
 4-7) subject_scores (과목별 점수)
@@ -299,6 +307,7 @@ o	문제 출제 (객관식/주관식/서술형)
 o	게시/비게시 토글 (is_published) — 게시 시 홈 즉시 노출, 비게시 시 즉시 숨김
 o	비게시 상태에서 직접 URL 접속해도 시험 시작 차단
 o	응시자 답안 조회 및 주관식 수동 채점
+o	AI 자동 채점 (OpenRouter API, 주관식/서술형 문제 자동 채점 + 피드백)
 •	관리자 API: GET/POST/PUT/DELETE /api/admin/official-exams
 ________________________________________
 12) 개발 순서(이대로 하면 가장 빠르고 안전)

@@ -9,6 +9,7 @@
 - **Database**: Supabase (PostgreSQL)
 - **Auth**: Supabase Auth
 - **Storage**: Supabase Storage (문제 이미지)
+- **AI**: OpenRouter API (주관식/서술형 자동 채점)
 
 ## 핵심 규칙 (절대 준수)
 
@@ -44,13 +45,15 @@
 
 ```
 /app              - Next.js App Router
-  /api            - API Routes (21개 엔드포인트)
+  /api            - API Routes (38개 엔드포인트)
   /(auth)         - 인증 관련 페이지 (로그인, 회원가입)
   /admin          - 관리자 페이지 (문제관리, 회원관리, 공식시험관리)
   /exam           - 시험 관련 페이지 (시작, 풀이, 결과)
   /my             - 마이페이지 (기록, 프로필, 오답노트, 탈퇴)
 /components       - 재사용 컴포넌트 (ExamCards, Leaderboard 등 클라이언트 폴링)
-/lib/supabase     - Supabase 클라이언트 (client, server, admin)
+/lib
+  /supabase       - Supabase 클라이언트 (client, server, admin)
+  openrouter.ts   - OpenRouter AI 채점 (주관식/서술형)
 /types            - TypeScript 타입 정의
 ```
 
@@ -59,10 +62,10 @@
 1. **profiles** - 회원 정보
 2. **exams** - 시험 종류 (기능사/산업기사/기사, exam_mode: PRACTICE/OFFICIAL, is_published: 게시 상태)
 3. **subjects** - 과목 설정 (과목당 문항 수 포함)
-4. **questions** - 문제 은행 (정답 포함, 프론트 노출 금지)
-5. **attempts** - 시험 응시 기록
+4. **questions** - 문제 은행 (정답 포함, 프론트 노출 금지, question_type: MULTIPLE_CHOICE/SHORT_ANSWER/ESSAY, points, answer_text)
+5. **attempts** - 시험 응시 기록 (grading_status: PENDING/GRADING/COMPLETED)
 6. **attempt_questions** - 시험지 스냅샷 (문제 순서)
-7. **attempt_items** - 학생 답안
+7. **attempt_items** - 학생 답안 (answer_text, awarded_points, grading_status, ai_feedback)
 8. **subject_scores** - 과목별 점수
 9. **daily_best_scores** - 오늘 랭킹
 10. **daily_leaderboard_snapshots** - 어제 Top5 스냅샷
@@ -77,6 +80,8 @@
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+OPENROUTER_API_KEY=your-openrouter-api-key
+OPENROUTER_MODEL=deepseek/deepseek-r1-0528:free
 ```
 
 ### 로컬 개발 서버 실행
