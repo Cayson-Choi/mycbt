@@ -15,7 +15,7 @@ function getStaticSupabase() {
 
 export default async function Home() {
   const supabase = getStaticSupabase()
-  const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at, creator_name, creator_title, is_published').order('id')
+  const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at, creator_name, creator_title, is_published, sort_order').order('sort_order')
 
   const practiceExams = exams?.filter(e => e.exam_mode !== 'OFFICIAL') || []
   const visibleExams = exams?.filter(e => e.exam_mode !== 'OFFICIAL' || e.is_published) || []

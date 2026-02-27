@@ -28,8 +28,8 @@ export async function GET() {
     // 시험 + 과목 + questions_per_attempt 조회
     const { data: exams, error: examsError } = await supabase
       .from('exams')
-      .select('id, name, exam_mode, duration_minutes')
-      .order('id')
+      .select('id, name, exam_mode, duration_minutes, sort_order')
+      .order('sort_order')
 
     if (examsError) {
       return NextResponse.json({ error: '시험 목록 조회 실패' }, { status: 500 })

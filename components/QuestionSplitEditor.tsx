@@ -387,7 +387,8 @@ export default function QuestionSplitEditor({
     }
   }
 
-  const examName = lockedExam ? lockedExam.name : formData.exam_id === 1 ? '전기기능사' : formData.exam_id === 2 ? '전기산업기사' : '전기기사'
+  const examNameMap: Record<number, string> = { 17: '전기기초', 1: '전기기능사', 2: '전기산업기사', 3: '전기기사' }
+  const examName = lockedExam ? lockedExam.name : examNameMap[formData.exam_id] || '시험'
   const subjectName = subjects.find((s) => s.id === formData.subject_id)?.name || '과목'
 
   return (
@@ -782,6 +783,7 @@ function EditPanel({
             onChange={(e) => update('exam_id', parseInt(e.target.value))}
             style={inputStyle}
           >
+            <option value={17}>전기기초</option>
             <option value={1}>전기기능사</option>
             <option value={2}>전기산업기사</option>
             <option value={3}>전기기사</option>

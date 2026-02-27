@@ -24,7 +24,15 @@ export default function AdminQuestionsPage() {
   const [selectedQuestions, setSelectedQuestions] = useState<Set<number>>(new Set())
   const [showBulkUpload, setShowBulkUpload] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [exams, setExams] = useState<any[]>([])
   const itemsPerPage = 20
+
+  useEffect(() => {
+    fetch('/api/admin/exam-settings')
+      .then(res => res.ok ? res.json() : { exams: [] })
+      .then(data => setExams(data.exams || []))
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     loadQuestions()
@@ -67,8 +75,8 @@ export default function AdminQuestionsPage() {
       if (examFilter === 'all') {
         // 전체 선택 시 모든 시험의 과목을 불러와서 합치기
         const allSubjects: any[] = []
-        for (const examId of ['1', '2', '3']) {
-          const res = await fetch(`/api/exams/${examId}/subjects`)
+        for (const exam of exams) {
+          const res = await fetch(`/api/exams/${exam.id}/subjects`)
           if (res.ok) {
             const data = await res.json()
             allSubjects.push(...data)
@@ -287,9 +295,11 @@ export default function AdminQuestionsPage() {
               className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             >
               <option value="all">전체 시험</option>
-              <option value="1">전기기능사</option>
-              <option value="2">전기산업기사</option>
-              <option value="3">전기기사</option>
+              {exams.map((exam) => (
+                <option key={exam.id} value={exam.id.toString()}>
+                  {exam.name}
+                </option>
+              ))}
             </select>
 
             {subjects.length > 0 && (

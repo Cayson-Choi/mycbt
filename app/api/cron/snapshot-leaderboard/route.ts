@@ -18,7 +18,13 @@ export async function GET(request: Request) {
       .toISOString()
       .split('T')[0]
 
-    const examIds = [1, 2, 3]
+    // PRACTICE 시험 목록을 DB에서 동적 조회
+    const { data: practiceExams } = await supabase
+      .from('exams')
+      .select('id')
+      .eq('exam_mode', 'PRACTICE')
+
+    const examIds = practiceExams?.map(e => e.id) || []
     let totalInserted = 0
 
     for (const examId of examIds) {

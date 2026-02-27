@@ -6,6 +6,9 @@
 
 // 시험명 → 코드 매핑
 export const EXAM_TO_CODE: Record<string, { field: string; level: string }> = {
+  // 전기기초
+  '전기기초': { field: 'ELEC', level: 'B' },
+
   // 전기 계열
   '전기기능사': { field: 'ELEC', level: 'F' },
   '전기산업기사': { field: 'ELEC', level: 'I' },
@@ -42,6 +45,9 @@ export const EXAM_TO_CODE: Record<string, { field: string; level: string }> = {
 
 // 과목명 → 코드 매핑
 export const SUBJECT_TO_CODE: Record<string, string> = {
+  // 전기기초
+  '전기상식': 'CS',
+
   // 전기 분야
   '전기이론': 'TH',
   '전기기기': 'MA',

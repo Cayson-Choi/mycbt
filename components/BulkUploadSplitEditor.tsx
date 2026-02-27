@@ -683,7 +683,7 @@ function InputPanel({
 전기기능사,전기이론,옴의 법칙에서 전압은?,V=I×R,V=I/R,V=R/I,V=I+R,1,옴의 법칙: V=I×R,`}
         </pre>
         <p style={{ marginTop: '8px', fontSize: '12px', color: isDark ? '#9ca3af' : '#6b7280', lineHeight: '1.6' }}>
-          * exam: "전기기능사" / "전기산업기사" / "전기기사"<br />
+          * exam: "전기기초" / "전기기능사" / "전기산업기사" / "전기기사"<br />
           * subject: 과목명 (전기이론, 전기기기 등)<br />
           * answer: 1~4 중 정답 번호<br />
           * question_code는 자동 생성됩니다<br />

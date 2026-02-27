@@ -50,8 +50,8 @@ export default function ExamCards({ initialExams }: { initialExams: Exam[] }) {
     const fetchExams = () => {
       supabase
         .from('exams')
-        .select('id, name, exam_mode, duration_minutes, creator_name, creator_title, is_published')
-        .order('id')
+        .select('id, name, exam_mode, duration_minutes, creator_name, creator_title, is_published, sort_order')
+        .order('sort_order')
         .then(({ data }) => {
           if (data) {
             setExams(data.filter(e => e.exam_mode !== 'OFFICIAL' || e.is_published))

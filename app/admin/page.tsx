@@ -39,8 +39,8 @@ export default async function AdminPage() {
 
   const { data: exams } = await supabase
     .from('exams')
-    .select('id, name, exam_mode, duration_minutes')
-    .order('id')
+    .select('id, name, exam_mode, duration_minutes, sort_order')
+    .order('sort_order')
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
