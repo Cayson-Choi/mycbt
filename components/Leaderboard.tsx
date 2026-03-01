@@ -167,7 +167,9 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
                 : 'bg-gray-900/90 text-gray-400 hover:text-white hover:bg-gray-800 border-gray-700 shadow-lg'
             }`}
           >
-            {exam.name}
+            {exam.name.startsWith('전기') ? (
+              <>전기<span className="block lg:inline">{exam.name.slice(2)}</span></>
+            ) : exam.name}
           </button>
         ))}
       </div>
