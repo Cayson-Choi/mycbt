@@ -176,6 +176,8 @@ export default function SignupPage() {
             <option value="전기반">전기반</option>
             <option value="소방반">소방반</option>
             <option value="신중년">신중년</option>
+            <option value="P-Tech 1학년">P-Tech 1학년</option>
+            <option value="P-Tech 2학년">P-Tech 2학년</option>
           </select>
         </div>
 
