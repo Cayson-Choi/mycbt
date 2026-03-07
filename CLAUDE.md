@@ -81,7 +81,7 @@
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 OPENROUTER_API_KEY=your-openrouter-api-key
-OPENROUTER_MODEL=deepseek/deepseek-r1-0528:free
+OPENROUTER_MODEL=deepseek/deepseek-v3.2
 ```
 
 ### 로컬 개발 서버 실행

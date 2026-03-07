@@ -13,7 +13,7 @@ export async function gradeSubjectiveAnswer(params: {
   questionType: 'SHORT_ANSWER' | 'ESSAY'
 }): Promise<GradeResult | null> {
   const apiKey = process.env.OPENROUTER_API_KEY
-  const model = process.env.OPENROUTER_MODEL || 'deepseek/deepseek-r1-0528:free'
+  const model = process.env.OPENROUTER_MODEL || 'deepseek/deepseek-v3.2'
 
   if (!apiKey) {
     console.error('OPENROUTER_API_KEY is not set')
