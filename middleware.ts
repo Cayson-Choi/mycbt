@@ -44,7 +44,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // 공개 페이지/API는 쿠키 갱신 후 통과
-  const publicPaths = ['/', '/login', '/register', '/signup']
+  const publicPaths = ['/', '/login', '/complete-profile']
   const isPublic = publicPaths.includes(pathname)
   const publicApiPaths = ['/api/home/leaderboard', '/api/exams', '/api/auth']
   const isPublicApi = publicApiPaths.some(p => pathname.startsWith(p))

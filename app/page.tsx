@@ -1,19 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 import Leaderboard from '@/components/Leaderboard'
 import ExamCards from '@/components/ExamCards'
 
-export const revalidate = 60
-
-function getStaticSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-}
-
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const supabase = getStaticSupabase()
+  const supabase = await createClient()
   const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at, is_published, sort_order').order('sort_order')
 
   const practiceExams = exams?.filter(e => e.exam_mode !== 'OFFICIAL') || []

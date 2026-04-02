@@ -78,15 +78,9 @@ export default async function Header() {
                 <ThemeToggle />
                 <Link
                   href="/login"
-                  className="px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                >
-                  로그인
-                </Link>
-                <Link
-                  href="/signup"
                   className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
                 >
-                  회원가입
+                  로그인
                 </Link>
               </>
             )}

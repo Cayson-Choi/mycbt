@@ -83,16 +83,9 @@ export default function MobileNav({ user }: MobileNavProps) {
                 <Link
                   href="/login"
                   onClick={() => setOpen(false)}
-                  className="px-3 py-2.5 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  로그인
-                </Link>
-                <Link
-                  href="/signup"
-                  onClick={() => setOpen(false)}
                   className="px-3 py-2.5 text-sm text-blue-600 dark:text-blue-400 font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
-                  회원가입
+                  로그인
                 </Link>
               </>
             )}

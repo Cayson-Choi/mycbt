@@ -16,7 +16,7 @@ export default function AuthListener() {
     } = supabase.auth.onAuthStateChange((event) => {
       // 토큰 갱신 실패로 자동 로그아웃된 경우
       if (event === 'SIGNED_OUT') {
-        const publicPaths = ['/', '/login', '/signup']
+        const publicPaths = ['/', '/login', '/complete-profile']
         if (!publicPaths.includes(pathname)) {
           router.push('/login')
         }
