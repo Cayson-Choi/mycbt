@@ -11,9 +11,7 @@ export default function AdminUsersPage() {
   const [filteredUsers, setFilteredUsers] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const [affiliationFilter, setAffiliationFilter] = useState<string>('all')
   const [adminFilter, setAdminFilter] = useState<string>('all')
-  const [todayStats, setTodayStats] = useState<any[]>([])
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [pendingBulkDelete, setPendingBulkDelete] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -26,11 +24,6 @@ export default function AdminUsersPage() {
   // 필터링 및 검색
   useEffect(() => {
     let filtered = [...users]
-
-    // 소속 필터
-    if (affiliationFilter !== 'all') {
-      filtered = filtered.filter((u) => u.affiliation === affiliationFilter)
-    }
 
     // 관리자 필터
     if (adminFilter === 'admin') {
@@ -46,8 +39,7 @@ export default function AdminUsersPage() {
         (u) =>
           u.name?.toLowerCase().includes(query) ||
           u.email?.toLowerCase().includes(query) ||
-          u.phone?.toLowerCase().includes(query) ||
-          u.affiliation?.toLowerCase().includes(query)
+          u.phone?.toLowerCase().includes(query)
       )
     }
 
@@ -61,31 +53,7 @@ export default function AdminUsersPage() {
     setFilteredUsers(filtered)
     setCurrentPage(1)
     setSelectedIds(new Set())
-  }, [users, searchQuery, affiliationFilter, adminFilter])
-
-  // 소속별 통계 계산
-  const affiliationStats = users.reduce((acc, user) => {
-    const affiliation = user.affiliation || '미지정'
-    acc[affiliation] = (acc[affiliation] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
-
-  const uniqueAffiliations = Array.from(
-    new Set(users.map((u) => u.affiliation).filter(Boolean))
-  )
-
-  // 오늘의 통계 합계 계산 (전체)
-  const totalSignupsToday = todayStats.reduce((sum, stat) => sum + (stat.signups_count || 0), 0)
-  const totalDeletionsToday = todayStats.reduce((sum, stat) => sum + (stat.deletions_count || 0), 0)
-
-  // 소속별 오늘 통계 가져오기 함수
-  const getAffiliationStats = (affiliation: string) => {
-    const stat = todayStats.find((s) => s.affiliation === affiliation)
-    return {
-      signups: stat?.signups_count || 0,
-      deletions: stat?.deletions_count || 0,
-    }
-  }
+  }, [users, searchQuery, adminFilter])
 
   const loadUsers = async () => {
     try {
@@ -102,7 +70,6 @@ export default function AdminUsersPage() {
       if (res.ok) {
         const data = await res.json()
         setUsers(data.users || [])
-        setTodayStats(data.todayStats || [])
       }
     } catch (err) {
       console.error('Failed to load users:', err)
@@ -221,60 +188,9 @@ export default function AdminUsersPage() {
           <p className="text-gray-600 dark:text-gray-400">회원 목록 및 권한 관리</p>
         </div>
 
-        {/* 소속별 통계 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
-          <div className="flex items-center gap-3 flex-wrap">
-            {/* 전체 */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-200 dark:border-purple-800">
-              <span className="text-sm text-gray-600 dark:text-gray-400">전체</span>
-              <span className="text-sm font-bold text-purple-700 dark:text-purple-300">{users.length}</span>
-              {totalSignupsToday > 0 && (
-                <span className="text-xs font-medium text-red-500 dark:text-red-400">+{totalSignupsToday}</span>
-              )}
-              {totalDeletionsToday > 0 && (
-                <span className="text-xs font-medium text-blue-500 dark:text-blue-400">-{totalDeletionsToday}</span>
-              )}
-            </div>
-
-            <span className="text-gray-300 dark:text-gray-600">|</span>
-
-            {/* 소속별 */}
-            {Object.entries(affiliationStats)
-              .sort(([a], [b]) => a.localeCompare(b))
-              .map(([affiliation, count]) => {
-                const stats = getAffiliationStats(affiliation)
-                return (
-                  <div key={affiliation} className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">{affiliation}</span>
-                    <span className="text-sm font-bold text-gray-900 dark:text-gray-100">{count as number}</span>
-                    {stats.signups > 0 && (
-                      <span className="text-xs font-medium text-red-500 dark:text-red-400">+{stats.signups}</span>
-                    )}
-                    {stats.deletions > 0 && (
-                      <span className="text-xs font-medium text-blue-500 dark:text-blue-400">-{stats.deletions}</span>
-                    )}
-                  </div>
-                )
-              })}
-          </div>
-        </div>
-
         {/* 필터 및 검색 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
           <div className="flex items-center gap-3 flex-wrap">
-            <select
-              value={affiliationFilter}
-              onChange={(e) => setAffiliationFilter(e.target.value)}
-              className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-            >
-              <option value="all">전체 소속</option>
-              {uniqueAffiliations.map((affiliation) => (
-                <option key={affiliation} value={affiliation}>
-                  {affiliation}
-                </option>
-              ))}
-            </select>
-
             <select
               value={adminFilter}
               onChange={(e) => setAdminFilter(e.target.value)}
@@ -290,7 +206,7 @@ export default function AdminUsersPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="이름, 이메일, 전화번호, 소속 검색..."
+                placeholder="이름, 이메일, 전화번호 검색..."
                 className="w-full px-3 py-2 pr-8 border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               />
               {searchQuery && (
@@ -407,7 +323,6 @@ export default function AdminUsersPage() {
                         />
                       </th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">이름</th>
-                      <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">소속</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">이메일</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">전화번호</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">응시횟수</th>
@@ -434,9 +349,6 @@ export default function AdminUsersPage() {
                         </td>
                         <td className="px-2 lg:px-4 py-3 text-gray-900 dark:text-gray-100 text-center font-medium mobile-vertical">
                           {user.name}
-                        </td>
-                        <td className="px-2 lg:px-4 py-3 text-gray-600 dark:text-gray-400 text-center mobile-vertical">
-                          {user.affiliation}
                         </td>
                         <td className="px-2 lg:px-4 py-3 text-gray-900 dark:text-gray-100">
                           <span className="hidden lg:inline">{user.email}</span>
