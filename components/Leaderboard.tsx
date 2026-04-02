@@ -222,7 +222,7 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5 lg:gap-3">
-                        <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-yellow-300 via-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/40 pulse-gold">
+                        <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-yellow-300 via-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-md shadow-amber-500/20 pulse-gold">
                           <span className="text-yellow-900 text-base lg:text-lg font-black">
                             1
                           </span>

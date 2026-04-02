@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, ReactNode } from 'react'
 
-export default function HeroSection() {
+export default function HeroSection({ children }: { children?: ReactNode }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -218,7 +218,7 @@ export default function HeroSection() {
             <span className="hero-bolt text-3xl lg:text-4xl">&#x26A1;</span>
           </div>
 
-          <h1 className="hero-title text-4xl lg:text-6xl font-black mb-2 leading-none tracking-tighter">
+          <h1 className="hero-title text-5xl lg:text-8xl font-black mb-2 leading-none tracking-tighter">
             전기짱
           </h1>
 
@@ -229,6 +229,13 @@ export default function HeroSection() {
           </p>
         </div>
       </div>
+
+      {/* Children (Leaderboard 등) - 캔버스 위에 겹쳐서 표시 */}
+      {children && (
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 lg:pb-6">
+          {children}
+        </div>
+      )}
     </div>
   )
 }

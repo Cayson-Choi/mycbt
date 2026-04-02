@@ -44,8 +44,8 @@ body {
 }
 
 @keyframes pulseRing {
-  0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 1); }
-  70% { box-shadow: 0 0 25px 35px rgba(251, 191, 36, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+  70% { box-shadow: 0 0 8px 10px rgba(251, 191, 36, 0); }
   100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
 }
 
@@ -106,7 +106,35 @@ body {
 
 
 .gold-glow {
-  box-shadow: 0 0 30px rgba(251, 191, 36, 0.3), 0 0 60px rgba(251, 191, 36, 0.1);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.1), 0 0 20px rgba(251, 191, 36, 0.05);
+}
+
+/* Hero title fonts */
+@font-face {
+  font-family: 'NanumSquareNeo';
+  src: url('/fonts/NanumSquareNeo-eHv.ttf') format('truetype');
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GeumEnBohwa';
+  src: url('/fonts/geumenbohwa.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DdakDanDan';
+  src: url('/fonts/ddakdandan.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bisang';
+  src: url('/fonts/bisang.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'NanumBrush';
+  src: url('/fonts/NanumBrush.ttf') format('truetype');
+  font-display: swap;
 }
 
 /* Hero section */
@@ -126,6 +154,10 @@ body {
 }
 
 .hero-title {
+  font-family: 'DdakDanDan', sans-serif;
+  letter-spacing: 0.08em;
+  -webkit-text-stroke: 1.5px rgba(255, 200, 50, 0.3);
+  paint-order: stroke fill;
   background: linear-gradient(135deg, #ffd700 0%, #ffb347 25%, #ffffff 50%, #ffd700 75%, #ff8c00 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
