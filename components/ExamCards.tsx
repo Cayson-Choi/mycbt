@@ -44,6 +44,7 @@ export default function ExamCards({ initialExams }: { initialExams: Exam[] }) {
 
   useEffect(() => {
     const supabase = createClient()
+    let interval: ReturnType<typeof setInterval> | null = null
 
     const fetchExams = () => {
       supabase
@@ -57,8 +58,35 @@ export default function ExamCards({ initialExams }: { initialExams: Exam[] }) {
         })
     }
 
-    const interval = setInterval(fetchExams, 10000)
-    return () => clearInterval(interval)
+    const startPolling = () => {
+      if (!interval) {
+        interval = setInterval(fetchExams, 10000)
+      }
+    }
+
+    const stopPolling = () => {
+      if (interval) {
+        clearInterval(interval)
+        interval = null
+      }
+    }
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        stopPolling()
+      } else {
+        fetchExams() // 탭 복귀 시 즉시 갱신
+        startPolling()
+      }
+    }
+
+    startPolling()
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    return () => {
+      stopPolling()
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
   }, [])
 
   return (

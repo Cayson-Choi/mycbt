@@ -1,33 +1,23 @@
-import { createClient } from '@/lib/supabase/server'
+import { Suspense } from 'react'
 import Link from 'next/link'
-import LogoutButton from './LogoutButton'
 import ThemeToggle from './ThemeToggle'
 import MobileNav from './MobileNav'
+import HeaderUserNav from './HeaderUserNav'
+import HeaderMobileNav from './HeaderMobileNav'
 
-export default async function Header() {
-  const supabase = await createClient()
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  const user = session?.user ?? null
+function HeaderUserNavFallback() {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+    </div>
+  )
+}
 
-  let profile: { name: string; affiliation: string | null; is_admin: boolean } | null = null
-  if (user) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('name, affiliation')
-      .eq('id', user.id)
-      .single()
-    if (data) {
-      profile = {
-        ...data,
-        is_admin: !!user.app_metadata?.is_admin,
-      }
-    }
-  }
+function HeaderMobileNavFallback() {
+  return <MobileNav user={null} />
+}
 
-  const mobileUser = profile ? { name: profile.name, isAdmin: profile.is_admin } : null
-
+export default function Header() {
   return (
     <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,48 +36,16 @@ export default async function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-2">
-            {user && profile ? (
-              <>
-                <Link
-                  href="/my"
-                  className="px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                >
-                  마이페이지
-                </Link>
-                {profile.is_admin && (
-                  <Link
-                    href="/admin"
-                    className="px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  >
-                    관리자
-                  </Link>
-                )}
-                <ThemeToggle />
-                <span className="text-sm text-gray-500 dark:text-gray-400 pl-2 border-l border-gray-200 dark:border-gray-700">
-                  {profile.name}님
-                  {profile.is_admin && (
-                    <span className="ml-1.5 text-xs bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 px-1.5 py-0.5 rounded">
-                      관리자
-                    </span>
-                  )}
-                </span>
-                <LogoutButton />
-              </>
-            ) : (
-              <>
-                <ThemeToggle />
-                <Link
-                  href="/login"
-                  className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-                >
-                  로그인
-                </Link>
-              </>
-            )}
+            <ThemeToggle />
+            <Suspense fallback={<HeaderUserNavFallback />}>
+              <HeaderUserNav />
+            </Suspense>
           </nav>
 
           {/* Mobile nav */}
-          <MobileNav user={mobileUser} />
+          <Suspense fallback={<HeaderMobileNavFallback />}>
+            <HeaderMobileNav />
+          </Suspense>
         </div>
       </div>
     </header>

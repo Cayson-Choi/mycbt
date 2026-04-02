@@ -1,23 +1,44 @@
-import { createClient } from '@/lib/supabase/server'
-import Leaderboard from '@/components/Leaderboard'
-import ExamCards from '@/components/ExamCards'
+import { Suspense } from 'react'
 import HeroSection from '@/components/HeroSection'
+import HomeLeaderboard from '@/components/HomeLeaderboard'
+import HomeExamCards from '@/components/HomeExamCards'
 
-export const dynamic = 'force-dynamic'
+function LeaderboardSkeleton() {
+  return (
+    <div className="text-center text-gray-400 py-16">
+      <div className="w-8 h-8 border-2 border-gray-600 border-t-yellow-400 rounded-full animate-spin mx-auto mb-3" />
+      <p className="text-sm">랭킹 불러오는 중...</p>
+    </div>
+  )
+}
 
-export default async function Home() {
-  const supabase = await createClient()
-  const { data: exams } = await supabase.from('exams').select('id, name, exam_mode, duration_minutes, created_at, is_published, sort_order').order('sort_order')
+function ExamCardsSkeleton() {
+  return (
+    <div className="grid gap-4 max-w-5xl mx-auto grid-cols-2 md:grid-cols-3">
+      {[...Array(3)].map((_, i) => (
+        <div
+          key={i}
+          className="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg lg:rounded-xl p-1.5 lg:p-4 animate-pulse"
+        >
+          <div className="h-4 w-12 bg-white/20 rounded-full mb-2 ml-auto" />
+          <div className="h-5 w-24 bg-white/20 rounded mb-1" />
+          <div className="h-3 w-16 bg-white/20 rounded mb-2" />
+          <div className="h-3 w-20 bg-white/20 rounded" />
+        </div>
+      ))}
+    </div>
+  )
+}
 
-  const practiceExams = exams?.filter(e => e.exam_mode !== 'OFFICIAL') || []
-  const visibleExams = exams?.filter(e => e.exam_mode !== 'OFFICIAL' || e.is_published) || []
-
+export default function Home() {
   return (
     <div>
       {/* Hero + Ranking */}
       <section>
         <HeroSection>
-          <Leaderboard exams={practiceExams} />
+          <Suspense fallback={<LeaderboardSkeleton />}>
+            <HomeLeaderboard />
+          </Suspense>
         </HeroSection>
       </section>
 
@@ -26,7 +47,9 @@ export default async function Home() {
         id="exams"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative z-10 pb-10"
       >
-        <ExamCards initialExams={visibleExams} />
+        <Suspense fallback={<ExamCardsSkeleton />}>
+          <HomeExamCards />
+        </Suspense>
       </section>
 
       {/* Features */}

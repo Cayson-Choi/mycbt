@@ -38,6 +38,8 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
   useEffect(() => {
     if (!activeExamId) return
 
+    let interval: ReturnType<typeof setInterval> | null = null
+
     const fetchLeaderboard = (showLoading: boolean) => {
       if (showLoading) setLoading(true)
       fetch(`/api/home/leaderboard?exam_id=${activeExamId}`)
@@ -47,9 +49,36 @@ export default function Leaderboard({ exams }: LeaderboardProps) {
         .finally(() => { if (showLoading) setLoading(false) })
     }
 
+    const startPolling = () => {
+      if (!interval) {
+        interval = setInterval(() => fetchLeaderboard(false), 10000)
+      }
+    }
+
+    const stopPolling = () => {
+      if (interval) {
+        clearInterval(interval)
+        interval = null
+      }
+    }
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        stopPolling()
+      } else {
+        fetchLeaderboard(false) // 탭 복귀 시 즉시 갱신
+        startPolling()
+      }
+    }
+
     fetchLeaderboard(true)
-    const interval = setInterval(() => fetchLeaderboard(false), 10000)
-    return () => clearInterval(interval)
+    startPolling()
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    return () => {
+      stopPolling()
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
   }, [activeExamId])
 
   if (exams.length === 0) return null

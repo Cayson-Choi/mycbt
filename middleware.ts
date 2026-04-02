@@ -1,10 +1,41 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// ── 공개 경로 (Supabase 클라이언트 생성 없이 즉시 통과) ──
+// 인증이 필요 없는 API: 리더보드, 시험목록, 인증 콜백/로그아웃, cron
+const PUBLIC_API_PREFIXES = [
+  '/api/home/leaderboard',
+  '/api/exams',
+  '/api/auth',
+  '/api/cron',
+]
+
+// 공개 페이지: 홈, 로그인, 추가정보기입
+const PUBLIC_PAGES = new Set(['/', '/login', '/complete-profile'])
+
+// ── 보호된 경로 (로그인 필수) ──
+const PROTECTED_PREFIXES = ['/exam', '/my', '/admin']
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // 모든 경로에서 쿠키 갱신을 위해 Supabase 클라이언트 생성
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 1단계: 공개 경로 빠른 패스 (Supabase 클라이언트 생성 없이 즉시 통과)
+  //   - 공개 API: 인증 불필요, 쿠키 갱신도 불필요
+  //   - 공개 페이지: 로그인 안 한 사용자도 접근 가능
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const isPublicApi = PUBLIC_API_PREFIXES.some(p => pathname.startsWith(p))
+  if (isPublicApi) {
+    return NextResponse.next()
+  }
+
+  const isPublicPage = PUBLIC_PAGES.has(pathname)
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 2단계: Supabase 클라이언트 생성 (쿠키 갱신용)
+  //   - 공개 페이지: 쿠키 갱신만 하고 통과
+  //   - 보호된 경로: 쿠키 갱신 + 세션 확인
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -29,7 +60,7 @@ export async function middleware(request: NextRequest) {
   )
 
   // ★ getSession()은 쿠키에서 로컬로 읽음 (네트워크 요청 없음, ~0ms)
-  // getUser()는 Supabase 서버로 HTTP 요청 (~200-500ms)
+  // getUser()는 Supabase 서버로 HTTP 요청 (~200-500ms) → 절대 사용 금지
   let user = null
   try {
     const {
@@ -43,21 +74,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // 공개 페이지/API는 쿠키 갱신 후 통과
-  const publicPaths = ['/', '/login', '/complete-profile']
-  const isPublic = publicPaths.includes(pathname)
-  const publicApiPaths = ['/api/home/leaderboard', '/api/exams', '/api/auth']
-  const isPublicApi = publicApiPaths.some(p => pathname.startsWith(p))
-
-  if (isPublic || isPublicApi) {
+  // 공개 페이지는 쿠키 갱신만 하고 통과
+  if (isPublicPage) {
     return supabaseResponse
   }
 
-  // 보호된 페이지: 로그인 필요
-  const protectedPaths = ['/exam', '/my', '/admin']
-  const isProtectedPath = protectedPaths.some(path =>
-    pathname.startsWith(path)
-  )
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 3단계: 보호된 경로 접근 제어
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const isProtectedPath = PROTECTED_PREFIXES.some(p => pathname.startsWith(p))
 
   if (isProtectedPath && !user) {
     const url = request.nextUrl.clone()
@@ -78,6 +103,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    /*
+     * 아래 경로를 제외한 모든 요청에서 미들웨어 실행:
+     * - _next/static (빌드 정적 파일: JS, CSS, 청크)
+     * - _next/image (이미지 최적화 프록시)
+     * - favicon.ico (파비콘)
+     * - 정적 자산 확장자 (이미지, 폰트, 미디어, 데이터 파일)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|map|woff|woff2|ttf|eot|otf|mp4|webm|json|xml|txt|robots\\.txt|sitemap\\.xml)$).*)',
   ],
 }

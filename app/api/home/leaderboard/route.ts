@@ -183,6 +183,20 @@ export async function GET(request: Request) {
       my_score: myScore,
     })
 
+    // 10초 폴링 API: 로그인 사용자는 개인 데이터(my_rank) 포함이므로 private 캐시,
+    // 비로그인은 공용 데이터만이므로 CDN 캐시 활용
+    if (user) {
+      response.headers.set(
+        'Cache-Control',
+        'private, max-age=5, stale-while-revalidate=10'
+      )
+    } else {
+      response.headers.set(
+        'Cache-Control',
+        'public, s-maxage=5, stale-while-revalidate=10'
+      )
+    }
+
     return response
   } catch (error) {
     console.error('Leaderboard error:', error)

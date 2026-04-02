@@ -52,12 +52,15 @@ export async function POST(request: Request) {
       .eq('status', 'IN_PROGRESS')
 
     if (existingAttempts && existingAttempts.length > 0) {
-      for (const existing of existingAttempts) {
-        await supabase.from('attempt_items').delete().eq('attempt_id', existing.id)
-        await supabase.from('subject_scores').delete().eq('attempt_id', existing.id)
-        await supabase.from('attempt_questions').delete().eq('attempt_id', existing.id)
-        await supabase.from('attempts').delete().eq('id', existing.id)
-      }
+      const existingIds = existingAttempts.map((e) => e.id)
+      // 종속 테이블 삭제를 병렬 실행 (FK 순서: 자식 먼저)
+      await Promise.all([
+        supabase.from('attempt_items').delete().in('attempt_id', existingIds),
+        supabase.from('subject_scores').delete().in('attempt_id', existingIds),
+        supabase.from('attempt_questions').delete().in('attempt_id', existingIds),
+      ])
+      // 부모 테이블은 자식 삭제 후 실행
+      await supabase.from('attempts').delete().in('id', existingIds)
     }
 
     // 4. 23:00~23:59 KST 체크 (PRACTICE 모드에서만)
@@ -201,15 +204,23 @@ export async function POST(request: Request) {
         )
       }
 
-      let seq = 1
+      // 모든 과목의 문제를 병렬로 한번에 조회 (순차 N+1 제거)
+      const questionResults = await Promise.all(
+        subjects.map((subject) =>
+          supabase
+            .from('questions')
+            .select('id')
+            .eq('exam_id', exam_id)
+            .eq('subject_id', subject.id)
+            .eq('is_active', true)
+        )
+      )
 
-      for (const subject of subjects) {
-        const { data: availableQuestions, error: questionsError } = await supabase
-          .from('questions')
-          .select('id')
-          .eq('exam_id', exam_id)
-          .eq('subject_id', subject.id)
-          .eq('is_active', true)
+      // 검증 및 랜덤 선택
+      let seq = 1
+      for (let i = 0; i < subjects.length; i++) {
+        const subject = subjects[i]
+        const { data: availableQuestions, error: questionsError } = questionResults[i]
 
         if (questionsError || !availableQuestions || availableQuestions.length === 0) {
           await supabase.from('attempts').delete().eq('id', newAttempt.id)

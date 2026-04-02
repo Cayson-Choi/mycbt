@@ -15,6 +15,7 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
     let animationId: number
     let width = 0
     let height = 0
+    let isVisible = true
 
     const resize = () => {
       const parent = canvas.parentElement
@@ -31,7 +32,18 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
     resize()
     window.addEventListener('resize', resize)
 
-    // 전기 파티클
+    // 탭 비활성 시 애니메이션 중지
+    const handleVisibility = () => {
+      isVisible = !document.hidden
+      if (isVisible) {
+        animationId = requestAnimationFrame(animate)
+      } else {
+        cancelAnimationFrame(animationId)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    // 전기 파티클 (모바일에서는 파티클 수 감소)
     interface Particle {
       x: number
       y: number
@@ -42,15 +54,24 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
       color: string
       pulse: number
       pulseSpeed: number
+      cellX: number
+      cellY: number
     }
+
+    const isMobile = width < 768
+    const PARTICLE_COUNT = isMobile ? 30 : 60
+    const CONNECTION_DIST = 120
+    const CELL_SIZE = CONNECTION_DIST
 
     const particles: Particle[] = []
     const colors = ['#f0c27f', '#e8d5b7', '#ffd700', '#ffb347', '#ff6b35']
 
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const x = Math.random() * width
+      const y = Math.random() * height
       particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
+        x,
+        y,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         size: Math.random() * 2 + 0.5,
@@ -58,6 +79,8 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
         color: colors[Math.floor(Math.random() * colors.length)],
         pulse: Math.random() * Math.PI * 2,
         pulseSpeed: Math.random() * 0.02 + 0.01,
+        cellX: Math.floor(x / CELL_SIZE),
+        cellY: Math.floor(y / CELL_SIZE),
       })
     }
 
@@ -97,22 +120,51 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
       })
     }
 
-    // 연결선
+    // 연결선 - 공간 분할(spatial grid)로 O(n*k) 복잡도 최적화
     const drawConnections = () => {
+      // 그리드 구축
+      const grid: Map<string, number[]> = new Map()
       for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const dist = Math.sqrt(dx * dx + dy * dy)
+        const p = particles[i]
+        p.cellX = Math.floor(p.x / CELL_SIZE)
+        p.cellY = Math.floor(p.y / CELL_SIZE)
+        const key = `${p.cellX},${p.cellY}`
+        const cell = grid.get(key)
+        if (cell) {
+          cell.push(i)
+        } else {
+          grid.set(key, [i])
+        }
+      }
 
-          if (dist < 120) {
-            const opacity = (1 - dist / 120) * 0.08
-            ctx.beginPath()
-            ctx.strokeStyle = `rgba(255, 200, 100, ${opacity})`
-            ctx.lineWidth = 0.5
-            ctx.moveTo(particles[i].x, particles[i].y)
-            ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.stroke()
+      // 인접 셀만 검사하여 연결선 그리기
+      const distSq = CONNECTION_DIST * CONNECTION_DIST
+      for (let i = 0; i < particles.length; i++) {
+        const pi = particles[i]
+        // 현재 셀과 인접 셀 검사 (오른쪽, 아래, 대각선만 - 중복 방지)
+        for (let dx = 0; dx <= 1; dx++) {
+          for (let dy = -1; dy <= 1; dy++) {
+            if (dx === 0 && dy <= 0 && !(dx === 0 && dy === 0)) continue
+            const key = `${pi.cellX + dx},${pi.cellY + dy}`
+            const cell = grid.get(key)
+            if (!cell) continue
+            for (const j of cell) {
+              if (j <= i) continue
+              const pj = particles[j]
+              const ddx = pi.x - pj.x
+              const ddy = pi.y - pj.y
+              const d = ddx * ddx + ddy * ddy
+              if (d < distSq) {
+                const dist = Math.sqrt(d)
+                const opacity = (1 - dist / CONNECTION_DIST) * 0.08
+                ctx.beginPath()
+                ctx.strokeStyle = `rgba(255, 200, 100, ${opacity})`
+                ctx.lineWidth = 0.5
+                ctx.moveTo(pi.x, pi.y)
+                ctx.lineTo(pj.x, pj.y)
+                ctx.stroke()
+              }
+            }
           }
         }
       }
@@ -121,6 +173,8 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
     let frame = 0
 
     const animate = () => {
+      if (!isVisible) return
+
       ctx.clearRect(0, 0, width, height)
       frame++
 
@@ -200,6 +254,7 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
     return () => {
       cancelAnimationFrame(animationId)
       window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', handleVisibility)
     }
   }, [])
 
