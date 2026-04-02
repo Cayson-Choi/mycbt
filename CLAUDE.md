@@ -1,13 +1,13 @@
-# 전기 자격시험 CBT 시스템
+# 전기짱 - 전기 자격시험 CBT 시스템
 
 ## 프로젝트 개요
-학생이 컴퓨터로 전기 자격시험 문제를 풀고, 서버가 채점해서 점수와 랭킹을 보여주는 CBT(Computer Based Test) 사이트
+전기 자격시험 문제를 풀고, 서버가 채점해서 점수와 랭킹을 보여주는 CBT(Computer Based Test) 사이트
 
 ## 기술 스택
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes
 - **Database**: Supabase (PostgreSQL)
-- **Auth**: Supabase Auth
+- **Auth**: Supabase Auth (Google, Kakao 소셜 로그인)
 - **Storage**: Supabase Storage (문제 이미지)
 - **AI**: OpenRouter API (주관식/서술형 자동 채점)
 
@@ -31,38 +31,56 @@
 
 ### A. 23:00~23:59(KST) 신규 시험 시작 금지
 - 이 시간에는 새 시험지를 만들 수 없음
-- 단, 이미 진행 중(IN_PROGRESS)이고 만료 전이면 "이어풀기" 가능
 
-### B. 시험 시간 제한 60분
-- `started_at`부터 60분 안에 제출해야 함
-- 60분 지나면 자동 만료(EXPIRED)
+### B. 시험 시간 제한 (관리자 설정)
+- `started_at`부터 설정된 시간 안에 제출해야 함
+- 시간 초과 시 자동 만료(EXPIRED)
 
-### C. 동시 시험 1개만 가능
-- 하나 시작하면 제출하거나 만료될 때까지 다른 시험 시작 불가
-- DB 유니크 인덱스로 강제: `CREATE UNIQUE INDEX idx_one_active_attempt_per_user ON attempts(user_id) WHERE status = 'IN_PROGRESS'`
+### C. 시험 중단 시 기록 삭제
+- 시험 도중 나가면 해당 시험 기록(attempt, 답안, 점수)이 완전 삭제됨
+- 새 시험 시작 시 기존 IN_PROGRESS 시험도 자동 삭제
+
+## 인증 플로우
+1. 로그인 페이지에서 Google 또는 Kakao 소셜 로그인
+2. Supabase OAuth → 콜백에서 프로필 존재 여부 확인
+3. 프로필 없음 → `/complete-profile` (추가정보기입: 이름, 전화번호, 개인정보 동의)
+4. 프로필 있음 → 홈으로 이동
 
 ## 프로젝트 구조
 
 ```
 /app              - Next.js App Router
-  /api            - API Routes (38개 엔드포인트)
-  /(auth)         - 인증 관련 페이지 (로그인, 회원가입)
+  /api            - API Routes
+    /auth         - 인증 (콜백, 로그아웃, 추가정보기입)
+    /account      - 프로필, 탈퇴
+    /admin        - 문제/회원/공식시험 관리 (관리자 전용)
+    /attempts     - 시험 시작/풀이/제출/중단
+    /exams        - 시험/과목 조회
+    /home         - 리더보드
+    /my           - 응시기록/오답노트
+    /upload       - 이미지 업로드
+    /cron         - 리더보드 스냅샷 (Vercel Cron)
+  /(auth)         - 인증 페이지 (로그인, 추가정보기입)
   /admin          - 관리자 페이지 (문제관리, 회원관리, 공식시험관리)
   /exam           - 시험 관련 페이지 (시작, 풀이, 결과)
   /my             - 마이페이지 (기록, 프로필, 오답노트, 탈퇴)
-/components       - 재사용 컴포넌트 (ExamCards, Leaderboard 등 클라이언트 폴링)
+/components       - 재사용 컴포넌트
+  HeroSection.tsx - 대문 인터랙티브 파티클 애니메이션
+  Leaderboard.tsx - 랭킹 (10초 폴링)
+  ExamCards.tsx   - 시험 카드 목록 (10초 폴링)
 /lib
   /supabase       - Supabase 클라이언트 (client, server, admin)
   openrouter.ts   - OpenRouter AI 채점 (주관식/서술형)
 /types            - TypeScript 타입 정의
+/public/fonts     - 커스텀 폰트 (따악단단 등)
 ```
 
 ## DB 테이블 요약
 
-1. **profiles** - 회원 정보
-2. **exams** - 시험 종류 (기능사/산업기사/기사, exam_mode: PRACTICE/OFFICIAL, is_published: 게시 상태)
+1. **profiles** - 회원 정보 (name, phone, is_admin)
+2. **exams** - 시험 종류 (기능사/산업기사/기사, exam_mode: PRACTICE/OFFICIAL, is_published, sort_order)
 3. **subjects** - 과목 설정 (과목당 문항 수 포함)
-4. **questions** - 문제 은행 (정답 포함, 프론트 노출 금지, question_type: MULTIPLE_CHOICE/SHORT_ANSWER/ESSAY, points, answer_text)
+4. **questions** - 문제 은행 (정답 포함, 프론트 노출 금지, question_type, points, answer_text)
 5. **attempts** - 시험 응시 기록 (grading_status: PENDING/GRADING/COMPLETED)
 6. **attempt_questions** - 시험지 스냅샷 (문제 순서)
 7. **attempt_items** - 학생 답안 (answer_text, awarded_points, grading_status, ai_feedback)
@@ -71,8 +89,6 @@
 10. **daily_leaderboard_snapshots** - 어제 Top5 스냅샷
 11. **audit_logs** - 관리자 변경 이력
 
-자세한 스키마는 `prd.md` 참조
-
 ## 개발 가이드
 
 ### 환경 변수 설정
@@ -80,6 +96,8 @@
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+CRON_SECRET=your-cron-secret
 OPENROUTER_API_KEY=your-openrouter-api-key
 OPENROUTER_MODEL=deepseek/deepseek-v3.2
 ```

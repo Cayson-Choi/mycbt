@@ -1,6 +1,6 @@
-# 전기 자격시험 CBT 시스템
+# 전기짱 - 전기 자격시험 CBT
 
-학생이 컴퓨터로 전기 자격시험 문제를 풀고, 서버가 채점해서 점수와 랭킹을 보여주는 온라인 모의고사 플랫폼
+전기 자격시험 문제를 풀고, 서버가 채점해서 점수와 랭킹을 보여주는 온라인 모의고사 플랫폼
 
 ## 시작하기
 
@@ -14,7 +14,10 @@ npm install
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+CRON_SECRET=your-cron-secret
 OPENROUTER_API_KEY=your-openrouter-api-key
+OPENROUTER_MODEL=deepseek/deepseek-v3.2
 ```
 
 ### 3. 개발 서버 실행
@@ -26,29 +29,28 @@ npm run dev
 
 ## 주요 기능
 
-- ✅ 랜덤 문제 출제 (시작 순간 고정)
-- ✅ 서버 사이드 채점 (보안)
-- ✅ 60분 제한 시험
-- ✅ 실시간 랭킹 (오늘/어제 Top5)
-- ✅ KST 기준 일별 집계
-- ✅ 동시 1개 시험만 가능
-- ✅ 23:00~23:59 신규 시험 제한
-- ✅ 공식 시험 (비밀번호, 이탈 감지)
-- ✅ 주관식/서술형 문제 지원
-- ✅ AI 자동 채점 (OpenRouter API)
+- 소셜 로그인 (Google, Kakao)
+- 랜덤 문제 출제 (시작 순간 고정)
+- 서버 사이드 채점 (보안)
+- 시간 제한 시험 (관리자 설정)
+- 실시간 랭킹 (오늘/어제 Top5)
+- KST 기준 일별 집계
+- 공식 시험 (비밀번호, 이탈 감지)
+- 주관식/서술형 문제 + AI 자동 채점
+- 인터랙티브 대문 (전기 파티클 애니메이션)
 
 ## 기술 스택
 
 - **Frontend**: Next.js 15, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes
 - **Database**: Supabase (PostgreSQL)
-- **Auth**: Supabase Auth
+- **Auth**: Supabase Auth (Google, Kakao OAuth)
 - **Storage**: Supabase Storage
+- **AI**: OpenRouter API
 
 ## 문서
 
 - [CLAUDE.md](./CLAUDE.md) - 프로젝트 상세 가이드
-- [prd.md](./prd.md) - 전체 요구사항 명세서
 - [CURRENT_STATE.md](./CURRENT_STATE.md) - 개발 진행 상태
 
 ## 개발 명령어
