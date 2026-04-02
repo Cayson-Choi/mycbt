@@ -1,0 +1,234 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+
+export default function HeroSection() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animationId: number
+    let width = 0
+    let height = 0
+
+    const resize = () => {
+      const parent = canvas.parentElement
+      if (!parent) return
+      width = parent.offsetWidth
+      height = parent.offsetHeight
+      canvas.width = width * window.devicePixelRatio
+      canvas.height = height * window.devicePixelRatio
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    // 전기 파티클
+    interface Particle {
+      x: number
+      y: number
+      vx: number
+      vy: number
+      size: number
+      opacity: number
+      color: string
+      pulse: number
+      pulseSpeed: number
+    }
+
+    const particles: Particle[] = []
+    const colors = ['#f0c27f', '#e8d5b7', '#ffd700', '#ffb347', '#ff6b35']
+
+    for (let i = 0; i < 60; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 2 + 0.5,
+        opacity: Math.random() * 0.5 + 0.1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * 0.02 + 0.01,
+      })
+    }
+
+    // 번개 효과
+    interface Lightning {
+      startX: number
+      startY: number
+      segments: { x: number; y: number }[]
+      opacity: number
+      life: number
+      maxLife: number
+    }
+
+    const lightnings: Lightning[] = []
+
+    const createLightning = () => {
+      const startX = Math.random() * width
+      const startY = Math.random() * height * 0.3
+      const segments: { x: number; y: number }[] = [{ x: startX, y: startY }]
+      let x = startX
+      let y = startY
+      const steps = Math.floor(Math.random() * 5) + 3
+
+      for (let i = 0; i < steps; i++) {
+        x += (Math.random() - 0.5) * 60
+        y += Math.random() * 30 + 10
+        segments.push({ x, y })
+      }
+
+      lightnings.push({
+        startX,
+        startY,
+        segments,
+        opacity: 0.8,
+        life: 0,
+        maxLife: 20 + Math.random() * 15,
+      })
+    }
+
+    // 연결선
+    const drawConnections = () => {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x
+          const dy = particles[i].y - particles[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+
+          if (dist < 120) {
+            const opacity = (1 - dist / 120) * 0.08
+            ctx.beginPath()
+            ctx.strokeStyle = `rgba(255, 200, 100, ${opacity})`
+            ctx.lineWidth = 0.5
+            ctx.moveTo(particles[i].x, particles[i].y)
+            ctx.lineTo(particles[j].x, particles[j].y)
+            ctx.stroke()
+          }
+        }
+      }
+    }
+
+    let frame = 0
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height)
+      frame++
+
+      // 연결선
+      drawConnections()
+
+      // 파티클 업데이트 & 렌더
+      for (const p of particles) {
+        p.x += p.vx
+        p.y += p.vy
+        p.pulse += p.pulseSpeed
+
+        if (p.x < 0) p.x = width
+        if (p.x > width) p.x = 0
+        if (p.y < 0) p.y = height
+        if (p.y > height) p.y = 0
+
+        const pulsedOpacity = p.opacity + Math.sin(p.pulse) * 0.15
+        const pulsedSize = p.size + Math.sin(p.pulse) * 0.5
+
+        // 글로우
+        ctx.beginPath()
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pulsedSize * 4)
+        gradient.addColorStop(0, `rgba(255, 200, 100, ${pulsedOpacity * 0.3})`)
+        gradient.addColorStop(1, 'rgba(255, 200, 100, 0)')
+        ctx.fillStyle = gradient
+        ctx.arc(p.x, p.y, pulsedSize * 4, 0, Math.PI * 2)
+        ctx.fill()
+
+        // 코어
+        ctx.beginPath()
+        ctx.fillStyle = p.color
+        ctx.globalAlpha = pulsedOpacity
+        ctx.arc(p.x, p.y, pulsedSize, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.globalAlpha = 1
+      }
+
+      // 번개 생성 (랜덤)
+      if (frame % 90 === 0 && Math.random() > 0.4) {
+        createLightning()
+      }
+
+      // 번개 렌더
+      for (let i = lightnings.length - 1; i >= 0; i--) {
+        const l = lightnings[i]
+        l.life++
+
+        if (l.life > l.maxLife) {
+          lightnings.splice(i, 1)
+          continue
+        }
+
+        const progress = l.life / l.maxLife
+        const opacity = l.opacity * (1 - progress)
+
+        ctx.beginPath()
+        ctx.strokeStyle = `rgba(255, 215, 0, ${opacity})`
+        ctx.lineWidth = 1.5 * (1 - progress)
+        ctx.shadowColor = '#ffd700'
+        ctx.shadowBlur = 10 * (1 - progress)
+
+        ctx.moveTo(l.segments[0].x, l.segments[0].y)
+        for (let s = 1; s < l.segments.length; s++) {
+          ctx.lineTo(l.segments[s].x, l.segments[s].y)
+        }
+        ctx.stroke()
+
+        ctx.shadowBlur = 0
+      }
+
+      animationId = requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    return () => {
+      cancelAnimationFrame(animationId)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
+  return (
+    <div className="relative overflow-hidden hero-bg">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 pointer-events-none"
+      />
+      <div className="absolute inset-0 hero-gradient" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 lg:pt-8 pb-4 lg:pb-6">
+        <div className="text-center">
+          {/* 번개 아이콘 */}
+          <div className="inline-flex items-center justify-center mb-2">
+            <span className="hero-bolt text-3xl lg:text-4xl">&#x26A1;</span>
+          </div>
+
+          <h1 className="hero-title text-4xl lg:text-6xl font-black mb-2 leading-none tracking-tighter">
+            전기짱
+          </h1>
+
+          <div className="hero-divider mx-auto mb-2" />
+
+          <p className="text-sm lg:text-base text-amber-100/70 leading-relaxed max-w-md mx-auto font-light">
+            모의고사를 풀고, 즉시 채점하고, 랭킹으로 경쟁하세요.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

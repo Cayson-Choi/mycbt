@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Leaderboard from '@/components/Leaderboard'
 import ExamCards from '@/components/ExamCards'
+import HeroSection from '@/components/HeroSection'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,35 +15,27 @@ export default async function Home() {
   return (
     <div>
       {/* Hero + Ranking */}
-      <section className="bg-gradient-to-b from-blue-600 to-blue-800 dark:from-blue-900 dark:to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 lg:pt-10 pb-16 lg:pb-20">
-          {/* Compact hero text */}
-          <div className="text-center mb-4">
-            <h1 className="text-4xl lg:text-5xl font-extrabold text-white mb-3 leading-tight tracking-tight">
-              전기짱
-            </h1>
-            <p className="text-base text-white/80 leading-relaxed">
-              모의고사를 풀고, 즉시 채점하고, 랭킹으로 경쟁하세요.
-            </p>
+      <section>
+        <HeroSection />
+        <div className="bg-gradient-to-b from-[#0c0c1d] to-gray-50 dark:to-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 lg:pb-6">
+            <Leaderboard exams={practiceExams} />
           </div>
-
-          {/* Leaderboard */}
-          <Leaderboard exams={practiceExams} />
         </div>
       </section>
 
       {/* Exam cards */}
       <section
         id="exams"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pb-16"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-2 relative z-10 pb-10"
       >
         <ExamCards initialExams={visibleExams} />
       </section>
 
       {/* Features */}
       <section className="bg-white dark:bg-gray-800 border-y border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="text-center mb-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="text-center mb-4">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               주요 기능
             </h2>
@@ -52,7 +45,7 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 max-w-5xl mx-auto">
-            <div className="text-center p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="text-center p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
               <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-7 h-7 text-blue-600 dark:text-blue-400"
@@ -78,7 +71,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="text-center p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="text-center p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
               <div className="w-14 h-14 bg-purple-100 dark:bg-purple-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-7 h-7 text-purple-600 dark:text-purple-400"
@@ -103,7 +96,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="text-center p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="text-center p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
               <div className="w-14 h-14 bg-green-100 dark:bg-green-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-7 h-7 text-green-600 dark:text-green-400"
@@ -129,7 +122,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="text-center p-6 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="text-center p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
               <div className="w-14 h-14 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-7 h-7 text-orange-600 dark:text-orange-400"

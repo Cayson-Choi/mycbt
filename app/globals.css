@@ -109,20 +109,52 @@ body {
   box-shadow: 0 0 30px rgba(251, 191, 36, 0.3), 0 0 60px rgba(251, 191, 36, 0.1);
 }
 
-/* Hero text effects */
-.hero-text-stroke {
-  text-shadow:
-    0 0 8px rgba(0,0,0,0.9),
-    0 0 16px rgba(0,0,0,0.7),
-    0 2px 4px rgba(0,0,0,0.9),
-    0 0 40px rgba(0,0,0,0.5);
+/* Hero section */
+.hero-bg {
+  background: linear-gradient(135deg, #0c0c1d 0%, #1a1028 30%, #0d1117 70%, #0c0c1d 100%);
 }
 
-.hero-subtext-stroke {
-  text-shadow:
-    0 0 6px rgba(0,0,0,0.9),
-    0 1px 3px rgba(0,0,0,0.9),
-    0 0 20px rgba(0,0,0,0.5);
+.dark .hero-bg {
+  background: linear-gradient(135deg, #050510 0%, #100a1a 30%, #080b10 70%, #050510 100%);
+}
+
+.hero-gradient {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(255, 170, 50, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(200, 140, 255, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 200, 100, 0.03) 0%, transparent 50%);
+}
+
+.hero-title {
+  background: linear-gradient(135deg, #ffd700 0%, #ffb347 25%, #ffffff 50%, #ffd700 75%, #ff8c00 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: heroShine 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(255, 200, 50, 0.3));
+}
+
+@keyframes heroShine {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 200% center; }
+}
+
+.hero-bolt {
+  display: inline-block;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+  animation: boltPulse 2s ease-in-out infinite;
+}
+
+@keyframes boltPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)); }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)); }
+}
+
+.hero-divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
 }
 
 /* 모바일에서만 세로 텍스트 */
