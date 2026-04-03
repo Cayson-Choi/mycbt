@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server"
-import { getToken } from "next-auth/jwt"
 
 // 공개 API
 const PUBLIC_API_PREFIXES = [
@@ -14,7 +13,7 @@ const PUBLIC_API_PREFIXES = [
 // 공개 페이지
 const PUBLIC_PAGES = new Set(["/", "/login", "/complete-profile"])
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // 1. 공개 API → 즉시 통과
@@ -27,21 +26,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // 3. JWT 토큰 확인 (Prisma import 없이 경량 체크)
-  const token = await getToken({ req: request })
+  // 3. 세션 쿠키 확인 (경량 체크, JWT 파싱 없음)
+  const sessionToken =
+    request.cookies.get("authjs.session-token")?.value ||
+    request.cookies.get("__Secure-authjs.session-token")?.value
 
-  if (!token) {
+  if (!sessionToken) {
     const url = request.nextUrl.clone()
     url.pathname = "/login"
     url.searchParams.set("redirectTo", pathname)
     return NextResponse.redirect(url)
-  }
-
-  // 4. 관리자 경로
-  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
-    if (!token.isAdmin) {
-      return NextResponse.redirect(new URL("/", request.url))
-    }
   }
 
   return NextResponse.next()
