@@ -280,7 +280,7 @@ export default function HeroSection({ children }: { children?: ReactNode }) {
           <div className="hero-divider mx-auto mb-2" />
 
           <p className="text-sm lg:text-base text-amber-100/70 leading-relaxed max-w-md mx-auto font-light">
-            모의고사를 풀고, 즉시 채점하고, 랭킹으로 경쟁하세요.
+            전기 자격증 CBT 모의고사를 풀고, 즉시 채점하세요.
           </p>
         </div>
       </div>

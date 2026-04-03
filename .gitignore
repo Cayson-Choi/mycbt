@@ -46,3 +46,5 @@ supabase keys.txt
 
 # claude
 .claude/
+
+/lib/generated/prisma

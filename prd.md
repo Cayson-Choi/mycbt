@@ -1,330 +1,1119 @@
-0) 서비스 한 줄
-학생이 컴퓨터로 전기 자격시험 문제를 풀고, 서버가 채점해서 점수와 오늘/어제 랭킹을 보여주는 CBT 사이트.
-________________________________________
-1) 절대 규칙(이건 무조건 지킨다)
-규칙 1) 랜덤이지만 시험지는 “시작 순간 고정”
-•	시험 시작 버튼 누르는 순간 서버가 문제를 랜덤으로 뽑고
-•	그 목록/순서를 DB에 저장해서 “시험지(스냅샷)”를 만든다
-•	그래서 새로고침/재접속/꺼졌다 켜도 문제와 순서가 절대 안 바뀜
-규칙 2) 채점/점수 계산은 서버만
-•	브라우저에서 점수 계산하면 조작 가능
-•	제출하면 서버가 정답과 비교해서 채점하고 점수를 저장한 뒤 결과만 보여줌
-•	정답(answer)은 프론트로 절대 내려보내지 않는다
-규칙 3) 랭킹은 “한국 날짜(KST)” 기준
-•	오늘 랭킹은 KST 오늘 날짜 데이터만 모아서 만든다
-•	밤 12시(00:00 KST) 지나면 새로운 “오늘 랭킹”이 시작됨
-________________________________________
-2) 운영 규칙(추가 확정사항 전부 포함)
-A) 23:00~23:59(KST)에는 “새 시험 시작” 금지
-•	이 시간에는 새 시험지를 만들 수 없다
-•	단, 이미 진행 중(IN_PROGRESS)이고 만료 전이면 “이어풀기”는 가능
-B) 시험 시간 제한은 60분
-•	started_at부터 60분 안에 제출해야 한다
-•	60분이 지나면 자동으로 만료(EXPIRED)
-C) 동시에 시험은 1개만 가능
-•	기능사 하다가 산업기사 시작하고 다시 기능사 돌아오기 같은 건 불가
-•	하나 시작했으면:
-o	제출해서 끝내거나
-o	60분 지나서 만료돼야
-o	다음 시험 시작 가능
-________________________________________
-3) 학생이 하는 일(전체 흐름)
-1.	회원가입/로그인
-2.	홈에서 시험 선택(기능사/산업기사/기사)
-3.	시험 시작 버튼 누름
-o	진행 중 시험이 있으면 “이어풀기”로 들어감(만료 전이면)
-o	23~24시는 “새 시험 시작”이 막힘
-4.	문제 풀기(답 고를 때마다 서버에 자동 저장)
-5.	제출(60분 안에만 가능)
-6.	결과 보기(점수/오답/해설)
-7.	홈에서 오늘/어제 랭킹 + 내 순위 보기
-8.	마이페이지에서 기록/통계 보기
-9.	원하면 회원 탈퇴(학생 스스로 가능)
-________________________________________
-4) DB 설계(엑셀 표 여러 장이라고 생각)
-아래 표(테이블)들만 제대로 만들면 시스템이 돌아간다.
-4-1) profiles (회원정보)
-•	id (PK, auth.users.id와 연결)
-•	name (가입 후 변경 불가)
-•	email
-•	affiliation (교수/전기반/소방반/신중년)
-•	phone
-•	student_id (학번, OFFICIAL 시험 응시 시 필수. 프로필에 이미 저장되어 있으면 자동 사용, 없으면 시험 시작 화면에서 1회 입력 후 저장)
-•	is_admin
-•	created_at, updated_at
-________________________________________
-4-2) exams / subjects (문항 수 유연하게 하기 위한 설정표)
-exams
-•	id(PK), name, exam_mode(PRACTICE/OFFICIAL), password, duration_minutes, is_published, creator_name, creator_title
-•	exam_mode: PRACTICE(연습) / OFFICIAL(공식 시험, 중간고사/기말고사)
-•	is_published: OFFICIAL 시험 게시 상태 (false=비게시, true=게시 중). PRACTICE는 항상 노출.
-•	password: OFFICIAL 모드 시험 접근 비밀번호
-•	duration_minutes: 시험 시간(분), 기본 60분
-subjects
-•	id(PK)
-•	exam_id(FK)
-•	name(과목명)
-•	questions_per_attempt(과목당 몇 문제 뽑을지)
-•	order_no(표시 순서)
-✅ 총 문항 수 = subjects.questions_per_attempt 합계
-(그래서 15문항이 될 수도 있고 25문항이 될 수도 있음)
-________________________________________
-4-3) questions (문제은행) — question_code로 이미지 매칭 확정
-•	id(PK)
-•	question_code(UNIQUE) ✅ 이미지 파일 이름과 연결되는 고유번호
-•	exam_id, subject_id
-•	question_type (MULTIPLE_CHOICE / SHORT_ANSWER / ESSAY, 기본 MULTIPLE_CHOICE)
-•	question_text
-•	choice_1~choice_4 (객관식용)
-•	answer(정답 1~4, 객관식용) ❌ 프론트에 절대 보내면 안 됨
-•	answer_text (주관식/서술형 참고 정답, nullable)
-•	points (배점, 기본 1)
-•	explanation(해설) ✅ 제출 후만 공개
-•	image_url(nullable) ✅ DB는 image_url로 통일
-•	is_active(bool, soft delete)
-•	created_at, updated_at
-________________________________________
-4-4) attempts (시험 응시 1회 기록)
-•	id(PK)
-•	user_id(FK)
-•	exam_id(FK)
-•	status: IN_PROGRESS / SUBMITTED / EXPIRED
-•	grading_status: PENDING / GRADING / COMPLETED (AI 채점 진행 상태)
-•	started_at
-•	expires_at (= started_at + 60분)
-•	submitted_at(nullable)
-•	total_questions
-•	total_correct(nullable)
-•	total_score(nullable)
-•	violation_count (이탈 횟수, OFFICIAL 모드용)
-•	created_at, updated_at
-✅ 동시성 제어 방식 확정(가장 안전)
-한 사람은 IN_PROGRESS 시험을 동시에 1개만 가질 수 있게 DB가 강제로 막는다.
-CREATE UNIQUE INDEX idx_one_active_attempt_per_user 
-ON attempts(user_id) 
-WHERE status = 'IN_PROGRESS';
-________________________________________
-4-5) attempt_questions (시험지 스냅샷: 문제 목록+순서)
-•	attempt_id(FK)
-•	seq(1..N)
-•	question_id(FK)
-•	PK(attempt_id, seq)
-•	UNIQUE(attempt_id, question_id) 권장
-✅ 이 표가 있어서 “시험 시작 순간 고정된 시험지”가 유지됨.
-________________________________________
-4-6) attempt_items (학생이 고른 답 + 정오답)
-•	attempt_id
-•	question_id
-•	selected(1~4, nullable, 객관식용)
-•	answer_text (주관식/서술형 답안 텍스트, nullable)
-•	is_correct(nullable)
-•	awarded_points (AI/수동 채점 부여 점수, nullable)
-•	grading_status (PENDING / AI_GRADED / MANUAL_GRADED, nullable)
-•	ai_feedback (AI 채점 피드백, nullable)
-•	PK(attempt_id, question_id)
-________________________________________
-4-7) subject_scores (과목별 점수)
-•	attempt_id
-•	subject_id
-•	subject_questions
-•	subject_correct
-•	subject_score
-•	PK(attempt_id, subject_id)
-✅ 점수 공식 확정
-•	전체 점수: round(total_correct / total_questions * 100)
-•	과목 점수: round(subject_correct / subject_questions * 100)
-________________________________________
-4-8) daily_best_scores (오늘 랭킹용)
-•	kst_date(date)
-•	exam_id
-•	user_id
-•	best_score
-•	best_submitted_at(동점이면 빠른 사람 우선)
-•	attempt_id
-•	PK(kst_date, exam_id, user_id)
-________________________________________
-4-9) daily_leaderboard_snapshots (어제 Top5 스냅샷)
-•	kst_date(date) // 어제 날짜
-•	exam_id
-•	rank(1~5)
-•	user_id(nullable)
-•	user_name_display(text)
-•	score
-•	submitted_at
-•	PK(kst_date, exam_id, rank)
-________________________________________
-4-10) audit_logs (관리자 변경 이력)
-•	admin_user_id
-•	action_type
-•	target_table
-•	target_id
-•	reason
-•	changed_fields(jsonb)
-•	old_data(jsonb)
-•	new_data(jsonb)
-•	created_at
-________________________________________
-5) 이미지 저장/매칭 규칙(확정)
-•	Storage 경로: /question-images/q_{question_code}.{ext}
-•	확장자: png, jpg, jpeg
-•	DB 저장: questions.image_url (공개 URL)
-•	매칭 실패 시: 문제는 저장되지만 image_url=null
-________________________________________
-6) EXPIRED(만료) 처리 정책 — 이번에 최종 확정
-만료가 언제 발생?
-•	started_at + 60분이 지나면 만료
-만료된 시험은 마이페이지에 보인다
-•	상태를 “미제출(시간초과)”로 표시
-•	학생이 왜 점수가 없는지 이해하도록
-만료된 시험의 답안은 완전 삭제(확정)
-•	attempt_items 삭제(학생이 고른 답 제거)
-•	subject_scores 삭제(과목 점수 제거)
-•	attempts는 남기고 status를 EXPIRED로 변경(기록만 유지)
-✅ 이번에 확정: attempt_questions는 “유지” (옵션 B)
-•	만료되더라도 시험지(어떤 문제가 나왔는지)는 남긴다
-왜 유지하냐?
-•	용량이 크지 않음
-•	나중에 “어떤 시험/과목에서 만료가 많이 나는지” 분석 가능
-•	운영 개선에 도움이 됨
-정리하면:
-•	시험지(문제 목록)는 남김
-•	학생 답안은 삭제
-•	기록은 EXPIRED로 남김
-________________________________________
-7) 탈퇴 정책(확정) — 오늘 랭킹/어제 스냅샷까지 포함
-학생이 탈퇴하면 이렇게 처리한다.
-7-1) 오늘 랭킹(daily_best_scores) 처리 (확정)
-•	탈퇴 순간부터 오늘 랭킹에서 빠져야 한다
-•	그래서 탈퇴 시 daily_best_scores 레코드 삭제
-•	결과: 오늘 Top5 조회 시 탈퇴자는 보이지 않음
-7-2) 어제 Top5 스냅샷(daily_leaderboard_snapshots) 처리 (확정)
-•	스냅샷은 통계 목적이라 유지
-•	대신 익명 처리:
-o	user_name_display = “(탈퇴한 사용자)”
-o	user_id = NULL(또는 특수값)
-7-3) 나머지 개인정보 데이터
-•	profiles/auth.users 삭제
-•	개인 응시 데이터는 정책대로 삭제(개인정보 보호)
-________________________________________
-8) Storage cleanup 문구 정리(확정)
-•	“탈퇴 시 Storage cleanup”은 삭제한다(문구 제거)
-•	문제 이미지는 questions에 속하고, 학생 탈퇴와 무관하다
-________________________________________
-9) API 설계(버튼 누르면 서버에서 하는 일)
-공통으로 서버가 항상 확인하는 것
-•	로그인했는지
-•	내 attempt인지
-•	status가 맞는지
-•	만료 전인지(expires_at > now)
-________________________________________
-9-1) 시험 시작
-POST /api/attempts/start (입력: exam_id, password?)
-서버 로직:
-1.	IN_PROGRESS가 있는지 확인(시험 종류 상관없이)
-2.	있으면:
-o	만료 전이면 그 attempt_id 반환(이어풀기)
-o	만료면 EXPIRED 처리 + 답안 삭제 + 계속 진행
-3.	OFFICIAL 모드: is_published 체크(비게시면 차단) + 비밀번호 검증 + 학번 확인(profiles.student_id가 없으면 차단, 프론트에서 사전 입력/저장 유도)
-4.	PRACTICE 모드: 23:00~23:59(KST)이면 새 시험 생성 거절
-5.	새 attempt 생성(started_at, expires_at=+duration_minutes분, status=IN_PROGRESS)
-6.	PRACTICE: 과목 설정값대로 랜덤으로 문제 추출 / OFFICIAL: 전체 활성 문제 id순
-7.	attempt_questions에 저장(순서 포함) → attempt_id 반환
-동시성은 DB 유니크 인덱스가 막아줌(확정)
-________________________________________
-9-2) 시험지 조회(정답 제외)
-GET /api/attempts/:attemptId/paper
-•	attempt_questions 기준으로 문제를 가져옴
-•	정답(answer)은 절대 포함하지 않음
-________________________________________
-9-3) 제출/채점(서버만)
-POST /api/attempts/:attemptId/submit
-서버 로직:
-1.	내 것인지, IN_PROGRESS인지, 만료 전인지 확인
-2.	attempt_questions에 있는 문제만 채점(조작 방지)
-3.	attempt_items 저장(is_correct 확정)
-4.	subject_scores 계산/저장
-o	round(subject_correct / subject_questions * 100)
-5.	total_correct 계산
-6.	total_score 계산/저장
-o	round(total_correct / total_questions * 100)
-7.	SUBMITTED 처리 + submitted_at 기록
-8.	daily_best_scores upsert(오늘 KST 기준)
-9.	결과 반환
-________________________________________
-9-4) 홈 랭킹
-GET /api/home/leaderboard?exam_id=...
+# 전기짱 v2.0 PRD (Product Requirements Document)
+
+## 리뉴얼 개요
+
+Supabase 기반 → **Neon(DB) + Prisma(ORM) + NextAuth(인증) + Cloudinary(이미지) + Vercel(배포)** 전면 전환
+
+- **프로젝트명(영문)**: `mycbt` (외부 서비스, 코드, 도메인 등에서 사용)
+- **서비스명(한글)**: `전기짱` (사용자에게 보이는 브랜딩)
+
+### 전환 이유
+- Supabase Auth는 카카오/네이버 OAuth 지원이 제한적 → NextAuth로 네이티브 지원
+- Cayson MBTI 프로젝트에서 Neon + Prisma + NextAuth 패턴 검증 완료 → 코드 재사용
+- Cloudinary 무료 25GB로 문제 이미지 충분 (Vercel Blob 무료 500MB 부족)
+- Prisma로 타입 안전성 자동 생성 (수동 database.ts 불필요)
+
+### 기술 스택
+
+| 항목 | v1 (현재) | v2 (리뉴얼) |
+|------|-----------|-------------|
+| 프레임워크 | Next.js 15 (App Router, TypeScript) | 유지 |
+| DB | Supabase PostgreSQL | **Neon PostgreSQL** |
+| ORM | Supabase Client SDK | **Prisma** |
+| 인증 | Supabase Auth (Google, 카카오) | **NextAuth v5** (Google, 카카오, 네이버, 이메일 Magic Link) |
+| 이미지 저장 | Supabase Storage | **Cloudinary** (무료 25GB) |
+| 스타일링 | Tailwind CSS | 유지 |
+| AI 채점 | OpenRouter (DeepSeek v3.2) | 유지 |
+| 결제 | 없음 | **토스페이먼츠** (등급 정기결제 + 개별 콘텐츠 구매) |
+| 배포 | Vercel | 유지 |
+
+---
+
+## 0. 서비스 한 줄
+
+전기 자격시험 CBT 모의고사를 풀고, 서버가 채점해서 점수와 랭킹을 보여주는 웹사이트. 등급제(월 정기결제)와 개별 콘텐츠 구매를 결합한 하이브리드 결제 모델.
+
+---
+
+## 1. 절대 규칙
+
+### 규칙 1) 랜덤이지만 시험지는 "시작 순간 고정"
+- 시험 시작 버튼 누르는 순간 서버가 문제를 랜덤으로 뽑음
+- 그 목록/순서를 DB에 저장해서 "시험지(스냅샷)"를 만듦
+- 새로고침/재접속/꺼졌다 켜도 문제와 순서가 절대 안 바뀜
+
+### 규칙 2) 채점/점수 계산은 서버만
+- 브라우저에서 점수 계산하면 조작 가능
+- 제출하면 서버가 정답과 비교해서 채점하고 점수를 저장한 뒤 결과만 보여줌
+- **정답(answer)은 프론트에 절대 내려보내지 않는다**
+
+### 규칙 3) 랭킹은 "한국 날짜(KST)" 기준
+- 오늘 랭킹은 KST 오늘 날짜 데이터만 모아서 만듦
+- 밤 12시(00:00 KST) 지나면 새로운 "오늘 랭킹"이 시작
+
+---
+
+## 2. 등급제 및 결제 시스템
+
+### 등급 체계
+
+| 등급 | 월 결제 금액 | 설명 |
+|------|-------------|------|
+| 게스트 (GUEST) | 0원 | 무료 가입, 제한된 콘텐츠 접근 |
+| 브론즈 (BRONZE) | 500원/월 | |
+| 실버 (SILVER) | 1,000원/월 | |
+| 골드 (GOLD) | 3,000원/월 | |
+| 다이아몬드 (DIAMOND) | 5,000원/월 | 모든 콘텐츠 접근 |
+
+### 등급별 접근 제한
+- 각 시험/문제/동영상에 **최소 필요 등급**을 설정 (관리자가 지정)
+- 사용자 등급이 해당 콘텐츠의 최소 등급 이상이면 접근 가능
+- 시험 카드에 필요 등급을 표시하여 사용자가 사전에 파악 가능
+
+### 동영상 강의
+- 동영상은 직접 호스팅하지 않고 **외부 링크(유튜브 등) 첨부** 방식
+- 각 동영상에 최소 필요 등급 설정
+- 등급 미달 시 "등급 업그레이드 필요" 안내 표시
+
+### 결제 방식 (토스페이먼츠 통합)
+
+**1) 등급 정기결제 (빌링키 방식)**
+- 사용자가 등급 선택 → 토스페이먼츠 카드 등록 → 빌링키 발급
+- 매월 자동 결제 → Webhook으로 결과 수신 → 등급 자동 갱신
+- 결제 실패 시 → 유예 기간 후 게스트로 다운그레이드
+- `tierExpiresAt`으로 만료일 관리 (결제일 + 30일)
+
+**2) 개별 콘텐츠 구매 (즉시 결제)**
+- 등급이 부족해도 특정 문제/동영상을 건당 구매 가능
+- 토스페이먼츠 SDK로 즉시 결제창 → 결제 완료 → `PurchasedContent` 테이블에 기록
+- 한 번 구매하면 영구 접근
+
+### 콘텐츠 접근 판단 로직
+```
+접근 가능 = (사용자 등급 >= 콘텐츠 최소 등급) OR (개별 구매 이력 있음)
+```
+
+---
+
+## 3. 운영 규칙
+
+### A) 23:00~23:59(KST) 새 시험 시작 금지
+- 이 시간에는 새 시험지를 만들 수 없음
+- 이미 진행 중(IN_PROGRESS)이고 만료 전이면 "이어풀기"는 가능
+
+### B) 시험 시간 제한
+- started_at부터 duration_minutes(기본 60분) 안에 제출해야 함
+- 시간이 지나면 자동으로 만료(EXPIRED)
+
+### C) 동시에 시험은 1개만 가능
+- 하나 시작했으면 제출하거나 만료돼야 다음 시험 시작 가능
+- DB 유니크 인덱스로 강제
+
+---
+
+## 4. 사용자 흐름
+
+### 학생 흐름
+1. 회원가입/로그인 (Google / 카카오 / 네이버 / 이메일 인증)
+   - 이메일 인증: 이메일 입력 → cayson0127@gmail.com SMTP로 Magic Link 발송 → 메일 내 링크 클릭 → 가입/로그인 완료
+2. 프로필 완성 (이름, 전화번호)
+3. (선택) 등급 업그레이드 — 토스페이먼츠로 월 정기결제
+4. 홈에서 시험 카테고리 선택 (전기기초 / 전기기능사 / 전기산업기사 / 전기기사)
+5. 카테고리 페이지에서 구체적 시험 선택 (무료, 2020년 1회차 ~ 2026년 1회차)
+   - 각 시험 카드에 최소 필요 등급 표시
+   - 등급 미달 시 업그레이드 안내 또는 개별 구매 유도
+6. 시험 시작 (진행 중 시험 있으면 이어풀기)
+7. 문제 풀기 (답 고를 때마다 서버에 자동 저장)
+8. 제출 (시간 내)
+9. 결과 보기 (점수 / 오답 / 해설)
+10. 동영상 강의 시청 (등급별 접근 제한, 개별 구매 가능)
+11. 마이페이지에서 기록/통계/등급/결제내역 보기
+12. 원하면 회원 탈퇴
+
+---
+
+## 5. 환경 변수 (.env.local)
+
+```bash
+# === NextAuth ===
+NEXTAUTH_SECRET=(자동 생성된 랜덤 문자열)
+NEXTAUTH_URL=http://localhost:3000
+
+# === Neon PostgreSQL ===
+DATABASE_URL=(Neon PostgreSQL 연결 문자열)
+
+# === Google OAuth ===
+GOOGLE_CLIENT_ID=(Google Cloud Console에서 발급)
+GOOGLE_CLIENT_SECRET=(Google Cloud Console에서 발급)
+
+# === 카카오 OAuth ===
+KAKAO_CLIENT_ID=(카카오 개발자 센터 REST API 키)
+KAKAO_CLIENT_SECRET=(카카오 개발자 센터 Client Secret)
+NEXT_PUBLIC_KAKAO_JS_KEY=(카카오 JavaScript 키 - 카카오톡 공유용)
+
+# === 네이버 OAuth ===
+NAVER_CLIENT_ID=(네이버 개발자 센터에서 발급)
+NAVER_CLIENT_SECRET=(네이버 개발자 센터에서 발급)
+
+# === Gmail SMTP ===
+EMAIL_SERVER_USER=cayson0127@gmail.com
+EMAIL_SERVER_PASSWORD=(Gmail 앱 비밀번호 16자리)
+EMAIL_FROM=cayson0127@gmail.com
+
+# === Cloudinary ===
+CLOUDINARY_CLOUD_NAME=(Cloudinary 대시보드에서 확인)
+CLOUDINARY_API_KEY=(Cloudinary 대시보드에서 확인)
+CLOUDINARY_API_SECRET=(Cloudinary 대시보드에서 확인)
+
+# === 토스페이먼츠 ===
+TOSS_CLIENT_KEY=(토스페이먼츠 클라이언트 키)
+TOSS_SECRET_KEY=(토스페이먼츠 시크릿 키)
+
+# === OpenRouter AI (유지) ===
+OPENROUTER_API_KEY=sk-or-v1-xxx
+OPENROUTER_MODEL=deepseek/deepseek-v3.2
+
+# === Vercel Cron ===
+CRON_SECRET=(랜덤 시크릿)
+```
+
+---
+
+## 6. 외부 서비스 설정
+
+### Neon PostgreSQL
+- Vercel Storage에서 생성
+- Prisma로 스키마 관리, `npx prisma db push`로 적용
+- 무료 티어: 512MB 스토리지
+
+### Google OAuth
+- Google Cloud Console → 프로젝트 생성
+- OAuth 동의 화면: 외부 사용자 타입
+- 승인된 JavaScript 원본: `https://전기짱도메인.vercel.app`
+- 승인된 리디렉션 URI: `https://전기짱도메인.vercel.app/api/auth/callback/google`
+
+### 카카오 OAuth
+- 카카오 개발자 센터 → 앱 생성 (비즈 앱 전환 필요)
+- 플랫폼 키 → Default REST API Key → Redirect URI 등록
+- 플랫폼 키 → Default JS Key → JavaScript SDK 도메인 등록
+- 동의항목: 닉네임(필수), 프로필 사진(필수), 이메일(필수 수집)
+- **핵심: `client: { token_endpoint_auth_method: "client_secret_post" }` 설정 필수**
+
+### 네이버 OAuth
+- 네이버 개발자 센터 → 앱 생성
+- 사용 API: 네이버 로그인
+- 제공 정보: 회원이름(필수), 이메일(필수), 프로필 사진(추가)
+- 서비스 URL: `https://전기짱도메인.vercel.app`
+- Callback URL: `https://전기짱도메인.vercel.app/api/auth/callback/naver`
+
+### Gmail SMTP (이메일 Magic Link 인증용)
+- 발신 계정: cayson0127@gmail.com
+- 사용자가 이메일 입력 → cayson0127@gmail.com에서 인증 링크 메일 발송 → 클릭 시 가입/로그인 완료
+- 2단계 인증 활성화 필수
+- 앱 비밀번호 생성 후 사용 (공백 제거)
+- **주의: EMAIL_SERVER_USER와 앱 비밀번호 생성 계정이 반드시 일치해야 함**
+
+### Cloudinary
+- 무료 25GB 스토리지
+- 이미지 URL로 자동 리사이즈/최적화 지원
+- 부족해질 경우 AWS S3로 전환 가능
+- 폴더 구조: `electric-jjang/questions/q_{question_code}.{ext}`
+
+### 토스페이먼츠 (Toss Payments)
+- 토스페이먼츠 개발자센터에서 API 키 발급
+- **등급 정기결제 (빌링키)**: 월 자동 결제로 등급 유지
+- **개별 콘텐츠 구매**: 즉시 결제로 특정 문제/동영상 구매
+- Webhook으로 결제 결과 수신 → 자동 등급/구매 처리
+- 테스트 키로 개발 후 라이브 키로 전환
+
+### OpenRouter AI (유지)
+- 모델: deepseek/deepseek-v3.2
+- OpenAI 호환 API 형식 사용
+- 주관식/서술형 AI 채점용
+
+---
+
+## 7. DB 스키마 (Prisma)
+
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── 사용자 ───
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  // 전기짱 전용 필드
+  phone         String?
+  studentId     String?   // 학번 (OFFICIAL 시험용)
+  isAdmin       Boolean   @default(false)
+
+  // 등급/결제
+  tier          UserTier  @default(GUEST)
+  tierExpiresAt DateTime? @map("tier_expires_at") // 등급 만료일 (결제일+30일)
+  billingKey    String?   @map("billing_key")     // 토스페이먼츠 빌링키
+
+  attempts          Attempt[]
+  dailyBestScores   DailyBestScore[]
+  payments          Payment[]
+  purchasedContents PurchasedContent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ─── NextAuth 필수 테이블 ───
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─── 등급/결제 ───
+
+enum UserTier {
+  GUEST
+  BRONZE
+  SILVER
+  GOLD
+  DIAMOND
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  paymentKey    String?  @unique @map("payment_key") // 토스페이먼츠 결제키
+  orderId       String   @unique @map("order_id")
+  amount        Int
+  type          String   // SUBSCRIPTION(정기결제) / ONE_TIME(개별구매)
+  tier          UserTier? // 정기결제 시 해당 등급
+  status        String   // READY / DONE / CANCELED / FAILED
+  paidAt        DateTime? @map("paid_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("payments")
+}
+
+model PurchasedContent {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  contentType String   @map("content_type") // EXAM / VIDEO
+  contentId   Int      @map("content_id")   // examId 또는 videoId
+  purchasedAt DateTime @default(now()) @map("purchased_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentType, contentId])
+  @@map("purchased_contents")
+}
+
+// ─── 동영상 강의 ───
+
+model Video {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?  @db.Text
+  videoUrl     String   @map("video_url")  // 유튜브 등 외부 링크
+  thumbnailUrl String?  @map("thumbnail_url")
+  minTier      UserTier @default(GUEST) @map("min_tier") // 최소 필요 등급
+  price        Int?     // 개별 구매 가격 (null이면 개별 구매 불가)
+  examId       Int?     @map("exam_id")    // 관련 시험 (nullable)
+  sortOrder    Int      @default(0) @map("sort_order")
+  isActive     Boolean  @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("videos")
+}
+
+// ─── 시험 카테고리 + 시험 ───
+
+// 시험 카테고리 (전기기초, 전기기능사, 전기산업기사, 전기기사)
+model ExamCategory {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // "전기기초", "전기기능사", "전기산업기사", "전기기사"
+  description String?  @db.Text
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+
+  exams Exam[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("exam_categories")
+}
+
+enum ExamMode {
+  PRACTICE
+  OFFICIAL
+}
+
+// 개별 시험 (무료, 2020년 1회차, 2020년 2회차, ... 2026년 1회차)
+model Exam {
+  id              Int          @id @default(autoincrement())
+  categoryId      Int          @map("category_id") // 상위 카테고리
+  name            String       // "무료", "2020년 1회차", "2024년 3회차" 등
+  year            Int?         // 연도 (null이면 무료/연습)
+  round           Int?         // 회차 1~4 (null이면 무료/연습)
+  examMode        ExamMode     @default(PRACTICE) @map("exam_mode")
+  password        String?      // OFFICIAL 모드 비밀번호
+  durationMinutes Int          @default(60) @map("duration_minutes")
+  isPublished     Boolean      @default(true) @map("is_published")
+  creatorName     String?      @map("creator_name")
+  creatorTitle    String?      @map("creator_title")
+  sortOrder       Int          @default(0) @map("sort_order")
+  minTier         UserTier     @default(GUEST) @map("min_tier") // 최소 필요 등급
+  price           Int?         // 개별 구매 가격 (null이면 개별 구매 불가)
+
+  category  ExamCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subjects  Subject[]
+  questions Question[]
+  attempts  Attempt[]
+  dailyBestScores       DailyBestScore[]
+  dailyLeaderboardSnaps DailyLeaderboardSnapshot[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([categoryId, year, round]) // 같은 카테고리 내 연도+회차 중복 방지
+  @@map("exams")
+}
+
+model Subject {
+  id                  Int    @id @default(autoincrement())
+  examId              Int    @map("exam_id")
+  name                String
+  questionsPerAttempt Int    @default(5) @map("questions_per_attempt")
+  orderNo             Int    @default(0) @map("order_no")
+
+  exam      Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questions Question[]
+  subjectScores SubjectScore[]
+
+  @@map("subjects")
+}
+
+// ─── 문제은행 ───
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  SHORT_ANSWER
+  ESSAY
+}
+
+model Question {
+  id           Int          @id @default(autoincrement())
+  questionCode String       @unique @map("question_code")
+  examId       Int          @map("exam_id")
+  subjectId    Int          @map("subject_id")
+  questionType QuestionType @default(MULTIPLE_CHOICE) @map("question_type")
+  questionText String       @map("question_text") @db.Text
+  choice1      String?      @map("choice_1")
+  choice2      String?      @map("choice_2")
+  choice3      String?      @map("choice_3")
+  choice4      String?      @map("choice_4")
+  answer       Int?         // 정답 1~4 (객관식용) - 프론트 전송 금지
+  answerText   String?      @map("answer_text") @db.Text // 주관식/서술형 참고 정답
+  points       Int          @default(1)
+  explanation  String?      @db.Text // 해설 (제출 후만 공개)
+  imageUrl     String?      @map("image_url")
+  isActive     Boolean      @default(true) @map("is_active")
+
+  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  attemptQuestions AttemptQuestion[]
+  attemptItems     AttemptItem[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([examId, subjectId, isActive])
+  @@map("questions")
+}
+
+// ─── 시험 응시 ───
+
+enum AttemptStatus {
+  IN_PROGRESS
+  SUBMITTED
+  EXPIRED
+}
+
+enum GradingStatus {
+  PENDING
+  GRADING
+  COMPLETED
+}
+
+model Attempt {
+  id             Int           @id @default(autoincrement())
+  userId         String        @map("user_id")
+  examId         Int           @map("exam_id")
+  status         AttemptStatus @default(IN_PROGRESS)
+  gradingStatus  GradingStatus @default(PENDING) @map("grading_status")
+  startedAt      DateTime      @default(now()) @map("started_at")
+  expiresAt      DateTime      @map("expires_at")
+  submittedAt    DateTime?     @map("submitted_at")
+  totalQuestions Int           @map("total_questions")
+  totalCorrect   Int?          @map("total_correct")
+  totalScore     Int?          @map("total_score")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  attemptQuestions AttemptQuestion[]
+  attemptItems     AttemptItem[]
+  subjectScores    SubjectScore[]
+  dailyBestScore   DailyBestScore[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 한 사람은 IN_PROGRESS 시험을 동시에 1개만
+  // Prisma에서는 partial unique index 미지원 → 앱 레벨 + raw SQL로 처리
+  @@index([userId, status])
+  @@map("attempts")
+}
+
+model AttemptQuestion {
+  attemptId  Int @map("attempt_id")
+  seq        Int
+  questionId Int @map("question_id")
+
+  attempt  Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, seq])
+  @@unique([attemptId, questionId])
+  @@map("attempt_questions")
+}
+
+enum ItemGradingStatus {
+  PENDING
+  AI_GRADED
+  MANUAL_GRADED
+}
+
+model AttemptItem {
+  attemptId     Int     @map("attempt_id")
+  questionId    Int     @map("question_id")
+  selected      Int?    // 1~4 (객관식)
+  answerText    String? @map("answer_text") @db.Text // 주관식/서술형 답안
+  isCorrect     Boolean? @map("is_correct")
+  awardedPoints Int?    @map("awarded_points")
+  gradingStatus ItemGradingStatus? @map("grading_status")
+  aiFeedback    String? @map("ai_feedback") @db.Text
+
+  attempt  Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, questionId])
+  @@map("attempt_items")
+}
+
+model SubjectScore {
+  attemptId       Int @map("attempt_id")
+  subjectId       Int @map("subject_id")
+  subjectQuestions Int @map("subject_questions")
+  subjectCorrect  Int @map("subject_correct")
+  subjectScore    Int @map("subject_score")
+
+  attempt Attempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, subjectId])
+  @@map("subject_scores")
+}
+
+// ─── 랭킹 ───
+
+model DailyBestScore {
+  kstDate       DateTime @map("kst_date") @db.Date
+  examId        Int      @map("exam_id")
+  userId        String   @map("user_id")
+  bestScore     Int      @map("best_score")
+  bestSubmittedAt DateTime @map("best_submitted_at")
+  attemptId     Int      @map("attempt_id")
+
+  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attempt Attempt @relation(fields: [attemptId], references: [id])
+
+  @@id([kstDate, examId, userId])
+  @@map("daily_best_scores")
+}
+
+model DailyLeaderboardSnapshot {
+  kstDate        DateTime @map("kst_date") @db.Date
+  examId         Int      @map("exam_id")
+  rank           Int
+  userId         String?  @map("user_id")
+  userNameDisplay String  @map("user_name_display")
+  score          Int
+  submittedAt    DateTime @map("submitted_at")
+
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@id([kstDate, examId, rank])
+  @@map("daily_leaderboard_snapshots")
+}
+
+// ─── 관리자 로그 ───
+
+model AuditLog {
+  id           Int      @id @default(autoincrement())
+  adminUserId  String   @map("admin_user_id")
+  actionType   String   @map("action_type")
+  targetTable  String   @map("target_table")
+  targetId     String?  @map("target_id")
+  reason       String?
+  changedFields Json?   @map("changed_fields")
+  oldData      Json?    @map("old_data")
+  newData      Json?    @map("new_data")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
+```
+
+### DB 보조 처리 (앱 레벨)
+
+Supabase에서 DB 함수로 처리하던 것들을 앱 레벨로 이동:
+
+```
+- to_kst_date() → lib/utils.ts의 toKstDate() 함수
+- now_kst() → lib/utils.ts의 nowKst() 함수
+- is_prohibited_hour_kst() → lib/utils.ts의 isProhibitedHourKst() 함수
+- IN_PROGRESS 유니크 제약 → raw SQL: CREATE UNIQUE INDEX idx_one_active ON attempts(user_id) WHERE status = 'IN_PROGRESS'
+  (Prisma migration 후 prisma/migrations에 raw SQL 추가)
+```
+
+### 점수 공식
+- 전체 점수: `Math.round(totalCorrect / totalQuestions * 100)`
+- 과목 점수: `Math.round(subjectCorrect / subjectQuestions * 100)`
+
+---
+
+## 8. 페이지 구조
+
+### 공개 페이지 (로그인 불필요)
+| 경로 | 설명 |
+|------|------|
+| `/` | 홈 (히어로 섹션 + 시험 **카테고리** 카드 + 주요기능) |
+| `/login` | 로그인 (Google / 카카오 / 네이버 / 이메일 Magic Link) |
+| `/complete-profile` | 프로필 완성 (이름, 전화번호) |
+
+### 보호 페이지 (로그인 필요)
+| 경로 | 설명 |
+|------|------|
+| `/exam/[categoryId]` | 시험 목록 (무료 + 연도/회차별 기출문제 카드) |
+| `/exam/[categoryId]/[examId]` | 시험 상세/시작 화면 |
+| `/exam/attempt/[attemptId]` | 시험 진행 |
+| `/exam/result/[attemptId]` | 결과 (점수/오답/해설) |
+| `/my` | 마이페이지 (응시 기록, 최근 점수) |
+| `/my/profile` | 프로필 수정 |
+| `/my/wrong-answers` | 오답 노트 |
+| `/my/membership` | 등급 관리 (현재 등급, 업그레이드, 결제 내역) |
+| `/my/withdraw` | 회원 탈퇴 |
+| `/videos` | 동영상 강의 목록 |
+| `/videos/[videoId]` | 동영상 시청 (등급/구매 확인) |
+| `/payment/success` | 결제 성공 리다이렉트 |
+| `/payment/fail` | 결제 실패 리다이렉트 |
+
+### 관리자 페이지 (관리자만)
+| 경로 | 설명 |
+|------|------|
+| `/admin` | 관리자 대시보드 |
+| `/admin/questions` | 문제 관리 (CRUD, 벌크 업로드) |
+| `/admin/users` | 사용자 관리 |
+| `/admin/official-exams` | 공식 시험 관리 |
+| `/admin/official-exams/[examId]` | 공식 시험 편집 |
+| `/admin/official-exams/[examId]/attempts/[attemptId]` | 주관식 수동 채점 |
+| `/admin/videos` | 동영상 관리 (등록/수정/삭제/등급 설정) |
+| `/admin/payments` | 결제 내역 조회 / 수동 등급 부여 |
+
+---
+
+## 9. API 설계
+
+### 인증 (NextAuth 내장)
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `*` | `/api/auth/[...nextauth]` | NextAuth 핸들러 (Google/카카오/네이버 콜백 포함) |
+| `POST` | `/api/auth/complete-profile` | 프로필 완성 |
+
+### 시험 카테고리/조회
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/exam-categories` | 카테고리 목록 (전기기초/기능사/산업기사/기사) |
+| `GET` | `/api/exam-categories/[categoryId]/exams` | 카테고리 내 시험 목록 (무료 + 연도/회차별) |
+| `GET` | `/api/exams/[examId]` | 시험 상세 |
+| `GET` | `/api/exams/[examId]/subjects` | 과목 목록 + 문항 수 |
+| `GET` | `/api/exams/[examId]/question-count` | 활성 문제 수 |
+
+### 응시
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `POST` | `/api/attempts/start` | 시험 시작 (exam_id, password?) |
+| `GET` | `/api/attempts/[attemptId]/paper` | 시험지 조회 (정답 제외) |
+| `POST` | `/api/attempts/[attemptId]/answer` | 답안 저장 (자동 저장) |
+| `POST` | `/api/attempts/[attemptId]/submit` | 제출/채점 |
+| `POST` | `/api/attempts/[attemptId]/abandon` | 시험 포기 |
+| `GET` | `/api/attempts/[attemptId]/result` | 결과 조회 |
+
+### 계정/프로필
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/account/profile` | 프로필 조회 |
+| `PUT` | `/api/account/profile` | 프로필 수정 (전화번호) |
+| `POST` | `/api/account/withdraw` | 회원 탈퇴 |
+
+### 홈/마이페이지
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/home/leaderboard` | 오늘/어제 Top5 + 내 순위 |
+| `GET` | `/api/my/history` | 응시 기록 |
+| `GET` | `/api/my/wrong-answers` | 오답 목록 |
+
+### 관리자 - 문제
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/admin/questions` | 문제 목록 |
+| `POST` | `/api/admin/questions` | 문제 생성 |
+| `PATCH` | `/api/admin/questions/[id]` | 문제 수정 |
+| `DELETE` | `/api/admin/questions/[id]` | 문제 삭제 |
+| `POST` | `/api/admin/questions/bulk` | 벌크 업로드 |
+| `POST` | `/api/admin/questions/check-code` | 코드 중복 확인 |
+| `POST` | `/api/admin/questions/next-code` | 다음 코드 생성 |
+| `POST` | `/api/admin/questions/duplicates` | 중복 문제 탐지 |
+
+### 관리자 - 사용자
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/admin/users` | 사용자 목록 |
+| `PATCH` | `/api/admin/users/[id]` | 사용자 수정 |
+| `DELETE` | `/api/admin/users/[id]` | 사용자 삭제 |
+
+### 관리자 - 공식 시험
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/admin/official-exams` | 목록 |
+| `POST` | `/api/admin/official-exams` | 생성 |
+| `PATCH` | `/api/admin/official-exams/[examId]` | 수정 (게시/비게시 토글) |
+| `POST` | `/api/admin/official-exams/[examId]/results` | 결과/리더보드 |
+| `POST` | `/api/admin/official-exams/[examId]/ai-grade` | AI 자동 채점 |
+| `PATCH` | `/api/admin/official-exams/[examId]/attempts/[attemptId]/grade` | 수동 채점 |
+
+### 관리자 - 설정
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/admin/exam-settings` | 시험 설정 조회 |
+| `POST` | `/api/admin/exam-settings` | 시험 설정 수정 |
+| `POST` | `/api/admin/reset-attempts` | 응시 기록 초기화 |
+
+### 결제 (토스페이먼츠)
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `POST` | `/api/payments/billing-key` | 빌링키 발급 (카드 등록) |
+| `POST` | `/api/payments/subscribe` | 등급 정기결제 요청 |
+| `POST` | `/api/payments/one-time` | 개별 콘텐츠 즉시 결제 |
+| `POST` | `/api/payments/webhook` | 토스페이먼츠 Webhook 수신 |
+| `GET` | `/api/payments/history` | 결제 내역 조회 |
+| `POST` | `/api/payments/cancel-subscription` | 정기결제 해지 |
+
+### 동영상 강의
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/videos` | 동영상 목록 (등급별 필터) |
+| `GET` | `/api/videos/[videoId]` | 동영상 상세 (접근 권한 확인) |
+
+### 관리자 - 동영상
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `GET` | `/api/admin/videos` | 동영상 관리 목록 |
+| `POST` | `/api/admin/videos` | 동영상 등록 (링크 + 등급 설정) |
+| `PATCH` | `/api/admin/videos/[id]` | 동영상 수정 |
+| `DELETE` | `/api/admin/videos/[id]` | 동영상 삭제 |
+
+### 이미지 업로드
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `POST` | `/api/upload/image` | Cloudinary에 문제 이미지 업로드 |
+
+### 크론
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| `POST` | `/api/cron/snapshot-leaderboard` | 어제 Top5 스냅샷 생성 (매일) |
+
+---
+
+## 10. API 상세 로직
+
+### 10-1) 시험 시작 - POST /api/attempts/start
+
+```
+입력: { examId, password? }
+1. 로그인 확인 (NextAuth session)
+2. IN_PROGRESS가 있는지 확인 (시험 종류 상관없이)
+3. 있으면:
+   - 만료 전이면 그 attemptId 반환 (이어풀기)
+   - 만료면 EXPIRED 처리 + 답안 삭제 + 계속 진행
+4. OFFICIAL 모드:
+   - isPublished 체크 (비게시면 차단)
+   - 비밀번호 검증
+   - 학번 확인 (없으면 차단)
+5. PRACTICE 모드:
+   - 23:00~23:59(KST)이면 새 시험 생성 거절
+6. 새 attempt 생성 (startedAt, expiresAt=+durationMinutes, status=IN_PROGRESS)
+7. PRACTICE: 과목별 questionsPerAttempt만큼 랜덤 추출
+   OFFICIAL: 전체 활성 문제 id순
+8. attemptQuestions에 저장 → attemptId 반환
+```
+
+### 10-2) 시험지 조회 - GET /api/attempts/[attemptId]/paper
+- attemptQuestions 기준으로 문제 가져옴
+- **정답(answer) 절대 포함하지 않음**
+
+### 10-3) 제출/채점 - POST /api/attempts/[attemptId]/submit
+
+```
+1. 내 것인지, IN_PROGRESS인지, 만료 전인지 확인
+2. attemptQuestions에 있는 문제만 채점 (조작 방지)
+3. attemptItems 저장 (isCorrect 확정)
+4. subjectScores 계산/저장
+5. totalCorrect / totalScore 계산/저장
+6. SUBMITTED 처리 + submittedAt 기록
+7. dailyBestScores upsert (오늘 KST 기준)
+8. 결과 반환
+```
+
+### 10-4) 홈 랭킹 - GET /api/home/leaderboard?examId=...
+
+```
 반환:
-•	오늘 Top5(daily_best_scores)
-•	어제 Top5(daily_leaderboard_snapshots)
-•	NEW/▲▼ 계산
-•	로그인 시 내 순위 포함
-NEW 규칙:
-•	어제 Top5에 없었는데 오늘 Top5에 들어오면 NEW
-________________________________________
-9-5) 회원 탈퇴
-POST /api/account/withdraw
-서버 로직:
-1.	본인 확인
-2.	daily_best_scores에서 오늘 레코드 삭제(오늘 랭킹 제외)
-3.	daily_leaderboard_snapshots 익명 처리
-4.	profiles/auth.users 등 개인정보 삭제
-________________________________________
-10) 프론트(학생 화면) 계획
-홈
-•	시험 선택 (기능사/산업기사/기사 + 게시된 공식 시험)
-•	시험 카드 실시간 갱신 (10초 폴링, ExamCards 클라이언트 컴포넌트)
-•	OFFICIAL 시험은 is_published=true인 것만 노출
-•	버튼 상태:
-o	IN_PROGRESS 있으면 “이어하기”
-o	없으면:
-	23~24시: “새 시험 시작 불가”
-	그 외: “시험 시작”
-•	오늘/어제 Top5 + 내 순위
-시험 화면
-•	남은 시간(duration_minutes) 표시
-•	답 선택 시 서버 저장
-•	재접속 시 복원
-결과 화면
-•	점수/오답/해설(제출 후)
-•	과목별 성적: 정답 개수로 표시 (예: 1 / 5), 정답률 기반 프로그레스바
-마이페이지
-•	SUBMITTED: 점수/기록 표시
-•	EXPIRED: “미제출(시간초과)” 표시
-•	EXPIRED는 답안 삭제되었으니 “답안 없음” 표시
-•	(시험지 attempt_questions는 남아있으므로, 원하면 “출제된 문제 목록” 정도는 보여줄 수도 있음)
-탈퇴
-•	경고 + 최종 확인
-________________________________________
-11) 관리자 화면 계획
-•	문제 업로드(CSV/JSON)
-•	images.zip 업로드 → question_code로 매칭 → image_url 업데이트
-•	문제 수정/비활성화(soft delete)
-•	변경 시 audit_logs에 “이유+전후 값” 기록
-•	어제 스냅샷 재생성 기능(필요 시)
-•	공식 시험 관리 (/admin/official-exams)
-o	공식 시험 생성/수정/삭제
-o	문제 출제 (객관식/주관식/서술형)
-o	게시/비게시 토글 (is_published) — 게시 시 홈 즉시 노출, 비게시 시 즉시 숨김
-o	비게시 상태에서 직접 URL 접속해도 시험 시작 차단
-o	응시자 답안 조회 및 주관식 수동 채점
-o	AI 자동 채점 (OpenRouter API, 주관식/서술형 문제 자동 채점 + 피드백)
-•	관리자 API: GET/POST/PUT/DELETE /api/admin/official-exams
-________________________________________
-12) 개발 순서(이대로 하면 가장 빠르고 안전)
-1.	Supabase Auth + profiles 연결
-2.	DB 테이블 생성(위 확정 스키마)
-3.	유니크 인덱스 적용(동시성 확정)
-4.	Storage 버킷(question-images) 생성 + 공개 URL 세팅
-5.	API 구현(start/paper/submit/leaderboard/withdraw)
-6.	프론트 구현(홈/시험/결과/마이페이지/탈퇴)
-7.	관리자 구현(업로드/zip매칭/audit_logs)
-8.	테스트
-o	start 연타해도 IN_PROGRESS 1개
-o	23:30 새 시험 생성 불가, 이어하기 가능
-o	60분 넘으면 EXPIRED 처리 + 답안 삭제 + 마이페이지 표시
-o	EXPIRED여도 attempt_questions는 남는지 확인
-o	탈퇴하면 오늘 랭킹에서 즉시 제외(daily_best_scores 삭제)
-o	어제 스냅샷은 (탈퇴한 사용자)로 익명화
-o	이미지 매칭 실패 시 image_url=null
+- 오늘 Top5 (dailyBestScores)
+- 어제 Top5 (dailyLeaderboardSnapshots)
+- NEW/▲▼ 계산
+- 로그인 시 내 순위 포함
 
+NEW 규칙: 어제 Top5에 없었는데 오늘 Top5에 들어오면 NEW
+```
 
+### 10-5) 등급 정기결제 - POST /api/payments/subscribe
+
+```
+입력: { tier }
+1. 로그인 확인
+2. 빌링키 확인 (없으면 먼저 /api/payments/billing-key로 카드 등록)
+3. 토스페이먼츠 빌링키 결제 API 호출 (금액: BRONZE=500, SILVER=1000, GOLD=3000, DIAMOND=5000)
+4. 결제 성공 → User.tier 업데이트, tierExpiresAt = now + 30일
+5. Payment 레코드 생성 (type=SUBSCRIPTION)
+6. 결과 반환
+```
+
+### 10-6) 개별 콘텐츠 구매 - POST /api/payments/one-time
+
+```
+입력: { contentType, contentId } (EXAM 또는 VIDEO)
+1. 로그인 확인
+2. 이미 구매했는지 PurchasedContent 확인
+3. 토스페이먼츠 즉시 결제 → 승인 API 호출
+4. 성공 → PurchasedContent 레코드 생성
+5. Payment 레코드 생성 (type=ONE_TIME)
+```
+
+### 10-7) 토스페이먼츠 Webhook - POST /api/payments/webhook
+
+```
+1. Webhook Signature 검증
+2. 결제 상태 업데이트 (Payment.status)
+3. 정기결제 성공 → tier, tierExpiresAt 갱신
+4. 정기결제 실패 → 유예 후 GUEST로 다운그레이드
+```
+
+### 10-8) 콘텐츠 접근 권한 확인 로직
+
+```
+function canAccess(user, content):
+  // 1. 등급 확인
+  if user.tier >= content.minTier AND user.tierExpiresAt > now:
+    return true
+  // 2. 개별 구매 확인
+  if PurchasedContent exists (userId, contentType, contentId):
+    return true
+  return false
+```
+
+### 10-10) 회원 탈퇴 - POST /api/account/withdraw
+
+```
+1. 본인 확인
+2. dailyBestScores에서 해당 유저 레코드 삭제
+3. dailyLeaderboardSnapshots 익명 처리 (userNameDisplay = "(탈퇴한 사용자)", userId = null)
+4. 사용자 관련 데이터 삭제 (Cascade로 자동 처리)
+5. User 레코드 삭제
+```
+
+---
+
+## 11. 컴포넌트 구조
+
+### 레이아웃/네비게이션
+- `Header.tsx` - 상단 네비게이션 (로고, 테마 토글, 사용자 메뉴)
+- `Footer.tsx` - 하단 푸터
+- `HeroSection.tsx` - 홈 히어로 섹션 (전기 파티클 애니메이션, 랭킹 없이 타이틀만 표시)
+
+### 인증
+- `AuthProvider.tsx` - NextAuth SessionProvider 래퍼 (Supabase AuthListener 대체)
+- `ThemeProvider.tsx` - next-themes 다크모드
+- `ThemeToggle.tsx` - 다크/라이트 토글
+
+### 시험
+- `CategoryCards.tsx` - 홈 카테고리 카드 (전기기초/기능사/산업기사/기사)
+- `ExamCards.tsx` - 카테고리 내 시험 카드 목록 (무료 + 연도/회차별, 등급 표시)
+
+- `ExamPaperPrint.ts` - 시험지 인쇄
+
+### 랭킹
+- `Leaderboard.tsx` - 전체 리더보드 (홈 랭킹 표시는 제거됨)
+
+### 문제 관리 (관리자)
+- `QuestionSplitEditor.tsx` - 단일 문제 편집기
+- `BulkUploadSplitEditor.tsx` - 벌크 업로드
+- `DuplicateQuestionsSection.tsx` - 중복 문제 탐지
+- `ExamSettingsSection.tsx` - 시험 설정
+- `ResetAttemptsSection.tsx` - 응시 초기화
+
+### 공통
+- `MathText.tsx` - KaTeX 수식 렌더러
+- `ConfirmDialog.tsx` - 확인 모달
+
+---
+
+## 12. lib/ 구조 (리뉴얼 후)
+
+```
+lib/
+├── prisma.ts          # Prisma Client 싱글톤
+├── auth.ts            # NextAuth 설정 (Google/카카오/네이버/Email Magic Link provider)
+├── auth-helpers.ts    # getServerSession 래퍼, 권한 체크 유틸
+├── cloudinary.ts      # Cloudinary 업로드/삭제 유틸
+├── toss-payments.ts   # 토스페이먼츠 API (빌링키, 결제 승인, 정기결제)
+├── openrouter.ts      # OpenRouter AI 채점 (유지)
+├── utils.ts           # toKstDate, nowKst, isProhibitedHourKst 등
+└── question-code-mapping.ts  # 문제 코드 매핑 (유지)
+```
+
+---
+
+## 13. Middleware (리뉴얼 후)
+
+NextAuth 기반 경량 미들웨어:
+
+```
+공개 경로 (통과):
+- /, /login, /complete-profile
+- /api/auth/*, /api/home/*, /api/exams/*, /api/cron/*, /api/payments/webhook
+
+보호 경로 (세션 필요):
+- /exam/*, /my/*, /admin/*
+- /api/attempts/*, /api/account/*, /api/my/*, /api/admin/*
+
+관리자 경로 (isAdmin 필요):
+- /admin/*
+- /api/admin/*
+
+주의: middleware에서 Prisma import 금지 (Edge Function 크기 초과 E-003)
+→ NextAuth JWT 토큰의 세션 정보만 사용
+```
+
+---
+
+## 14. EXPIRED(만료) 처리 정책
+
+### 만료 시점
+- startedAt + durationMinutes가 지나면 만료
+
+### 만료된 시험 처리
+- 마이페이지에 "미제출(시간초과)" 표시
+- **답안 삭제**: attemptItems, subjectScores 삭제
+- **시험지 유지**: attemptQuestions는 보존 (분석용)
+- **기록 유지**: attempt는 남기고 status를 EXPIRED로 변경
+
+---
+
+## 15. 탈퇴 정책
+
+### 오늘 랭킹 (dailyBestScores)
+- 탈퇴 즉시 삭제 → 오늘 Top5에서 제외
+
+### 어제 스냅샷 (dailyLeaderboardSnapshots)
+- 통계 목적으로 유지
+- 익명 처리: `userNameDisplay = "(탈퇴한 사용자)"`, `userId = null`
+
+### 개인정보
+- User + 연관 데이터 전부 삭제 (Prisma Cascade)
+
+---
+
+## 16. 이미지 저장/매칭 규칙
+
+- Cloudinary 경로: `electric-jjang/questions/q_{questionCode}.{ext}`
+- 확장자: png, jpg, jpeg
+- DB 저장: `questions.imageUrl` (Cloudinary 공개 URL)
+- 매칭 실패 시: 문제는 저장되지만 `imageUrl = null`
+- 관리자: images.zip 업로드 → questionCode로 매칭 → imageUrl 업데이트
+
+---
+
+## 17. 이전에 발생한 에러 및 대응 (참고용)
+
+| 코드 | 내용 | 대응 |
+|------|------|------|
+| E-001 | NextAuth token.id 타입 에러 | `token.id as string` 타입 단언 |
+| E-002 | Script onLoad 서버 컴포넌트 에러 | 클라이언트 컴포넌트 분리 |
+| E-003 | Vercel Edge Function 1MB 초과 | **미들웨어에서 Prisma/bcrypt import 금지**, 쿠키 기반 경량 처리 |
+| E-004 | DYNAMIC_SERVER_USAGE 에러 | `export const dynamic = "force-dynamic"` |
+| E-005 | OG 이미지 edge runtime 경고 | `dynamic = "force-dynamic"` |
+| E-006 | Google OAuth redirect_uri_mismatch | 배포 URL을 Cloud Console에 등록 |
+| E-007 | 카카오 KOE006 앱 설정 오류 | Redirect URI에 배포 URL 추가 |
+| E-008 | 네이버 OAuth 로그인 실패 | Callback URL에 배포 URL 추가 |
+| E-009 | **카카오 OAuth 토큰 교환 실패** | **`client_secret_post` 필수 설정** |
+| E-010 | Gemini API 429 할당량 초과 | OpenRouter로 전환 완료 |
+| E-011 | Gemini 404 모델 미지원 | OpenRouter로 전환 완료 |
+| E-012 | Vercel 배포 캐시 미반영 | Redeploy 시 Build Cache 해제 |
+| E-013 | Gmail SMTP 인증 실패 | 발신 계정과 앱 비밀번호 계정 통일 |
+| E-014 | 카카오톡 공유 4019 에러 | JS SDK 도메인 + 웹 도메인 두 곳 등록 |
+
+---
+
+## 18. 개발 순서
+
+### Phase 1: 기반 세팅
+1. 패키지 설치 (`prisma`, `@prisma/client`, `next-auth`, `cloudinary`, `@tosspayments/payment-widget-sdk` 등)
+2. Supabase 패키지 제거 (`@supabase/ssr`, `@supabase/supabase-js`)
+3. Prisma 스키마 작성 + Neon DB 연결 + `npx prisma db push`
+4. partial unique index 추가 (raw SQL)
+5. NextAuth 설정 (Google / 카카오 / 네이버 / Email Magic Link provider)
+6. Prisma Client 싱글톤 (`lib/prisma.ts`)
+7. 유틸 함수 이동 (`lib/utils.ts` - KST 날짜 등)
+
+### Phase 2: 인증/미들웨어
+8. NextAuth API 라우트 (`/api/auth/[...nextauth]`) — Google, 카카오, 네이버, Email provider
+9. middleware.ts 교체 (NextAuth 세션 기반)
+10. AuthProvider 컴포넌트 (SessionProvider)
+11. 로그인 페이지 교체 (소셜 3종 + 이메일 입력 폼)
+12. 프로필 완성 페이지 교체
+
+### Phase 3: 핵심 API 교체
+13. 시험 조회 API (Prisma 쿼리로 교체)
+14. 응시 API (start / paper / answer / submit / result)
+15. 랭킹 API (leaderboard)
+16. 마이페이지 API (history / wrong-answers)
+17. 계정 API (profile / withdraw)
+
+### Phase 4: 관리자 API 교체
+18. 문제 관리 API
+19. 사용자 관리 API
+20. 공식 시험 관리 API
+21. 이미지 업로드 API (Cloudinary로 교체)
+22. 크론 API
+
+### Phase 5: 결제/등급/동영상
+23. 토스페이먼츠 연동 (`lib/toss-payments.ts`)
+24. 결제 API (빌링키 / 정기결제 / 개별구매 / Webhook)
+25. 등급 관리 페이지 (`/my/membership`)
+26. 동영상 강의 API + 페이지 (`/videos`)
+27. 관리자 동영상/결제 관리 페이지
+28. 시험/동영상에 등급 접근 제한 적용
+
+### Phase 6: 프론트 교체
+29. Header/Footer에서 Supabase auth 제거 → NextAuth useSession
+30. 시험 관련 페이지 API 호출 수정 + 등급 표시
+31. 마이페이지 API 호출 수정
+32. 관리자 페이지 API 호출 수정
+
+### Phase 7: 정리/테스트
+33. Supabase 관련 코드 전부 삭제 (`lib/supabase/`, `types/database.ts`)
+34. `.env.local` 정리
+35. 통합 테스트
+    - 로그인 4종 (Google / 카카오 / 네이버 / 이메일 Magic Link)
+    - 시험 시작 연타 → IN_PROGRESS 1개
+    - 23:30 새 시험 생성 불가, 이어하기 가능
+    - 만료 처리 + 답안 삭제 + 마이페이지 표시
+    - 이미지 업로드 (Cloudinary)
+    - 탈퇴 → 랭킹 제외 + 스냅샷 익명화
+    - 토스페이먼츠 정기결제 → 등급 업그레이드 → 만료 → 다운그레이드
+    - 개별 콘텐츠 구매 → 즉시 접근 가능
+    - 등급 미달 시 시험/동영상 접근 차단 + 안내 표시
+36. Vercel 배포 + OAuth 리다이렉트 URL 최종 등록
+
+---
+
+## 19. 데이터 마이그레이션
+
+### 기존 데이터 (Supabase → Neon)
+- `exams`, `subjects`: 수동 시드 또는 SQL export/import
+- `questions`: CSV/JSON export → Prisma seed 스크립트
+- `profiles`: NextAuth 첫 로그인 시 자동 생성 (기존 사용자는 재가입)
+- `attempts`, `daily_*`: 리셋 (신규 시작)
+
+### 문제 이미지 (Supabase Storage → Cloudinary)
+- Supabase Storage에서 이미지 다운로드
+- Cloudinary에 재업로드
+- DB의 imageUrl 업데이트

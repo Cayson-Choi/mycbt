@@ -1,0 +1,389 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── 사용자 (NextAuth + 전기짱) ───
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  // 전기짱 전용 필드
+  phone     String?
+  studentId String? @map("student_id")
+  isAdmin   Boolean @default(false) @map("is_admin")
+
+  // 등급/결제
+  tier          UserTier  @default(GUEST)
+  tierExpiresAt DateTime? @map("tier_expires_at")
+  billingKey    String?   @map("billing_key")
+
+  attempts          Attempt[]
+  dailyBestScores   DailyBestScore[]
+  payments          Payment[]
+  purchasedContents PurchasedContent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ─── NextAuth 필수 테이블 ───
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─── 등급/결제 ───
+
+enum UserTier {
+  GUEST
+  BRONZE
+  SILVER
+  GOLD
+  DIAMOND
+}
+
+model Payment {
+  id         String    @id @default(cuid())
+  userId     String    @map("user_id")
+  paymentKey String?   @unique @map("payment_key")
+  orderId    String    @unique @map("order_id")
+  amount     Int
+  type       String // SUBSCRIPTION / ONE_TIME
+  tier       UserTier?
+  status     String // READY / DONE / CANCELED / FAILED
+  paidAt     DateTime? @map("paid_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("payments")
+}
+
+model PurchasedContent {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  contentType String   @map("content_type") // EXAM / VIDEO
+  contentId   Int      @map("content_id")
+  purchasedAt DateTime @default(now()) @map("purchased_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentType, contentId])
+  @@map("purchased_contents")
+}
+
+// ─── 동영상 강의 ───
+
+model Video {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?  @db.Text
+  videoUrl     String   @map("video_url")
+  thumbnailUrl String?  @map("thumbnail_url")
+  minTier      UserTier @default(GUEST) @map("min_tier")
+  price        Int?
+  examId       Int?     @map("exam_id")
+  sortOrder    Int      @default(0) @map("sort_order")
+  isActive     Boolean  @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("videos")
+}
+
+// ─── 시험 카테고리 + 시험 ───
+
+model ExamCategory {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String? @db.Text
+  sortOrder   Int     @default(0) @map("sort_order")
+  isActive    Boolean @default(true) @map("is_active")
+
+  exams Exam[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("exam_categories")
+}
+
+enum ExamMode {
+  PRACTICE
+  OFFICIAL
+}
+
+model Exam {
+  id              Int      @id @default(autoincrement())
+  categoryId      Int      @map("category_id")
+  name            String
+  year            Int?
+  round           Int?
+  examMode        ExamMode @default(PRACTICE) @map("exam_mode")
+  password        String?
+  durationMinutes Int      @default(60) @map("duration_minutes")
+  isPublished     Boolean  @default(true) @map("is_published")
+  creatorName     String?  @map("creator_name")
+  creatorTitle    String?  @map("creator_title")
+  sortOrder       Int      @default(0) @map("sort_order")
+  minTier         UserTier @default(GUEST) @map("min_tier")
+  price           Int?
+
+  category              ExamCategory               @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subjects              Subject[]
+  questions             Question[]
+  attempts              Attempt[]
+  dailyBestScores       DailyBestScore[]
+  dailyLeaderboardSnaps DailyLeaderboardSnapshot[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([categoryId, year, round])
+  @@map("exams")
+}
+
+model Subject {
+  id                  Int    @id @default(autoincrement())
+  examId              Int    @map("exam_id")
+  name                String
+  questionsPerAttempt Int    @default(5) @map("questions_per_attempt")
+  orderNo             Int    @default(0) @map("order_no")
+
+  exam          Exam           @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questions     Question[]
+  subjectScores SubjectScore[]
+
+  @@map("subjects")
+}
+
+// ─── 문제은행 ───
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  SHORT_ANSWER
+  ESSAY
+}
+
+model Question {
+  id           Int          @id @default(autoincrement())
+  questionCode String       @unique @map("question_code")
+  examId       Int          @map("exam_id")
+  subjectId    Int          @map("subject_id")
+  questionType QuestionType @default(MULTIPLE_CHOICE) @map("question_type")
+  questionText String       @map("question_text") @db.Text
+  choice1      String?      @map("choice_1")
+  choice2      String?      @map("choice_2")
+  choice3      String?      @map("choice_3")
+  choice4      String?      @map("choice_4")
+  answer       Int?
+  answerText   String?      @map("answer_text") @db.Text
+  points       Int          @default(1)
+  explanation  String?      @db.Text
+  imageUrl     String?      @map("image_url")
+  isActive     Boolean      @default(true) @map("is_active")
+
+  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  attemptQuestions AttemptQuestion[]
+  attemptItems     AttemptItem[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([examId, subjectId, isActive])
+  @@map("questions")
+}
+
+// ─── 시험 응시 ───
+
+enum AttemptStatus {
+  IN_PROGRESS
+  SUBMITTED
+  EXPIRED
+}
+
+enum GradingStatus {
+  PENDING
+  GRADING
+  COMPLETED
+}
+
+model Attempt {
+  id            Int           @id @default(autoincrement())
+  userId        String        @map("user_id")
+  examId        Int           @map("exam_id")
+  status        AttemptStatus @default(IN_PROGRESS)
+  gradingStatus GradingStatus @default(PENDING) @map("grading_status")
+  startedAt     DateTime      @default(now()) @map("started_at")
+  expiresAt     DateTime      @map("expires_at")
+  submittedAt   DateTime?     @map("submitted_at")
+  totalQuestions Int          @map("total_questions")
+  totalCorrect  Int?          @map("total_correct")
+  totalScore    Int?          @map("total_score")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  attemptQuestions AttemptQuestion[]
+  attemptItems     AttemptItem[]
+  subjectScores    SubjectScore[]
+  dailyBestScore   DailyBestScore[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, status])
+  @@map("attempts")
+}
+
+model AttemptQuestion {
+  attemptId  Int @map("attempt_id")
+  seq        Int
+  questionId Int @map("question_id")
+
+  attempt  Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, seq])
+  @@unique([attemptId, questionId])
+  @@map("attempt_questions")
+}
+
+enum ItemGradingStatus {
+  PENDING
+  AI_GRADED
+  MANUAL_GRADED
+}
+
+model AttemptItem {
+  attemptId     Int              @map("attempt_id")
+  questionId    Int              @map("question_id")
+  selected      Int?
+  answerText    String?          @map("answer_text") @db.Text
+  isCorrect     Boolean?         @map("is_correct")
+  awardedPoints Int?             @map("awarded_points")
+  gradingStatus ItemGradingStatus? @map("grading_status")
+  aiFeedback    String?          @map("ai_feedback") @db.Text
+
+  attempt  Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, questionId])
+  @@map("attempt_items")
+}
+
+model SubjectScore {
+  attemptId       Int @map("attempt_id")
+  subjectId       Int @map("subject_id")
+  subjectQuestions Int @map("subject_questions")
+  subjectCorrect  Int @map("subject_correct")
+  subjectScore    Int @map("subject_score")
+
+  attempt Attempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, subjectId])
+  @@map("subject_scores")
+}
+
+// ─── 랭킹 ───
+
+model DailyBestScore {
+  kstDate         DateTime @map("kst_date") @db.Date
+  examId          Int      @map("exam_id")
+  userId          String   @map("user_id")
+  bestScore       Int      @map("best_score")
+  bestSubmittedAt DateTime @map("best_submitted_at")
+  attemptId       Int      @map("attempt_id")
+
+  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attempt Attempt @relation(fields: [attemptId], references: [id])
+
+  @@id([kstDate, examId, userId])
+  @@map("daily_best_scores")
+}
+
+model DailyLeaderboardSnapshot {
+  kstDate         DateTime @map("kst_date") @db.Date
+  examId          Int      @map("exam_id")
+  rank            Int
+  userId          String?  @map("user_id")
+  userNameDisplay String   @map("user_name_display")
+  score           Int
+  submittedAt     DateTime @map("submitted_at")
+
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@id([kstDate, examId, rank])
+  @@map("daily_leaderboard_snapshots")
+}
+
+// ─── 관리자 로그 ───
+
+model AuditLog {
+  id            Int      @id @default(autoincrement())
+  adminUserId   String   @map("admin_user_id")
+  actionType    String   @map("action_type")
+  targetTable   String   @map("target_table")
+  targetId      String?  @map("target_id")
+  reason        String?
+  changedFields Json?    @map("changed_fields")
+  oldData       Json?    @map("old_data")
+  newData       Json?    @map("new_data")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
