@@ -55,6 +55,23 @@ export async function POST(
     let hasSubjective = false
     const subjectStats = new Map<number, { correct: number; total: number; pointsEarned: number; pointsTotal: number }>()
 
+    // 채점 결과를 메모리에서 계산 (DB 호출 없음)
+    const itemsToCreate: Array<{
+      attemptId: number
+      questionId: number
+      selected: number | null
+      answerText: string | null
+      isCorrect: boolean | null
+      awardedPoints: number | null
+      gradingStatus: "AI_GRADED" | "PENDING"
+    }> = []
+    const itemsToUpdate: Array<{
+      questionId: number
+      isCorrect: boolean | null
+      awardedPoints: number | null
+      gradingStatus: "AI_GRADED" | "PENDING"
+    }> = []
+
     for (const aq of attemptQuestions) {
       const q = aq.question
       const subjectId = q.subjectId
@@ -77,55 +94,88 @@ export async function POST(
           stats.pointsEarned += questionPoints
         }
 
-        await prisma.attemptItem.upsert({
-          where: { attemptId_questionId: { attemptId: aid, questionId: q.id } },
-          update: { isCorrect, awardedPoints: isCorrect ? questionPoints : 0, gradingStatus: "AI_GRADED" },
-          create: {
-            attemptId: aid,
+        if (studentItem) {
+          itemsToUpdate.push({
             questionId: q.id,
-            selected: studentItem?.selected ?? null,
             isCorrect,
             awardedPoints: isCorrect ? questionPoints : 0,
             gradingStatus: "AI_GRADED",
-          },
-        })
-      } else {
-        hasSubjective = true
-        await prisma.attemptItem.upsert({
-          where: { attemptId_questionId: { attemptId: aid, questionId: q.id } },
-          update: { isCorrect: null, awardedPoints: null, gradingStatus: "PENDING" },
-          create: {
+          })
+        } else {
+          itemsToCreate.push({
             attemptId: aid,
             questionId: q.id,
-            answerText: studentItem?.answerText ?? null,
+            selected: null,
+            answerText: null,
+            isCorrect,
+            awardedPoints: isCorrect ? questionPoints : 0,
+            gradingStatus: "AI_GRADED",
+          })
+        }
+      } else {
+        hasSubjective = true
+
+        if (studentItem) {
+          itemsToUpdate.push({
+            questionId: q.id,
             isCorrect: null,
             awardedPoints: null,
             gradingStatus: "PENDING",
-          },
-        })
+          })
+        } else {
+          itemsToCreate.push({
+            attemptId: aid,
+            questionId: q.id,
+            selected: null,
+            answerText: null,
+            isCorrect: null,
+            awardedPoints: null,
+            gradingStatus: "PENDING",
+          })
+        }
       }
     }
+
+    // 배치 처리: 새 항목은 createMany, 기존 항목은 개별 update를 Promise.all로 병렬 실행
+    const dbOps: Promise<unknown>[] = []
+
+    if (itemsToCreate.length > 0) {
+      dbOps.push(prisma.attemptItem.createMany({ data: itemsToCreate }))
+    }
+
+    if (itemsToUpdate.length > 0) {
+      dbOps.push(
+        ...itemsToUpdate.map((item) =>
+          prisma.attemptItem.update({
+            where: { attemptId_questionId: { attemptId: aid, questionId: item.questionId } },
+            data: {
+              isCorrect: item.isCorrect,
+              awardedPoints: item.awardedPoints,
+              gradingStatus: item.gradingStatus,
+            },
+          })
+        )
+      )
+    }
+
+    await Promise.all(dbOps)
 
     const totalScore = isOfficial
       ? totalPointsEarned
       : Math.round((totalCorrect / attempt.totalQuestions) * 100)
 
-    // 과목별 점수 저장
-    for (const [subjectId, stats] of subjectStats.entries()) {
-      const subjectScore = isOfficial
+    // 과목별 점수 일괄 저장
+    const subjectScoreData = Array.from(subjectStats.entries()).map(([subjectId, stats]) => ({
+      attemptId: aid,
+      subjectId,
+      subjectQuestions: stats.total,
+      subjectCorrect: stats.correct,
+      subjectScore: isOfficial
         ? stats.pointsEarned
-        : Math.round((stats.correct / stats.total) * 100)
+        : Math.round((stats.correct / stats.total) * 100),
+    }))
 
-      await prisma.subjectScore.create({
-        data: {
-          attemptId: aid,
-          subjectId,
-          subjectQuestions: stats.total,
-          subjectCorrect: stats.correct,
-          subjectScore,
-        },
-      })
-    }
+    await prisma.subjectScore.createMany({ data: subjectScoreData })
 
     // attempt 업데이트
     const submittedAt = new Date()

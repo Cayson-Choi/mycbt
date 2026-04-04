@@ -1,8 +1,6 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { notFound } from "next/navigation"
+import { prisma } from "@/lib/prisma"
 
 interface ExamItem {
   id: number
@@ -15,11 +13,6 @@ interface ExamItem {
   questions_per_attempt: number
 }
 
-interface CategoryData {
-  category: { id: number; name: string; description: string | null }
-  exams: ExamItem[]
-}
-
 const roundColors = [
   "from-blue-500 to-blue-700",
   "from-emerald-500 to-emerald-700",
@@ -27,82 +20,71 @@ const roundColors = [
   "from-rose-500 to-rose-700",
 ]
 
-export default function CategoryPage({
+export default async function CategoryPage({
   params,
 }: {
   params: Promise<{ categoryId: string }>
 }) {
-  const router = useRouter()
-  const [data, setData] = useState<CategoryData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
+  const { categoryId } = await params
+  const id = parseInt(categoryId)
 
-  useEffect(() => {
-    params.then(({ categoryId }) => {
-      loadCategory(categoryId)
-    })
-  }, [params])
-
-  const loadCategory = async (categoryId: string) => {
-    try {
-      const res = await fetch(`/api/exam-categories/${categoryId}/exams`)
-      if (!res.ok) {
-        setError("카테고리를 찾을 수 없습니다")
-        setLoading(false)
-        return
-      }
-      const result = await res.json()
-      setData(result)
-    } catch {
-      setError("데이터를 불러올 수 없습니다")
-    } finally {
-      setLoading(false)
-    }
+  if (isNaN(id)) {
+    notFound()
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-8" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className="h-36 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    )
+  const category = await prisma.examCategory.findUnique({
+    where: { id, isActive: true },
+    select: { id: true, name: true, description: true },
+  })
+
+  if (!category) {
+    notFound()
   }
 
-  if (error || !data) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700 text-center">
-          <p className="text-red-600 dark:text-red-400 mb-4">
-            {error || "데이터를 불러올 수 없습니다"}
-          </p>
-          <Link
-            href="/"
-            className="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            홈으로 돌아가기
-          </Link>
-        </div>
-      </div>
-    )
-  }
+  const exams = await prisma.exam.findMany({
+    where: {
+      categoryId: id,
+      isPublished: true,
+      examMode: "PRACTICE",
+    },
+    select: {
+      id: true,
+      name: true,
+      year: true,
+      round: true,
+      durationMinutes: true,
+      minTier: true,
+      subjects: {
+        select: {
+          questionsPerAttempt: true,
+        },
+      },
+      _count: {
+        select: { questions: true },
+      },
+    },
+    orderBy: [{ year: "desc" }, { round: "asc" }],
+  })
 
-  const { category, exams } = data
+  const examList: ExamItem[] = exams.map((exam) => ({
+    id: exam.id,
+    name: exam.name,
+    year: exam.year,
+    round: exam.round,
+    duration_minutes: exam.durationMinutes,
+    min_tier: exam.minTier,
+    total_questions: exam._count.questions,
+    questions_per_attempt: exam.subjects.reduce(
+      (sum, s) => sum + s.questionsPerAttempt,
+      0
+    ),
+  }))
 
   // 년도별 그룹핑
   const examsByYear = new Map<number, ExamItem[]>()
   const noYearExams: ExamItem[] = []
 
-  for (const exam of exams) {
+  for (const exam of examList) {
     if (exam.year) {
       const yearExams = examsByYear.get(exam.year) || []
       yearExams.push(exam)
@@ -148,11 +130,11 @@ export default function CategoryPage({
             </p>
           )}
           <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
-            총 {exams.length}개 시험
+            총 {examList.length}개 시험
           </p>
         </div>
 
-        {exams.length === 0 ? (
+        {examList.length === 0 ? (
           <div className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-12 text-center">
             <div className="text-5xl mb-4">📋</div>
             <p className="text-gray-500 dark:text-gray-400 text-lg">

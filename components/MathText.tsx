@@ -7,10 +7,27 @@
  * Supports:
  * - LaTeX math: $...$ (inline), $$...$$ (display)
  * - HTML tags: <sub>, <sup>, <frac>
+ *
+ * KaTeX is dynamically imported to avoid 264KB bundle on initial load.
  */
 
-import { memo, useMemo } from 'react'
-import katex from 'katex'
+import { memo, useState, useEffect, useRef } from 'react'
+
+type KaTeX = typeof import('katex')
+let katexPromise: Promise<KaTeX> | null = null
+let katexModule: KaTeX | null = null
+
+// Singleton: load katex once and cache it
+function getKatex(): Promise<KaTeX> {
+  if (katexModule) return Promise.resolve(katexModule)
+  if (!katexPromise) {
+    katexPromise = import('katex').then((m) => {
+      katexModule = m
+      return m
+    })
+  }
+  return katexPromise
+}
 
 interface MathTextProps {
   text: string
@@ -18,7 +35,7 @@ interface MathTextProps {
 }
 
 // Convert LaTeX $...$ and $$...$$ segments to KaTeX HTML
-function renderLatex(text: string): string {
+function renderLatex(text: string, katex: KaTeX['default']): string {
   // Process $$...$$ (display math) first, then $...$ (inline math)
   return text
     .replace(/\$\$(.+?)\$\$/g, (_match, tex: string) => {
@@ -53,21 +70,49 @@ function sanitizeHtml(html: string): string {
   return processed
 }
 
-// Process text: if it contains $, use LaTeX rendering; otherwise use HTML sanitize
-function processText(text: string): string {
-  if (text.includes('$')) {
-    return renderLatex(text)
-  }
-  return sanitizeHtml(text)
-}
-
 export default memo(function MathText({ text, className = '' }: MathTextProps) {
-  const processedText = useMemo(() => processText(text), [text])
+  // If text has no $, no katex needed — process synchronously
+  const needsKatex = text.includes('$')
+
+  // For non-katex text, render immediately with sanitized HTML
+  const fallbackHtml = needsKatex ? text : sanitizeHtml(text)
+
+  const [html, setHtml] = useState<string>(() => {
+    // If katex is already loaded, render synchronously (no flash)
+    if (needsKatex && katexModule) {
+      return renderLatex(text, katexModule.default)
+    }
+    return fallbackHtml
+  })
+
+  const prevTextRef = useRef(text)
+
+  useEffect(() => {
+    if (!needsKatex) {
+      setHtml(sanitizeHtml(text))
+      return
+    }
+
+    // If katex already loaded and text hasn't changed from initial render, skip
+    if (katexModule && prevTextRef.current === text) {
+      prevTextRef.current = text
+      return
+    }
+    prevTextRef.current = text
+
+    let cancelled = false
+    getKatex().then((mod) => {
+      if (!cancelled) {
+        setHtml(renderLatex(text, mod.default))
+      }
+    })
+    return () => { cancelled = true }
+  }, [text, needsKatex])
 
   return (
     <span
       className={`${className} [&>sub]:text-[0.7em] [&>sub]:align-sub [&>sup]:text-[0.7em] [&>sup]:align-super`}
-      dangerouslySetInnerHTML={{ __html: processedText }}
+      dangerouslySetInnerHTML={{ __html: html }}
       style={{ color: 'inherit' }}
     />
   )
