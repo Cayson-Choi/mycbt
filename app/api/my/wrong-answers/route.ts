@@ -176,18 +176,18 @@ export async function GET() {
     )
 
     // 9. 과목별 통계
-    const subjectStats = uniqueWrongAnswers.reduce((acc: any, item: any) => {
-      const key = item.subject_id
-      if (!acc[key]) {
-        acc[key] = {
-          subject_id: item.subject_id,
-          subject_name: item.subject_name,
+    const subjectStats: Record<string, { subject_id: number; subject_name: string; count: number }> = {}
+    for (const item of uniqueWrongAnswers) {
+      const key = String((item as any).subject_id)
+      if (!subjectStats[key]) {
+        subjectStats[key] = {
+          subject_id: (item as any).subject_id,
+          subject_name: (item as any).subject_name,
           count: 0,
         }
       }
-      acc[key].count++
-      return acc
-    }, {})
+      subjectStats[key].count++
+    }
 
     return NextResponse.json({
       wrong_answers: uniqueWrongAnswers,
