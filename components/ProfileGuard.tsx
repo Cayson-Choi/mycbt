@@ -14,5 +14,14 @@ export default function ProfileGuard() {
     }
   }, [session, router])
 
+  // 홈 진입 시 주요 페이지를 미리 prefetch
+  useEffect(() => {
+    router.prefetch('/my')
+    router.prefetch('/category/1')
+    router.prefetch('/category/2')
+    router.prefetch('/category/3')
+    router.prefetch('/category/4')
+  }, [router])
+
   return null
 }

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface SubjectScore {
@@ -37,7 +38,15 @@ interface Props {
 }
 
 export default function AttemptHistoryClient({ attempts, examStats }: Props) {
+  const router = useRouter()
   const [filter, setFilter] = useState<'all' | number>('all')
+
+  // 마이페이지 진입 시 하위 페이지들을 미리 prefetch
+  useEffect(() => {
+    router.prefetch('/my/wrong-answers')
+    router.prefetch('/my/profile')
+    router.prefetch('/my/withdraw')
+  }, [router])
 
   const filteredAttempts =
     filter === 'all'
