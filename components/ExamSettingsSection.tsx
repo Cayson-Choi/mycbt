@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 
 interface Exam {
   id: number
   name: string
+  category_name?: string
   exam_mode?: string
   duration_minutes?: number
 }
@@ -143,6 +144,15 @@ export default function ExamSettingsSection({ exams }: Props) {
     )
   }
 
+  // 카테고리별 그룹핑
+  const groupedExams = new Map<string, Exam[]>()
+  for (const exam of exams) {
+    const catName = exam.category_name || exam.name.split(' ')[0]
+    const group = groupedExams.get(catName) || []
+    group.push(exam)
+    groupedExams.set(catName, group)
+  }
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
       <h2 className="text-xl font-bold mb-4 dark:text-white">
@@ -150,65 +160,71 @@ export default function ExamSettingsSection({ exams }: Props) {
       </h2>
 
       <div className="space-y-3">
-        {exams.map((exam) => {
-          const examSubjects = getSubjectsForExam(exam.id)
-          if (examSubjects.length === 0) return null
+        {Array.from(groupedExams.entries()).map(([catName, catExams]) => (
+          <CategoryAccordionClient key={catName} categoryName={catName}>
+            <div className="space-y-2">
+              {catExams.map((exam) => {
+                const examSubjects = getSubjectsForExam(exam.id)
+                if (examSubjects.length === 0) return null
 
-          const isOfficial = exam.exam_mode === 'OFFICIAL'
+                const isOfficial = exam.exam_mode === 'OFFICIAL'
 
-          return (
-            <div key={exam.id} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
-                  {exam.name}
-                </h3>
-                {isOfficial && (
-                  <span className="text-[10px] bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded font-medium">
-                    공식 - 전체 출제
-                  </span>
-                )}
-              </div>
-              {isOfficial ? (
-                <p className="text-xs text-gray-400 dark:text-gray-500">
-                  공식 시험은 등록된 모든 활성 문제가 출제됩니다.
-                </p>
-              ) : (
-                <div className="space-y-2">
-                  <div className="flex items-center gap-1.5 text-xs">
-                    <span className="text-gray-700 dark:text-gray-300">시험 시간</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={300}
-                      value={durationValues[exam.id] ?? 60}
-                      onChange={(e) => handleDurationChange(exam.id, e.target.value)}
-                      className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
-                    />
-                    <span className="text-gray-400 dark:text-gray-500">분</span>
-                  </div>
-                  <div className="flex flex-wrap gap-x-5 gap-y-1.5">
-                    {examSubjects.map((subject) => (
-                      <div
-                        key={subject.id}
-                        className="flex items-center gap-1.5 text-xs"
-                      >
-                        <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
-                        <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
-                        <input
-                          type="number"
-                          min={0}
-                          value={editValues[subject.id] ?? subject.questions_per_attempt}
-                          onChange={(e) => handleChange(subject.id, e.target.value)}
-                          className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
-                        />
+                return (
+                  <div key={exam.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
+                        {exam.name}
+                      </h3>
+                      {isOfficial && (
+                        <span className="text-[10px] bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded font-medium">
+                          공식 - 전체 출제
+                        </span>
+                      )}
+                    </div>
+                    {isOfficial ? (
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                        공식 시험은 등록된 모든 활성 문제가 출제됩니다.
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-1.5 text-xs">
+                          <span className="text-gray-700 dark:text-gray-300">시험 시간</span>
+                          <input
+                            type="number"
+                            min={1}
+                            max={300}
+                            value={durationValues[exam.id] ?? 60}
+                            onChange={(e) => handleDurationChange(exam.id, e.target.value)}
+                            className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
+                          />
+                          <span className="text-gray-400 dark:text-gray-500">분</span>
+                        </div>
+                        <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                          {examSubjects.map((subject) => (
+                            <div
+                              key={subject.id}
+                              className="flex items-center gap-1.5 text-xs"
+                            >
+                              <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
+                              <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
+                              <input
+                                type="number"
+                                min={0}
+                                value={editValues[subject.id] ?? subject.questions_per_attempt}
+                                onChange={(e) => handleChange(subject.id, e.target.value)}
+                                className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
-              )}
+                )
+              })}
             </div>
-          )
-        })}
+          </CategoryAccordionClient>
+        ))}
       </div>
 
       <div className="mt-4 flex items-center gap-3">
@@ -232,6 +248,45 @@ export default function ExamSettingsSection({ exams }: Props) {
           </span>
         )}
       </div>
+    </div>
+  )
+}
+
+function CategoryAccordionClient({
+  categoryName,
+  children,
+}: {
+  categoryName: string
+  children: ReactNode
+}) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="border dark:border-gray-600 rounded-lg overflow-hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-left"
+      >
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {categoryName}
+        </span>
+        <svg
+          className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+      {open && <div className="px-4 py-3">{children}</div>}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import ResetAttemptsSection from "@/components/ResetAttemptsSection"
+import CategoryAccordion from "@/components/CategoryAccordion"
 import DuplicateQuestionsSection from "@/components/DuplicateQuestionsSection"
 import ExamSettingsSection from "@/components/ExamSettingsSection"
 
@@ -47,11 +48,21 @@ export default async function AdminPage() {
     id: e.id,
     name: e.year
       ? `${e.category.name} ${e.year}년 ${e.round}회`
-      : e.category.name,
+      : e.name,
+    category_name: e.category.name,
     exam_mode: e.examMode,
     duration_minutes: e.durationMinutes,
     sort_order: e.sortOrder,
   }))
+
+  // 카테고리별 그룹핑
+  const examsByCategory = new Map<string, typeof exams>()
+  for (const exam of exams) {
+    const catName = exam.category.name
+    const group = examsByCategory.get(catName) || []
+    group.push(exam)
+    examsByCategory.set(catName, group)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
@@ -92,8 +103,18 @@ export default async function AdminPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
           <h2 className="text-xl font-bold mb-4 dark:text-white">📚 시험별 문제 현황</h2>
           <div className="space-y-3">
-            {exams.map((exam) => (
-              <ExamQuestionCount key={exam.id} examId={exam.id} examName={exam.year ? `${exam.category.name} ${exam.year}년 ${exam.round}회` : exam.category.name} />
+            {Array.from(examsByCategory.entries()).map(([catName, catExams]) => (
+              <CategoryAccordion key={catName} categoryName={catName}>
+                <div className="space-y-2 mt-2">
+                  {catExams.map((exam) => (
+                    <ExamQuestionCount
+                      key={exam.id}
+                      examId={exam.id}
+                      examName={exam.year ? `${exam.category.name} ${exam.year}년 ${exam.round}회` : exam.name}
+                    />
+                  ))}
+                </div>
+              </CategoryAccordion>
             ))}
           </div>
         </div>
