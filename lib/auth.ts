@@ -12,16 +12,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
     Kakao({
       clientId: process.env.KAKAO_CLIENT_ID!,
       clientSecret: process.env.KAKAO_CLIENT_SECRET!,
       // 카카오는 client_secret_post 방식 필수 (에러 E-009 방지)
       client: { token_endpoint_auth_method: "client_secret_post" },
+      allowDangerousEmailAccountLinking: true,
     }),
     Naver({
       clientId: process.env.NAVER_CLIENT_ID!,
       clientSecret: process.env.NAVER_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
     Nodemailer({
       server: {
