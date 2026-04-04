@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
+import { unstable_cache } from "next/cache"
 
 export const revalidate = 60
 
@@ -34,39 +35,34 @@ export default async function CategoryPage({
     notFound()
   }
 
-  const category = await prisma.examCategory.findUnique({
-    where: { id, isActive: true },
-    select: { id: true, name: true, description: true },
-  })
+  const getCategoryData = unstable_cache(
+    async (catId: number) => {
+      const cat = await prisma.examCategory.findUnique({
+        where: { id: catId, isActive: true },
+        select: { id: true, name: true, description: true },
+      })
+      if (!cat) return null
 
-  if (!category) {
-    notFound()
-  }
-
-  const exams = await prisma.exam.findMany({
-    where: {
-      categoryId: id,
-      isPublished: true,
-      examMode: "PRACTICE",
-    },
-    select: {
-      id: true,
-      name: true,
-      year: true,
-      round: true,
-      durationMinutes: true,
-      minTier: true,
-      subjects: {
+      const exs = await prisma.exam.findMany({
+        where: { categoryId: catId, isPublished: true, examMode: "PRACTICE" },
         select: {
-          questionsPerAttempt: true,
+          id: true, name: true, year: true, round: true,
+          durationMinutes: true, minTier: true,
+          subjects: { select: { questionsPerAttempt: true } },
+          _count: { select: { questions: true } },
         },
-      },
-      _count: {
-        select: { questions: true },
-      },
+        orderBy: [{ year: "desc" }, { round: "asc" }],
+      })
+      return { category: cat, exams: exs }
     },
-    orderBy: [{ year: "desc" }, { round: "asc" }],
-  })
+    [`category-${id}`],
+    { revalidate: 60 }
+  )
+
+  const data = await getCategoryData(id)
+  if (!data) notFound()
+
+  const { category, exams } = data
 
   const examList: ExamItem[] = exams.map((exam) => ({
     id: exam.id,
