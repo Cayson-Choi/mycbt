@@ -525,18 +525,20 @@ export default function QuestionsClient() {
                             </div>
                           )}
                           <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                            <div>
-                              {q.answer === 1 ? '✓ ' : ''}1. <MathText text={q.choice_1} />
-                            </div>
-                            <div>
-                              {q.answer === 2 ? '✓ ' : ''}2. <MathText text={q.choice_2} />
-                            </div>
-                            <div>
-                              {q.answer === 3 ? '✓ ' : ''}3. <MathText text={q.choice_3} />
-                            </div>
-                            <div>
-                              {q.answer === 4 ? '✓ ' : ''}4. <MathText text={q.choice_4} />
-                            </div>
+                            {[1, 2, 3, 4].map((n) => (
+                              <div key={n}>
+                                {q.answer === n ? '✓ ' : ''}{n}.{' '}
+                                {q[`choice_${n}_image` as keyof typeof q] ? (
+                                  <img
+                                    src={q[`choice_${n}_image` as keyof typeof q] as string}
+                                    alt={`선택지 ${n}`}
+                                    className="inline-block max-h-10 align-middle"
+                                  />
+                                ) : (
+                                  <MathText text={q[`choice_${n}` as keyof typeof q] as string} />
+                                )}
+                              </div>
+                            ))}
                           </div>
                         </div>
                         <div className="flex gap-2 flex-shrink-0">
