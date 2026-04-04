@@ -24,6 +24,14 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
+        {/* DdakDanDan 히어로 폰트: preload로 최우선 다운로드 */}
+        <link
+          rel="preload"
+          href="/fonts/ddakdandan.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
         {/* Pretendard: preload + stylesheet */}
         <link
           rel="preload"
