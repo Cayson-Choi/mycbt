@@ -641,8 +641,12 @@ NEXTAUTH_URL=http://localhost:3000
 | Step 10 | Cloudinary 세팅 (이미지) | ✅ 완료 (API 코드 작성, 실테스트 미진행) |
 | Step 11 | 핵심 기능 포팅 (52+ 파일) | ✅ 완료 |
 | Step 12 | 성능 최적화 (7+ 라운드) | ✅ 완료 |
-| Step 13 | 토스페이먼츠 세팅 (결제) | ⬜ 예정 |
-| Step 14 | 동영상 강의 기능 | ⬜ 예정 |
+| Step 13 | 선택지 이미지 기능 | ✅ 완료 |
+| Step 14 | OG 메타태그 (카카오톡 미리보기) | ✅ 완료 |
+| Step 15 | 로고 + 헤더/푸터 브랜딩 | ✅ 완료 |
+| Step 16 | 모바일 반응형 개선 | ✅ 완료 |
+| Step 17 | 토스페이먼츠 세팅 (결제) | ⬜ 예정 |
+| Step 18 | 동영상 강의 기능 | ⬜ 예정 |
 
 ### 지금까지 배운 핵심 개념 요약
 
@@ -1602,3 +1606,268 @@ FUNC-T-ET-001
 2. **Prisma 경로**: 프로젝트 디렉토리 안에서 실행해야 `./lib/generated/prisma/client` 경로가 잡힘
 3. **LaTeX 문자열**: 반드시 `String.raw` 사용 (위 섹션 21 참조)
 4. **임시 파일 정리**: 시드 스크립트 실행 후 `rm` 으로 삭제 (git에 올라가면 안 됨)
+
+---
+
+## 26. staleTimes — 브라우저 캐시가 서버 갱신을 무시하는 문제
+
+### 문제 상황
+
+관리자가 시험 시간을 60분→20분으로 바꿨는데, 시험 시작 페이지에서 계속 60분으로 나왔다.
+서버 ISR은 30초마다 갱신하는데 왜?
+
+### 원인: staleTimes
+
+```typescript
+// next.config.ts
+experimental: {
+  staleTimes: {
+    dynamic: 60,
+    static: 300,  // ← 이게 원인! 5분간 브라우저가 캐시 유지
+  },
+},
+```
+
+ISR 페이지는 "static"으로 분류된다. `static: 300`이면 브라우저가 **5분간** 서버에 아예 안 물어보고 캐시된 걸 보여준다. 서버가 30초마다 갱신해도 브라우저가 5분간 무시하는 것.
+
+### 비유
+
+- 서버(ISR) = 주방에서 30초마다 새 요리로 교체
+- staleTimes = 웨이터가 "나 5분 전에 갖다줬으니까 아직 괜찮을 거야" 하고 주방에 안 감
+- 결과: 손님은 5분 된 음식(=60분으로 표시된 페이지)을 계속 봄
+
+### 해결
+
+```typescript
+staleTimes: {
+  dynamic: 30,   // 30초
+  static: 30,    // 30초 (이전 300초에서 대폭 단축)
+},
+```
+
+서버 ISR 주기(30초)와 브라우저 캐시 주기(30초)를 맞춰서, 최대 30초 안에 변경이 반영되도록 함.
+
+### 교훈
+
+캐싱은 **3단계**가 있고, 하나만 바꿔서는 안 된다:
+1. **서버 ISR** (`revalidate`) — 서버에서 새 HTML 만드는 주기
+2. **CDN 캐시** — Vercel 엣지에서 캐시 유지 시간
+3. **브라우저 캐시** (`staleTimes`) — 클라이언트가 서버에 안 물어보는 시간
+
+세 개가 전부 짧아야 변경이 빠르게 반영된다.
+
+---
+
+## 27. 모바일 한글 입력 문제 (IME Composition)
+
+### 문제 상황
+
+회원가입 페이지에서 아이디를 입력하려고 하면 **한글이 입력이 안 됨**. 전화번호는 입력이 됨.
+PC/모바일 상관없이 발생.
+
+### 원인
+
+```typescript
+const handleNicknameChange = (e) => {
+  const value = e.target.value.replace(/[^a-zA-Z0-9가-힣_]/g, "").slice(0, 20)
+  setNickname(value)
+}
+```
+
+문제 2가지:
+
+**1) 정규식 범위 누락**
+- `가-힣` = 완성된 한글만 (가, 나, 다, 강, 김 등)
+- 한글 조합 중 나오는 자음/모음 (ㄱ, ㅏ, ㄱㅏ 등)은 `가-힣` 밖
+- 결과: 조합 중인 글자가 정규식에 의해 **즉시 삭제**됨
+
+**2) onChange가 IME 조합 중에도 실행됨**
+- 모바일 한글 키보드에서 "강"을 입력하려면: ㄱ → 가 → 강 과정을 거침
+- 매 단계마다 onChange 실행 → ㄱ이 `가-힣` 밖이라 삭제 → 영원히 한글 입력 불가
+
+### 해결
+
+```typescript
+const [isComposing, setIsComposing] = useState(false)
+
+const handleNicknameChange = (e) => {
+  // IME 조합 중에는 필터링하지 않음
+  if (isComposing) {
+    setNickname(e.target.value)
+    return
+  }
+  // 조합 완료 후에만 필터링 (ㄱ-ㅎ, ㅏ-ㅣ도 허용)
+  const value = e.target.value.replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ_]/g, "").slice(0, 20)
+  setNickname(value)
+}
+
+// input에 추가
+<input
+  onCompositionStart={() => setIsComposing(true)}
+  onCompositionEnd={(e) => {
+    setIsComposing(false)
+    // 조합 완료 후 필터링 적용
+    const value = e.target.value.replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ_]/g, "").slice(0, 20)
+    setNickname(value)
+  }}
+/>
+```
+
+### 비유
+
+- `onChange` = 편집자가 작가가 한 글자 쓸 때마다 검열
+- `onCompositionStart/End` = "잠깐, 지금 한글 조합 중이니까 다 쓸 때까지 기다려"
+- 조합 완료 후 검열 → 정상 작동
+
+### 핵심 정리
+
+한글 입력 관련 input을 만들 때는 반드시:
+1. 정규식에 `ㄱ-ㅎ`, `ㅏ-ㅣ` 포함
+2. `onCompositionStart/End`로 조합 상태 추적
+3. 조합 중에는 필터링 건너뜀
+
+---
+
+## 28. 모바일 반응형 자주 겪는 문제
+
+### 문제 1: flex 아이템 오버플로우
+
+```
+[     input      ] [중복확인]     ← PC에서는 괜찮음
+[     input      ] [중복확인]→    ← 모바일에서 삐져나감!
+```
+
+**원인:** flex 컨테이너에서 input이 최소 너비 이하로 줄어들지 않음
+
+**해결:**
+```html
+<input className="flex-1 min-w-0 ..." />     <!-- min-w-0 추가! -->
+<button className="flex-shrink-0 ..." />       <!-- 버튼은 줄어들지 않게 -->
+```
+
+`min-w-0`이 핵심. flex 아이템의 기본 `min-width`가 `auto`라서 내용물보다 작아지지 않는데, `min-w-0`으로 제한을 풀어야 줄어들 수 있음.
+
+### 문제 2: min-h-[60vh]로 footer 겹침
+
+```
+PC (높이 1080px): 60vh = 648px → 콘텐츠 들어가고 footer도 아래에 잘 보임
+모바일 (높이 700px): 60vh = 420px → 로그인 폼이 420px보다 크면 footer가 겹침!
+```
+
+**해결:**
+```html
+<!-- 모바일에서는 min-h 제거, PC에서만 적용 -->
+<div className="min-h-0 sm:min-h-[60vh] py-8">
+```
+
+### 문제 3: 패딩이 PC 기준
+
+```html
+<!-- 변경 전 -->
+<div className="p-8">  <!-- 32px — 모바일에서 너무 큼 -->
+
+<!-- 변경 후 -->
+<div className="p-5 sm:p-8">  <!-- 모바일 20px, PC 32px -->
+```
+
+---
+
+## 29. 이미지 배경 제거 (rembg)
+
+### 뭐하는 거?
+
+로고 이미지가 주황색 배경 위에 있어서 헤더/푸터에 넣으면 이상하게 보인다.
+**rembg**라는 AI 도구로 배경을 자동 제거할 수 있다.
+
+### 사용법
+
+```bash
+pip install rembg
+```
+
+```python
+from rembg import remove
+from PIL import Image
+
+img = Image.open("logo.png").convert("RGB")
+result = remove(img)   # AI가 배경 자동 제거 → 투명 PNG
+result.save("logo.png")
+```
+
+### 비유
+
+- 포토샵에서 배경 지우기를 일일이 하는 것 = 수작업
+- rembg = AI가 알아서 배경/전경 구분해서 배경만 투명으로 만듦
+
+### 주의사항
+
+- 첫 실행 시 AI 모델(u2net, 176MB) 다운로드가 필요함
+- 로고와 배경 색상이 비슷하면 (금색 왕관 + 주황 배경) 단순 색상 필터(HSV)보다 **rembg가 정확**
+- RGB 이미지는 `convert("RGB")` 후 처리하면 RGBA(투명) 결과가 나옴
+
+---
+
+## 30. CSS 애니메이션 — 무지개 색상 변환
+
+### 구현 방법
+
+```css
+@keyframes rainbowText {
+  0%, 100% { color: #ef4444; }   /* 빨강 */
+  14% { color: #f97316; }        /* 주황 */
+  28% { color: #eab308; }        /* 노랑 */
+  42% { color: #22c55e; }        /* 초록 */
+  57% { color: #3b82f6; }        /* 파랑 */
+  71% { color: #6366f1; }        /* 남색 */
+  85% { color: #a855f7; }        /* 보라 */
+}
+.animate-rainbow-text {
+  animation: rainbowText 60s ease-in-out infinite;
+}
+```
+
+### 사용법
+
+```html
+<span className="animate-rainbow-text">전기짱</span>
+```
+
+### 핵심 포인트
+
+- `60s` = 1분 주기로 천천히 변화 (빠르면 정신없고, 느리면 자연스러움)
+- `ease-in-out` = 색상 전환이 부드럽게 (linear보다 자연스러움)
+- `infinite` = 무한 반복
+- `@keyframes`에서 % = 전체 시간의 비율 (14% = 60초 × 0.14 = 8.4초 지점)
+
+### prefers-reduced-motion
+
+움직임 민감한 사용자를 위해 애니메이션 끄기:
+```css
+@media (prefers-reduced-motion: reduce) {
+  .animate-rainbow-text { animation: none; }
+}
+```
+
+---
+
+## 31. 추가 버그 모음 (세션 2)
+
+### 버그 9: staleTimes로 관리자 수정 미반영
+- **증상:** 관리자가 시험 시간 60분→20분 변경했는데 페이지에 계속 60분
+- **원인:** `staleTimes.static = 300` → 브라우저가 5분간 서버에 안 물어봄
+- **해결:** `static: 300` → `static: 30`으로 단축
+
+### 버그 10: 모바일 한글 입력 불가 (회원가입)
+- **증상:** 아이디 입력란에 한글이 아예 안 써짐 (전화번호는 됨)
+- **원인:** `onChange`에서 `[^a-zA-Z0-9가-힣_]` 정규식이 IME 조합 중 자음/모음을 삭제
+- **해결:** `ㄱ-ㅎ`, `ㅏ-ㅣ` 추가 + `onCompositionStart/End`로 조합 중 필터링 건너뜀
+
+### 버그 11: 중복확인 버튼 모바일 오버플로우
+- **증상:** 모바일에서 "중복확인" 버튼이 오른쪽으로 삐져나감
+- **원인:** input에 `min-w-0` 없이 `flex-1`만 사용
+- **해결:** input에 `min-w-0`, 버튼에 `flex-shrink-0` 추가
+
+### 버그 12: 로그인 페이지 footer 겹침 (모바일)
+- **증상:** 모바일에서 이메일 로그인 버튼과 footer가 겹침
+- **원인:** `min-h-[60vh]`가 모바일 화면에서는 콘텐츠보다 작아서 footer가 밀려 올라옴
+- **해결:** `min-h-0 sm:min-h-[60vh] py-8` — 모바일은 min-h 제거, PC만 적용
