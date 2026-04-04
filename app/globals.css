@@ -201,6 +201,20 @@ body {
   animation: rankPulse 2s ease-in-out infinite;
 }
 
+/* Header rainbow text - 1분 주기 빨주노초파남보 */
+@keyframes rainbowText {
+  0%, 100% { color: #ef4444; }
+  14% { color: #f97316; }
+  28% { color: #eab308; }
+  42% { color: #22c55e; }
+  57% { color: #3b82f6; }
+  71% { color: #6366f1; }
+  85% { color: #a855f7; }
+}
+.animate-rainbow-text {
+  animation: rainbowText 60s ease-in-out infinite;
+}
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .float-animation,

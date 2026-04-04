@@ -22,8 +22,10 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* 로고 */}
-          <Link href="/" className="text-xl font-black tracking-tight">
-            전기짱
+          <Link href="/" className="flex items-center gap-1.5">
+            <img src="/logo.png" alt="" className="w-7 h-7 object-contain" />
+            <span className="text-xl font-black tracking-tight animate-rainbow-text">전기짱</span>
+            <span className="hidden sm:inline text-xs text-gray-400 dark:text-gray-500 ml-1 font-medium">차원이 다른 CBT</span>
           </Link>
 
           {/* 우측 메뉴 */}
