@@ -253,7 +253,7 @@ export default function MyPage() {
             href="/my/profile"
             className="flex-1 px-3 py-2.5 bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 text-sm"
           >
-            프로필 수정
+            정보수정 및 탈퇴
           </Link>
           <Link
             href="/my/wrong-answers"
