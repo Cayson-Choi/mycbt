@@ -57,7 +57,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 pb-12">
       <div className="text-center">
         <h1 className="text-3xl font-bold mb-2">로그인</h1>
         <p className="text-gray-500 dark:text-gray-400">
