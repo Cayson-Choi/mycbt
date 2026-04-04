@@ -58,7 +58,8 @@ export async function GET() {
         id: e.id,
         name: e.year
           ? `${e.category?.name} ${e.year}년 ${e.round}회`
-          : (e.category?.name || e.name),
+          : e.name,
+        category_name: e.category?.name || "",
         exam_mode: e.examMode,
         duration_minutes: e.durationMinutes,
         sort_order: e.sortOrder,

@@ -19,10 +19,15 @@ export async function GET(request: Request) {
     // 쿼리 파라미터
     const { searchParams } = new URL(request.url)
     const examId = searchParams.get("exam_id")
+    const examIds = searchParams.get("exam_ids")
     const subjectId = searchParams.get("subject_id")
 
     const where: any = {}
-    if (examId) where.examId = parseInt(examId)
+    if (examId) {
+      where.examId = parseInt(examId)
+    } else if (examIds) {
+      where.examId = { in: examIds.split(",").map(Number).filter((n) => !isNaN(n)) }
+    }
     if (subjectId) where.subjectId = parseInt(subjectId)
 
     const questions = await prisma.question.findMany({

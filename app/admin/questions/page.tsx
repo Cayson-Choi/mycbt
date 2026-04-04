@@ -16,6 +16,7 @@ export default function AdminQuestionsPage() {
   const [questions, setQuestions] = useState<any[]>([])
   const [filteredQuestions, setFilteredQuestions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [examFilter, setExamFilter] = useState<string>(searchParams.get('exam') || 'all')
   const [subjectFilter, setSubjectFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -31,13 +32,24 @@ export default function AdminQuestionsPage() {
   useEffect(() => {
     fetch('/api/admin/exam-settings')
       .then(res => res.ok ? res.json() : { exams: [] })
-      .then(data => setExams(data.exams || []))
+      .then(data => {
+        const examsList = data.exams || []
+        setExams(examsList)
+        // URL 파라미터로 시험이 지정된 경우 카테고리도 자동 선택
+        const examParam = searchParams.get('exam')
+        if (examParam && examParam !== 'all') {
+          const matched = examsList.find((e: any) => e.id.toString() === examParam)
+          if (matched?.category_name) {
+            setCategoryFilter(matched.category_name)
+          }
+        }
+      })
       .catch(() => {})
   }, [])
 
   useEffect(() => {
     loadQuestions()
-  }, [examFilter])
+  }, [examFilter, categoryFilter])
 
   // 과목 목록 로드
   useEffect(() => {
@@ -104,10 +116,18 @@ export default function AdminQuestionsPage() {
 
   const loadQuestions = async () => {
     try {
-      const url =
-        examFilter === 'all'
-          ? '/api/admin/questions'
-          : `/api/admin/questions?exam_id=${examFilter}`
+      let url = '/api/admin/questions'
+      if (examFilter !== 'all') {
+        url = `/api/admin/questions?exam_id=${examFilter}`
+      } else if (categoryFilter !== 'all') {
+        // 카테고리 선택 + 전체 시험: 해당 카테고리의 모든 exam_id를 쿼리
+        const catExamIds = exams
+          .filter((e: any) => e.category_name === categoryFilter)
+          .map((e: any) => e.id)
+        if (catExamIds.length > 0) {
+          url = `/api/admin/questions?exam_ids=${catExamIds.join(',')}`
+        }
+      }
 
       const res = await fetch(url)
       if (res.status === 401) {
@@ -287,30 +307,54 @@ export default function AdminQuestionsPage() {
         {/* 필터 및 검색 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
           <div className="flex items-center gap-3 flex-wrap">
+            {/* 1단계: 카테고리 */}
             <select
-              value={examFilter}
+              value={categoryFilter}
               onChange={(e) => {
-                setExamFilter(e.target.value)
+                setCategoryFilter(e.target.value)
+                setExamFilter('all')
                 setSubjectFilter('all')
               }}
               className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             >
-              <option value="all">전체 시험</option>
-              {exams.map((exam) => (
-                <option key={exam.id} value={exam.id.toString()}>
-                  {exam.name}
+              <option value="all">전체 카테고리</option>
+              {Array.from(new Set(exams.map((e: any) => e.category_name))).filter(Boolean).map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
                 </option>
               ))}
             </select>
 
-            {subjects.length > 0 && (
+            {/* 2단계: 시험 (카테고리 선택 시) */}
+            {categoryFilter !== 'all' && (
+              <select
+                value={examFilter}
+                onChange={(e) => {
+                  setExamFilter(e.target.value)
+                  setSubjectFilter('all')
+                }}
+                className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              >
+                <option value="all">전체 시험</option>
+                {exams
+                  .filter((e: any) => e.category_name === categoryFilter)
+                  .map((exam: any) => (
+                    <option key={exam.id} value={exam.id.toString()}>
+                      {exam.name}
+                    </option>
+                  ))}
+              </select>
+            )}
+
+            {/* 3단계: 과목 (시험 선택 시) */}
+            {examFilter !== 'all' && subjects.length > 0 && (
               <select
                 value={subjectFilter}
                 onChange={(e) => setSubjectFilter(e.target.value)}
                 className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
               >
                 <option value="all">전체 과목</option>
-                {subjects.map((subject) => (
+                {subjects.map((subject: any) => (
                   <option key={subject.id} value={subject.id.toString()}>
                     {subject.name}
                   </option>
