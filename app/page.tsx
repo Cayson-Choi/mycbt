@@ -1,19 +1,13 @@
-import { redirect } from "next/navigation"
-import { auth } from "@/lib/auth"
 import HeroSection from "@/components/HeroSection"
 import HomeExamCards from "@/components/HomeExamCards"
+import ProfileGuard from "@/components/ProfileGuard"
 
-export default async function Home() {
-  // 로그인된 사용자인데 전화번호가 없으면 → 추가정보기입 페이지로
-  const session = await auth()
-  if (session?.user?.id) {
-    if (!session.user.nickname || !session.user.phone) {
-      redirect("/complete-profile")
-    }
-  }
+export const revalidate = 60
 
+export default function Home() {
   return (
     <div>
+      <ProfileGuard />
       {/* Hero */}
       <section>
         <HeroSection />
