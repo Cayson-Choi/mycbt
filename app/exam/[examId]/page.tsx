@@ -2,8 +2,16 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import ExamStartClient from "./ExamStartClient"
 
-// 시험 시작 페이지는 관리자가 수정한 정보(시간, 문항 수 등)를 즉시 반영해야 하므로 캐시 사용 안 함
-export const dynamic = "force-dynamic"
+// 30초마다 갱신 — 관리자 수정 시 최대 30초 후 반영, 사용자에게는 캐시로 빠르게 표시
+export const revalidate = 30
+
+export async function generateStaticParams() {
+  const exams = await prisma.exam.findMany({
+    where: { isPublished: true },
+    select: { id: true },
+  })
+  return exams.map((e) => ({ examId: String(e.id) }))
+}
 
 export default async function ExamStartPage({
   params,
