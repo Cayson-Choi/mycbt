@@ -3,10 +3,44 @@
 import { signIn } from "next-auth/react"
 import { useState } from "react"
 
+function isKakaoInApp() {
+  if (typeof window === "undefined") return false
+  const ua = navigator.userAgent.toLowerCase()
+  return ua.includes("kakaotalk")
+}
+
+function openExternalBrowser(url: string) {
+  // 카카오톡 인앱: intent 스킴으로 외부 브라우저 열기
+  const intentUrl =
+    `intent://${url.replace(/^https?:\/\//, "")}#Intent;scheme=https;package=com.android.chrome;end`
+  // iOS 카카오톡은 Safari로 열리도록 itms-apps 대신 직접 location 변경
+  const ua = navigator.userAgent.toLowerCase()
+  if (ua.includes("iphone") || ua.includes("ipad")) {
+    // iOS: 카카오톡 내에서 Safari 열기
+    window.location.href = url
+  } else {
+    // Android: Chrome intent
+    window.location.href = intentUrl
+  }
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [emailSent, setEmailSent] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [kakaoAlert, setKakaoAlert] = useState(false)
+
+  const handleGoogleLogin = () => {
+    if (isKakaoInApp()) {
+      setKakaoAlert(true)
+      // 현재 페이지 URL을 외부 브라우저로 열기
+      setTimeout(() => {
+        openExternalBrowser(window.location.href)
+      }, 1500)
+      return
+    }
+    signIn("google", { callbackUrl: "/" })
+  }
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,9 +60,21 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-sm space-y-3">
+        {/* 카카오톡 인앱 구글 로그인 안내 */}
+        {kakaoAlert && (
+          <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg text-sm">
+            <p className="font-semibold text-yellow-800 dark:text-yellow-300 mb-1">
+              카카오톡 내에서는 구글 로그인이 불가합니다.
+            </p>
+            <p className="text-yellow-700 dark:text-yellow-400">
+              외부 브라우저로 이동합니다. 잠시만 기다려주세요...
+            </p>
+          </div>
+        )}
+
         {/* 소셜 로그인 */}
         <button
-          onClick={() => signIn("google", { callbackUrl: "/" })}
+          onClick={handleGoogleLogin}
           className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
