@@ -1335,3 +1335,270 @@ export default function ProfileGuard() {
 - **증상:** 회원 탈퇴했는데 사이트가 로그인 상태로 남아있음
 - **원인:** DB에서 유저를 삭제했지만 JWT 세션 쿠키가 브라우저에 남아있었음
 - **해결:** 탈퇴 후 `signOut({ callbackUrl: '/' })` 호출하여 세션 쿠키 삭제
+
+### 버그 6: LaTeX 백슬래시 손실
+- **증상:** 수학 공식 선택지가 `∂arepsilon`, `dfrac`, `imes`처럼 깨져서 표시
+- **원인:** TypeScript에서 `"$\\varepsilon$"` 대신 일반 문자열을 사용하여 `\v`, `\d`, `\t`가 이스케이프 시퀀스로 해석됨
+- **해결:** `String.raw` 템플릿 리터럴 사용 → `String.raw\`$\varepsilon$\`` 으로 백슬래시 보존
+
+### 버그 7: next/image 외부 이미지 차단
+- **증상:** 관리자 페이지에서 문제 이미지(Cloudinary)가 안 보임, "문제 이미지" alt 텍스트만 표시
+- **원인:** `next.config.ts`의 `images.remotePatterns`에 Cloudinary 도메인이 등록되지 않음
+- **해결:** `res.cloudinary.com` 도메인 추가
+
+### 버그 8: OG 이미지 404
+- **증상:** 카카오톡 링크 미리보기에서 이미지가 안 나옴
+- **원인:** `public/og.png` 파일이 git에 커밋되지 않아서 Vercel에 배포 안 됨
+- **해결:** `git add public/og.png` → 커밋/푸시
+
+---
+
+## 20. 선택지 이미지 기능
+
+### 왜 필요한가?
+
+"배전반을 나타내는 그림 기호는?" 같은 문제는 선택지 자체가 **이미지**여야 한다.
+텍스트로 "직사각형 안에 X 표시 (빈 배경)"이라고 쓰면 실제 시험과 다르다.
+
+### DB 구조
+
+Question 테이블에 4개 필드 추가:
+
+```
+choice_1_image  -- 선택지 1 이미지 URL (없으면 텍스트 표시)
+choice_2_image  -- 선택지 2 이미지 URL
+choice_3_image  -- 선택지 3 이미지 URL
+choice_4_image  -- 선택지 4 이미지 URL
+```
+
+### 렌더링 로직
+
+```
+이미지 URL이 있으면 → <img> 태그로 이미지 표시
+이미지 URL이 없으면 → 기존처럼 텍스트(MathText) 표시
+```
+
+이 로직이 적용된 페이지:
+- 시험 풀기 (ExamAttemptClient)
+- 시험 결과 (ExamResultContent)
+- 오답노트 (WrongAnswersContent)
+- 관리자 문제 목록 (QuestionsClient)
+- 관리자 문제 편집기 (QuestionSplitEditor) - 미리보기 포함
+
+### 관리자 이미지 업로드
+
+선택지 이미지 입력은 본문 이미지와 **동일한 방식** 지원:
+1. **URL 직접 입력** — 이미지 주소 붙여넣기
+2. **Base64 붙여넣기** — `data:image/...` 자동 감지 → Cloudinary 업로드
+3. **Ctrl+V 붙여넣기** — 클립보드 이미지 자동 업로드
+4. **파일 선택** — "파일" 버튼으로 탐색기에서 선택
+5. **삭제** — "삭제" 버튼으로 이미지 제거
+6. **미리보기** — 업로드된 이미지 썸네일 표시
+
+---
+
+## 21. KaTeX로 수학 수식 표시
+
+### 뭐하는 거?
+
+전기 시험 문제에는 분수, 루트, 삼각함수 같은 수학 공식이 많다.
+이걸 예쁘게 표시하려면 **KaTeX**(카텍)이라는 수학 렌더링 라이브러리를 사용한다.
+
+### 사용법
+
+문제 텍스트나 선택지에 `$...$`로 감싸면 된다.
+
+```
+입력: $\dfrac{V_0 - V_n}{V_n} \times 100\%$
+
+결과:  V₀ - Vₙ
+      ───────── × 100%
+         Vₙ
+```
+
+### 자주 쓰는 LaTeX 명령어
+
+| 명령어 | 결과 | 설명 |
+|--------|------|------|
+| `\dfrac{a}{b}` | a/b 분수 | 큰 분수 표시 |
+| `\sqrt{x}` | √x | 루트 |
+| `\times` | × | 곱셈 기호 |
+| `\cos\theta` | cosθ | 코사인 세타 |
+| `\tan^{-1}` | tan⁻¹ | 아크탄젠트 |
+| `\omega` | ω | 오메가 |
+| `\varepsilon` | ε | 엡실론 |
+| `V_n` | Vₙ | 아래 첨자 |
+| `10^3` | 10³ | 위 첨자 |
+| `\Omega` | Ω | 옴 기호 |
+
+### 주의: String.raw 사용 필수
+
+TypeScript/JavaScript에서 LaTeX 문자열을 코드로 작성할 때 반드시 `String.raw`를 사용해야 한다.
+
+```typescript
+// ❌ 잘못된 방식 — \v, \t, \d 등이 이스케이프 시퀀스로 해석됨
+const bad = "$\\varepsilon$"  // \v → 수직탭 문자로 변환돼버림!
+
+// ✅ 올바른 방식 — String.raw는 백슬래시를 있는 그대로 유지
+const good = String.raw`$\varepsilon$`  // \v가 그대로 보존됨
+```
+
+**비유:**
+- 일반 문자열 = 편지를 읽으면서 약어를 자동 번역하는 비서 (`\n` → 줄바꿈, `\t` → 탭)
+- `String.raw` = 편지를 있는 그대로 전달하는 비서 (아무것도 건드리지 않음)
+
+---
+
+## 22. force-dynamic vs ISR (페이지 캐싱 전략)
+
+### force-dynamic = 주문 즉시 조리
+
+```
+손님이 주문 → 매번 주방에서 새로 요리 → 항상 최신 상태
+```
+
+```typescript
+export const dynamic = "force-dynamic"  // 매 요청마다 서버에서 새로 렌더링
+```
+
+- **장점:** 관리자가 수정하면 **즉시** 반영
+- **단점:** 매번 DB 조회 → **0.5~1초** 걸림
+
+### ISR = 미리 만들어두고 주기적으로 교체
+
+```
+첫 손님이 주문 → 요리를 진열대에 올려둠
+→ 30초간 다음 손님들은 진열대에서 바로 가져감 (DB 안 감!)
+→ 30초 지나면 새로 만들어서 교체
+```
+
+```typescript
+export const revalidate = 30  // 30초마다 갱신
+```
+
+- **장점:** 진열대(캐시)에서 바로 꺼내니까 **0.1초** 이내
+- **단점:** 관리자가 수정해도 **최대 30초** 기다려야 반영
+
+### 우리는 뭘 쓰나?
+
+**ISR (revalidate = 30)** 을 쓴다.
+
+이유: 관리자가 시험 정보를 바꾸는 건 하루에 한두 번 있을까 말까.
+반면 사용자가 시험 페이지를 여는 건 하루에 수백 번.
+30초 지연 때문에 관리자가 약간 불편한 것 vs 수백 명이 매번 1초씩 기다리는 것
+→ **ISR이 압도적으로 유리**
+
+### 페이지별 전략 정리
+
+| 페이지 | 전략 | 이유 |
+|--------|------|------|
+| 홈페이지 | ISR 60초 | 자주 안 바뀜 |
+| 카테고리 페이지 | ISR 60초 + generateStaticParams | 시험 목록은 천천히 변함 |
+| 시험 시작 페이지 | ISR 30초 + generateStaticParams | 시험 정보 변경 빠르게 반영 |
+| 시험 풀기 | 서버 컴포넌트 (캐시 없음) | 개인별 답안 데이터 |
+| 시험 결과 | 서버 컴포넌트 (캐시 없음) | 개인별 성적 데이터 |
+| 마이페이지 | 서버 컴포넌트 (캐시 없음) | 개인별 기록 |
+| 관리자 페이지 | 서버 컴포넌트 (캐시 없음) | 항상 최신 필요 |
+
+---
+
+## 23. OG (Open Graph) 메타태그
+
+### 뭐하는 거?
+
+카카오톡이나 슬랙에 URL을 보내면 **미리보기 카드**가 나온다.
+이게 OG 메타태그를 읽어서 보여주는 것이다.
+
+```html
+<meta property="og:title" content="전기짱" />
+<meta property="og:description" content="전기 박사와 기술사들이 검증한 CBT 문제" />
+<meta property="og:image" content="https://www.mycbt.xyz/og.png" />
+```
+
+### Next.js에서 설정하는 법
+
+```typescript
+// app/layout.tsx
+export const metadata: Metadata = {
+  title: "전기짱",
+  description: "전기 박사와 기술사들이 검증한 CBT 문제",
+  openGraph: {
+    title: "전기짱",
+    description: "전기 박사와 기술사들이 검증한 CBT 문제",
+    siteName: "전기짱",
+    url: "https://www.mycbt.xyz",
+    images: [
+      {
+        url: "https://www.mycbt.xyz/og.png",  // 절대 URL 필수!
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+}
+```
+
+### 주의사항
+
+1. **이미지 URL은 절대 경로** — `/og.png`가 아니라 `https://www.mycbt.xyz/og.png`
+2. **이미지 파일은 git에 커밋** — `public/og.png`가 커밋 안 되면 Vercel에 배포 안 됨 (404)
+3. **카카오톡 캐시** — OG 수정 후에도 카톡에서 예전 것이 보이면 [카카오 캐시 초기화](https://developers.kakao.com/tool/debugger/sharing) 필요
+4. **권장 이미지 크기** — 1200 × 630 픽셀
+
+---
+
+## 24. Cloudinary 이미지 저장소
+
+### next/image와 외부 이미지
+
+Next.js의 `<Image>` 컴포넌트는 보안상 **허용된 도메인의 이미지만** 표시한다.
+허용되지 않은 도메인은 차단되어 깨진 이미지로 나온다.
+
+### 도메인 등록 방법
+
+```typescript
+// next.config.ts
+images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'res.cloudinary.com',  // ← Cloudinary 허용
+    },
+  ],
+},
+```
+
+### 비유
+
+- `<Image>` = 보안이 철저한 우편함 (등록된 발신자만 통과)
+- `remotePatterns` = 허용 목록 (이 목록에 있는 도메인만 이미지 통과)
+- 등록 안 하면 = "이 발신자 모르겠는데?" → 이미지 차단
+
+---
+
+## 25. 문제 등록 시 알게 된 것들
+
+### 문제 코드 체계
+
+```
+FUNC-T-ET-001
+│     │  │  └── 일련번호
+│     │  └──── 과목 약어 (ET=전기이론, EM=전기기기, EI=전기설비)
+│     └─────── T=맛보기(Trial)
+└───────────── FUNC=전기기능사
+```
+
+### 과목 분류 기준
+
+| 문제 내용 | 과목 | 예시 |
+|-----------|------|------|
+| 회로, 저항, 전압, 전류 계산 | 전기이론 | RC 병렬회로 위상각, Rx 저항값 |
+| 전동기, 변압기, 발전기 | 전기기기 | 유도 전동기 효율, 전압 변동률, 기동 토크 |
+| 배선, 기호, 법규, 시설 | 전기설비 | 배전반 그림 기호 |
+
+### 시드 스크립트 작성 시 주의
+
+1. **환경변수 로드**: `import * as dotenv from "dotenv"; dotenv.config({ path: ".env.local" })`
+2. **Prisma 경로**: 프로젝트 디렉토리 안에서 실행해야 `./lib/generated/prisma/client` 경로가 잡힘
+3. **LaTeX 문자열**: 반드시 `String.raw` 사용 (위 섹션 21 참조)
+4. **임시 파일 정리**: 시드 스크립트 실행 후 `rm` 으로 삭제 (git에 올라가면 안 됨)
