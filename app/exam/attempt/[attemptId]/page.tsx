@@ -61,7 +61,7 @@ const QuestionCard = memo(function QuestionCard({
   onAnswer: (questionId: number, choice: number) => void
   onAnswerText: (questionId: number, text: string) => void
 }) {
-  const questionType = question.question_type || 'CHOICE'
+  const questionType = question.question_type || 'MULTIPLE_CHOICE'
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border dark:border-gray-700">
@@ -72,7 +72,7 @@ const QuestionCard = memo(function QuestionCard({
         <div className="flex-1">
           <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
             <span>{question.subject_name}</span>
-            {questionType !== 'CHOICE' && (
+            {questionType !== 'MULTIPLE_CHOICE' && (
               <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">
                 {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
               </span>
@@ -96,7 +96,7 @@ const QuestionCard = memo(function QuestionCard({
             </div>
           )}
 
-          {questionType === 'CHOICE' ? (
+          {questionType === 'MULTIPLE_CHOICE' ? (
             <div className="space-y-3">
               {[1, 2, 3, 4].map((choice) => (
                 <label
