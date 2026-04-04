@@ -1,481 +1,122 @@
-'use client'
+import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+import { redirect, notFound } from "next/navigation"
+import Link from "next/link"
+import ExamAttemptClient from "./ExamAttemptClient"
+import type { PaperData } from "./ExamAttemptClient"
 
-import { useEffect, useState, useCallback, useRef, use, memo } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import MathText from '@/components/MathText'
-import ConfirmDialog from '@/components/ConfirmDialog'
-// FullscreenEnforcer 제거됨
-
-// --- ExamTimer: isolated timer component so ticks don't re-render the question list ---
-function ExamTimer({ expiresAt, onExpire }: { expiresAt: string; onExpire: () => void }) {
-  const [timeLeft, setTimeLeft] = useState(() => {
-    const diff = Math.max(0, Math.floor((new Date(expiresAt).getTime() - Date.now()) / 1000))
-    return diff
-  })
-
-  useEffect(() => {
-    const target = new Date(expiresAt).getTime()
-
-    const update = () => {
-      const diff = Math.max(0, Math.floor((target - Date.now()) / 1000))
-      setTimeLeft(diff)
-      if (diff === 0) onExpire()
-    }
-
-    update()
-    const interval = setInterval(update, 1000)
-    return () => clearInterval(interval)
-  }, [expiresAt, onExpire])
-
-  const minutes = Math.floor(timeLeft / 60)
-  const seconds = timeLeft % 60
-
-  return (
-    <div className="text-right">
-      <div
-        className={`text-2xl font-bold ${
-          timeLeft < 300 ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'
-        }`}
-      >
-        {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-      </div>
-      <div className="text-xs text-gray-500 dark:text-gray-400">남은 시간</div>
-    </div>
-  )
-}
-
-// --- QuestionCard: memoized so only the card whose answer changed re-renders ---
-const QuestionCard = memo(function QuestionCard({
-  question,
-  index,
-  selectedAnswer,
-  answerText,
-  onAnswer,
-  onAnswerText,
-}: {
-  question: any
-  index: number
-  selectedAnswer: number | undefined
-  answerText: string | undefined
-  onAnswer: (questionId: number, choice: number) => void
-  onAnswerText: (questionId: number, text: string) => void
-}) {
-  const questionType = question.question_type || 'MULTIPLE_CHOICE'
-
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border dark:border-gray-700">
-      <div className="flex items-start gap-4 mb-4">
-        <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center font-bold text-blue-700 dark:text-blue-300">
-          {index + 1}
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
-            <span>{question.subject_name}</span>
-            {questionType !== 'MULTIPLE_CHOICE' && (
-              <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">
-                {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
-              </span>
-            )}
-          </div>
-          <MathText
-            text={question.question_text}
-            className="text-lg font-medium mb-4 block dark:text-white"
-          />
-
-          {question.image_url && (
-            <div className="mb-4 relative w-full max-w-lg">
-              <Image
-                src={question.image_url}
-                alt="문제 이미지"
-                width={600}
-                height={400}
-                className="w-full h-auto rounded"
-                loading="lazy"
-              />
-            </div>
-          )}
-
-          {questionType === 'MULTIPLE_CHOICE' ? (
-            <div className="space-y-3">
-              {[1, 2, 3, 4].map((choice) => (
-                <label
-                  key={choice}
-                  className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                    selectedAnswer === choice
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name={`question-${question.question_id}`}
-                    checked={selectedAnswer === choice}
-                    onChange={() => onAnswer(question.question_id, choice)}
-                    className="mt-1"
-                  />
-                  <span className="flex-1 dark:text-gray-200">
-                    {choice}.{' '}
-                    <MathText text={question[`choice_${choice}`]} />
-                  </span>
-                </label>
-              ))}
-            </div>
-          ) : questionType === 'SHORT_ANSWER' ? (
-            <input
-              type="text"
-              value={answerText || ''}
-              onChange={(e) => onAnswerText(question.question_id, e.target.value)}
-              placeholder="답을 입력하세요"
-              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none bg-white dark:bg-gray-700 dark:text-white"
-            />
-          ) : (
-            <textarea
-              value={answerText || ''}
-              onChange={(e) => onAnswerText(question.question_id, e.target.value)}
-              placeholder="답안을 작성하세요"
-              rows={5}
-              className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none bg-white dark:bg-gray-700 dark:text-white resize-vertical"
-            />
-          )}
-        </div>
-      </div>
-    </div>
-  )
-})
-
-// --- QuitButton: isolated so opening the quit dialog doesn't re-render the question list ---
-function QuitButton({ attemptId }: { attemptId: string }) {
-  const router = useRouter()
-  const [showQuit, setShowQuit] = useState(false)
-
-  const handleQuit = async () => {
-    setShowQuit(false)
-    // 시험 기록 완전 삭제
-    await fetch(`/api/attempts/${attemptId}/abandon`, { method: 'POST' }).catch(() => {})
-    router.push('/')
-  }
-
-  return (
-    <>
-      <button
-        onClick={() => setShowQuit(true)}
-        className="px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
-      >
-        중단하고 나가기
-      </button>
-      <ConfirmDialog
-        open={showQuit}
-        title="시험 중단"
-        message={"시험을 중단하시겠습니까?\n작성한 답안은 모두 삭제됩니다."}
-        confirmText="중단하기"
-        confirmColor="red"
-        onConfirm={handleQuit}
-        onCancel={() => setShowQuit(false)}
-      />
-    </>
-  )
-}
-
-// --- SubmitSection: isolated so opening submit dialogs doesn't re-render the question list ---
-function SubmitSection({
-  answeredCount,
-  totalCount,
-  attemptId,
-  onError,
-}: {
-  answeredCount: number
-  totalCount: number
-  attemptId: string
-  onError: (msg: string) => void
-}) {
-  const router = useRouter()
-  const [submitting, setSubmitting] = useState(false)
-  const [confirmType, setConfirmType] = useState<
-    null | 'submit-unanswered' | 'submit'
-  >(null)
-
-  const handleSubmitClick = () => {
-    if (answeredCount < totalCount) {
-      setConfirmType('submit-unanswered')
-    } else {
-      setConfirmType('submit')
-    }
-  }
-
-  const doSubmit = async () => {
-    setConfirmType(null)
-    setSubmitting(true)
-
-    // 브라우저에 paint 기회를 줘서 "제출 중..." 즉시 표시
-    await new Promise(resolve => setTimeout(resolve, 0))
-
-    try {
-      const res = await fetch(`/api/attempts/${attemptId}/submit`, {
-        method: 'POST',
-      })
-
-      if (!res.ok) {
-        const data = await res.json()
-        onError(data.error || '제출에 실패했습니다')
-        setSubmitting(false)
-        return
-      }
-
-      router.push(`/exam/result/${attemptId}`)
-    } catch {
-      onError('오류가 발생했습니다')
-      setSubmitting(false)
-    }
-  }
-
-  return (
-    <>
-      <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border dark:border-gray-700">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
-          <div className="text-gray-600 dark:text-gray-400">
-            {answeredCount === totalCount
-              ? '모든 문제를 풀었습니다'
-              : `${totalCount - answeredCount}문제가 남았습니다`}
-          </div>
-          <button
-            onClick={handleSubmitClick}
-            disabled={submitting}
-            className="w-full sm:w-auto px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-          >
-            {submitting ? '제출 중...' : '시험 제출'}
-          </button>
-        </div>
-      </div>
-
-      {/* 미답 문제 제출 확인 */}
-      <ConfirmDialog
-        open={confirmType === 'submit-unanswered'}
-        title="미완료 문제 있음"
-        message={`${totalCount - answeredCount}문제를 풀지 않았습니다.\n정말 제출하시겠습니까?`}
-        confirmText="제출하기"
-        confirmColor="green"
-        onConfirm={() => setConfirmType('submit')}
-        onCancel={() => setConfirmType(null)}
-      />
-
-      {/* 최종 제출 확인 */}
-      <ConfirmDialog
-        open={confirmType === 'submit'}
-        title="시험 제출"
-        message={"시험을 제출하시겠습니까?\n제출 후에는 수정할 수 없습니다."}
-        confirmText="제출"
-        confirmColor="green"
-        onConfirm={doSubmit}
-        onCancel={() => setConfirmType(null)}
-      />
-    </>
-  )
-}
-
-// --- Main page component ---
-export default function ExamAttemptPage({
+export default async function ExamAttemptPage({
   params,
 }: {
   params: Promise<{ attemptId: string }>
 }) {
-  const router = useRouter()
-  const { attemptId } = use(params)
-
-  const [paper, setPaper] = useState<any>(null)
-  const [answers, setAnswers] = useState<Map<number, number>>(new Map())
-  const [textAnswers, setTextAnswers] = useState<Map<number, string>>(new Map())
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [timeExpired, setTimeExpired] = useState(false)
-  const [examMode, setExamMode] = useState<string>('PRACTICE')
-
-  useEffect(() => {
-    loadPaper()
-  }, [attemptId])
-
-  const loadPaper = async () => {
-    try {
-      const res = await fetch(`/api/attempts/${attemptId}/paper`)
-      if (!res.ok) {
-        setError('시험지를 불러올 수 없습니다')
-        setLoading(false)
-        return
-      }
-
-      const data = await res.json()
-      setPaper(data)
-      setExamMode(data.exam_mode || 'PRACTICE')
-
-      // 기존 답안 로드
-      const newAnswers = new Map<number, number>()
-      const newTextAnswers = new Map<number, string>()
-      data.questions.forEach((q: any) => {
-        if (q.selected) {
-          newAnswers.set(q.question_id, q.selected)
-        }
-        if (q.answer_text) {
-          newTextAnswers.set(q.question_id, q.answer_text)
-        }
-      })
-      setAnswers(newAnswers)
-      setTextAnswers(newTextAnswers)
-
-      setLoading(false)
-    } catch (err) {
-      setError('오류가 발생했습니다')
-      setLoading(false)
-    }
+  const session = await auth()
+  if (!session?.user?.id) {
+    redirect('/login')
   }
 
-  const handleAnswer = useCallback((questionId: number, choice: number) => {
-    // UI 즉시 업데이트
-    setAnswers((prev) => {
-      const next = new Map(prev)
-      next.set(questionId, choice)
-      return next
-    })
+  const { attemptId } = await params
+  const aid = Number(attemptId)
 
-    // 서버에 저장 (fire-and-forget: await 없이 백그라운드 저장)
-    fetch(`/api/attempts/${attemptId}/answer`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question_id: questionId, selected: choice }),
-    }).catch(err => console.error('답안 저장 실패:', err))
-  }, [attemptId])
-
-  // 주관식 답안 저장 (debounced)
-  const textSaveTimers = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map())
-  const handleAnswerText = useCallback((questionId: number, text: string) => {
-    // UI 즉시 업데이트
-    setTextAnswers((prev) => {
-      const next = new Map(prev)
-      next.set(questionId, text)
-      return next
-    })
-
-    // 기존 타이머 클리어
-    const existing = textSaveTimers.current.get(questionId)
-    if (existing) clearTimeout(existing)
-
-    // 500ms 디바운스 후 서버 저장
-    const timer = setTimeout(() => {
-      fetch(`/api/attempts/${attemptId}/answer`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question_id: questionId, answer_text: text }),
-      }).catch(err => console.error('답안 저장 실패:', err))
-      textSaveTimers.current.delete(questionId)
-    }, 500)
-    textSaveTimers.current.set(questionId, timer)
-  }, [attemptId])
-
-  const handleExpire = useCallback(() => {
-    setTimeExpired(true)
-  }, [])
-
-  const handleError = useCallback((msg: string) => {
-    setError(msg)
-  }, [])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-lg dark:text-white">시험지를 불러오는 중...</div>
-      </div>
-    )
+  if (isNaN(aid)) {
+    notFound()
   }
 
-  if (error) {
+  // 시험 정보, 시험지 문제(정답 제외), 기존 답안을 병렬 조회
+  const [attempt, attemptQuestions, savedAnswers] = await Promise.all([
+    prisma.attempt.findUnique({
+      where: { id: aid },
+      include: {
+        exam: {
+          select: {
+            name: true,
+            examMode: true,
+            durationMinutes: true,
+            year: true,
+            round: true,
+            category: { select: { name: true } },
+          },
+        },
+      },
+    }),
+    prisma.attemptQuestion.findMany({
+      where: { attemptId: aid },
+      orderBy: { seq: "asc" },
+      include: {
+        question: {
+          select: {
+            id: true,
+            questionCode: true,
+            questionText: true,
+            questionType: true,
+            choice1: true,
+            choice2: true,
+            choice3: true,
+            choice4: true,
+            imageUrl: true,
+            subjectId: true,
+            subject: { select: { name: true } },
+          },
+        },
+      },
+    }),
+    prisma.attemptItem.findMany({
+      where: { attemptId: aid },
+      select: { questionId: true, selected: true, answerText: true },
+    }),
+  ])
+
+  if (!attempt) {
+    notFound()
+  }
+
+  if (attempt.userId !== session.user.id) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
-          <div className="text-red-600 dark:text-red-400 mb-4">{error}</div>
-          <button
-            onClick={() => router.push('/')}
-            className="text-blue-600 dark:text-blue-400 hover:underline"
-          >
+          <div className="text-red-600 dark:text-red-400 mb-4">권한이 없습니다</div>
+          <Link href="/" className="text-blue-600 dark:text-blue-400 hover:underline">
             홈으로 돌아가기
-          </button>
+          </Link>
         </div>
       </div>
     )
   }
 
-  // 객관식 답안 + 주관식 답안(비어있지 않은) 합산
-  const answeredCount = (() => {
-    let count = answers.size
-    textAnswers.forEach((text, qid) => {
-      if (text.trim() && !answers.has(qid)) count++
-    })
-    return count
-  })()
-  const totalCount = paper?.questions.length || 0
+  // exam 이름: year가 있으면 "카테고리 YYYY년 N회" 형식
+  const examName = attempt.exam.year
+    ? `${attempt.exam.category.name} ${attempt.exam.year}년 ${attempt.exam.round}회`
+    : attempt.exam.name
 
-  return (
-    <>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {/* 상단 고정 바 */}
-        <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 fixed top-0 left-0 right-0 z-50 shadow-sm">
-          <div className="max-w-5xl mx-auto px-4 py-3">
-            <div className="flex justify-between items-center">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-base sm:text-lg font-bold dark:text-white truncate">{paper.exam_name}</h1>
-                  {examMode === 'OFFICIAL' && (
-                    <span className="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-semibold shrink-0">
-                      공식
-                    </span>
-                  )}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
-                  답안: {answeredCount} / {totalCount}
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <ExamTimer expiresAt={paper.expires_at} onExpire={handleExpire} />
-                <QuitButton attemptId={attemptId} />
-              </div>
-            </div>
-          </div>
-        </div>
+  const answersMap = new Map(savedAnswers.map((a) => [a.questionId, a]))
 
-        {/* 문제 */}
-        <div className="max-w-5xl mx-auto px-4 py-8 pt-24">
-          <div className="space-y-8">
-            {paper.questions.map((question: any, index: number) => (
-              <QuestionCard
-                key={question.question_id}
-                question={question}
-                index={index}
-                selectedAnswer={answers.get(question.question_id)}
-                answerText={textAnswers.get(question.question_id)}
-                onAnswer={handleAnswer}
-                onAnswerText={handleAnswerText}
-              />
-            ))}
-          </div>
+  const questions = attemptQuestions.map((aq) => {
+    const saved = answersMap.get(aq.question.id)
+    return {
+      seq: aq.seq,
+      question_id: aq.question.id,
+      question_code: aq.question.questionCode,
+      question_text: aq.question.questionText,
+      question_type: aq.question.questionType || "MULTIPLE_CHOICE",
+      choice_1: aq.question.choice1,
+      choice_2: aq.question.choice2,
+      choice_3: aq.question.choice3,
+      choice_4: aq.question.choice4,
+      image_url: aq.question.imageUrl,
+      subject_name: aq.question.subject.name,
+      selected: saved?.selected ?? null,
+      answer_text: saved?.answerText ?? null,
+    }
+  })
 
-          {/* 제출 버튼 */}
-          <SubmitSection
-            answeredCount={answeredCount}
-            totalCount={totalCount}
-            attemptId={attemptId}
-            onError={handleError}
-          />
-        </div>
+  const paper: PaperData = {
+    attempt_id: attempt.id,
+    exam_name: examName,
+    exam_mode: attempt.exam.examMode,
+    expires_at: attempt.expiresAt.toISOString(),
+    total_questions: attempt.totalQuestions,
+    questions,
+  }
 
-        {/* 시간 만료 안내 */}
-        <ConfirmDialog
-          open={timeExpired}
-          title="시험 시간 종료"
-          message="시험 시간이 종료되었습니다."
-          confirmText="확인"
-          cancelText="확인"
-          onConfirm={() => router.push('/')}
-          onCancel={() => router.push('/')}
-        />
-      </div>
-    </>
-  )
+  return <ExamAttemptClient attemptId={attemptId} paper={paper} />
 }
