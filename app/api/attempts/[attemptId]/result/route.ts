@@ -106,7 +106,13 @@ export async function GET(
       total_questions: attempt.totalQuestions,
       total_correct: attempt.totalCorrect,
       total_score: attempt.totalScore,
-      subject_scores: subjectScores,
+      subject_scores: subjectScores.map((ss) => ({
+        subject_id: ss.subjectId,
+        subject_name: ss.subject.name,
+        subject_questions: ss.subjectQuestions,
+        subject_correct: ss.subjectCorrect,
+        subject_score: ss.subjectScore,
+      })),
       questions: questionsWithAnswers,
     })
   } catch (error) {

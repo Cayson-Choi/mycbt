@@ -122,7 +122,7 @@ export default function ExamResultPage({
             {result.subject_scores.map((subject: any) => (
               <div key={subject.subject_id} className="border dark:border-gray-600 rounded-lg p-4">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold dark:text-white">{subject.subjects?.name}</span>
+                  <span className="font-semibold dark:text-white">{subject.subject_name}</span>
                   <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
                     {subject.subject_correct} / {subject.subject_questions}
                   </span>
@@ -157,8 +157,8 @@ export default function ExamResultPage({
         {showExplanations && (
           <div className="space-y-6">
             {result.questions.map((question: any, index: number) => {
-              const questionType = question.question_type || 'CHOICE'
-              const isSubjective = questionType !== 'CHOICE'
+              const questionType = question.question_type || 'MULTIPLE_CHOICE'
+              const isSubjective = questionType !== 'MULTIPLE_CHOICE'
               const borderColor = isSubjective
                 ? question.grading_status === 'PENDING'
                   ? 'border-l-yellow-500'
