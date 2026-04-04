@@ -46,18 +46,6 @@ export async function POST(request: Request) {
       await prisma.attempt.deleteMany({ where: { id: { in: ids } } })
     }
 
-    // 23:00~23:59 KST 체크 (PRACTICE만)
-    if (!isOfficial) {
-      const now = new Date()
-      const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000)
-      if (kstDate.getUTCHours() === 23) {
-        return NextResponse.json(
-          { error: "23:00~23:59(KST)에는 새 시험을 시작할 수 없습니다", can_start: false },
-          { status: 403 }
-        )
-      }
-    }
-
     const subjects = await prisma.subject.findMany({
       where: { examId: Number(exam_id) },
       orderBy: { orderNo: "asc" },

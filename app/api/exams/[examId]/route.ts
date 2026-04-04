@@ -17,7 +17,16 @@ export async function GET(
       return NextResponse.json({ error: "시험을 찾을 수 없습니다" }, { status: 404 })
     }
 
-    const response = NextResponse.json(exam)
+    // snake_case 변환 (프론트 호환)
+    const response = NextResponse.json({
+      id: exam.id,
+      name: exam.category.name,
+      exam_mode: exam.examMode,
+      password: exam.password,
+      duration_minutes: exam.durationMinutes,
+      is_published: exam.isPublished,
+      sort_order: exam.sortOrder,
+    })
     response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=120")
     return response
   } catch {

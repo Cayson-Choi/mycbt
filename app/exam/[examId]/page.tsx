@@ -203,9 +203,6 @@ export default function ExamStartPage({ params }: { params: Promise<{ examId: st
               <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                 <li>• 시험 시작 후 {durationMinutes}분 이내에 제출해야 합니다</li>
                 <li>• 시간이 초과되면 자동으로 만료됩니다</li>
-                {!isOfficial && (
-                  <li>• 23:00~23:59(KST)에는 새 시험을 시작할 수 없습니다</li>
-                )}
                 <li>• 시험을 중단하면 기록이 삭제됩니다</li>
               </ul>
             </div>

@@ -13,7 +13,16 @@ export async function GET(
       orderBy: { orderNo: "asc" },
     })
 
-    const response = NextResponse.json(subjects)
+    // snake_case 변환 (프론트 호환)
+    const mapped = subjects.map((s) => ({
+      id: s.id,
+      exam_id: s.examId,
+      name: s.name,
+      questions_per_attempt: s.questionsPerAttempt,
+      order_no: s.orderNo,
+    }))
+
+    const response = NextResponse.json(mapped)
     response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=120")
     return response
   } catch {
