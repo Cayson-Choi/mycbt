@@ -1,251 +1,204 @@
-'use client'
+import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+import { redirect } from "next/navigation"
+import Link from "next/link"
+import WrongAnswersContent from "./WrongAnswersContent"
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import MathText from '@/components/MathText'
+export default async function WrongAnswersPage() {
+  const session = await auth()
+  if (!session?.user?.id) {
+    redirect('/login?redirect=/my/wrong-answers')
+  }
 
-export default function WrongAnswersPage() {
-  const router = useRouter()
-  const [data, setData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<'all' | number>('all')
+  const userId = session.user.id
 
-  useEffect(() => {
-    loadWrongAnswers()
-  }, [])
+  // 1. 사용자의 모든 제출된 시도 조회
+  const attempts = await prisma.attempt.findMany({
+    where: {
+      userId,
+      status: "SUBMITTED",
+    },
+    select: {
+      id: true,
+      examId: true,
+      submittedAt: true,
+    },
+    orderBy: { submittedAt: "desc" },
+  })
 
-  const loadWrongAnswers = async () => {
-    try {
-      const res = await fetch('/api/my/wrong-answers')
-      if (res.status === 401) {
-        router.push('/login?redirect=/my/wrong-answers')
-        return
-      }
+  if (attempts.length === 0) {
+    return (
+      <WrongAnswersContent
+        data={{ wrong_answers: [], total_count: 0, subject_stats: [] }}
+      />
+    )
+  }
 
-      if (!res.ok) {
-        throw new Error('Failed to load wrong answers')
-      }
+  const attemptIds = attempts.map((a) => a.id)
 
-      const data = await res.json()
-      setData(data)
-    } catch (err) {
-      console.error('Failed to load wrong answers:', err)
-    } finally {
-      setLoading(false)
+  // 2. 모든 attempt_questions 한번에 조회
+  const allAttemptQuestions = await prisma.attemptQuestion.findMany({
+    where: { attemptId: { in: attemptIds } },
+    select: { attemptId: true, questionId: true },
+  })
+
+  // 3. 모든 answers 한번에 조회 (attempt_items)
+  const allAnswers = await prisma.attemptItem.findMany({
+    where: { attemptId: { in: attemptIds } },
+    select: {
+      attemptId: true,
+      questionId: true,
+      selected: true,
+      isCorrect: true,
+    },
+  })
+
+  // attempt별로 그룹화
+  const questionsByAttempt = new Map<number, number[]>()
+  for (const aq of allAttemptQuestions) {
+    if (!questionsByAttempt.has(aq.attemptId)) {
+      questionsByAttempt.set(aq.attemptId, [])
+    }
+    questionsByAttempt.get(aq.attemptId)!.push(aq.questionId)
+  }
+
+  const answersByAttempt = new Map<number, Map<number, number>>()
+  for (const ans of allAnswers) {
+    if (!answersByAttempt.has(ans.attemptId)) {
+      answersByAttempt.set(ans.attemptId, new Map())
+    }
+    if (ans.selected !== null) {
+      answersByAttempt.get(ans.attemptId)!.set(ans.questionId, ans.selected)
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-lg dark:text-white">로딩 중...</div>
-      </div>
-    )
-  }
-
-  if (!data) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
-          <div className="text-red-600 dark:text-red-400 mb-4">데이터를 불러올 수 없습니다</div>
-          <Link href="/my" className="text-blue-600 dark:text-blue-400 hover:underline">
-            마이페이지로 돌아가기
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  const filteredAnswers =
-    filter === 'all'
-      ? data.wrong_answers
-      : data.wrong_answers.filter((a: any) => a.subject_id === filter)
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">오답노트</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            틀린 문제를 복습하고 약점을 보완하세요
-          </p>
-        </div>
-
-        {/* 통계 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
-          <h2 className="text-xl font-bold mb-4 dark:text-white">오답 통계</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="border dark:border-gray-600 rounded-lg p-4">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">총 오답 문제</div>
-              <div className="text-3xl font-bold text-red-600 dark:text-red-400">
-                {data.total_count}문제
-              </div>
-            </div>
-            <div className="border dark:border-gray-600 rounded-lg p-4">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">과목별 오답</div>
-              <div className="space-y-1">
-                {(data.subject_stats || []).map((stat: any) => (
-                  <div key={stat.subject_id} className="flex justify-between text-sm">
-                    <span className="text-gray-700 dark:text-gray-300">{stat.subject_name}</span>
-                    <span className="font-semibold text-red-600 dark:text-red-400">
-                      {stat.count}문제
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 과목 필터 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold dark:text-white">과목 필터:</span>
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded ${
-                filter === 'all'
-                  ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-              }`}
-            >
-              전체 ({data.total_count || 0})
-            </button>
-            {(data.subject_stats || []).map((stat: any) => (
-              <button
-                key={stat.subject_id}
-                onClick={() => setFilter(stat.subject_id)}
-                className={`px-4 py-2 rounded ${
-                  filter === stat.subject_id
-                    ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                }`}
-              >
-                {stat.subject_name} ({stat.count})
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 오답 문제 목록 */}
-        {filteredAnswers.length > 0 ? (
-          <div className="space-y-6">
-            {filteredAnswers.map((item: any, index: number) => (
-              <div
-                key={`${item.attempt_id}-${item.question_id}`}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-red-500 dark:border-red-400"
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 flex items-center justify-center font-bold">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <span className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
-                        {item.exam_name}
-                      </span>
-                      <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
-                        {item.subject_name}
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {item.question_code}
-                      </span>
-                      <span className="text-xs text-gray-400 dark:text-gray-500">
-                        {new Date(item.attempt_date).toLocaleDateString('ko-KR')}
-                      </span>
-                    </div>
-
-                    <MathText
-                      text={item.question_text}
-                      className="text-lg font-medium mb-4 dark:text-white block"
-                    />
-
-                    <div className="space-y-2 mb-4">
-                      {[1, 2, 3, 4].map((choice) => {
-                        const isCorrect = choice === item.correct_answer
-                        const isSelected = choice === item.student_answer
-
-                        return (
-                          <div
-                            key={choice}
-                            className={`p-3 border-2 rounded-lg ${
-                              isCorrect
-                                ? 'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-900/30'
-                                : isSelected
-                                ? 'border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-900/30'
-                                : 'border-gray-200 dark:border-gray-600'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2">
-                              {isCorrect && (
-                                <span className="text-green-600 dark:text-green-400 font-bold">V</span>
-                              )}
-                              {isSelected && !isCorrect && (
-                                <span className="text-red-600 dark:text-red-400 font-bold">X</span>
-                              )}
-                              <span className="dark:text-gray-200">
-                                {choice}.{' '}
-                                <MathText text={item[`choice_${choice}`]} />
-                              </span>
-                              {isCorrect && (
-                                <span className="ml-auto text-sm font-semibold text-green-600 dark:text-green-400">
-                                  정답
-                                </span>
-                              )}
-                              {isSelected && !isCorrect && (
-                                <span className="ml-auto text-sm font-semibold text-red-600 dark:text-red-400">
-                                  선택한 답
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-
-                    <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                      <div className="font-semibold text-blue-900 dark:text-blue-200 mb-1">해설</div>
-                      <MathText
-                        text={item.explanation}
-                        className="text-blue-800 dark:text-blue-300"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-12 text-center border dark:border-gray-700">
-            <div className="text-gray-500 dark:text-gray-400 text-lg mb-2">
-              {filter === 'all' ? '오답이 없습니다!' : '이 과목에는 오답이 없습니다!'}
-            </div>
-            <div className="text-gray-400 dark:text-gray-500 text-sm">
-              {filter === 'all'
-                ? '모든 문제를 맞혔거나 아직 시험을 보지 않았습니다.'
-                : '다른 과목을 선택해보세요.'}
-            </div>
-          </div>
-        )}
-
-        {/* 하단 버튼 */}
-        <div className="mt-8 flex gap-4">
-          <Link
-            href="/my"
-            className="flex-1 px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
-          >
-            마이페이지로
-          </Link>
-          <Link
-            href="/"
-            className="flex-1 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
-          >
-            홈으로
-          </Link>
-        </div>
-      </div>
-    </div>
+  // 모든 고유 questionId 수집
+  const allQuestionIds = Array.from(
+    new Set(allAttemptQuestions.map((aq) => aq.questionId))
   )
+
+  if (allQuestionIds.length === 0) {
+    return (
+      <WrongAnswersContent
+        data={{ wrong_answers: [], total_count: 0, subject_stats: [] }}
+      />
+    )
+  }
+
+  // 4. 모든 questions 한번에 조회
+  const questions = await prisma.question.findMany({
+    where: { id: { in: allQuestionIds } },
+    select: {
+      id: true,
+      questionCode: true,
+      examId: true,
+      subjectId: true,
+      questionText: true,
+      choice1: true,
+      choice2: true,
+      choice3: true,
+      choice4: true,
+      answer: true,
+      explanation: true,
+    },
+  })
+
+  const questionsMap = new Map(questions.map((q) => [q.id, q]))
+
+  // 고유 subjectId, examId 수집
+  const subjectIds = Array.from(new Set(questions.map((q) => q.subjectId)))
+  const examIds = Array.from(new Set(questions.map((q) => q.examId)))
+
+  // 5. 모든 subjects 한번에 조회
+  const subjects = await prisma.subject.findMany({
+    where: { id: { in: subjectIds } },
+    select: { id: true, name: true },
+  })
+  const subjectsMap = new Map(subjects.map((s) => [s.id, s.name]))
+
+  // 6. 모든 exams 한번에 조회
+  const exams = await prisma.exam.findMany({
+    where: { id: { in: examIds } },
+    select: { id: true, name: true },
+  })
+  const examsMap = new Map(exams.map((e) => [e.id, e.name]))
+
+  // 7. 데이터 병합 및 틀린 문제 필터링
+  const wrongAnswers: any[] = []
+
+  for (const attempt of attempts) {
+    const questionIds = questionsByAttempt.get(attempt.id) || []
+    const answersMap = answersByAttempt.get(attempt.id) || new Map()
+
+    for (const questionId of questionIds) {
+      const question = questionsMap.get(questionId)
+      if (!question) continue
+
+      const studentAnswer = answersMap.get(questionId)
+      const correctAnswer = question.answer
+
+      // 틀린 문제만 추가
+      if (
+        studentAnswer !== undefined &&
+        studentAnswer !== correctAnswer
+      ) {
+        wrongAnswers.push({
+          attempt_id: attempt.id,
+          attempt_date: attempt.submittedAt?.toISOString() ?? '',
+          exam_id: question.examId,
+          exam_name: examsMap.get(question.examId) || "알 수 없음",
+          subject_id: question.subjectId,
+          subject_name: subjectsMap.get(question.subjectId) || "알 수 없음",
+          question_id: question.id,
+          question_code: question.questionCode,
+          question_text: question.questionText,
+          choice_1: question.choice1,
+          choice_2: question.choice2,
+          choice_3: question.choice3,
+          choice_4: question.choice4,
+          correct_answer: correctAnswer,
+          student_answer: studentAnswer,
+          explanation: question.explanation,
+        })
+      }
+    }
+  }
+
+  // 8. 중복 제거 (같은 문제를 여러 번 틀린 경우 가장 최근 것만)
+  const uniqueWrongAnswers: typeof wrongAnswers = Array.from(
+    wrongAnswers
+      .reduce((map, item) => {
+        const existing = map.get(item.question_id)
+        if (
+          !existing ||
+          new Date(item.attempt_date) > new Date(existing.attempt_date)
+        ) {
+          map.set(item.question_id, item)
+        }
+        return map
+      }, new Map())
+      .values()
+  )
+
+  // 9. 과목별 통계
+  const subjectStats: Record<string, { subject_id: number; subject_name: string; count: number }> = {}
+  for (const item of uniqueWrongAnswers) {
+    const key = String(item.subject_id)
+    if (!subjectStats[key]) {
+      subjectStats[key] = {
+        subject_id: item.subject_id,
+        subject_name: item.subject_name,
+        count: 0,
+      }
+    }
+    subjectStats[key].count++
+  }
+
+  const data = {
+    wrong_answers: uniqueWrongAnswers,
+    total_count: uniqueWrongAnswers.length,
+    subject_stats: Object.values(subjectStats),
+  }
+
+  return <WrongAnswersContent data={data} />
 }

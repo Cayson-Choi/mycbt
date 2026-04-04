@@ -1,65 +1,135 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+import { redirect } from "next/navigation"
 import Link from 'next/link'
+import AttemptHistoryClient from './AttemptHistoryClient'
 
-export default function MyPage() {
-  const router = useRouter()
-  const [data, setData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<'all' | number>('all')
+export default async function MyPage() {
+  const session = await auth()
+  if (!session?.user?.id) {
+    redirect('/login?redirect=/my')
+  }
 
-  useEffect(() => {
-    loadHistory()
-  }, [])
+  const userId = session.user.id
 
-  const loadHistory = async () => {
-    try {
-      const res = await fetch('/api/my/history')
-      if (res.status === 401) {
-        router.push('/login?redirect=/my')
-        return
+  // 1. 사용자의 모든 응시 기록 조회 (제출된 것만)
+  const attempts = await prisma.attempt.findMany({
+    where: {
+      userId,
+      status: "SUBMITTED",
+    },
+    select: {
+      id: true,
+      examId: true,
+      startedAt: true,
+      submittedAt: true,
+      totalScore: true,
+      gradingStatus: true,
+      exam: {
+        select: { name: true },
+      },
+    },
+    orderBy: { submittedAt: "desc" },
+  })
+
+  // 2. 모든 응시의 과목별 점수를 한번에 조회 (N+1 방지)
+  const attemptIds = attempts.map((a) => a.id)
+  let allSubjectScores: any[] = []
+
+  if (attemptIds.length > 0) {
+    allSubjectScores = await prisma.subjectScore.findMany({
+      where: { attemptId: { in: attemptIds } },
+      select: {
+        attemptId: true,
+        subjectId: true,
+        subjectScore: true,
+        subjectCorrect: true,
+        subjectQuestions: true,
+        subject: {
+          select: { name: true },
+        },
+      },
+      orderBy: { subjectId: "asc" },
+    })
+  }
+
+  // attemptId별로 그룹핑
+  const scoresByAttempt = new Map<number, any[]>()
+  for (const score of allSubjectScores) {
+    const list = scoresByAttempt.get(score.attemptId) || []
+    list.push({
+      attempt_id: score.attemptId,
+      subject_id: score.subjectId,
+      subject_score: score.subjectScore,
+      subject_correct: score.subjectCorrect,
+      subject_questions: score.subjectQuestions,
+      subjects: { name: score.subject.name },
+    })
+    scoresByAttempt.set(score.attemptId, list)
+  }
+
+  const attemptsWithSubjects = attempts.map((attempt) => ({
+    id: attempt.id,
+    exam_id: attempt.examId,
+    started_at: attempt.startedAt.toISOString(),
+    submitted_at: attempt.submittedAt?.toISOString() ?? null,
+    total_score: attempt.totalScore,
+    grading_status: attempt.gradingStatus,
+    exam_name: attempt.exam?.name || "알 수 없음",
+    subject_scores: scoresByAttempt.get(attempt.id) || [],
+  }))
+
+  // 3. 통계 계산
+  const totalAttempts = attempts.length
+  const scores = attempts
+    .map((a) => a.totalScore)
+    .filter((s): s is number => s !== null)
+  const avgScore =
+    scores.length > 0
+      ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+      : 0
+  const maxScore = scores.length > 0 ? Math.max(...scores) : 0
+  const passCount = scores.filter((s) => s >= 60).length
+  const passRate =
+    totalAttempts > 0
+      ? Math.round((passCount / totalAttempts) * 100)
+      : 0
+
+  // 4. 시험별 통계
+  const examStatsMap = attempts.reduce((acc: any, attempt) => {
+    const examId = attempt.examId
+    const examName = attempt.exam?.name || "알 수 없음"
+
+    if (!acc[examId]) {
+      acc[examId] = {
+        exam_id: examId,
+        exam_name: examName,
+        count: 0,
+        scores: [] as number[],
       }
-
-      if (!res.ok) {
-        throw new Error('Failed to load history')
-      }
-
-      const data = await res.json()
-      setData(data)
-    } catch (err) {
-      console.error('Failed to load history:', err)
-    } finally {
-      setLoading(false)
     }
-  }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-lg dark:text-white">로딩 중...</div>
-      </div>
-    )
-  }
+    acc[examId].count++
+    if (attempt.totalScore !== null) {
+      acc[examId].scores.push(attempt.totalScore)
+    }
 
-  if (!data) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
-          <div className="text-red-600 dark:text-red-400 mb-4">데이터를 불러올 수 없습니다</div>
-          <Link href="/" className="text-blue-600 dark:text-blue-400 hover:underline">
-            홈으로 돌아가기
-          </Link>
-        </div>
-      </div>
-    )
-  }
+    return acc
+  }, {})
 
-  const filteredAttempts =
-    filter === 'all'
-      ? data.attempts
-      : data.attempts.filter((a: any) => a.exam_id === filter)
+  const examStats = Object.values(examStatsMap).map((stat: any) => ({
+    exam_id: stat.exam_id,
+    exam_name: stat.exam_name,
+    attempt_count: stat.count,
+    avg_score:
+      stat.scores.length > 0
+        ? Math.round(
+            stat.scores.reduce((a: number, b: number) => a + b, 0) /
+              stat.scores.length
+          )
+        : 0,
+    max_score: stat.scores.length > 0 ? Math.max(...stat.scores) : 0,
+  }))
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
@@ -75,23 +145,23 @@ export default function MyPage() {
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
               <span className="text-sm text-gray-600 dark:text-gray-400">총 응시</span>
-              <span className="text-sm font-bold text-blue-700 dark:text-blue-300">{data.stats.total_attempts}회</span>
+              <span className="text-sm font-bold text-blue-700 dark:text-blue-300">{totalAttempts}회</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
               <span className="text-sm text-gray-600 dark:text-gray-400">평균</span>
-              <span className="text-sm font-bold text-green-700 dark:text-green-300">{data.stats.avg_score}점</span>
+              <span className="text-sm font-bold text-green-700 dark:text-green-300">{avgScore}점</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-200 dark:border-purple-800">
               <span className="text-sm text-gray-600 dark:text-gray-400">최고</span>
-              <span className="text-sm font-bold text-purple-700 dark:text-purple-300">{data.stats.max_score}점</span>
+              <span className="text-sm font-bold text-purple-700 dark:text-purple-300">{maxScore}점</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 dark:bg-orange-900/30 rounded-lg border border-orange-200 dark:border-orange-800">
               <span className="text-sm text-gray-600 dark:text-gray-400">합격</span>
-              <span className="text-sm font-bold text-orange-700 dark:text-orange-300">{data.stats.pass_count}회</span>
+              <span className="text-sm font-bold text-orange-700 dark:text-orange-300">{passCount}회</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800">
               <span className="text-sm text-gray-600 dark:text-gray-400">합격률</span>
-              <span className="text-sm font-bold text-red-700 dark:text-red-300">{data.stats.pass_rate}%</span>
+              <span className="text-sm font-bold text-red-700 dark:text-red-300">{passRate}%</span>
             </div>
           </div>
         </div>
@@ -100,7 +170,7 @@ export default function MyPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
           <h2 className="text-xl font-bold mb-4 dark:text-white">시험별 성적</h2>
           <div className="grid md:grid-cols-3 gap-4">
-            {data.exam_stats.map((exam: any) => (
+            {examStats.map((exam) => (
               <div key={exam.exam_id} className="border dark:border-gray-600 rounded-lg p-4">
                 <div className="font-semibold text-lg mb-2 dark:text-white">{exam.exam_name}</div>
                 <div className="space-y-1 text-sm">
@@ -126,120 +196,11 @@ export default function MyPage() {
           </div>
         </div>
 
-        {/* 응시 기록 필터 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-            <h2 className="text-lg font-bold dark:text-white">응시 기록</h2>
-            <div className="flex gap-2 flex-wrap">
-              <button
-                onClick={() => setFilter('all')}
-                className={`px-4 py-2 rounded text-sm ${
-                  filter === 'all'
-                    ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                }`}
-              >
-                전체
-              </button>
-              {data.exam_stats.map((exam: any) => (
-                <button
-                  key={exam.exam_id}
-                  onClick={() => setFilter(exam.exam_id)}
-                  className={`px-4 py-2 rounded text-sm ${
-                    filter === exam.exam_id
-                      ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                  }`}
-                >
-                  {exam.exam_name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 응시 기록 목록 */}
-          {filteredAttempts.length > 0 ? (
-            <div className="space-y-4">
-              {filteredAttempts.map((attempt: any) => (
-                <div
-                  key={attempt.id}
-                  className="border dark:border-gray-600 rounded-lg p-4 hover:shadow-md dark:hover:shadow-gray-700 transition-shadow"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <div className="font-semibold text-lg dark:text-white">
-                        {attempt.exam_name}
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {new Date(attempt.submitted_at).toLocaleString('ko-KR')}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div
-                        className={`text-3xl font-bold ${
-                          attempt.grading_status === 'PENDING_MANUAL'
-                            ? 'text-yellow-600 dark:text-yellow-400'
-                            : attempt.total_score >= 60
-                              ? 'text-green-600 dark:text-green-400'
-                              : 'text-red-600 dark:text-red-400'
-                        }`}
-                      >
-                        {attempt.total_score}점
-                      </div>
-                      <div
-                        className={`text-sm font-semibold ${
-                          attempt.grading_status === 'PENDING_MANUAL'
-                            ? 'text-yellow-600 dark:text-yellow-400'
-                            : attempt.total_score >= 60
-                              ? 'text-green-600 dark:text-green-400'
-                              : 'text-red-600 dark:text-red-400'
-                        }`}
-                      >
-                        {attempt.grading_status === 'PENDING_MANUAL' ? '채점 대기' : attempt.total_score >= 60 ? '합격' : '불합격'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 과목별 점수 */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-3">
-                    {attempt.subject_scores.map((subject: any) => (
-                      <div
-                        key={subject.subject_id}
-                        className="bg-gray-50 dark:bg-gray-700 rounded p-2"
-                      >
-                        <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-                          {subject.subjects?.name}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                            {subject.subject_score}점
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {subject.subject_correct}/{subject.subject_questions}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* 버튼 */}
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/exam/result/${attempt.id}`}
-                      className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-center rounded hover:bg-blue-700 dark:hover:bg-blue-600"
-                    >
-                      상세 결과 보기
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center text-gray-500 dark:text-gray-400 py-3 text-sm">
-              응시 기록이 없습니다
-            </div>
-          )}
-        </div>
+        {/* 응시 기록 (클라이언트 컴포넌트 - 필터링 인터랙션) */}
+        <AttemptHistoryClient
+          attempts={attemptsWithSubjects}
+          examStats={examStats}
+        />
 
         {/* 하단 버튼 */}
         <div className="flex gap-2">
