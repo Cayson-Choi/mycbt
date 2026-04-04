@@ -37,6 +37,7 @@ export default function AdminUsersPage() {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(
         (u) =>
+          u.nickname?.toLowerCase().includes(query) ||
           u.name?.toLowerCase().includes(query) ||
           u.email?.toLowerCase().includes(query) ||
           u.phone?.toLowerCase().includes(query)
@@ -322,10 +323,10 @@ export default function AdminUsersPage() {
                           className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 cursor-pointer"
                         />
                       </th>
-                      <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">이름</th>
+                      <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">ID</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">이메일</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">전화번호</th>
-                      <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">응시횟수</th>
+                      <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">회원등급</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">구분</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">가입일</th>
                       <th className="px-2 lg:px-4 py-2 lg:py-3 font-medium text-gray-500 dark:text-gray-300 text-center mobile-vertical">권한관리</th>
@@ -348,7 +349,7 @@ export default function AdminUsersPage() {
                           )}
                         </td>
                         <td className="px-2 lg:px-4 py-3 text-gray-900 dark:text-gray-100 text-center font-medium mobile-vertical">
-                          {user.name}
+                          {user.nickname || user.name || '-'}
                         </td>
                         <td className="px-2 lg:px-4 py-3 text-gray-900 dark:text-gray-100">
                           <span className="hidden lg:inline">{user.email}</span>
@@ -375,8 +376,22 @@ export default function AdminUsersPage() {
                             return user.phone
                           })() : '-'}
                         </td>
-                        <td className="px-2 lg:px-4 py-3 text-gray-600 dark:text-gray-400 text-center">
-                          {user.attempt_count}회
+                        <td className="px-2 lg:px-4 py-3 text-center">
+                          {(() => {
+                            const tierMap: Record<string, { label: string; color: string }> = {
+                              GUEST: { label: '게스트', color: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300' },
+                              BRONZE: { label: '브론즈', color: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200' },
+                              SILVER: { label: '실버', color: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200' },
+                              GOLD: { label: '골드', color: 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200' },
+                              DIAMOND: { label: '다이아', color: 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-200' },
+                            }
+                            const tier = tierMap[user.tier] || tierMap.GUEST
+                            return (
+                              <span className={`inline-block px-1.5 lg:px-2 py-1 rounded font-medium leading-tight text-xs ${tier.color}`}>
+                                {tier.label}
+                              </span>
+                            )
+                          })()}
                         </td>
                         <td className="px-2 lg:px-4 py-3 text-center">
                           {user.is_admin ? (

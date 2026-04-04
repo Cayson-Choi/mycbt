@@ -20,30 +20,26 @@ export async function GET() {
     const profiles = await prisma.user.findMany({
       select: {
         id: true,
+        nickname: true,
         name: true,
         email: true,
         phone: true,
         isAdmin: true,
+        tier: true,
         createdAt: true,
-        _count: {
-          select: {
-            attempts: {
-              where: { status: "SUBMITTED" },
-            },
-          },
-        },
       },
       orderBy: { createdAt: "desc" },
     })
 
     const usersWithStats = profiles.map((p) => ({
       id: p.id,
+      nickname: p.nickname || "",
       name: p.name || "",
       email: p.email || "",
       phone: p.phone,
       is_admin: p.isAdmin,
+      tier: p.tier,
       created_at: p.createdAt.toISOString(),
-      attempt_count: p._count.attempts,
     }))
 
     return NextResponse.json({ users: usersWithStats })
