@@ -169,13 +169,13 @@ export default function CompleteProfilePage() {
                 }}
                 required
                 placeholder="영문, 한글, 숫자, _ (2~20자)"
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="flex-1 min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               />
               <button
                 type="button"
                 onClick={checkNickname}
                 disabled={checking || !nickname.trim()}
-                className="px-3 py-2 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 disabled:opacity-50 whitespace-nowrap"
+                className="flex-shrink-0 px-3 py-2 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 disabled:opacity-50"
               >
                 {checking ? "확인중" : "중복확인"}
               </button>
