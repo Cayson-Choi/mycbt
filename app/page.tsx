@@ -1,26 +1,7 @@
-import { Suspense } from "react"
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
 import HeroSection from "@/components/HeroSection"
 import HomeExamCards from "@/components/HomeExamCards"
-
-function ExamCardsSkeleton() {
-  return (
-    <div className="grid gap-4 max-w-5xl mx-auto grid-cols-2 md:grid-cols-3">
-      {[...Array(3)].map((_, i) => (
-        <div
-          key={i}
-          className="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg lg:rounded-xl p-1.5 lg:p-4 animate-pulse"
-        >
-          <div className="h-4 w-12 bg-white/20 rounded-full mb-2 ml-auto" />
-          <div className="h-5 w-24 bg-white/20 rounded mb-1" />
-          <div className="h-3 w-16 bg-white/20 rounded mb-2" />
-          <div className="h-3 w-20 bg-white/20 rounded" />
-        </div>
-      ))}
-    </div>
-  )
-}
 
 export default async function Home() {
   // 로그인된 사용자인데 전화번호가 없으면 → 추가정보기입 페이지로
@@ -43,9 +24,7 @@ export default async function Home() {
         id="exams"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative z-10 pb-10"
       >
-        <Suspense fallback={<ExamCardsSkeleton />}>
-          <HomeExamCards />
-        </Suspense>
+        <HomeExamCards />
       </section>
 
       {/* 왜 전기짱인가 */}
