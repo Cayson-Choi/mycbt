@@ -51,7 +51,7 @@ export default function LoginPage() {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await signIn("nodemailer", { email, redirect: false })
+    await signIn("nodemailer", { email, redirect: false, callbackUrl: "/" })
     setEmailSent(true)
     setLoading(false)
   }
