@@ -36,36 +36,42 @@ export default function Header() {
               <>
                 {/* 데스크톱 메뉴 */}
                 <div className="hidden sm:flex items-center gap-3">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">
-                    {(user as any).nickname || user.name || user.email}
-                  </span>
-                  {(user as any).nickname && (
-                    <Link
-                      href="/my"
-                      className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                    >
-                      마이페이지
-                    </Link>
+                  {(user as any).nickname ? (
+                    <>
+                      <span className="text-sm text-gray-600 dark:text-gray-300">
+                        {(user as any).nickname}
+                      </span>
+                      <Link
+                        href="/my"
+                        className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                      >
+                        마이페이지
+                      </Link>
+                      {(user as any).isAdmin && (
+                        <Link
+                          href="/admin"
+                          className="text-sm text-red-600 dark:text-red-400 hover:text-red-700"
+                        >
+                          관리자
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                        className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      >
+                        {loggingOut ? "..." : "로그아웃"}
+                      </button>
+                    </>
+                  ) : (
+                    <span className="text-sm text-orange-500 dark:text-orange-400">
+                      회원가입중
+                    </span>
                   )}
-                  {(user as any).isAdmin && (user as any).nickname && (
-                    <Link
-                      href="/admin"
-                      className="text-sm text-red-600 dark:text-red-400 hover:text-red-700"
-                    >
-                      관리자
-                    </Link>
-                  )}
-                  <button
-                    onClick={handleLogout}
-                    disabled={loggingOut}
-                    className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                  >
-                    {loggingOut ? "..." : "로그아웃"}
-                  </button>
                 </div>
 
-                {/* 모바일 햄버거 */}
-                <button
+                {/* 모바일 햄버거 (가입 완료 시만) */}
+                {(user as any).nickname && <button
                   onClick={() => setMobileOpen(!mobileOpen)}
                   className="sm:hidden p-2"
                 >
@@ -86,7 +92,7 @@ export default function Header() {
                       }
                     />
                   </svg>
-                </button>
+                </button>}
               </>
             ) : (
               <Link
@@ -100,21 +106,19 @@ export default function Header() {
         </div>
 
         {/* 모바일 메뉴 */}
-        {mobileOpen && user && (
+        {mobileOpen && user && (user as any).nickname && (
           <div className="sm:hidden pb-3 space-y-2 border-t border-gray-200 dark:border-gray-700 pt-3">
             <p className="text-sm text-gray-600 dark:text-gray-300 px-2">
-              {(user as any).nickname || user.name || user.email}
+              {(user as any).nickname}
             </p>
-            {(user as any).nickname && (
-              <Link
-                href="/my"
-                className="block px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-                onClick={() => setMobileOpen(false)}
-              >
-                마이페이지
-              </Link>
-            )}
-            {(user as any).isAdmin && (user as any).nickname && (
+            <Link
+              href="/my"
+              className="block px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+              onClick={() => setMobileOpen(false)}
+            >
+              마이페이지
+            </Link>
+            {(user as any).isAdmin && (
               <Link
                 href="/admin"
                 className="block px-2 py-1.5 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
