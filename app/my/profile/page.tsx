@@ -90,16 +90,16 @@ export default function ProfilePage() {
         {/* 프로필 수정 폼 (통합) */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* 이름 (수정 불가) */}
+            {/* 아이디 (수정 불가) */}
             <div>
-              <label className="block text-sm font-medium mb-1 dark:text-gray-200">이름</label>
+              <label className="block text-sm font-medium mb-1 dark:text-gray-200">아이디</label>
               <input
                 type="text"
-                value={profile?.name || ''}
+                value={profile?.nickname || ''}
                 disabled
                 className="w-full px-3 py-2 border dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed"
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">이름은 수정할 수 없습니다</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">아이디는 수정할 수 없습니다</p>
             </div>
 
             {/* 이메일 (수정 불가) */}

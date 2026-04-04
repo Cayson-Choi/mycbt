@@ -42,7 +42,7 @@ export default function CompleteProfilePage() {
 
   const checkNickname = async () => {
     if (!nickname.trim() || nickname.trim().length < 2) {
-      setError("ID는 2자 이상이어야 합니다")
+      setError("아이디는 2자 이상이어야 합니다")
       return
     }
     setChecking(true)
@@ -57,7 +57,7 @@ export default function CompleteProfilePage() {
       } else {
         setNicknameAvailable(false)
         setNicknameChecked(true)
-        setError("이미 사용 중인 ID입니다")
+        setError("이미 사용 중인 아이디입니다")
       }
     } catch {
       setError("중복 확인에 실패했습니다")
@@ -71,13 +71,13 @@ export default function CompleteProfilePage() {
     setError("")
 
     if (!nickname?.trim() || nickname.trim().length < 2) {
-      setError("ID는 2자 이상이어야 합니다")
+      setError("아이디는 2자 이상이어야 합니다")
       setSubmitting(false)
       return
     }
 
     if (!nicknameChecked || !nicknameAvailable) {
-      setError("ID 중복 확인을 해주세요")
+      setError("아이디 중복 확인을 해주세요")
       setSubmitting(false)
       return
     }
@@ -144,7 +144,7 @@ export default function CompleteProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="nickname" className="block text-sm font-medium mb-1 dark:text-gray-200">
-              ID <span className="text-xs text-red-500">(한 번 설정하면 변경할 수 없습니다)</span>
+              아이디 <span className="text-xs text-red-500">(한 번 설정하면 변경할 수 없습니다)</span>
             </label>
             <div className="flex gap-2">
               <input
@@ -166,7 +166,7 @@ export default function CompleteProfilePage() {
               </button>
             </div>
             {nicknameChecked && nicknameAvailable && (
-              <p className="text-xs text-green-600 dark:text-green-400 mt-1">사용 가능한 ID입니다</p>
+              <p className="text-xs text-green-600 dark:text-green-400 mt-1">사용 가능한 아이디입니다</p>
             )}
           </div>
 
@@ -199,7 +199,7 @@ export default function CompleteProfilePage() {
                 <span className="font-semibold text-blue-600 dark:text-blue-400">[필수]</span>{" "}
                 <span className="font-medium">개인정보 수집 및 이용 동의</span>
                 <ul className="mt-2 space-y-1 text-xs text-gray-600 dark:text-gray-400 list-disc list-inside">
-                  <li>수집 항목: ID, 전화번호</li>
+                  <li>수집 항목: 아이디, 전화번호</li>
                   <li>수집 목적: 본 서비스 이용 및 본인 식별</li>
                   <li>보유 기간: 회원 탈퇴 시까지</li>
                   <li>수집된 개인정보는 제3자에게 제공되지 않습니다.</li>

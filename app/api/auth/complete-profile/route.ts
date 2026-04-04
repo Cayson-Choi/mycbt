@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const { nickname, phone } = await request.json()
 
     if (!nickname?.trim() || nickname.trim().length < 2) {
-      return NextResponse.json({ error: "ID는 2자 이상이어야 합니다" }, { status: 400 })
+      return NextResponse.json({ error: "아이디는 2자 이상이어야 합니다" }, { status: 400 })
     }
 
     if (!/^[a-zA-Z0-9가-힣_]+$/.test(nickname.trim())) {
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       select: { nickname: true },
     })
     if (currentUser?.nickname) {
-      return NextResponse.json({ error: "ID는 한 번만 설정할 수 있습니다" }, { status: 400 })
+      return NextResponse.json({ error: "아이디는 한 번만 설정할 수 있습니다" }, { status: 400 })
     }
 
     // 중복 확인
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       where: { nickname: nickname.trim() },
     })
     if (existing) {
-      return NextResponse.json({ error: "이미 사용 중인 ID입니다" }, { status: 400 })
+      return NextResponse.json({ error: "이미 사용 중인 아이디입니다" }, { status: 400 })
     }
 
     await prisma.user.update({

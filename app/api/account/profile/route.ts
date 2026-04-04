@@ -14,6 +14,7 @@ export async function GET() {
       where: { id: session.user.id },
       select: {
         id: true,
+        nickname: true,
         name: true,
         email: true,
         phone: true,
@@ -28,6 +29,7 @@ export async function GET() {
     return NextResponse.json({
       profile: {
         id: user.id,
+        nickname: user.nickname,
         name: user.name,
         email: user.email,
         phone: user.phone,
