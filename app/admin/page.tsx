@@ -43,7 +43,7 @@ export default async function AdminPage() {
 
   const examsForProps = exams.map((e) => ({
     id: e.id,
-    name: `${e.category.name} ${e.name}`,
+    name: e.category.name,
     exam_mode: e.examMode,
     duration_minutes: e.durationMinutes,
     sort_order: e.sortOrder,
@@ -55,7 +55,7 @@ export default async function AdminPage() {
         {/* 헤더 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            관리자 페이지
+            👨‍💼 관리자 페이지
           </h1>
           <p className="text-gray-600 dark:text-gray-400">시스템 관리 및 설정</p>
         </div>
@@ -86,10 +86,10 @@ export default async function AdminPage() {
 
         {/* 시험별 문제 수 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
-          <h2 className="text-xl font-bold mb-4 dark:text-white">시험별 문제 현황</h2>
+          <h2 className="text-xl font-bold mb-4 dark:text-white">📚 시험별 문제 현황</h2>
           <div className="space-y-3">
             {exams.map((exam) => (
-              <ExamQuestionCount key={exam.id} examId={exam.id} examName={`${exam.category.name} ${exam.name}`} />
+              <ExamQuestionCount key={exam.id} examId={exam.id} examName={exam.category.name} />
             ))}
           </div>
         </div>
@@ -111,7 +111,7 @@ export default async function AdminPage() {
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">P</span>
+                <span className="text-2xl">📝</span>
               </div>
               <div>
                 <h3 className="font-bold text-lg dark:text-white">문제 관리</h3>
@@ -128,7 +128,7 @@ export default async function AdminPage() {
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">U</span>
+                <span className="text-2xl">👥</span>
               </div>
               <div>
                 <h3 className="font-bold text-lg dark:text-white">회원 관리</h3>
@@ -145,7 +145,7 @@ export default async function AdminPage() {
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-red-100 dark:bg-red-900/50 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">E</span>
+                <span className="text-2xl">🎓</span>
               </div>
               <div>
                 <h3 className="font-bold text-lg dark:text-white">공식 시험 관리</h3>
