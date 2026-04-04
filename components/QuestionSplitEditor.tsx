@@ -265,8 +265,8 @@ export default function QuestionSplitEditor({
     }
   }
 
-  // Base64/Blob → Storage 업로드 공통 함수
-  const uploadImageBlob = async (blob: Blob) => {
+  // Base64/Blob → Storage 업로드 공통 함수 (targetField: 저장할 formData 키)
+  const uploadImageBlob = async (blob: Blob, targetField: string = 'image_url') => {
     if (blob.size > 5 * 1024 * 1024) {
       alert('이미지 크기는 5MB 이하여야 합니다')
       return
@@ -285,7 +285,7 @@ export default function QuestionSplitEditor({
 
       if (res.ok) {
         const data = await res.json()
-        setFormData((prev) => ({ ...prev, image_url: data.url }))
+        setFormData((prev) => ({ ...prev, [targetField]: data.url }))
       } else {
         const data = await res.json()
         alert(data.error || '이미지 업로드 실패')
@@ -299,21 +299,21 @@ export default function QuestionSplitEditor({
   }
 
   // 이미지 URL 입력 변경 (Base64 data URL 자동 감지 → 업로드)
-  const handleImageUrlChange = (value: string) => {
+  const handleImageUrlChange = (value: string, targetField: string = 'image_url') => {
     if (value.startsWith('data:image/')) {
       try {
         const blob = dataUrlToBlob(value)
-        uploadImageBlob(blob)
+        uploadImageBlob(blob, targetField)
       } catch {
         alert('Base64 이미지 데이터가 올바르지 않습니다')
       }
     } else {
-      setFormData((prev) => ({ ...prev, image_url: value }))
+      setFormData((prev) => ({ ...prev, [targetField]: value }))
     }
   }
 
-  // 클립보드 이미지 붙여넣기
-  const handleImagePaste = (e: React.ClipboardEvent) => {
+  // 클립보드 이미지 붙여넣기 (targetField: 저장할 formData 키)
+  const handleImagePaste = (e: React.ClipboardEvent, targetField: string = 'image_url') => {
     const items = e.clipboardData?.items
     if (!items) return
 
@@ -321,7 +321,7 @@ export default function QuestionSplitEditor({
       if (item.type.startsWith('image/')) {
         e.preventDefault()
         const blob = item.getAsFile()
-        if (blob) uploadImageBlob(blob)
+        if (blob) uploadImageBlob(blob, targetField)
         return
       }
     }
@@ -331,10 +331,38 @@ export default function QuestionSplitEditor({
       e.preventDefault()
       try {
         const blob = dataUrlToBlob(text)
-        uploadImageBlob(blob)
+        uploadImageBlob(blob, targetField)
       } catch {
         // 파싱 실패 시 텍스트로 입력
       }
+    }
+  }
+
+  // 파일 선택으로 이미지 업로드 (targetField: 저장할 formData 키)
+  const handleImageFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, targetField: string = 'image_url') => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) { alert('이미지 파일만 업로드 가능합니다'); return }
+    if (file.size > 5 * 1024 * 1024) { alert('이미지 크기는 5MB 이하여야 합니다'); return }
+
+    try {
+      setUploadingImage(true)
+      const uploadFormData = new FormData()
+      uploadFormData.append('file', file)
+      const res = await fetch('/api/upload/image', { method: 'POST', body: uploadFormData })
+      if (res.ok) {
+        const data = await res.json()
+        setFormData((prev) => ({ ...prev, [targetField]: data.url }))
+      } else {
+        const data = await res.json()
+        alert(data.error || '이미지 업로드 실패')
+      }
+    } catch (err) {
+      console.error('Image upload error:', err)
+      alert('이미지 업로드 중 오류가 발생했습니다')
+    } finally {
+      setUploadingImage(false)
+      e.target.value = ''
     }
   }
 
@@ -562,6 +590,7 @@ export default function QuestionSplitEditor({
             handleImageUpload={handleImageUpload}
             handleImageUrlChange={handleImageUrlChange}
             handleImagePaste={handleImagePaste}
+            handleImageFileUpload={handleImageFileUpload}
             handleSubmit={handleSubmit}
             lockedExam={lockedExam}
           />
@@ -636,6 +665,7 @@ function EditPanel({
   handleImageUpload,
   handleImageUrlChange,
   handleImagePaste,
+  handleImageFileUpload,
   handleSubmit,
   lockedExam,
 }: {
@@ -650,8 +680,9 @@ function EditPanel({
   isDark: boolean
   handleAutoGenerateCode: () => void
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
-  handleImageUrlChange: (value: string) => void
-  handleImagePaste: (e: React.ClipboardEvent) => void
+  handleImageUrlChange: (value: string, targetField?: string) => void
+  handleImagePaste: (e: React.ClipboardEvent, targetField?: string) => void
+  handleImageFileUpload: (e: React.ChangeEvent<HTMLInputElement>, targetField?: string) => void
   handleSubmit: (e?: React.FormEvent) => void
   lockedExam?: { id: number; name: string }
 }) {
@@ -980,13 +1011,59 @@ function EditPanel({
                 }}
                 required
               />
-              <input
-                type="text"
-                value={formData[`choice_${n}_image` as keyof typeof formData] || ''}
-                onChange={(e) => update(`choice_${n}_image`, e.target.value)}
-                placeholder={`선택지 ${n} 이미지 URL (선택사항)`}
-                style={{ ...inputStyle, marginTop: '4px', fontSize: '12px' }}
-              />
+              {/* 선택지 이미지: URL 입력 + Ctrl+V 붙여넣기 + 파일 선택 */}
+              <div style={{ display: 'flex', gap: '4px', marginTop: '4px', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={formData[`choice_${n}_image` as keyof typeof formData] || ''}
+                  onChange={(e) => handleImageUrlChange(e.target.value, `choice_${n}_image`)}
+                  onPaste={(e) => handleImagePaste(e, `choice_${n}_image`)}
+                  placeholder={`선택지 ${n} 이미지 (URL 입력 또는 Ctrl+V 붙여넣기)`}
+                  style={{ ...inputStyle, flex: 1, fontSize: '12px', margin: 0 }}
+                />
+                <label style={{
+                  padding: '6px 10px',
+                  fontSize: '11px',
+                  backgroundColor: isDark ? '#374151' : '#f3f4f6',
+                  border: `1px solid ${isDark ? '#4b5563' : '#d1d5db'}`,
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  color: isDark ? '#d1d5db' : '#374151',
+                }}>
+                  파일
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageFileUpload(e, `choice_${n}_image`)}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+                {formData[`choice_${n}_image` as keyof typeof formData] && (
+                  <button
+                    type="button"
+                    onClick={() => update(`choice_${n}_image`, '')}
+                    style={{
+                      padding: '6px 8px',
+                      fontSize: '11px',
+                      backgroundColor: isDark ? '#991b1b' : '#fef2f2',
+                      border: `1px solid ${isDark ? '#b91c1c' : '#fecaca'}`,
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      color: isDark ? '#fca5a5' : '#dc2626',
+                    }}
+                  >
+                    삭제
+                  </button>
+                )}
+              </div>
+              {formData[`choice_${n}_image` as keyof typeof formData] && (
+                <img
+                  src={String(formData[`choice_${n}_image` as keyof typeof formData])}
+                  alt={`선택지 ${n} 이미지`}
+                  style={{ marginTop: '4px', maxHeight: '60px', borderRadius: '4px', border: `1px solid ${isDark ? '#4b5563' : '#d1d5db'}` }}
+                />
+              )}
             </div>
           ))}
 
