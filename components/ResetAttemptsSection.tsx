@@ -10,7 +10,7 @@ interface Exam {
 
 interface UserInfo {
   id: string
-  name: string
+  nickname: string
   email: string
   phone: string | null
 }
@@ -41,9 +41,9 @@ export default function ResetAttemptsSection({ exams }: Props) {
       .then((res) => res.json())
       .then((data) => {
         if (data.users) {
-          setUsers(data.users.map((u: { id: string; name: string; email: string; phone: string | null }) => ({
+          setUsers(data.users.map((u: { id: string; nickname: string; email: string; phone: string | null }) => ({
             id: u.id,
-            name: u.name,
+            nickname: u.nickname,
             email: u.email,
             phone: u.phone,
           })))
@@ -66,7 +66,7 @@ export default function ResetAttemptsSection({ exams }: Props) {
 
   const filteredUsers = userSearch.trim()
     ? users.filter((u) =>
-        u.name.includes(userSearch.trim()) ||
+        u.nickname.toLowerCase().includes(userSearch.trim().toLowerCase()) ||
         u.email.toLowerCase().includes(userSearch.trim().toLowerCase())
       )
     : []
@@ -78,7 +78,7 @@ export default function ResetAttemptsSection({ exams }: Props) {
       return exam ? `"${exam.name}" 응시 기록` : '시험별 응시 기록'
     }
     if (selectedUser) {
-      const userLabel = `"${selectedUser.name}" (${selectedUser.email})`
+      const userLabel = `"${selectedUser.nickname}" (${selectedUser.email})`
       if (userExamId) {
         const exam = exams.find((e) => e.id === userExamId)
         return `${userLabel}의 "${exam?.name}" 응시 기록`
@@ -194,7 +194,7 @@ export default function ResetAttemptsSection({ exams }: Props) {
             {selectedUser ? (
               <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg max-w-md">
                 <div className="flex-1 text-sm">
-                  <span className="font-medium dark:text-white">{selectedUser.name}</span>
+                  <span className="font-medium dark:text-white">{selectedUser.nickname}</span>
                   <span className="text-gray-500 dark:text-gray-400 ml-2">{selectedUser.email}</span>
                   {selectedUser.phone && (
                     <span className="text-gray-500 dark:text-gray-400 ml-2">{selectedUser.phone}</span>
@@ -217,7 +217,7 @@ export default function ResetAttemptsSection({ exams }: Props) {
                     setShowDropdown(true)
                   }}
                   onFocus={() => { if (userSearch.trim()) setShowDropdown(true) }}
-                  placeholder={usersLoading ? '사용자 목록 로딩 중...' : '이름 또는 이메일로 검색'}
+                  placeholder={usersLoading ? '사용자 목록 로딩 중...' : '아이디 또는 이메일로 검색'}
                   disabled={usersLoading}
                   className="w-full max-w-md px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm disabled:opacity-50"
                 />
@@ -238,7 +238,7 @@ export default function ResetAttemptsSection({ exams }: Props) {
                           }}
                           className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-sm border-b last:border-b-0 dark:border-gray-600"
                         >
-                          <span className="font-medium dark:text-white">{u.name}</span>
+                          <span className="font-medium dark:text-white">{u.nickname}</span>
                           <span className="text-gray-500 dark:text-gray-400 ml-2">{u.email}</span>
                           {u.phone && (
                             <span className="text-gray-500 dark:text-gray-400 ml-2">{u.phone}</span>
