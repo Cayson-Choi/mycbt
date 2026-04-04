@@ -29,17 +29,23 @@ export default function LoginPage() {
   const [emailSent, setEmailSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [kakaoAlert, setKakaoAlert] = useState(false)
+  const [socialLoading, setSocialLoading] = useState<string | null>(null)
 
   const handleGoogleLogin = () => {
     if (isKakaoInApp()) {
       setKakaoAlert(true)
-      // 현재 페이지 URL을 외부 브라우저로 열기
       setTimeout(() => {
         openExternalBrowser(window.location.href)
       }, 1500)
       return
     }
+    setSocialLoading("google")
     signIn("google", { callbackUrl: "/" })
+  }
+
+  const handleSocialLogin = (provider: string) => {
+    setSocialLoading(provider)
+    signIn(provider, { callbackUrl: "/" })
   }
 
   const handleEmailLogin = async (e: React.FormEvent) => {
@@ -72,10 +78,23 @@ export default function LoginPage() {
           </div>
         )}
 
+        {/* 로그인 중 표시 */}
+        {socialLoading && (
+          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg text-center">
+            <div className="text-blue-700 dark:text-blue-300 font-medium">
+              로그인 중...
+            </div>
+            <p className="text-xs text-blue-500 dark:text-blue-400 mt-1">
+              로그인 화면으로 이동합니다
+            </p>
+          </div>
+        )}
+
         {/* 소셜 로그인 */}
         <button
           onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          disabled={!!socialLoading}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -83,25 +102,27 @@ export default function LoginPage() {
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
           </svg>
-          <span>Google로 로그인</span>
+          <span>{socialLoading === "google" ? "로그인 중..." : "Google로 로그인"}</span>
         </button>
 
         <button
-          onClick={() => signIn("kakao", { callbackUrl: "/" })}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#FEE500] text-black rounded-lg hover:bg-[#FDD800] transition-colors"
+          onClick={() => handleSocialLogin("kakao")}
+          disabled={!!socialLoading}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#FEE500] text-black rounded-lg hover:bg-[#FDD800] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#000" d="M12 3C6.48 3 2 6.36 2 10.44c0 2.62 1.75 4.93 4.37 6.24l-1.12 4.16c-.1.35.3.64.6.44l4.96-3.27c.39.04.79.06 1.19.06 5.52 0 10-3.36 10-7.5S17.52 3 12 3z" />
           </svg>
-          <span>카카오로 로그인</span>
+          <span>{socialLoading === "kakao" ? "로그인 중..." : "카카오로 로그인"}</span>
         </button>
 
         <button
-          onClick={() => signIn("naver", { callbackUrl: "/" })}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#03C75A] text-white rounded-lg hover:bg-[#02b351] transition-colors"
+          onClick={() => handleSocialLogin("naver")}
+          disabled={!!socialLoading}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#03C75A] text-white rounded-lg hover:bg-[#02b351] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="text-lg font-bold">N</span>
-          <span>네이버로 로그인</span>
+          <span>{socialLoading === "naver" ? "로그인 중..." : "네이버로 로그인"}</span>
         </button>
 
         {/* 구분선 */}
