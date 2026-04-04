@@ -653,3 +653,74 @@ NEXTAUTH_URL=http://localhost:3000
 🔑 NextAuth Secret = 세션 토큰 암호화 열쇠
 🔑 .env.local = 모든 비밀 열쇠를 보관하는 금고 (GitHub에 절대 올리면 안 됨)
 ```
+
+---
+
+## 11. 같은 이메일로 여러 소셜 로그인 (allowDangerousEmailAccountLinking)
+
+### 문제 상황
+
+예를 들어:
+- 카카오톡 계정 이메일: `raphael0127@naver.com`
+- 네이버 계정 이메일: `raphael0127@naver.com`
+
+같은 이메일인데 다른 소셜 로그인으로 들어오면 어떻게 될까?
+
+### 기본 동작 (설정 안 했을 때)
+
+NextAuth는 보안상 **"OAuthAccountNotLinked"** 에러를 발생시킨다.
+
+```
+카카오로 먼저 가입 → User 생성 (email: raphael0127@naver.com)
+네이버로 로그인 시도 → "이 이메일은 이미 다른 방식으로 가입됨" 에러!
+```
+
+**왜 에러를 내냐?** 보안 때문이다. 만약 누군가 같은 이메일로 다른 소셜 계정을 만들어서 남의 계정에 접근하면 위험하기 때문.
+
+### 우리의 해결: allowDangerousEmailAccountLinking
+
+```typescript
+Google({
+  clientId: ...,
+  clientSecret: ...,
+  allowDangerousEmailAccountLinking: true,  // ← 이거 추가
+}),
+Kakao({
+  ...
+  allowDangerousEmailAccountLinking: true,  // ← 이거 추가
+}),
+Naver({
+  ...
+  allowDangerousEmailAccountLinking: true,  // ← 이거 추가
+}),
+```
+
+이걸 켜면 같은 이메일의 여러 소셜 계정이 **하나의 User에 자동 연결**된다.
+
+```
+카카오로 먼저 가입 → User (id: "abc123") 생성
+네이버로 로그인 → 같은 User (id: "abc123")에 네이버 Account 추가 연결!
+
+결과:
+User (id: "abc123", email: "raphael0127@naver.com")
+├── Account (provider: "kakao")
+└── Account (provider: "naver")
+```
+
+### 비유
+
+**비유:** 식당 회원카드
+
+- 카카오 = 삼성카드, 네이버 = 현대카드
+- 같은 사람이 다른 카드로 결제해도 같은 회원 포인트에 적립됨
+- `allowDangerousEmailAccountLinking`은 "다른 카드여도 같은 이메일이면 같은 회원으로 인정해줘"라는 설정
+
+### "Dangerous"라는 이름이 붙은 이유
+
+- 이론적으로 누군가 같은 이메일로 가짜 소셜 계정을 만들어서 남의 계정에 접근할 수 있음
+- 하지만 구글/카카오/네이버는 이메일 인증이 된 계정이므로 실질적 위험은 낮음
+- 우리 같은 서비스에서는 편의성이 보안 우려보다 크므로 켜는 게 맞음
+
+### 주의사항
+- **모든 provider에 다 넣어야 함** — 하나만 빠져도 그 provider에서 에러 발생
+- 이메일이 없는 소셜 계정은 해당 없음 (이메일로 매칭하는 거니까)
