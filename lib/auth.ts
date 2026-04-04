@@ -45,25 +45,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        // 첫 로그인 시 DB에서 추가 정보 가져오기
-        const dbUser = await prisma.user.findUnique({
-          where: { id: user.id },
-          select: {
-            nickname: true,
-            isAdmin: true,
-            tier: true,
-            tierExpiresAt: true,
-            phone: true,
-          },
-        })
-        if (dbUser) {
-          token.nickname = dbUser.nickname
-          token.isAdmin = dbUser.isAdmin
-          token.tier = dbUser.tier
-          token.tierExpiresAt = dbUser.tierExpiresAt
-          token.phone = dbUser.phone
+    async jwt({ token, user, trigger }) {
+      if (user || trigger === "update" || !token.nickname) {
+        // 첫 로그인, 세션 갱신, 또는 nickname 미설정 시 DB에서 가져오기
+        const userId = user?.id || token.sub
+        if (userId) {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+              nickname: true,
+              isAdmin: true,
+              tier: true,
+              tierExpiresAt: true,
+              phone: true,
+            },
+          })
+          if (dbUser) {
+            token.nickname = dbUser.nickname
+            token.isAdmin = dbUser.isAdmin
+            token.tier = dbUser.tier
+            token.tierExpiresAt = dbUser.tierExpiresAt
+            token.phone = dbUser.phone
+          }
         }
       }
       return token

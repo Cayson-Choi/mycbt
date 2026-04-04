@@ -39,13 +39,15 @@ export default function Header() {
                   <span className="text-sm text-gray-600 dark:text-gray-300">
                     {(user as any).nickname || user.name || user.email}
                   </span>
-                  <Link
-                    href="/my"
-                    className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                  >
-                    마이페이지
-                  </Link>
-                  {(user as any).isAdmin && (
+                  {(user as any).nickname && (
+                    <Link
+                      href="/my"
+                      className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                    >
+                      마이페이지
+                    </Link>
+                  )}
+                  {(user as any).isAdmin && (user as any).nickname && (
                     <Link
                       href="/admin"
                       className="text-sm text-red-600 dark:text-red-400 hover:text-red-700"
@@ -103,14 +105,16 @@ export default function Header() {
             <p className="text-sm text-gray-600 dark:text-gray-300 px-2">
               {(user as any).nickname || user.name || user.email}
             </p>
-            <Link
-              href="/my"
-              className="block px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-              onClick={() => setMobileOpen(false)}
-            >
-              마이페이지
-            </Link>
-            {(user as any).isAdmin && (
+            {(user as any).nickname && (
+              <Link
+                href="/my"
+                className="block px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                onClick={() => setMobileOpen(false)}
+              >
+                마이페이지
+              </Link>
+            )}
+            {(user as any).isAdmin && (user as any).nickname && (
               <Link
                 href="/admin"
                 className="block px-2 py-1.5 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"

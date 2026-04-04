@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
+import { useSession, signIn } from "next-auth/react"
 
 export default function CompleteProfilePage() {
   const router = useRouter()
@@ -117,8 +117,8 @@ export default function CompleteProfilePage() {
         return
       }
 
-      router.push("/")
-      router.refresh()
+      // 세션 갱신 후 홈으로 (nickname이 즉시 반영되도록)
+      window.location.href = "/"
     } catch {
       setError("오류가 발생했습니다")
       setSubmitting(false)
