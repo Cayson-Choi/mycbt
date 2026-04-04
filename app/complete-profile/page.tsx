@@ -33,8 +33,15 @@ export default function CompleteProfilePage() {
     setPhone(formatted)
   }
 
+  const [isComposing, setIsComposing] = useState(false)
+
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^a-zA-Z0-9가-힣_]/g, "").slice(0, 20)
+    // IME 조합 중에는 필터링하지 않음 (모바일 한글 입력 대응)
+    if (isComposing) {
+      setNickname(e.target.value)
+      return
+    }
+    const value = e.target.value.replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ_]/g, "").slice(0, 20)
     setNickname(value)
     setNicknameChecked(false)
     setNicknameAvailable(false)
@@ -134,8 +141,8 @@ export default function CompleteProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700 max-w-md w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-6 sm:py-12 px-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5 sm:p-8 border dark:border-gray-700 max-w-md w-full">
         <h1 className="text-2xl font-bold text-center mb-2 dark:text-white">회원가입</h1>
         <p className="text-center text-gray-500 dark:text-gray-400 mb-6 text-sm">
           서비스 이용을 위해 추가 정보를 입력해주세요.
@@ -152,6 +159,14 @@ export default function CompleteProfilePage() {
                 id="nickname"
                 value={nickname}
                 onChange={handleNicknameChange}
+                onCompositionStart={() => setIsComposing(true)}
+                onCompositionEnd={(e) => {
+                  setIsComposing(false)
+                  const value = (e.target as HTMLInputElement).value.replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ_]/g, "").slice(0, 20)
+                  setNickname(value)
+                  setNicknameChecked(false)
+                  setNicknameAvailable(false)
+                }}
                 required
                 placeholder="영문, 한글, 숫자, _ (2~20자)"
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
