@@ -22,6 +22,10 @@ interface QuestionResult {
   choice_2: string | null
   choice_3: string | null
   choice_4: string | null
+  choice_1_image: string | null
+  choice_2_image: string | null
+  choice_3_image: string | null
+  choice_4_image: string | null
   correct_answer: number | null
   explanation: string | null
   image_url: string | null
@@ -253,7 +257,15 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                                   )}
                                   <span className="dark:text-gray-200">
                                     {choice}.{' '}
-                                    <MathText text={question[`choice_${choice}` as keyof QuestionResult] as string || ''} />
+                                    {question[`choice_${choice}_image` as keyof QuestionResult] ? (
+                                      <img
+                                        src={question[`choice_${choice}_image` as keyof QuestionResult] as string}
+                                        alt={`선택지 ${choice}`}
+                                        className="inline-block max-h-16 align-middle"
+                                      />
+                                    ) : (
+                                      <MathText text={question[`choice_${choice}` as keyof QuestionResult] as string || ''} />
+                                    )}
                                   </span>
                                 </div>
                               </div>

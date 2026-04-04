@@ -49,6 +49,10 @@ export default function QuestionSplitEditor({
     choice_2: question?.choice_2 || '',
     choice_3: question?.choice_3 || '',
     choice_4: question?.choice_4 || '',
+    choice_1_image: question?.choice_1_image || '',
+    choice_2_image: question?.choice_2_image || '',
+    choice_3_image: question?.choice_3_image || '',
+    choice_4_image: question?.choice_4_image || '',
     answer: question?.answer || 1,
     answer_text: question?.answer_text || '',
     explanation: question?.explanation || '',
@@ -79,6 +83,10 @@ export default function QuestionSplitEditor({
     choice_2: question?.choice_2 || '',
     choice_3: question?.choice_3 || '',
     choice_4: question?.choice_4 || '',
+    choice_1_image: question?.choice_1_image || '',
+    choice_2_image: question?.choice_2_image || '',
+    choice_3_image: question?.choice_3_image || '',
+    choice_4_image: question?.choice_4_image || '',
     answer: question?.answer || 1,
     answer_text: question?.answer_text || '',
     explanation: question?.explanation || '',
@@ -972,6 +980,13 @@ function EditPanel({
                 }}
                 required
               />
+              <input
+                type="text"
+                value={formData[`choice_${n}_image` as keyof typeof formData] || ''}
+                onChange={(e) => update(`choice_${n}_image`, e.target.value)}
+                placeholder={`선택지 ${n} 이미지 URL (선택사항)`}
+                style={{ ...inputStyle, marginTop: '4px', fontSize: '12px' }}
+              />
             </div>
           ))}
 
@@ -1280,7 +1295,15 @@ function PreviewPanel({
                           }}
                         >
                           {choice}.{' '}
-                          <MathText text={normalizeLineBreaks(String(choiceText))} />
+                          {formData[`choice_${choice}_image` as keyof typeof formData] ? (
+                            <img
+                              src={String(formData[`choice_${choice}_image` as keyof typeof formData])}
+                              alt={`선택지 ${choice}`}
+                              style={{ display: 'inline-block', maxHeight: '64px', verticalAlign: 'middle' }}
+                            />
+                          ) : (
+                            <MathText text={normalizeLineBreaks(String(choiceText))} />
+                          )}
                           {isCorrect && (
                             <span
                               style={{

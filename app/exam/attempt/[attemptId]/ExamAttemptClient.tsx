@@ -115,7 +115,15 @@ const QuestionCard = memo(function QuestionCard({
                   />
                   <span className="flex-1 dark:text-gray-200">
                     {choice}.{' '}
-                    <MathText text={question[`choice_${choice}`]} />
+                    {question[`choice_${choice}_image` as keyof PaperQuestion] ? (
+                      <img
+                        src={question[`choice_${choice}_image` as keyof PaperQuestion] as string}
+                        alt={`선택지 ${choice}`}
+                        className="inline-block max-h-16 align-middle"
+                      />
+                    ) : (
+                      <MathText text={question[`choice_${choice}`]} />
+                    )}
                   </span>
                 </label>
               ))}
@@ -283,6 +291,10 @@ export interface PaperQuestion {
   choice_2: string | null
   choice_3: string | null
   choice_4: string | null
+  choice_1_image: string | null
+  choice_2_image: string | null
+  choice_3_image: string | null
+  choice_4_image: string | null
   image_url: string | null
   subject_name: string
   selected: number | null

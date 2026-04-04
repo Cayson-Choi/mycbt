@@ -636,10 +636,13 @@ NEXTAUTH_URL=http://localhost:3000
 | Step 5 | 네이버 OAuth 앱 생성 | ✅ 완료 |
 | Step 6 | Gmail SMTP 앱 비밀번호 생성 | ✅ 완료 |
 | Step 7 | NextAuth Secret 생성 | ✅ 완료 |
-| Step 8 | NextAuth 코드 작성 | ⬜ 다음 단계 |
-| Step 9 | 로그인 페이지 구현 | ⬜ 예정 |
-| Step 10 | Cloudinary 세팅 (이미지) | ⬜ 예정 |
-| Step 11 | 토스페이먼츠 세팅 (결제) | ⬜ 예정 |
+| Step 8 | NextAuth 코드 작성 | ✅ 완료 |
+| Step 9 | 로그인 페이지 구현 (4종 소셜 + 이메일) | ✅ 완료 |
+| Step 10 | Cloudinary 세팅 (이미지) | ✅ 완료 (API 코드 작성, 실테스트 미진행) |
+| Step 11 | 핵심 기능 포팅 (52+ 파일) | ✅ 완료 |
+| Step 12 | 성능 최적화 (7+ 라운드) | ✅ 완료 |
+| Step 13 | 토스페이먼츠 세팅 (결제) | ⬜ 예정 |
+| Step 14 | 동영상 강의 기능 | ⬜ 예정 |
 
 ### 지금까지 배운 핵심 개념 요약
 
@@ -724,3 +727,611 @@ User (id: "abc123", email: "raphael0127@naver.com")
 ### 주의사항
 - **모든 provider에 다 넣어야 함** — 하나만 빠져도 그 provider에서 에러 발생
 - 이메일이 없는 소셜 계정은 해당 없음 (이메일로 매칭하는 거니까)
+
+---
+
+## 12. 서버 컴포넌트 vs 클라이언트 컴포넌트 (가장 중요한 성능 개념)
+
+### 핵심 개념
+
+Next.js에서 페이지를 만드는 방식이 두 가지가 있다.
+
+| 구분 | 서버 컴포넌트 | 클라이언트 컴포넌트 |
+|------|-------------|-------------------|
+| 코드 실행 위치 | **서버 (Vercel)** | 사용자 브라우저 |
+| 선언 방법 | 아무것도 안 씀 (기본값) | 파일 맨 위에 `"use client"` 작성 |
+| DB 접근 | **직접 가능** (`prisma.xxx.findMany()`) | 불가능 (API를 통해서만) |
+| 사용자 인터랙션 | 불가능 (onClick, useState 등 사용 불가) | **가능** |
+| HTML 생성 시점 | 서버에서 미리 완성 → 브라우저에 전달 | 브라우저가 JS 다운로드 후 그려냄 |
+
+### 비유: 식당 배달 vs 밀키트
+
+**서버 컴포넌트 = 완성된 요리 배달**
+- 주방(서버)에서 요리를 다 만들어서 완성품을 배달
+- 손님(브라우저)은 받자마자 바로 먹을 수 있음
+- **빠르다!** (HTML이 이미 완성되어 있으니까)
+
+**클라이언트 컴포넌트 (API 방식) = 밀키트 배달**
+- 재료(JS 코드)를 배달
+- 손님(브라우저)이 직접 조리(API 호출 → 데이터 받기 → 화면 그리기)
+- **느리다!** (요리하는 시간 = 로딩 시간)
+- "로딩 중...", "불러오는 중..." 이런 게 나오는 이유가 이것
+
+### 실제 코드 비교
+
+**느린 방식 (클라이언트 컴포넌트 + API 호출):**
+```typescript
+"use client"  // ← 브라우저에서 실행
+import { useState, useEffect } from 'react'
+
+export default function MyPage() {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)  // "로딩 중..."이 필요한 이유
+
+  useEffect(() => {
+    // 브라우저에서 서버로 데이터 요청 (왕복 시간 발생!)
+    fetch('/api/my/attempts')
+      .then(res => res.json())
+      .then(data => {
+        setData(data)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) return <div>로딩 중...</div>  // ← 사용자가 이걸 보게 됨
+  return <div>{/* 데이터 표시 */}</div>
+}
+```
+
+**빠른 방식 (서버 컴포넌트 + 직접 DB 조회):**
+```typescript
+// "use client" 없음 → 서버에서 실행
+import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
+
+export default async function MyPage() {
+  const session = await auth()
+  // 서버에서 DB 직접 조회 (네트워크 왕복 없음!)
+  const attempts = await prisma.attempt.findMany({
+    where: { userId: session.user.id }
+  })
+
+  // HTML이 이미 완성된 상태로 브라우저에 전달
+  return <div>{/* 데이터 표시 */}</div>
+  // "로딩 중..." 이 필요 없다!
+}
+```
+
+### 왜 서버 컴포넌트가 빠른가?
+
+```
+[클라이언트 방식 - 느림]
+브라우저 → 페이지 로드 → JS 다운로드 → API 호출 → 서버 → DB → 서버 → 브라우저 → 화면 그리기
+                                      ↑ 여기서 "로딩 중..." 표시 ↑
+
+[서버 컴포넌트 방식 - 빠름]
+브라우저 → 서버(DB 조회 + HTML 완성) → 완성된 HTML 전달 → 바로 표시!
+          ↑ 서버와 DB는 같은 데이터센터에 있어서 초고속 ↑
+```
+
+서버(Vercel)와 DB(Neon)가 둘 다 클라우드에 있어서, 서버→DB 통신은 1~5ms밖에 안 걸림.
+반면 브라우저→서버 통신은 50~200ms가 걸림.
+서버 컴포넌트는 이 왕복을 없앤 것!
+
+### 그러면 언제 클라이언트 컴포넌트를 쓰냐?
+
+**사용자가 뭔가 클릭하거나 입력해야 할 때만!**
+
+| 상황 | 사용할 컴포넌트 |
+|------|---------------|
+| 데이터를 보여주기만 할 때 | **서버 컴포넌트** |
+| 버튼 클릭, 폼 입력, 토글 등 | **클라이언트 컴포넌트** |
+| 타이머 (시험 시간 카운트다운) | **클라이언트 컴포넌트** |
+| 필터 버튼 (전체/기능사/산업기사 전환) | **클라이언트 컴포넌트** |
+
+### 서버+클라이언트 분리 패턴 (우리 프로젝트의 핵심 패턴)
+
+대부분의 페이지는 **"서버에서 데이터 가져오고, 클라이언트에서 인터랙션"** 패턴을 사용한다.
+
+```
+page.tsx (서버 컴포넌트)
+├── DB에서 데이터 조회 (prisma)
+├── 데이터를 props로 전달
+└── <ClientComponent data={data} />  ← 여기만 클라이언트
+
+ClientComponent.tsx (클라이언트 컴포넌트)
+├── "use client"
+├── props로 받은 데이터를 화면에 표시
+├── 필터, 토글, 버튼 등 인터랙션 처리
+└── 필요할 때만 API 호출 (데이터 변경 시)
+```
+
+**비유:** 
+- page.tsx = 주방에서 재료를 다 준비해서 접시에 담아놓는 것
+- ClientComponent = 손님 테이블에서 소스 뿌리거나 뚜껑 여는 것
+
+### API는 언제 꼭 써야 하나?
+
+API(fetch)를 써야 하는 경우는 **데이터를 "변경"할 때**뿐이다.
+
+| 작업 | 방법 | 이유 |
+|------|------|------|
+| 시험 목록 보기 | 서버 컴포넌트 | 읽기만 하니까 |
+| 시험 결과 보기 | 서버 컴포넌트 | 읽기만 하니까 |
+| **시험 시작** | **API (POST)** | DB에 새 데이터 생성 |
+| **답안 제출** | **API (POST)** | DB에 데이터 저장 |
+| **시험 중단** | **API (POST)** | DB에서 데이터 삭제 |
+| **로그인/로그아웃** | **API** | 세션 생성/삭제 |
+
+**비유:**
+- 메뉴판 보기(읽기) = 서버 컴포넌트
+- 주문하기(쓰기) = API
+
+---
+
+## 13. 페이지 로딩 속도 최적화 (7라운드에 걸친 대작전)
+
+### 최초 상태 (문제)
+
+처음에 전기짱 사이트는 페이지 전환할 때 **2초 이상** 걸렸다.
+
+```
+홈 → 카테고리 페이지 : 2~3초
+카테고리 → 시험 시작 : 1~2초
+시험 끝 → 결과 보기 : 1~2초
+마이페이지 진입 : 2초+
+```
+
+원인: 모든 페이지가 클라이언트 컴포넌트 + API 호출 방식이었음
+
+### 최종 결과 (최적화 후)
+
+```
+홈 → 카테고리 페이지 : 0.1~0.2초 ⚡
+카테고리 → 시험 시작 : 0.1~0.2초 ⚡
+시험 끝 → 결과 보기 : 0.1~0.2초 ⚡
+마이페이지 진입 : 0.1~0.2초 ⚡
+```
+
+### 어떻게 달성했나? (6가지 기법)
+
+---
+
+### 기법 1: 서버 컴포넌트 전환 (가장 큰 효과)
+
+위의 섹션 12에서 설명한 대로, 모든 "읽기 전용" 페이지를 서버 컴포넌트로 바꿨다.
+
+**바꾼 페이지들:**
+- 홈페이지 (`app/page.tsx`)
+- 카테고리 페이지 (`app/category/[categoryId]/page.tsx`)
+- 시험 시작 페이지 (`app/exam/[examId]/page.tsx`)
+- 시험 풀기 페이지 (`app/exam/attempt/[attemptId]/page.tsx`)
+- 시험 결과 페이지 (`app/exam/result/[attemptId]/page.tsx`)
+- 마이페이지 (`app/my/page.tsx`)
+- 오답노트 (`app/my/wrong-answers/page.tsx`)
+- 프로필 수정 (`app/my/profile/page.tsx`)
+- 관리자 페이지 5개 전부
+
+---
+
+### 기법 2: DB 연결 방식 변경 (PrismaPg → PrismaNeon)
+
+**비유:** 전화 vs 문자
+
+- **PrismaPg (TCP 연결)** = 전화 걸기
+  - "여보세요? → 네 → 이거 주세요 → 잠깐만요 → 여기요 → 감사합니다 → 끊기"
+  - 처음 전화 연결하는 데 시간이 걸림 (1~2초) = **콜드 스타트**
+  - 서버리스(Vercel) 환경에서는 매번 새로 전화해야 할 수 있음
+
+- **PrismaNeon (HTTP 연결)** = 문자 보내기
+  - "이거 주세요" → 바로 답장 옴
+  - 연결 과정 없이 바로 통신 (100~200ms)
+  - 서버리스에서도 항상 빠름
+
+```typescript
+// 변경 전 (느림)
+import { PrismaPg } from '@prisma/adapter-pg'
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const adapter = new PrismaPg(pool)
+
+// 변경 후 (빠름)
+import { PrismaNeon } from '@prisma/adapter-neon'
+const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL })
+```
+
+**결과:** DB 첫 요청이 1~2초 → 100~200ms로 단축
+
+---
+
+### 기법 3: 캐싱 3단계 (3-Layer Caching)
+
+캐싱 = 한 번 만든 결과를 저장해두고 다시 쓰는 것
+
+**비유:** 식당 주문
+
+레벨 1: **CDN 캐시 (ISR)** = 만들어둔 도시락
+- 자주 바뀌지 않는 페이지(홈, 카테고리 목록)는 미리 만들어서 저장
+- 60초마다 새로 만듦
+- 전세계 어디서든 가장 가까운 보관소에서 바로 꺼내줌
+
+```typescript
+// page.tsx에 이 한 줄 추가하면 ISR 활성화
+export const revalidate = 60  // 60초마다 새로 만듦
+```
+
+레벨 2: **서버 캐시 (unstable_cache)** = 주방장의 메모장
+- DB 조회 결과를 서버 메모리에 60초간 저장
+- 같은 데이터를 다시 요청하면 DB 안 가고 메모에서 바로 답변
+- DB 부하 감소 + 응답 속도 향상
+
+```typescript
+import { unstable_cache } from 'next/cache'
+
+const getCategories = unstable_cache(
+  async () => {
+    return prisma.examCategory.findMany({ ... })  // 실제 DB 조회
+  },
+  ["exam-categories"],     // 캐시 이름표
+  { revalidate: 60 }       // 60초 후 새로 조회
+)
+
+// 사용할 때
+const categories = await getCategories()  // 캐시에 있으면 DB 안 감!
+```
+
+레벨 3: **브라우저 캐시 (staleTimes)** = 손님의 기억
+- 한 번 방문한 페이지를 브라우저가 기억
+- 다시 방문하면 서버에 안 물어보고 바로 보여줌
+
+```typescript
+// next.config.ts
+experimental: {
+  staleTimes: {
+    dynamic: 60,   // 동적 페이지: 60초간 기억
+    static: 300,   // 정적 페이지: 5분간 기억
+  },
+},
+```
+
+**3단계 캐싱 흐름:**
+```
+사용자가 페이지 요청
+  → 1단계: 브라우저 캐시에 있나? → 있으면 즉시 표시 (0ms)
+  → 2단계: CDN 캐시에 있나? → 있으면 바로 전달 (10~50ms)
+  → 3단계: 서버 캐시에 있나? → 있으면 DB 안 감 (50~100ms)
+  → 전부 없으면: DB 조회 → 결과를 3단계 모두에 저장
+```
+
+---
+
+### 기법 4: 미리 준비 (Prefetch)
+
+**비유:** 손님이 주문하기 전에 미리 요리 시작
+
+사용자가 아직 클릭하지 않았지만, **"아마 여길 누를 거야"** 하고 미리 페이지를 준비해두는 것.
+
+```typescript
+// 홈에 들어오면 → 카테고리 페이지들을 미리 준비
+useEffect(() => {
+  router.prefetch('/category/1')  // 전기기초
+  router.prefetch('/category/2')  // 전기기능사
+  router.prefetch('/category/3')  // 전기산업기사
+  router.prefetch('/category/4')  // 전기기사
+}, [router])
+
+// 마이페이지에 들어오면 → 하위 페이지들을 미리 준비
+useEffect(() => {
+  router.prefetch('/my/wrong-answers')
+  router.prefetch('/my/profile')
+  router.prefetch('/my/withdraw')
+  // 최근 결과 페이지 10개도 미리 준비
+  for (const attempt of attempts.slice(0, 10)) {
+    router.prefetch(`/exam/result/${attempt.id}`)
+  }
+}, [router, attempts])
+```
+
+**결과:** 사용자가 버튼 누르는 순간 이미 준비가 끝나 있어서 **즉시 전환!**
+
+---
+
+### 기법 5: 빌드 시 미리 생성 (generateStaticParams)
+
+**비유:** 개점 전에 인기 메뉴 미리 만들어두기
+
+카테고리 페이지(4개), 시험 시작 페이지(여러 개)를 **빌드할 때** 미리 HTML로 만들어둔다.
+
+```typescript
+// app/category/[categoryId]/page.tsx
+export async function generateStaticParams() {
+  const categories = await prisma.examCategory.findMany({
+    select: { id: true }
+  })
+  return categories.map(c => ({ categoryId: String(c.id) }))
+}
+// → 빌드 시 /category/1, /category/2, /category/3, /category/4 페이지가 미리 생성됨
+```
+
+사용자가 방문하면 서버에서 새로 만들 필요 없이 미리 만들어둔 걸 바로 전달.
+
+---
+
+### 기법 6: 불필요한 것 제거
+
+**로딩 스켈레톤 제거:**
+- 원래 `loading.tsx` 파일이 있으면 페이지 전환 시 스켈레톤(회색 블록)이 나왔음
+- 서버 컴포넌트로 바꾼 후에는 스켈레톤이 오히려 **깜빡임**을 일으킴
+- 모든 `loading.tsx` 삭제 → 이전 페이지가 유지되다가 새 페이지가 준비되면 바로 교체
+
+**KaTeX 동적 임포트:**
+- 수학 수식 렌더링 라이브러리 (264KB로 매우 큼)
+- 모든 페이지에서 로드하던 것을 → 수식이 있는 페이지에서만 로드하도록 변경
+
+```typescript
+// 변경 전: 항상 로드 (264KB 낭비)
+import katex from 'katex'
+
+// 변경 후: 필요할 때만 로드
+const katex = await import('katex')
+```
+
+**API 병렬 처리:**
+- 시험 시작 API에서 4개 DB 조회를 순차적으로 하던 것을 동시에 실행
+
+```typescript
+// 변경 전 (느림): 하나씩 순서대로
+const exam = await prisma.exam.findUnique(...)      // 100ms
+const subjects = await prisma.subject.findMany(...) // 100ms
+const existing = await prisma.attempt.findMany(...) // 100ms
+const questions = await prisma.question.findMany(...)// 100ms
+// 총 400ms
+
+// 변경 후 (빠름): 4개를 동시에
+const [exam, subjects, existing, questions] = await Promise.all([
+  prisma.exam.findUnique(...),
+  prisma.subject.findMany(...),
+  prisma.attempt.findMany(...),
+  prisma.question.findMany(...),
+])
+// 총 ~100ms (가장 느린 하나 기준)
+```
+
+**비유:** 4명에게 전화를 걸어야 할 때, 한 명씩 순서대로 거는 것(400초) vs 4명에게 동시에 거는 것(100초)
+
+---
+
+### 최적화 전후 비교 총정리
+
+| 항목 | 최적화 전 | 최적화 후 | 기법 |
+|------|----------|----------|------|
+| 카테고리 페이지 | 2~3초 | 0.1~0.2초 | 서버 컴포넌트 + ISR + prefetch |
+| 시험 시작 페이지 | 1~2초 | 0.1~0.2초 | 서버 컴포넌트 + generateStaticParams |
+| 시험 결과 페이지 | 1~2초 | 0.1~0.2초 | 서버 컴포넌트 + prefetch |
+| 마이페이지 | 2초+ | 0.1~0.2초 | 서버 컴포넌트 + prefetch |
+| DB 콜드 스타트 | 1~2초 | 0.1~0.2초 | PrismaPg→PrismaNeon |
+| 시험 제출 API | 2초+ | 0.15초 | batch createMany |
+| "로딩 중..." 표시 | 매번 나옴 | **완전 제거** | 서버 컴포넌트 |
+
+---
+
+## 14. 커스텀 폰트와 FOUT 문제
+
+### FOUT가 뭔데?
+
+**FOUT = Flash of Unstyled Text** (스타일 안 된 글자가 번쩍 나타나는 현상)
+
+우리 사이트에서 "전기짱"이라는 타이틀은 **따악단단(DdakDanDan)** 이라는 커스텀 폰트를 사용한다. 이 폰트 파일이 4.8MB로 꽤 크다.
+
+**문제:**
+```
+페이지 로드
+  → HTML이 먼저 보임 → 폰트 아직 안 옴 → 기본 고딕체로 "전기짱" 표시
+  → 0.5초 후 폰트 도착 → 갑자기 따악단단체로 바뀜!
+  → 사용자: "뭐지? 글씨가 깜빡거렸는데?"
+```
+
+### 해결 방법
+
+**1단계: font-display를 block으로 변경**
+
+```css
+/* 변경 전 */
+@font-face {
+  font-family: 'DdakDanDan';
+  font-display: swap;  /* ← 폰트 없으면 기본 폰트로 먼저 보여줌 (깜빡임 원인) */
+}
+
+/* 변경 후 */
+@font-face {
+  font-family: 'DdakDanDan';
+  font-display: block;  /* ← 폰트 올 때까지 글자를 안 보여줌 (깜빡임 방지) */
+}
+```
+
+**비유:**
+- `swap` = 대역 배우가 먼저 나가고, 주연이 도착하면 교체 (관객이 눈치챔)
+- `block` = 주연이 도착할 때까지 무대를 안 열음 (관객은 모름)
+
+**2단계: 폰트 미리 로드 (preload)**
+
+```html
+<!-- layout.tsx의 <head>에 추가 -->
+<link rel="preload" href="/fonts/DdakDanDan.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+```
+
+이러면 브라우저가 HTML을 읽자마자 폰트를 **최우선으로 다운로드**한다. 다른 이미지나 JS보다 먼저!
+
+---
+
+## 15. 카카오톡 인앱 브라우저 문제
+
+### 문제
+
+카카오톡 채팅방에서 전기짱 링크를 누르면 **카카오톡 내장 브라우저**에서 열린다.
+이 브라우저에서는 **구글 로그인이 작동하지 않는다** (구글이 보안상 차단).
+
+### 해결
+
+```typescript
+// 카카오톡 인앱 브라우저 감지
+function isKakaoInApp() {
+  const ua = navigator.userAgent.toLowerCase()
+  return ua.includes("kakaotalk")  // 카카오톡이면 true
+}
+
+// 구글 로그인 버튼 클릭 시
+const handleGoogleLogin = () => {
+  if (isKakaoInApp()) {
+    // 1. 안내 메시지 표시: "카카오톡 내에서는 구글 로그인이 불가합니다"
+    setKakaoAlert(true)
+    // 2. 1.5초 후 외부 브라우저(Chrome/Safari)로 자동 이동
+    setTimeout(() => openExternalBrowser(window.location.href), 1500)
+    return
+  }
+  // 일반 브라우저면 바로 구글 로그인
+  signIn("google", { callbackUrl: "/" })
+}
+```
+
+**비유:** 
+- 카카오톡 브라우저 = 회사 건물 안 작은 매점 (구글 결제기가 없음)
+- 외부 브라우저 = 밖에 있는 큰 마트 (구글 결제기 있음)
+- 해결: "여기선 구글 결제 안 돼요, 밖에 마트로 안내할게요" → 자동 이동
+
+---
+
+## 16. 이메일 인증 메일 커스터마이징
+
+### 기본 상태
+
+NextAuth의 이메일 로그인은 기본적으로 **영어 템플릿**을 보냈다:
+- 제목: "Sign in to www.mycbt.xyz"
+- 버튼: "Sign in" (영어)
+- 디자인: 밋밋한 기본 템플릿
+
+### 커스텀 적용
+
+`lib/auth.ts`에서 Nodemailer 프로바이더에 `sendVerificationRequest` 함수를 직접 작성:
+
+- **제목:** `[전기짱] 이메일 로그인 인증`
+- **버튼:** `로그인하기` (한글, 파란색)
+- **브랜딩:** 전기짱 로고 텍스트 + "전기 자격시험 CBT" 소개
+- **하단:** 본인 미요청 안내 + 링크 복사용 URL
+
+### callbackUrl 설정 (중요!)
+
+이메일의 로그인 링크를 클릭한 후 어디로 갈지 설정해야 한다.
+
+```typescript
+// 잘못된 설정 (callbackUrl 없음)
+await signIn("nodemailer", { email, redirect: false })
+// → 이메일 링크 클릭 → /login 페이지로 돌아감 (회원가입 페이지 안 뜸!)
+
+// 올바른 설정
+await signIn("nodemailer", { email, redirect: false, callbackUrl: "/" })
+// → 이메일 링크 클릭 → 홈(/)으로 이동 → ProfileGuard가 회원가입 페이지로 리다이렉트
+```
+
+---
+
+## 17. Middleware (미들웨어 = 경비실)
+
+### 뭐하는 거?
+
+모든 페이지 요청 전에 **먼저 실행**되는 코드. 로그인 여부를 확인해서 비로그인 사용자를 차단한다.
+
+**비유:** 건물 입구 경비실
+- 사람(요청)이 건물에 들어오면 → 경비실(미들웨어)에서 먼저 확인
+- 신분증(세션 쿠키) 있으면 → 통과
+- 없으면 → "로그인 페이지로 가세요" 하고 돌려보냄
+
+### Edge Runtime 제한 (중요한 삽질 포인트)
+
+미들웨어는 **Edge Runtime**에서 실행된다. Edge Runtime은 가볍고 빠르지만 제한이 있다:
+- **Prisma 사용 불가** — Node.js 전용 라이브러리
+- **DB 직접 조회 불가**
+- 따라서 **쿠키만 확인**하는 방식으로 작성해야 함
+
+```typescript
+// ❌ 이렇게 하면 에러 (Edge에서 Prisma 못 씀)
+import { prisma } from '@/lib/prisma'
+
+// ✅ 이렇게 해야 함 (쿠키만 확인)
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('authjs.session-token')
+  if (!token) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+}
+```
+
+---
+
+## 18. ProfileGuard 패턴 (프로필 완성 강제)
+
+### 문제
+
+소셜 로그인(구글/카카오/네이버)만 하면 이메일과 이름만 있고, **아이디(nickname)와 전화번호**가 없다.
+이 상태로 사이트를 쓰면 안 되므로, 추가 정보 입력을 강제해야 한다.
+
+### 해결: ProfileGuard 컴포넌트
+
+홈페이지에 `<ProfileGuard />` 컴포넌트를 넣어두고, 프로필이 미완성이면 자동으로 `/complete-profile`로 이동시킨다.
+
+```typescript
+"use client"
+export default function ProfileGuard() {
+  const { data: session } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    // 로그인은 했는데 닉네임이나 전화번호가 없으면
+    if (session?.user?.id && (!session.user.nickname || !session.user.phone)) {
+      router.replace("/complete-profile")  // 회원가입 페이지로 강제 이동
+    }
+  }, [session, router])
+
+  return null  // 화면에는 아무것도 안 보임 (감시만 함)
+}
+```
+
+**비유:** 
+- 식당에 들어왔는데 회원카드가 없으면 → "먼저 카드 만들고 오세요" 하고 접수처로 안내
+- ProfileGuard = 이 안내원 역할
+
+### 회원가입 취소
+
+회원가입 페이지에서 "취소"를 누르면:
+1. `signOut()` 호출 → 로그아웃
+2. 메인 페이지로 이동
+
+로그아웃을 해야 하는 이유: 로그인 상태로 메인에 가면 ProfileGuard가 다시 회원가입으로 보내기 때문.
+
+---
+
+## 19. 알게 된 버그와 해결 방법 모음
+
+### 버그 1: question_type 불일치
+- **증상:** 모든 문제가 서술형으로 나옴 (4지 선다가 안 보임)
+- **원인:** 코드에서 `questionType === 'CHOICE'`로 비교했는데, DB 값은 `'MULTIPLE_CHOICE'`
+- **해결:** `'CHOICE'` → `'MULTIPLE_CHOICE'`로 수정
+
+### 버그 2: camelCase vs snake_case
+- **증상:** 과목별 점수가 안 나옴
+- **원인:** Prisma는 `subjectScore` (camelCase) 반환, 프론트엔드는 `subject_score` (snake_case) 기대
+- **해결:** API 응답에서 변환 코드 추가
+
+### 버그 3: useSearchParams + Suspense
+- **증상:** 관리자 문제 관리 페이지 빌드 에러
+- **원인:** Next.js 15에서 `useSearchParams()`를 쓰려면 반드시 `<Suspense>`로 감싸야 함
+- **해결:** page.tsx에 Suspense 래퍼 추가, 실제 컴포넌트를 별도 파일로 분리
+
+### 버그 4: PrismaNeon 생성자
+- **증상:** DB 연결 에러
+- **원인:** `new PrismaNeon(connectionString)` 이렇게 문자열 직접 전달하면 안 됨
+- **해결:** `new PrismaNeon({ connectionString })` 객체로 감싸서 전달
+
+### 버그 5: 회원탈퇴 후 로그인 유지
+- **증상:** 회원 탈퇴했는데 사이트가 로그인 상태로 남아있음
+- **원인:** DB에서 유저를 삭제했지만 JWT 세션 쿠키가 브라우저에 남아있었음
+- **해결:** 탈퇴 후 `signOut({ callbackUrl: '/' })` 호출하여 세션 쿠키 삭제

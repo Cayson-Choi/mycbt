@@ -227,6 +227,10 @@ model Question {
   choice2      String?      @map("choice_2")
   choice3      String?      @map("choice_3")
   choice4      String?      @map("choice_4")
+  choice1Image String?      @map("choice_1_image")
+  choice2Image String?      @map("choice_2_image")
+  choice3Image String?      @map("choice_3_image")
+  choice4Image String?      @map("choice_4_image")
   answer       Int?
   answerText   String?      @map("answer_text") @db.Text
   points       Int          @default(1)

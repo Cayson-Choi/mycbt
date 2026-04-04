@@ -36,8 +36,7 @@ export default function Home() {
             </h2>
             <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
               인터넷에 떠도는 오류 투성이 문제를 그대로 가져다 쓰지 않습니다.
-              전기 분야 현직 전문가가 매 문제, 매 선지, 매 해설을
-              원본 기출과 대조하고 교차 검증한 문제만 출제합니다.
+              전기 분야 현직 전문가가 모든 문제와 선택지를 정확하게 복원하고, 철저한 검증을 거친 문제만을 출제합니다.
             </p>
           </div>
 
@@ -121,7 +120,7 @@ export default function Home() {
                 <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
                   <li className="flex gap-2">
                     <span className="text-blue-500">+</span>
-                    <span>원본 기출 대조 후 수록</span>
+                    <span>정확한 복원과 검증 후 수록</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-blue-500">+</span>
@@ -129,7 +128,7 @@ export default function Home() {
                   </li>
                   <li className="flex gap-2">
                     <span className="text-blue-500">+</span>
-                    <span>모든 문제에 상세 해설 수록</span>
+                    <span>모든 문제 해설 수록</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-blue-500">+</span>

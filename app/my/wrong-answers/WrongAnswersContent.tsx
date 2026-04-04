@@ -24,6 +24,10 @@ interface WrongAnswer {
   choice_2: string
   choice_3: string
   choice_4: string
+  choice_1_image: string | null
+  choice_2_image: string | null
+  choice_3_image: string | null
+  choice_4_image: string | null
   correct_answer: number
   student_answer: number
   explanation: string | null
@@ -168,7 +172,15 @@ export default function WrongAnswersContent({ data }: { data: WrongAnswersData }
                               )}
                               <span className="dark:text-gray-200">
                                 {choice}.{' '}
-                                <MathText text={item[`choice_${choice}` as keyof WrongAnswer] as string} />
+                                {item[`choice_${choice}_image` as keyof WrongAnswer] ? (
+                                  <img
+                                    src={item[`choice_${choice}_image` as keyof WrongAnswer] as string}
+                                    alt={`선택지 ${choice}`}
+                                    className="inline-block max-h-16 align-middle"
+                                  />
+                                ) : (
+                                  <MathText text={item[`choice_${choice}` as keyof WrongAnswer] as string} />
+                                )}
                               </span>
                               {isCorrect && (
                                 <span className="ml-auto text-sm font-semibold text-green-600 dark:text-green-400">
