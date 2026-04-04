@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useSession, signIn } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 
 export default function CompleteProfilePage() {
   const router = useRouter()
@@ -215,13 +215,23 @@ export default function CompleteProfilePage() {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={submitting || !agreed || !nicknameChecked || !nicknameAvailable}
-            className="w-full bg-blue-600 dark:bg-blue-500 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-          >
-            {submitting ? "처리 중..." : "가입 완료"}
-          </button>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: "/" })}
+              disabled={submitting}
+              className="flex-1 py-2.5 px-4 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium disabled:opacity-50"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              disabled={submitting || !agreed || !nicknameChecked || !nicknameAvailable}
+              className="flex-[2] bg-blue-600 dark:bg-blue-500 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            >
+              {submitting ? "처리 중..." : "가입 완료"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
