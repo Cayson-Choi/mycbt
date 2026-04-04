@@ -14,24 +14,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "exam_id가 필요합니다" }, { status: 400 })
     }
 
-    const exam = await prisma.exam.findUnique({
-      where: { id: Number(exam_id) },
-      select: {
-        id: true,
-        name: true,
-        examMode: true,
-        durationMinutes: true,
-        isPublished: true,
-        password: true,
-      },
-    })
+    // 시험 정보 + 과목 + 진행 중인 시험 + 문제 전부 병렬 조회
+    const examId = Number(exam_id)
+    const [exam, subjects, existing, allQuestions] = await Promise.all([
+      prisma.exam.findUnique({
+        where: { id: examId },
+        select: { id: true, name: true, examMode: true, durationMinutes: true, isPublished: true, password: true },
+      }),
+      prisma.subject.findMany({ where: { examId }, orderBy: { orderNo: "asc" } }),
+      prisma.attempt.findMany({ where: { userId: session.user.id, status: "IN_PROGRESS" }, select: { id: true } }),
+      prisma.question.findMany({ where: { examId, isActive: true }, select: { id: true, subjectId: true } }),
+    ])
+
     if (!exam) {
       return NextResponse.json({ error: "존재하지 않는 시험입니다" }, { status: 404 })
+    }
+    if (subjects.length === 0) {
+      return NextResponse.json({ error: "과목 정보를 찾을 수 없습니다" }, { status: 404 })
     }
 
     const isOfficial = exam.examMode === "OFFICIAL"
 
-    // OFFICIAL: 게시/비밀번호 검증
     if (isOfficial) {
       if (!exam.isPublished) {
         return NextResponse.json({ error: "현재 응시할 수 없는 시험입니다" }, { status: 403 })
@@ -41,56 +44,51 @@ export async function POST(request: Request) {
       }
     }
 
-    // 진행 중인 시험 삭제
-    const existing = await prisma.attempt.findMany({
-      where: { userId: session.user.id, status: "IN_PROGRESS" },
-      select: { id: true },
-    })
+    // 진행 중인 시험 삭제 (fire-and-forget: 새 시험 생성과 병렬)
+    let cleanupPromise: Promise<void> | null = null
     if (existing.length > 0) {
       const ids = existing.map((e) => e.id)
-      await Promise.all([
-        prisma.attemptItem.deleteMany({ where: { attemptId: { in: ids } } }),
-        prisma.subjectScore.deleteMany({ where: { attemptId: { in: ids } } }),
-        prisma.attemptQuestion.deleteMany({ where: { attemptId: { in: ids } } }),
-      ])
-      await prisma.attempt.deleteMany({ where: { id: { in: ids } } })
-    }
-
-    const subjects = await prisma.subject.findMany({
-      where: { examId: Number(exam_id) },
-      orderBy: { orderNo: "asc" },
-    })
-    if (subjects.length === 0) {
-      return NextResponse.json({ error: "과목 정보를 찾을 수 없습니다" }, { status: 404 })
+      cleanupPromise = (async () => {
+        await Promise.all([
+          prisma.attemptItem.deleteMany({ where: { attemptId: { in: ids } } }),
+          prisma.subjectScore.deleteMany({ where: { attemptId: { in: ids } } }),
+          prisma.attemptQuestion.deleteMany({ where: { attemptId: { in: ids } } }),
+        ])
+        await prisma.attempt.deleteMany({ where: { id: { in: ids } } })
+      })()
     }
 
     const startedAt = new Date()
     const expiresAt = new Date(startedAt.getTime() + exam.durationMinutes * 60 * 1000)
 
+    if (allQuestions.length === 0) {
+      if (cleanupPromise) await cleanupPromise
+      return NextResponse.json({ error: "출제할 문제가 없습니다" }, { status: 404 })
+    }
+
     if (isOfficial) {
       // OFFICIAL: 전체 활성 문제 id순
-      const allQuestions = await prisma.question.findMany({
-        where: { examId: Number(exam_id), isActive: true },
-        orderBy: { id: "asc" },
-        select: { id: true },
-      })
-      if (allQuestions.length === 0) {
+      const officialQuestions = allQuestions.sort((a, b) => a.id - b.id)
+      if (officialQuestions.length === 0) {
+        if (cleanupPromise) await cleanupPromise
         return NextResponse.json({ error: "출제할 문제가 없습니다" }, { status: 404 })
       }
 
+      // cleanup과 attempt 생성 병렬
+      if (cleanupPromise) await cleanupPromise
       const newAttempt = await prisma.attempt.create({
         data: {
           userId: session.user.id,
-          examId: Number(exam_id),
+          examId: examId,
           status: "IN_PROGRESS",
           startedAt,
           expiresAt,
-          totalQuestions: allQuestions.length,
+          totalQuestions: officialQuestions.length,
         },
       })
 
       await prisma.attemptQuestion.createMany({
-        data: allQuestions.map((q, i) => ({
+        data: officialQuestions.map((q, i) => ({
           attemptId: newAttempt.id,
           seq: i + 1,
           questionId: q.id,
@@ -103,7 +101,7 @@ export async function POST(request: Request) {
         exam_name: exam.name,
         exam_mode: exam.examMode,
         duration_minutes: exam.durationMinutes,
-        total_questions: allQuestions.length,
+        total_questions: officialQuestions.length,
         expires_at: expiresAt.toISOString(),
         is_existing: false,
         message: "시험이 시작되었습니다",
@@ -112,10 +110,11 @@ export async function POST(request: Request) {
       // PRACTICE: 과목별 랜덤 선택
       const totalQuestions = subjects.reduce((sum, s) => sum + s.questionsPerAttempt, 0)
 
+      if (cleanupPromise) await cleanupPromise
       const newAttempt = await prisma.attempt.create({
         data: {
           userId: session.user.id,
-          examId: Number(exam_id),
+          examId: examId,
           status: "IN_PROGRESS",
           startedAt,
           expiresAt,
@@ -126,13 +125,9 @@ export async function POST(request: Request) {
       const attemptQuestions: { attemptId: number; seq: number; questionId: number }[] = []
       let seq = 1
 
-      // 모든 과목 문제를 한 번에 조회 후 subjectId로 그룹핑
-      const allQuestionsPractice = await prisma.question.findMany({
-        where: { examId: Number(exam_id), isActive: true },
-        select: { id: true, subjectId: true },
-      })
+      // 이미 조회된 allQuestions를 subjectId로 그룹핑 (추가 DB 조회 없음)
       const questionsBySubject = new Map<number, { id: number }[]>()
-      for (const q of allQuestionsPractice) {
+      for (const q of allQuestions) {
         const list = questionsBySubject.get(q.subjectId) ?? []
         list.push({ id: q.id })
         questionsBySubject.set(q.subjectId, list)
