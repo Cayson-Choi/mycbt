@@ -169,7 +169,7 @@ export default function CategoryPage({
               <div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                   {noYearExams.map((exam, idx) => (
-                    <ExamCard key={exam.id} exam={exam} colorIndex={idx} />
+                    <ExamCard key={exam.id} exam={exam} categoryName={category.name} colorIndex={idx} />
                   ))}
                 </div>
               </div>
@@ -194,6 +194,7 @@ export default function CategoryPage({
                       <ExamCard
                         key={exam.id}
                         exam={exam}
+                        categoryName={category.name}
                         colorIndex={(exam.round || 1) - 1}
                       />
                     ))}
@@ -210,9 +211,11 @@ export default function CategoryPage({
 
 function ExamCard({
   exam,
+  categoryName,
   colorIndex,
 }: {
   exam: ExamItem
+  categoryName: string
   colorIndex: number
 }) {
   const hasQuestions = exam.total_questions > 0
@@ -267,7 +270,7 @@ function ExamCard({
 
       {/* 시험명 */}
       <h3 className="font-bold text-sm sm:text-base mb-1">
-        {exam.year ? `${exam.year}년 ${exam.round}회` : exam.name}
+        {exam.year ? `${categoryName} ${exam.year}년 ${exam.round}회` : exam.name}
       </h3>
 
       {/* 문제 수 */}
