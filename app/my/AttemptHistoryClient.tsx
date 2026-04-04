@@ -41,12 +41,16 @@ export default function AttemptHistoryClient({ attempts, examStats }: Props) {
   const router = useRouter()
   const [filter, setFilter] = useState<'all' | number>('all')
 
-  // 마이페이지 진입 시 하위 페이지들을 미리 prefetch
+  // 마이페이지 진입 시 하위 페이지 + 응시 결과 페이지 미리 prefetch
   useEffect(() => {
     router.prefetch('/my/wrong-answers')
     router.prefetch('/my/profile')
     router.prefetch('/my/withdraw')
-  }, [router])
+    // 각 응시 기록의 상세 결과 페이지도 prefetch (최근 10개)
+    for (const attempt of attempts.slice(0, 10)) {
+      router.prefetch(`/exam/result/${attempt.id}`)
+    }
+  }, [router, attempts])
 
   const filteredAttempts =
     filter === 'all'
