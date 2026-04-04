@@ -23,6 +23,14 @@ const roundColors = [
   "from-rose-500 to-rose-700",
 ]
 
+export async function generateStaticParams() {
+  const categories = await prisma.examCategory.findMany({
+    where: { isActive: true },
+    select: { id: true },
+  })
+  return categories.map((c) => ({ categoryId: String(c.id) }))
+}
+
 export default async function CategoryPage({
   params,
 }: {

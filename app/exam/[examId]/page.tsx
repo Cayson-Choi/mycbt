@@ -5,6 +5,14 @@ import ExamStartClient from "./ExamStartClient"
 
 export const revalidate = 60
 
+export async function generateStaticParams() {
+  const exams = await prisma.exam.findMany({
+    where: { isPublished: true },
+    select: { id: true },
+  })
+  return exams.map((e) => ({ examId: String(e.id) }))
+}
+
 export default async function ExamStartPage({
   params,
 }: {

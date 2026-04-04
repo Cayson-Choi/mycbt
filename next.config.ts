@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['katex'],
+    staleTimes: {
+      dynamic: 60,
+      static: 300,
+    },
   },
 };
 
