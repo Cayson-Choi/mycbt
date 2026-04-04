@@ -8,11 +8,19 @@ import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: "전기짱",
-  description: "모의고사를 풀고, 즉시 채점하고, 랭킹으로 경쟁하세요.",
+  description: "전기 박사와 기술사들이 검증한 CBT 문제",
   openGraph: {
     title: "전기짱",
-    description: "모의고사를 풀고, 즉시 채점하고, 랭킹으로 경쟁하세요.",
+    description: "전기 박사와 기술사들이 검증한 CBT 문제",
     siteName: "전기짱",
+    url: "https://www.mycbt.xyz",
+    images: [
+      {
+        url: "https://www.mycbt.xyz/og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
 };
 
