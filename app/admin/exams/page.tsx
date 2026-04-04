@@ -351,8 +351,8 @@ export default function AdminExamsPage() {
                         <td className="px-4 py-3 dark:text-gray-200">
                           <div className="font-medium">
                             {exam.year
-                              ? `${exam.year}년 ${exam.round}회차`
-                              : "기본"}
+                              ? `${exam.category_name} ${exam.year}년 ${exam.round}회차`
+                              : exam.name}
                           </div>
                           {exam.subjects.length > 0 && (
                             <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
