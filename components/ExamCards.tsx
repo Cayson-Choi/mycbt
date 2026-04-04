@@ -47,27 +47,8 @@ export default function ExamCards({
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full" />
             <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-white/5 rounded-full" />
 
-            {/* 아이콘 */}
-            <div className="relative mb-4">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d={style.icon}
-                  />
-                </svg>
-              </div>
-            </div>
-
             {/* 내용 */}
-            <div className="relative">
+            <div className="relative pt-2">
               <h3 className="text-lg sm:text-xl font-bold mb-1">
                 {cat.name}
               </h3>
