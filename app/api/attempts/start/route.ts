@@ -16,6 +16,14 @@ export async function POST(request: Request) {
 
     const exam = await prisma.exam.findUnique({
       where: { id: Number(exam_id) },
+      select: {
+        id: true,
+        name: true,
+        examMode: true,
+        durationMinutes: true,
+        isPublished: true,
+        password: true,
+      },
     })
     if (!exam) {
       return NextResponse.json({ error: "존재하지 않는 시험입니다" }, { status: 404 })
@@ -40,9 +48,11 @@ export async function POST(request: Request) {
     })
     if (existing.length > 0) {
       const ids = existing.map((e) => e.id)
-      await prisma.attemptItem.deleteMany({ where: { attemptId: { in: ids } } })
-      await prisma.subjectScore.deleteMany({ where: { attemptId: { in: ids } } })
-      await prisma.attemptQuestion.deleteMany({ where: { attemptId: { in: ids } } })
+      await Promise.all([
+        prisma.attemptItem.deleteMany({ where: { attemptId: { in: ids } } }),
+        prisma.subjectScore.deleteMany({ where: { attemptId: { in: ids } } }),
+        prisma.attemptQuestion.deleteMany({ where: { attemptId: { in: ids } } }),
+      ])
       await prisma.attempt.deleteMany({ where: { id: { in: ids } } })
     }
 
@@ -116,19 +126,21 @@ export async function POST(request: Request) {
       const attemptQuestions: { attemptId: number; seq: number; questionId: number }[] = []
       let seq = 1
 
-      // 모든 과목 문제 병렬 조회
-      const questionResults = await Promise.all(
-        subjects.map((s) =>
-          prisma.question.findMany({
-            where: { examId: Number(exam_id), subjectId: s.id, isActive: true },
-            select: { id: true },
-          })
-        )
-      )
+      // 모든 과목 문제를 한 번에 조회 후 subjectId로 그룹핑
+      const allQuestionsPractice = await prisma.question.findMany({
+        where: { examId: Number(exam_id), isActive: true },
+        select: { id: true, subjectId: true },
+      })
+      const questionsBySubject = new Map<number, { id: number }[]>()
+      for (const q of allQuestionsPractice) {
+        const list = questionsBySubject.get(q.subjectId) ?? []
+        list.push({ id: q.id })
+        questionsBySubject.set(q.subjectId, list)
+      }
 
       for (let i = 0; i < subjects.length; i++) {
         const subject = subjects[i]
-        const available = questionResults[i]
+        const available = questionsBySubject.get(subject.id) ?? []
 
         if (available.length === 0) {
           await prisma.attempt.delete({ where: { id: newAttempt.id } })

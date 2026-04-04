@@ -1,17 +1,26 @@
 import { prisma } from "@/lib/prisma"
+import { unstable_cache } from "next/cache"
 import ExamCards from "./ExamCards"
 
-export default async function HomeExamCards() {
-  const categories = await prisma.examCategory.findMany({
-    where: { isActive: true },
-    include: {
-      exams: {
-        where: { isPublished: true, examMode: "PRACTICE" },
-        select: { id: true },
+const getCategories = unstable_cache(
+  async () => {
+    return prisma.examCategory.findMany({
+      where: { isActive: true },
+      include: {
+        exams: {
+          where: { isPublished: true, examMode: "PRACTICE" },
+          select: { id: true },
+        },
       },
-    },
-    orderBy: { sortOrder: "asc" },
-  })
+      orderBy: { sortOrder: "asc" },
+    })
+  },
+  ["exam-categories"],
+  { revalidate: 60 }
+)
+
+export default async function HomeExamCards() {
+  const categories = await getCategories()
 
   const categoryCards = categories.map((cat) => ({
     id: cat.id,

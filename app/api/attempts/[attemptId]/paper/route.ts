@@ -15,10 +15,38 @@ export async function GET(
     const { attemptId } = await params
     const aid = Number(attemptId)
 
-    const attempt = await prisma.attempt.findUnique({
-      where: { id: aid },
-      include: { exam: { select: { name: true, examMode: true, durationMinutes: true } } },
-    })
+    // 시험 정보, 시험지 문제(정답 제외), 기존 답안을 병렬 조회
+    const [attempt, attemptQuestions, savedAnswers] = await Promise.all([
+      prisma.attempt.findUnique({
+        where: { id: aid },
+        include: { exam: { select: { name: true, examMode: true, durationMinutes: true } } },
+      }),
+      prisma.attemptQuestion.findMany({
+        where: { attemptId: aid },
+        orderBy: { seq: "asc" },
+        include: {
+          question: {
+            select: {
+              id: true,
+              questionCode: true,
+              questionText: true,
+              questionType: true,
+              choice1: true,
+              choice2: true,
+              choice3: true,
+              choice4: true,
+              imageUrl: true,
+              subjectId: true,
+              subject: { select: { name: true } },
+            },
+          },
+        },
+      }),
+      prisma.attemptItem.findMany({
+        where: { attemptId: aid },
+        select: { questionId: true, selected: true, answerText: true },
+      }),
+    ])
 
     if (!attempt) {
       return NextResponse.json({ error: "시험을 찾을 수 없습니다" }, { status: 404 })
@@ -26,35 +54,6 @@ export async function GET(
     if (attempt.userId !== session.user.id) {
       return NextResponse.json({ error: "권한이 없습니다" }, { status: 403 })
     }
-
-    // 시험지 문제 조회 (정답 제외!)
-    const attemptQuestions = await prisma.attemptQuestion.findMany({
-      where: { attemptId: aid },
-      orderBy: { seq: "asc" },
-      include: {
-        question: {
-          select: {
-            id: true,
-            questionCode: true,
-            questionText: true,
-            questionType: true,
-            choice1: true,
-            choice2: true,
-            choice3: true,
-            choice4: true,
-            imageUrl: true,
-            subjectId: true,
-            subject: { select: { name: true } },
-          },
-        },
-      },
-    })
-
-    // 기존 답안 조회 (이어풀기)
-    const savedAnswers = await prisma.attemptItem.findMany({
-      where: { attemptId: aid },
-      select: { questionId: true, selected: true, answerText: true },
-    })
     const answersMap = new Map(savedAnswers.map((a) => [a.questionId, a]))
 
     const questions = attemptQuestions.map((aq) => {

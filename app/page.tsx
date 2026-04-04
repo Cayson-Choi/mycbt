@@ -1,7 +1,6 @@
 import { Suspense } from "react"
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
 import HeroSection from "@/components/HeroSection"
 import HomeExamCards from "@/components/HomeExamCards"
 
@@ -27,11 +26,7 @@ export default async function Home() {
   // 로그인된 사용자인데 전화번호가 없으면 → 추가정보기입 페이지로
   const session = await auth()
   if (session?.user?.id) {
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { nickname: true, phone: true },
-    })
-    if (!user?.nickname || !user?.phone) {
+    if (!session.user.nickname || !session.user.phone) {
       redirect("/complete-profile")
     }
   }
