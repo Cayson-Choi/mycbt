@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     const questions = await prisma.question.findMany({
       where,
       include: {
-        exam: { select: { name: true } },
+        exam: { select: { name: true, category: { select: { name: true } } } },
         subject: { select: { name: true } },
       },
       orderBy: [{ examId: "asc" }, { subjectId: "asc" }, { questionCode: "asc" }],
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
       explanation: q.explanation,
       image_url: q.imageUrl,
       points: q.points,
-      exams: q.exam ? { name: q.exam.name } : null,
+      exams: q.exam ? { name: q.exam.category?.name || q.exam.name } : null,
       subjects: q.subject ? { name: q.subject.name } : null,
     }))
 

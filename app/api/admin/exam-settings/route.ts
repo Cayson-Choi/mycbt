@@ -23,6 +23,7 @@ export async function GET() {
         examMode: true,
         durationMinutes: true,
         sortOrder: true,
+        category: { select: { name: true } },
       },
       orderBy: { sortOrder: "asc" },
     })
@@ -53,7 +54,7 @@ export async function GET() {
     return NextResponse.json({
       exams: exams.map((e) => ({
         id: e.id,
-        name: e.name,
+        name: e.category?.name || e.name,
         exam_mode: e.examMode,
         duration_minutes: e.durationMinutes,
         sort_order: e.sortOrder,
