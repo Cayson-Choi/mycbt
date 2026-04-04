@@ -352,7 +352,7 @@ export default function AdminExamsPage() {
                           <div className="font-medium">
                             {exam.year
                               ? `${exam.year}년 ${exam.round}회차`
-                              : exam.name}
+                              : "기본"}
                           </div>
                           {exam.subjects.length > 0 && (
                             <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
@@ -392,12 +392,20 @@ export default function AdminExamsPage() {
                           </button>
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <button
-                            onClick={() => setDeleteTarget(exam)}
-                            className="text-red-500 hover:text-red-700 dark:hover:text-red-400 text-xs"
-                          >
-                            삭제
-                          </button>
+                          <div className="flex items-center justify-center gap-3">
+                            <Link
+                              href={`/admin/questions?exam=${exam.id}`}
+                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium"
+                            >
+                              문제관리
+                            </Link>
+                            <button
+                              onClick={() => setDeleteTarget(exam)}
+                              className="text-red-500 hover:text-red-700 dark:hover:text-red-400 text-xs"
+                            >
+                              삭제
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

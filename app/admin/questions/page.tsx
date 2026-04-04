@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, lazy, Suspense } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import MathText from '@/components/MathText'
@@ -12,10 +12,11 @@ const BulkUploadSplitEditor = lazy(() => import('@/components/BulkUploadSplitEdi
 
 export default function AdminQuestionsPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [questions, setQuestions] = useState<any[]>([])
   const [filteredQuestions, setFilteredQuestions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [examFilter, setExamFilter] = useState<string>('all')
+  const [examFilter, setExamFilter] = useState<string>(searchParams.get('exam') || 'all')
   const [subjectFilter, setSubjectFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [subjects, setSubjects] = useState<any[]>([])
