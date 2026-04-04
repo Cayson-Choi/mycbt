@@ -6,30 +6,19 @@ export default async function HomeExamCards() {
     where: { isActive: true },
     include: {
       exams: {
-        where: { isPublished: true },
-        orderBy: { sortOrder: "asc" },
-        select: {
-          id: true,
-          name: true,
-          year: true,
-          round: true,
-          examMode: true,
-          durationMinutes: true,
-        },
+        where: { isPublished: true, examMode: "PRACTICE" },
+        select: { id: true },
       },
     },
     orderBy: { sortOrder: "asc" },
   })
 
-  const exams = categories.flatMap((cat) =>
-    cat.exams.map((exam) => ({
-      id: exam.id,
-      name: cat.name,
-      examMode: exam.examMode,
-      durationMinutes: exam.durationMinutes,
-      isPublished: true,
-    }))
-  )
+  const categoryCards = categories.map((cat) => ({
+    id: cat.id,
+    name: cat.name,
+    description: cat.description,
+    examCount: cat.exams.length,
+  }))
 
-  return <ExamCards initialExams={exams} />
+  return <ExamCards categories={categoryCards} />
 }

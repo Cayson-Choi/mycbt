@@ -20,7 +20,9 @@ export async function GET(
     // snake_case 변환 (프론트 호환)
     const response = NextResponse.json({
       id: exam.id,
-      name: exam.category.name,
+      name: exam.year
+        ? `${exam.category.name} ${exam.year}년 ${exam.round}회`
+        : exam.category.name,
       exam_mode: exam.examMode,
       password: exam.password,
       duration_minutes: exam.durationMinutes,

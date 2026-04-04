@@ -20,12 +20,14 @@ export async function GET() {
       select: {
         id: true,
         name: true,
+        year: true,
+        round: true,
         examMode: true,
         durationMinutes: true,
         sortOrder: true,
         category: { select: { name: true } },
       },
-      orderBy: { sortOrder: "asc" },
+      orderBy: [{ categoryId: "asc" }, { year: "desc" }, { round: "asc" }, { sortOrder: "asc" }],
     })
 
     // 과목 목록
@@ -54,7 +56,9 @@ export async function GET() {
     return NextResponse.json({
       exams: exams.map((e) => ({
         id: e.id,
-        name: e.category?.name || e.name,
+        name: e.year
+          ? `${e.category?.name} ${e.year}년 ${e.round}회`
+          : (e.category?.name || e.name),
         exam_mode: e.examMode,
         duration_minutes: e.durationMinutes,
         sort_order: e.sortOrder,

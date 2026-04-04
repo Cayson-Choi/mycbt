@@ -32,18 +32,22 @@ export default async function AdminPage() {
       select: {
         id: true,
         name: true,
+        year: true,
+        round: true,
         examMode: true,
         durationMinutes: true,
         sortOrder: true,
         category: { select: { name: true } },
       },
-      orderBy: { sortOrder: "asc" },
+      orderBy: [{ categoryId: "asc" }, { year: "desc" }, { round: "asc" }, { sortOrder: "asc" }],
     }),
   ])
 
   const examsForProps = exams.map((e) => ({
     id: e.id,
-    name: e.category.name,
+    name: e.year
+      ? `${e.category.name} ${e.year}년 ${e.round}회`
+      : e.category.name,
     exam_mode: e.examMode,
     duration_minutes: e.durationMinutes,
     sort_order: e.sortOrder,
@@ -89,7 +93,7 @@ export default async function AdminPage() {
           <h2 className="text-xl font-bold mb-4 dark:text-white">📚 시험별 문제 현황</h2>
           <div className="space-y-3">
             {exams.map((exam) => (
-              <ExamQuestionCount key={exam.id} examId={exam.id} examName={exam.category.name} />
+              <ExamQuestionCount key={exam.id} examId={exam.id} examName={exam.year ? `${exam.category.name} ${exam.year}년 ${exam.round}회` : exam.category.name} />
             ))}
           </div>
         </div>
@@ -105,6 +109,23 @@ export default async function AdminPage() {
 
         {/* 관리 메뉴 */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <Link
+            href="/admin/exams"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">📅</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg dark:text-white">시험 관리</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  년도/회차 시험 생성 및 관리
+                </p>
+              </div>
+            </div>
+          </Link>
+
           <Link
             href="/admin/questions"
             className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
