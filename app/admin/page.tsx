@@ -35,6 +35,7 @@ export default async function AdminPage() {
         examMode: true,
         durationMinutes: true,
         sortOrder: true,
+        category: { select: { name: true } },
       },
       orderBy: { sortOrder: "asc" },
     }),
@@ -42,7 +43,7 @@ export default async function AdminPage() {
 
   const examsForProps = exams.map((e) => ({
     id: e.id,
-    name: e.name,
+    name: `${e.category.name} ${e.name}`,
     exam_mode: e.examMode,
     duration_minutes: e.durationMinutes,
     sort_order: e.sortOrder,
@@ -88,7 +89,7 @@ export default async function AdminPage() {
           <h2 className="text-xl font-bold mb-4 dark:text-white">시험별 문제 현황</h2>
           <div className="space-y-3">
             {exams.map((exam) => (
-              <ExamQuestionCount key={exam.id} examId={exam.id} examName={exam.name} />
+              <ExamQuestionCount key={exam.id} examId={exam.id} examName={`${exam.category.name} ${exam.name}`} />
             ))}
           </div>
         </div>
