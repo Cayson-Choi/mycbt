@@ -19,6 +19,7 @@ model User {
   sessions      Session[]
 
   // 전기짱 전용 필드
+  nickname  String?  @unique // 사용자 ID (한 번 설정하면 변경 불가)
   phone     String?
   studentId String? @map("student_id")
   isAdmin   Boolean @default(false) @map("is_admin")

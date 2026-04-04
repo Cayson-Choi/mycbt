@@ -29,9 +29,9 @@ export default async function Home() {
   if (session?.user?.id) {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { phone: true },
+      select: { nickname: true, phone: true },
     })
-    if (!user?.phone) {
+    if (!user?.nickname || !user?.phone) {
       redirect("/complete-profile")
     }
   }

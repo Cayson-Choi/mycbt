@@ -51,6 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const dbUser = await prisma.user.findUnique({
           where: { id: user.id },
           select: {
+            nickname: true,
             isAdmin: true,
             tier: true,
             tierExpiresAt: true,
@@ -58,6 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           },
         })
         if (dbUser) {
+          token.nickname = dbUser.nickname
           token.isAdmin = dbUser.isAdmin
           token.tier = dbUser.tier
           token.tierExpiresAt = dbUser.tierExpiresAt
@@ -69,6 +71,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (token) {
         session.user.id = token.sub!
+        session.user.nickname = (token.nickname as string) ?? null
         session.user.isAdmin = (token.isAdmin as boolean) ?? false
         session.user.tier = (token.tier as any) ?? "GUEST"
         session.user.tierExpiresAt = (token.tierExpiresAt as Date) ?? null

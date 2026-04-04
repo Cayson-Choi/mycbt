@@ -5,6 +5,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string
+      nickname: string | null
       isAdmin: boolean
       tier: UserTier
       tierExpiresAt: Date | null

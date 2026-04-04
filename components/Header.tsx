@@ -37,7 +37,7 @@ export default function Header() {
                 {/* 데스크톱 메뉴 */}
                 <div className="hidden sm:flex items-center gap-3">
                   <span className="text-sm text-gray-600 dark:text-gray-300">
-                    {user.name || user.email}
+                    {(user as any).nickname || user.name || user.email}
                   </span>
                   <Link
                     href="/my"
@@ -101,7 +101,7 @@ export default function Header() {
         {mobileOpen && user && (
           <div className="sm:hidden pb-3 space-y-2 border-t border-gray-200 dark:border-gray-700 pt-3">
             <p className="text-sm text-gray-600 dark:text-gray-300 px-2">
-              {user.name || user.email}
+              {(user as any).nickname || user.name || user.email}
             </p>
             <Link
               href="/my"
