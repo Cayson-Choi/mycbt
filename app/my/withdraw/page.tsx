@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import ConfirmDialog from '@/components/ConfirmDialog'
 
@@ -23,7 +24,9 @@ export default function WithdrawPage() {
       })
 
       if (res.ok) {
-        router.push('/')
+        // JWT 세션 쿠키 제거 후 홈으로 이동
+        await signOut({ callbackUrl: '/' })
+        return
       } else {
         const data = await res.json()
         setError(data.error || '탈퇴 처리 실패')
@@ -47,32 +50,13 @@ export default function WithdrawPage() {
 
         {/* 경고 메시지 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
-          <div className="space-y-4">
-            <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4">
-              <h3 className="font-bold text-red-900 dark:text-red-200 mb-2">삭제되는 정보</h3>
-              <ul className="text-sm text-red-800 dark:text-red-300 space-y-1">
-                <li>- 모든 개인정보 (이름, 이메일, 전화번호)</li>
-                <li>- 모든 시험 응시 기록 및 답안</li>
-                <li>- 오늘 랭킹에서 즉시 제외</li>
-                <li>- 마이페이지의 모든 데이터</li>
-              </ul>
-            </div>
-
-            <div className="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-4">
-              <h3 className="font-bold text-yellow-900 dark:text-yellow-200 mb-2">유지되는 정보</h3>
-              <ul className="text-sm text-yellow-800 dark:text-yellow-300 space-y-1">
-                <li>- 어제 랭킹 스냅샷 (익명 처리: "탈퇴한 사용자"로 표시)</li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-100 dark:bg-gray-700 border-l-4 border-gray-500 p-4">
-              <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-2">주의사항</h3>
-              <ul className="text-sm text-gray-800 dark:text-gray-300 space-y-1">
-                <li>- 모든 데이터는 즉시 삭제되며 복구할 수 없습니다</li>
-                <li>- 탈퇴 후 동일한 계정으로 재가입은 가능하지만 기존 데이터는 복원되지 않습니다</li>
-                <li>- 탈퇴 처리는 즉시 완료됩니다</li>
-              </ul>
-            </div>
+          <div className="bg-gray-100 dark:bg-gray-700 border-l-4 border-gray-500 p-4">
+            <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-2">주의사항</h3>
+            <ul className="text-sm text-gray-800 dark:text-gray-300 space-y-1">
+              <li>- 모든 데이터는 즉시 삭제되며 복구할 수 없습니다</li>
+              <li>- 탈퇴 후 동일한 계정으로 재가입은 가능하지만 기존 데이터는 복원되지 않습니다</li>
+              <li>- 탈퇴 처리는 즉시 완료됩니다</li>
+            </ul>
           </div>
 
           {/* 확인 체크박스 */}
