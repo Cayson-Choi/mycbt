@@ -88,10 +88,14 @@ def remove_text_remnant(gray_array):
         elif first_block_end > 0:
             break
 
-    # If first block is small (< 35px, likely text remnant like "는?" or "기는?")
-    # AND there's a gap after it (>= 5 white rows)
-    # AND there's more content after the gap (the actual diagram)
-    if first_block_end < 35:
+    # Check if first block is a text remnant vs diagram element:
+    # - Text remnant (Korean chars): high ink density (avg > 30 ink pixels/row)
+    # - Diagram element (wires, +V label): low ink density (avg < 30)
+    avg_ink = np.mean(ink_per_row[:first_block_end + 1])
+    is_dense_text = avg_ink > 30
+
+    # Only remove if: small block (< 35px), dense text, gap after, more content below
+    if first_block_end < 35 and is_dense_text:
         gap_start = first_block_end + 1
         gap_end = gap_start
         for i in range(gap_start, min(gap_start + 30, h)):
@@ -118,14 +122,8 @@ def crop_and_trim(image_path, crop_y):
     if crop_y > 0 and crop_y < h - 10:
         img = img.crop((0, crop_y, w, h))
 
-    # Step 2: detect and remove text remnant at top
+    # Step 2: find content bounding box (no auto text-remnant removal — risks cutting diagrams)
     gray = np.array(img.convert('L'))
-    remnant_skip = remove_text_remnant(gray)
-    if remnant_skip > 0:
-        img = img.crop((0, remnant_skip, img.size[0], img.size[1]))
-        gray = np.array(img.convert('L'))
-
-    # Step 3: find content bounding box
     mask = gray < 240
     rows_with_content = np.any(mask, axis=1)
     cols_with_content = np.any(mask, axis=0)
