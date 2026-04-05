@@ -547,8 +547,12 @@ export default function QuestionsClient() {
                           )}
                           <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                             {[1, 2, 3, 4].map((n) => (
-                              <div key={n}>
-                                {q.answer === n ? '✓ ' : ''}{n}.{' '}
+                              <div key={n} className="flex items-center gap-1.5">
+                                <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold flex-shrink-0 ${
+                                  q.answer === n
+                                    ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
+                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+                                }`}>{n}</span>
                                 {q[`choice_${n}_image` as keyof typeof q] ? (
                                   <img
                                     src={q[`choice_${n}_image` as keyof typeof q] as string}

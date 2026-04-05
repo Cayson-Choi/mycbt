@@ -1282,14 +1282,29 @@ function BulkPreviewPanel({
                               : isDark ? 'rgba(55, 65, 81, 0.3)' : '#ffffff',
                           }}
                         >
-                          <input
-                            type="radio"
-                            checked={isCorrect}
-                            readOnly
-                            style={{ marginTop: '2px', accentColor: '#22c55e' }}
-                          />
+                          <span
+                            style={{
+                              flexShrink: 0,
+                              width: '26px',
+                              height: '26px',
+                              borderRadius: '50%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '12px',
+                              fontWeight: 700,
+                              backgroundColor: isCorrect
+                                ? isDark ? '#ffffff' : '#111827'
+                                : isDark ? '#4b5563' : '#e5e7eb',
+                              color: isCorrect
+                                ? isDark ? '#111827' : '#ffffff'
+                                : isDark ? '#d1d5db' : '#4b5563',
+                            }}
+                          >
+                            {choice}
+                          </span>
                           <span style={{ flex: 1, fontSize: '14px', color: isDark ? '#e5e7eb' : '#111827', wordBreak: 'break-word' }}>
-                            {choice}. <MathText text={normalizeLineBreaks(choiceText)} />
+                            <MathText text={normalizeLineBreaks(choiceText)} />
                             {isCorrect && (
                               <span
                                 style={{

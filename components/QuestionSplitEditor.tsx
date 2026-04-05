@@ -1358,12 +1358,27 @@ function PreviewPanel({
                             : isDark ? 'rgba(55, 65, 81, 0.3)' : '#ffffff',
                         }}
                       >
-                        <input
-                          type="radio"
-                          checked={isCorrect}
-                          readOnly
-                          style={{ marginTop: '2px', accentColor: '#22c55e' }}
-                        />
+                        <span
+                          style={{
+                            flexShrink: 0,
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            backgroundColor: isCorrect
+                              ? isDark ? '#ffffff' : '#111827'
+                              : isDark ? '#4b5563' : '#e5e7eb',
+                            color: isCorrect
+                              ? isDark ? '#111827' : '#ffffff'
+                              : isDark ? '#d1d5db' : '#4b5563',
+                          }}
+                        >
+                          {choice}
+                        </span>
                         <span
                           style={{
                             flex: 1,
@@ -1371,7 +1386,6 @@ function PreviewPanel({
                             color: isDark ? '#e5e7eb' : '#111827',
                           }}
                         >
-                          {choice}.{' '}
                           {formData[`choice_${choice}_image` as keyof typeof formData] ? (
                             <img
                               src={String(formData[`choice_${choice}_image` as keyof typeof formData])}
