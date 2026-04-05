@@ -76,8 +76,8 @@ export function CountUp({ target, suffix = '', className = '' }: { target: numbe
     const runCycle = () => {
       if (cancelled) return
 
-      const duration = 1500
-      const steps = 40
+      const duration = 3000
+      const steps = 60
       let step = 0
 
       setCount(0)
@@ -85,7 +85,8 @@ export function CountUp({ target, suffix = '', className = '' }: { target: numbe
       const timer = setInterval(() => {
         if (cancelled) { clearInterval(timer); return }
         step++
-        const progress = 1 - Math.pow(1 - step / steps, 3)
+        // 강한 ease-out: 처음 빠르게, 끝으로 갈수록 점점 더 느려짐
+        const progress = 1 - Math.pow(1 - step / steps, 5)
         setCount(Math.round(target * progress))
         if (step >= steps) {
           setCount(target)
