@@ -12,6 +12,7 @@ interface ExamItem {
   year: number | null
   round: number | null
   exam_mode: string
+  exam_type: string
   duration_minutes: number
   is_published: boolean
   subjects: { id: number; name: string; questions_per_attempt: number }[]
@@ -42,6 +43,7 @@ export default function ExamsClient({
   )
   const [newYear, setNewYear] = useState<number>(2026)
   const [newRound, setNewRound] = useState<number>(1)
+  const [newExamType, setNewExamType] = useState<string>("WRITTEN")
   const [newDuration, setNewDuration] = useState<number>(60)
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState("")
@@ -79,6 +81,7 @@ export default function ExamsClient({
           category_id: newCategoryId,
           year: newYear,
           round: newRound,
+          exam_type: newExamType,
           duration_minutes: newDuration,
         }),
       })
@@ -197,7 +200,7 @@ export default function ExamsClient({
             <h2 className="text-lg font-bold mb-4 dark:text-white">
               새 시험 추가
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium mb-1 dark:text-gray-200">
                   카테고리
@@ -212,6 +215,19 @@ export default function ExamsClient({
                       {c.name}
                     </option>
                   ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 dark:text-gray-200">
+                  유형
+                </label>
+                <select
+                  value={newExamType}
+                  onChange={(e) => setNewExamType(e.target.value)}
+                  className="w-full px-3 py-2 border dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                >
+                  <option value="WRITTEN">필기</option>
+                  <option value="PRACTICAL">실기</option>
                 </select>
               </div>
               <div>
@@ -305,6 +321,9 @@ export default function ExamsClient({
                         시험
                       </th>
                       <th className="px-4 py-3 text-center font-medium text-gray-600 dark:text-gray-300">
+                        유형
+                      </th>
+                      <th className="px-4 py-3 text-center font-medium text-gray-600 dark:text-gray-300">
                         과목
                       </th>
                       <th className="px-4 py-3 text-center font-medium text-gray-600 dark:text-gray-300">
@@ -340,6 +359,15 @@ export default function ExamsClient({
                                 .join(", ")}
                             </div>
                           )}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            exam.exam_type === "PRACTICAL"
+                              ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300"
+                              : "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300"
+                          }`}>
+                            {exam.exam_type === "PRACTICAL" ? "실기" : "필기"}
+                          </span>
                         </td>
                         <td className="px-4 py-3 text-center dark:text-gray-300">
                           {exam.subjects.length}개

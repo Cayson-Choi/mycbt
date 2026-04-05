@@ -164,6 +164,11 @@ enum ExamMode {
   OFFICIAL
 }
 
+enum ExamType {
+  WRITTEN
+  PRACTICAL
+}
+
 model Exam {
   id              Int      @id @default(autoincrement())
   categoryId      Int      @map("category_id")
@@ -171,6 +176,7 @@ model Exam {
   year            Int?
   round           Int?
   examMode        ExamMode @default(PRACTICE) @map("exam_mode")
+  examType        ExamType @default(WRITTEN) @map("exam_type")
   password        String?
   durationMinutes Int      @default(60) @map("duration_minutes")
   isPublished     Boolean  @default(true) @map("is_published")
@@ -190,7 +196,7 @@ model Exam {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([categoryId, year, round])
+  @@unique([categoryId, year, round, examType])
   @@map("exams")
 }
 

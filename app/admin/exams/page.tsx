@@ -44,6 +44,7 @@ export default async function AdminExamsPage() {
     year: e.year,
     round: e.round,
     exam_mode: e.examMode,
+    exam_type: e.examType,
     duration_minutes: e.durationMinutes,
     is_published: e.isPublished,
     subjects: e.subjects.map((s) => ({

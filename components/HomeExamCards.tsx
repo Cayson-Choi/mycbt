@@ -9,7 +9,7 @@ const getCategories = unstable_cache(
       include: {
         exams: {
           where: { isPublished: true, examMode: "PRACTICE" },
-          select: { id: true },
+          select: { id: true, examType: true },
         },
       },
       orderBy: { sortOrder: "asc" },
@@ -27,6 +27,8 @@ export default async function HomeExamCards() {
     name: cat.name,
     description: cat.description,
     examCount: cat.exams.length,
+    writtenCount: cat.exams.filter((e) => e.examType === "WRITTEN").length,
+    practicalCount: cat.exams.filter((e) => e.examType === "PRACTICAL").length,
   }))
 
   return <ExamCards categories={categoryCards} />

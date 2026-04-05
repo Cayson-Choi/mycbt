@@ -21,17 +21,23 @@ export async function GET(
       return NextResponse.json({ error: "카테고리를 찾을 수 없습니다" }, { status: 404 })
     }
 
+    const url = new URL(_request.url)
+    const examTypeParam = url.searchParams.get("examType")
+    const examTypeFilter = examTypeParam === "PRACTICAL" ? "PRACTICAL" as const : "WRITTEN" as const
+
     const exams = await prisma.exam.findMany({
       where: {
         categoryId: id,
         isPublished: true,
         examMode: "PRACTICE",
+        examType: examTypeFilter,
       },
       select: {
         id: true,
         name: true,
         year: true,
         round: true,
+        examType: true,
         durationMinutes: true,
         minTier: true,
         subjects: {
@@ -51,6 +57,7 @@ export async function GET(
       name: exam.name,
       year: exam.year,
       round: exam.round,
+      exam_type: exam.examType,
       duration_minutes: exam.durationMinutes,
       min_tier: exam.minTier,
       total_questions: exam._count.questions,

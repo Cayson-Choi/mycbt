@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
         year: e.year,
         round: e.round,
         exam_mode: e.examMode,
+        exam_type: e.examType,
         duration_minutes: e.durationMinutes,
         is_published: e.isPublished,
         min_tier: e.minTier,
@@ -83,13 +84,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "권한 없음" }, { status: 403 })
 
     const body = await request.json()
-    const { category_id, year, round, duration_minutes, subjects } = body as {
+    const { category_id, year, round, exam_type, duration_minutes, subjects } = body as {
       category_id: number
       year: number
       round: number
+      exam_type?: string
       duration_minutes?: number
       subjects?: { name: string; questions_per_attempt: number }[]
     }
+    const examType = exam_type === "PRACTICAL" ? "PRACTICAL" as const : "WRITTEN" as const
 
     if (!category_id || !year || !round) {
       return NextResponse.json(
@@ -126,16 +129,17 @@ export async function POST(request: NextRequest) {
     // 중복 확인
     const existing = await prisma.exam.findUnique({
       where: {
-        categoryId_year_round: {
+        categoryId_year_round_examType: {
           categoryId: category_id,
           year,
           round,
+          examType,
         },
       },
     })
     if (existing) {
       return NextResponse.json(
-        { error: `${year}년 ${round}회차 시험이 이미 존재합니다` },
+        { error: `${year}년 ${round}회차 ${examType === "PRACTICAL" ? "실기" : "필기"} 시험이 이미 존재합니다` },
         { status: 400 }
       )
     }
@@ -164,12 +168,14 @@ export async function POST(request: NextRequest) {
     }
 
     // 시험 생성
+    const typeLabel = examType === "PRACTICAL" ? "실기" : ""
     const exam = await prisma.exam.create({
       data: {
         categoryId: category_id,
-        name: `${category.name} ${year}년 ${round}회`,
+        name: `${category.name} ${typeLabel ? typeLabel + " " : ""}${year}년 ${round}회`,
         year,
         round,
+        examType,
         durationMinutes: duration_minutes || 60,
         isPublished: true,
         subjects: subjectsToCreate

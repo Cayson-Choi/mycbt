@@ -7,6 +7,8 @@ interface CategoryCard {
   name: string
   description: string | null
   examCount: number
+  writtenCount: number
+  practicalCount: number
 }
 
 const cardStyles = [
@@ -60,7 +62,7 @@ export default function ExamCards({
               <div className="flex items-center justify-between">
                 <span className="text-sm text-white/80">
                   {cat.examCount > 0
-                    ? `${cat.examCount}개 시험`
+                    ? `필기 ${cat.writtenCount}${cat.practicalCount > 0 ? ` / 실기 ${cat.practicalCount}` : ""}`
                     : "준비 중"}
                 </span>
                 <div className="flex items-center text-sm font-medium text-white/90 group-hover:text-white transition-colors">

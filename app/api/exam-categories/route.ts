@@ -15,6 +15,7 @@ export async function GET() {
             year: true,
             round: true,
             examMode: true,
+            examType: true,
             durationMinutes: true,
             minTier: true,
             price: true,
