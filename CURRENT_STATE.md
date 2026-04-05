@@ -1,7 +1,7 @@
 # 현재 개발 상태
 
 ## 최종 업데이트
-2026-04-04
+2026-04-05
 
 ## 기술 스택
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
@@ -37,10 +37,13 @@
 - [x] 로그아웃
 
 ### 3. 시험 시스템
-- [x] 시험 카테고리 → 시험 목록 구조 (ExamCategory → Exam with year/round)
-- [x] 시험 선택 (전기기초/기능사/산업기사/기사)
+- [x] 시험 카테고리 → 필기/실기 선택 → 시험 목록 구조
+- [x] ExamType enum (WRITTEN/PRACTICAL) - 필기/실기 구분
+- [x] 카테고리 페이지에서 필기/실기 선택 화면 (`/category/[id]`)
+- [x] 필기/실기별 연도 그룹 시험 목록 (`/category/[id]/[examType]`)
 - [x] 시험 시작 (랜덤 문제 선택, 시험지 스냅샷)
 - [x] 문제 풀이 (4지선다, 이미지 문제, 타이머)
+- [x] 선택지 UI: 동그라미 안에 1,2,3,4 번호 (전체 화면 통일)
 - [x] 답안 실시간 저장 (서버 저장)
 - [x] 시험 중단 시 기록 완전 삭제 (abandon API)
 - [x] 새 시험 시작 시 기존 IN_PROGRESS 자동 삭제
@@ -49,17 +52,24 @@
 - [x] 시간 제한 (관리자 설정 가능), 만료 처리
 - [x] 홈페이지 시험 카드 실시간 갱신 (10초 폴링)
 
-### 4. 랭킹 시스템
+### 4. 필기/실기 배지 시스템
+- [x] 모든 시험 관련 화면에 필기/실기 배지 표시
+  - 홈 카테고리 카드, 시험 시작, 시험 풀이, 결과, 오답노트, 응시기록
+  - 관리자 대시보드, 문제 관리, 시험 설정
+- [x] 필기: 파란색 배지 / 실기: 초록색 배지
+- [x] DB unique constraint: `categoryId_year_round_examType`
+
+### 5. 랭킹 시스템
 - [x] 오늘 Top5 (daily_best_scores)
 - [x] 어제 Top5 스냅샷 (daily_leaderboard_snapshots)
 - [x] NEW/▲▼ 순위 변동 표시
 - [x] 내 순위 표시
 
-### 5. 마이페이지
-- [x] 응시 기록 조회 (날짜별, 시험별)
-- [x] 오답 노트 (틀린 문제 모아보기, 해설 포함)
+### 6. 마이페이지
+- [x] 응시 기록 조회 (날짜별, 시험별, 필기/실기 표시)
+- [x] 오답 노트 (틀린 문제 모아보기, 해설 포함, 필기/실기 표시)
 
-### 6. 관리자 페이지
+### 7. 관리자 페이지
 - [x] 문제 관리 (추가/수정/삭제)
   - [x] Canvas 스타일 분할 편집기 (왼쪽=편집, 오른쪽=실시간 미리보기)
   - [x] 연속 저장 (닫지 않고 계속 저장)
@@ -67,11 +77,13 @@
   - [x] 이미지 업로드 (Cloudinary)
   - [x] 문제코드 자동생성/중복검사
   - [x] 드롭다운 필터 + 페이지네이션 (20개씩)
+  - [x] 필기/실기 유형 필터
 - [x] 일괄 문제 업로드 (JSON/CSV)
 - [x] 회원 관리 (목록, 아이디/등급 표시, 권한 부여/해제, 삭제)
-- [x] 시험 설정 (시험 시간, 과목별 출제 문항 수 설정)
+- [x] 시험 설정 (시험 시간, 과목별 출제 문항 수 설정, 필기/실기 배지)
+- [x] 시험별 문제 현황에 필기/실기 배지 표시
 
-### 7. 공식 시험 (OFFICIAL)
+### 8. 공식 시험 (OFFICIAL)
 - [x] 공식 시험 생성/수정/삭제
 - [x] 문제 출제 (객관식/주관식/서술형)
 - [x] 게시/비게시 토글 (is_published)
@@ -80,26 +92,60 @@
 - [x] 응시자 답안 조회 및 주관식 수동 채점
 - [x] AI 자동 채점 (OpenRouter API, 주관식/서술형)
 
-### 8. 등급 시스템 (DB 구조만)
+### 9. 홈페이지 UI/UX
+- [x] ⚡ 번개 이모지 로고 (이미지 로고 대체)
+- [x] 카테고리 카드 컴팩트 디자인 (필기/실기 배지 상단, 입장하기 하단)
+- [x] 모바일 반응형 카드 중앙 정렬 (max-w-sm)
+- [x] WHY 전기짱 섹션 스크롤 인터랙티브 효과
+  - ScrollReveal: fade-in + slide-up 애니메이션
+  - CountUp: 100% 숫자 카운트업 애니메이션
+- [x] 전체 여백 최적화 (모바일 기준)
+- [x] 모바일 글씨 크기 반응형 적용
+
+### 10. 등급 시스템 (DB 구조만)
 - [x] UserTier enum (GUEST/BRONZE/SILVER/GOLD/DIAMOND)
 - [x] 관리자 페이지에 등급 뱃지 표시
 - [ ] 결제 연동 등급 승급 로직
+
+## 문제 데이터 현황
+
+### 전기기사 필기 (21개 시험, 2,100문제)
+- 2018년 1~3회, 2019년 1~3회, 2020년 1·3·4회
+- 2021년 1~3회, 2022년 1~2회
+- 2023년 2~3회, 2024년 1~3회
+- 2025년 2~3회
+- 5과목: 전기자기학(EM), 전력공학(PC), 전기기기(MA), 회로이론 및 제어공학(CC), 전기설비기술기준(EL)
+- 각 시험 100문제 × 5과목 × 20문제
+
+### 이미지 처리
+- [그림] 포함 문제 → Cloudinary에 크롭된 다이어그램만 업로드
+- Agent 비전으로 300DPI 원본에서 정밀 크롭 (텍스트/선택지 제거)
+- 보기에 그림이 있는 문제 → choice_N_image로 개별 업로드
+- 텍스트만 있는 문제 → image_url = NULL (불필요한 이미지 제거)
+
+### 수학 수식
+- KaTeX 문법으로 변환 (인라인: $수식$, 블록: $$수식$$)
+- 분수: `\dfrac` 사용 (단, 지수 안에서는 `\frac` 사용하여 크기 적절하게)
+- 규정 개정 무효 문제 → is_active = true, question_text에 "(규정 개정 문제)" 표시
 
 ## 미구현 기능
 - [ ] 결제 시스템 (토스페이먼츠) - PRD 설계 완료, DB 스키마 있음
 - [ ] 동영상 강의 기능 - PRD 설계 완료, DB 스키마(Video) 있음
 - [ ] 등급제 결제 연동 (등급 승급/만료 로직)
-- [ ] Cloudinary 이미지 업로드 실제 테스트
+- [ ] 전기기사 실기 문제 등록
 
 ## 프로젝트 구조
 
 ```
 app/
 ├── layout.tsx                  # 루트 레이아웃 (Header, Footer, AuthProvider, ThemeProvider)
-├── page.tsx                    # 홈 (HeroSection + 시험 카드)
+├── page.tsx                    # 홈 (HeroSection + ExamCards + WhySection)
 ├── globals.css                 # 전역 스타일 + 애니메이션
 ├── login/page.tsx              # 소셜 로그인 (Google, Kakao, Naver, Email)
 ├── complete-profile/page.tsx   # 추가정보기입 (아이디, 전화번호, 개인정보 동의)
+├── category/
+│   ├── [categoryId]/page.tsx         # 필기/실기 선택 화면
+│   └── [categoryId]/[examType]/page.tsx  # 연도별 시험 목록
 ├── admin/
 │   ├── page.tsx                # 관리자 대시보드
 │   ├── questions/page.tsx      # 문제 관리
@@ -131,13 +177,15 @@ app/
 
 components/
 ├── HeroSection.tsx             # 대문 인터랙티브 파티클 애니메이션 (Canvas)
-├── Header.tsx                  # 네비게이션 (nickname 기반 메뉴 표시)
-├── Footer.tsx                  # 푸터
+├── Header.tsx                  # 네비게이션 (⚡ 이모지 로고)
+├── Footer.tsx                  # 푸터 (⚡ 이모지 로고)
 ├── AuthProvider.tsx            # NextAuth SessionProvider
 ├── ThemeProvider.tsx            # 다크모드 프로바이더
 ├── ThemeToggle.tsx              # 다크모드 토글 버튼
-├── ExamCards.tsx               # 시험 카드 목록 (10초 폴링)
-├── HomeExamCards.tsx           # 홈페이지 시험 카드
+├── ExamCards.tsx               # 카테고리 카드 (필기/실기 배지 + 입장하기)
+├── HomeExamCards.tsx           # 홈페이지 카테고리 카드 (서버 컴포넌트)
+├── WhySection.tsx              # WHY 전기짱 섹션 (인터랙티브 클라이언트 컴포넌트)
+├── ScrollReveal.tsx            # 스크롤 애니메이션 + CountUp 컴포넌트
 ├── MathText.tsx                # 수학 표기법 렌더링
 ├── ConfirmDialog.tsx           # 확인 다이얼로그
 ├── FullscreenEnforcer.tsx      # 전체화면 강제 (OFFICIAL 모드)
@@ -145,7 +193,8 @@ components/
 ├── ResetAttemptsSection.tsx    # 응시 기록 초기화
 ├── DuplicateQuestionsSection.tsx # 중복 문제 관리
 ├── QuestionSplitEditor.tsx     # 문제 편집 분할 뷰 (lazy loaded)
-└── BulkUploadSplitEditor.tsx   # 일괄 업로드 분할 뷰 (lazy loaded)
+├── BulkUploadSplitEditor.tsx   # 일괄 업로드 분할 뷰 (lazy loaded)
+└── ProfileGuard.tsx            # 프로필 미완성 감지 리다이렉트
 
 lib/
 ├── auth.ts                     # NextAuth v5 설정 (Google/Kakao/Naver/Email)
@@ -156,7 +205,7 @@ lib/
 └── generated/prisma/           # Prisma 생성 클라이언트
 
 prisma/
-├── schema.prisma               # DB 스키마 (User, Exam, Question, Attempt 등)
+├── schema.prisma               # DB 스키마 (ExamType enum 포함)
 └── prisma.config.ts            # Prisma 7 설정 (datasource URL)
 
 middleware.ts                   # 쿠키 기반 경량 인증 체크 (Edge 호환)
