@@ -8,6 +8,7 @@ interface ExamData {
   id: number
   name: string
   exam_mode: string
+  exam_type: string
   duration_minutes: number
   is_published: boolean
   sort_order: number
@@ -97,7 +98,14 @@ export default function ExamStartClient({
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-3xl mx-auto px-4">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
-          <h1 className="text-3xl font-bold text-center mb-2 dark:text-white">
+          <h1 className="text-3xl font-bold text-center mb-2 dark:text-white flex items-center justify-center gap-2">
+            <span className={`text-xs font-bold px-2 py-0.5 rounded ${
+              exam.exam_type === 'PRACTICAL'
+                ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+            }`}>
+              {exam.exam_type === 'PRACTICAL' ? '실기' : '필기'}
+            </span>
             {exam.name}
           </h1>
           {isOfficial ? (

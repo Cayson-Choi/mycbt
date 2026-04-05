@@ -123,9 +123,10 @@ export default async function WrongAnswersPage() {
   // 6. 모든 exams 한번에 조회
   const exams = await prisma.exam.findMany({
     where: { id: { in: examIds } },
-    select: { id: true, name: true },
+    select: { id: true, name: true, examType: true },
   })
   const examsMap = new Map(exams.map((e) => [e.id, e.name]))
+  const examTypeMap = new Map(exams.map((e) => [e.id, e.examType]))
 
   // 7. 데이터 병합 및 틀린 문제 필터링
   const wrongAnswers: any[] = []
@@ -151,6 +152,7 @@ export default async function WrongAnswersPage() {
           attempt_date: attempt.submittedAt?.toISOString() ?? '',
           exam_id: question.examId,
           exam_name: examsMap.get(question.examId) || "알 수 없음",
+          exam_type: examTypeMap.get(question.examId) || "WRITTEN",
           subject_id: question.subjectId,
           subject_name: subjectsMap.get(question.subjectId) || "알 수 없음",
           question_id: question.id,

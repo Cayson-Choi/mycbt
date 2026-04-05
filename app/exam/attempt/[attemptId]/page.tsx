@@ -31,6 +31,7 @@ export default async function ExamAttemptPage({
           select: {
             name: true,
             examMode: true,
+            examType: true,
             durationMinutes: true,
             year: true,
             round: true,
@@ -121,6 +122,7 @@ export default async function ExamAttemptPage({
     attempt_id: attempt.id,
     exam_name: examName,
     exam_mode: attempt.exam.examMode,
+    exam_type: attempt.exam.examType,
     expires_at: attempt.expiresAt.toISOString(),
     total_questions: attempt.totalQuestions,
     questions,

@@ -311,6 +311,7 @@ export interface PaperData {
   attempt_id: number
   exam_name: string
   exam_mode: string
+  exam_type: string
   expires_at: string
   total_questions: number
   questions: PaperQuestion[]
@@ -429,6 +430,13 @@ export default function ExamAttemptClient({
             <div className="flex justify-between items-center gap-2">
               <div className="min-w-0">
                 <h1 className="text-sm sm:text-lg font-bold dark:text-white truncate">
+                  <span className={`text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded mr-1.5 align-middle ${
+                    paper.exam_type === 'PRACTICAL'
+                      ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                      : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+                  }`}>
+                    {paper.exam_type === 'PRACTICAL' ? '실기' : '필기'}
+                  </span>
                   {paper.exam_name}
                   {paper.exam_mode === 'OFFICIAL' && (
                     <span className="ml-1.5 text-[10px] sm:text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-1.5 py-0.5 rounded-full font-semibold align-middle">

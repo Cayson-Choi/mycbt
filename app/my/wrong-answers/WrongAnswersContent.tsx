@@ -15,6 +15,7 @@ interface WrongAnswer {
   attempt_date: string
   exam_id: number
   exam_name: string
+  exam_type: string
   subject_id: number
   subject_name: string
   question_id: number
@@ -128,6 +129,13 @@ export default function WrongAnswersContent({ data }: { data: WrongAnswersData }
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                        item.exam_type === 'PRACTICAL'
+                          ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                          : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+                      }`}>
+                        {item.exam_type === 'PRACTICAL' ? '실기' : '필기'}
+                      </span>
                       <span className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
                         {item.exam_name}
                       </span>

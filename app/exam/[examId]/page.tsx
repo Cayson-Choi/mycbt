@@ -43,6 +43,7 @@ export default async function ExamStartPage({
       ? `${ex.category.name} ${ex.year}년 ${ex.round}회`
       : ex.name,
     exam_mode: ex.examMode,
+    exam_type: ex.examType,
     duration_minutes: ex.durationMinutes,
     is_published: ex.isPublished,
     sort_order: ex.sortOrder,
