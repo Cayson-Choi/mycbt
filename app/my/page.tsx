@@ -26,7 +26,7 @@ export default async function MyPage() {
       totalScore: true,
       gradingStatus: true,
       exam: {
-        select: { name: true },
+        select: { name: true, examType: true },
       },
     },
     orderBy: { submittedAt: "desc" },
@@ -76,6 +76,7 @@ export default async function MyPage() {
     total_score: attempt.totalScore,
     grading_status: attempt.gradingStatus,
     exam_name: attempt.exam?.name || "알 수 없음",
+    exam_type: attempt.exam?.examType || "WRITTEN",
     subject_scores: scoresByAttempt.get(attempt.id) || [],
   }))
 

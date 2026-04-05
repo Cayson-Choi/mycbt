@@ -23,7 +23,7 @@ export default async function ExamResultPage({
 
   const attempt = await prisma.attempt.findUnique({
     where: { id: aid },
-    include: { exam: { select: { name: true, examMode: true } } },
+    include: { exam: { select: { name: true, examMode: true, examType: true } } },
   })
 
   if (!attempt) {
@@ -133,6 +133,7 @@ export default async function ExamResultPage({
     exam_id: attempt.examId,
     exam_name: attempt.exam.name,
     exam_mode: attempt.exam.examMode,
+    exam_type: attempt.exam.examType,
     grading_status: attempt.gradingStatus,
     status: attempt.status,
     started_at: attempt.startedAt.toISOString(),

@@ -21,6 +21,7 @@ interface Attempt {
   total_score: number | null
   grading_status: string
   exam_name: string
+  exam_type: string
   subject_scores: SubjectScore[]
 }
 
@@ -100,7 +101,14 @@ export default function AttemptHistoryClient({ attempts, examStats }: Props) {
               >
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <div className="font-semibold text-lg dark:text-white">
+                    <div className="font-semibold text-lg dark:text-white flex items-center gap-2">
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                        attempt.exam_type === 'PRACTICAL'
+                          ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                          : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+                      }`}>
+                        {attempt.exam_type === 'PRACTICAL' ? '실기' : '필기'}
+                      </span>
                       {attempt.exam_name}
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">

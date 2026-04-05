@@ -44,6 +44,7 @@ interface ExamResultData {
   exam_id: number
   exam_name: string
   exam_mode: string
+  exam_type: string
   grading_status: string
   status: string
   started_at: string
@@ -66,7 +67,16 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
       <div className="max-w-5xl mx-auto px-4">
         {/* 총점 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 mb-8 text-center border dark:border-gray-700">
-          <h1 className="text-2xl font-bold mb-4 dark:text-white">{result.exam_name} 결과</h1>
+          <h1 className="text-2xl font-bold mb-4 dark:text-white flex items-center justify-center gap-2">
+            <span className={`text-xs font-bold px-2 py-0.5 rounded ${
+              result.exam_type === 'PRACTICAL'
+                ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+            }`}>
+              {result.exam_type === 'PRACTICAL' ? '실기' : '필기'}
+            </span>
+            {result.exam_name} 결과
+          </h1>
 
           <div className="mb-6">
             <div
