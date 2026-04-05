@@ -22,9 +22,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* 로고 */}
-          <Link href="/" className="flex items-center gap-0.5">
-            <span className="text-2xl">⚡</span>
-            <span className="text-xl font-black tracking-tight animate-rainbow-text">전기짱</span>
+          <Link href="/" className="flex items-center">
+            <span className="text-2xl leading-none">⚡</span>
+            <span className="text-xl font-black tracking-tight animate-rainbow-text -ml-0.5">전기짱</span>
             <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300 ml-1.5 font-semibold">차원이 다른 CBT</span>
           </Link>
 
