@@ -1,0 +1,2532 @@
+[
+  [
+    {
+      "code": "ELEC-E-EL-007",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_087_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_087_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_087_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_087_4.png"
+      ],
+      "exam": "전기기사 2018년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-012",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_092_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_092_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_092_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_092_4.png"
+      ],
+      "exam": "전기기사 2018년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-014",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_094_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_094_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_094_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_01/images/EE18_01_094_4.png"
+      ],
+      "exam": "전기기사 2018년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-024",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_084_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_084_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_084_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_084_4.png"
+      ],
+      "exam": "전기기사 2018년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-025",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_085_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_085_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_085_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_085_4.png"
+      ],
+      "exam": "전기기사 2018년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-037",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_097_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_097_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_097_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_02/images/EE18_02_097_4.png"
+      ],
+      "exam": "전기기사 2018년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-042",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_082_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_082_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_082_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_082_4.png"
+      ],
+      "exam": "전기기사 2018년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-060",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_100_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_100_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_100_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/18_03/images/EE18_03_100_4.png"
+      ],
+      "exam": "전기기사 2018년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-064",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_084_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_084_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_084_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_084_4.png"
+      ],
+      "exam": "전기기사 2019년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-067",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_087_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_087_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_087_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_087_4.png"
+      ],
+      "exam": "전기기사 2019년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-070",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_090_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_090_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_090_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_090_4.png"
+      ],
+      "exam": "전기기사 2019년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-074",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_094_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_094_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_094_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_01/images/EE19_01_094_4.png"
+      ],
+      "exam": "전기기사 2019년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-EL-085",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_085_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_085_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_085_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_085_4.png"
+      ],
+      "exam": "전기기사 2019년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-092",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_092_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_092_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_092_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_092_4.png"
+      ],
+      "exam": "전기기사 2019년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-093",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_093_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_093_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_093_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_093_4.png"
+      ],
+      "exam": "전기기사 2019년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-094",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_094_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_094_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_094_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_094_4.png"
+      ],
+      "exam": "전기기사 2019년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-095",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_095_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_095_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_095_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_095_4.png"
+      ],
+      "exam": "전기기사 2019년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-099",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_099_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_099_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_099_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_099_4.png"
+      ],
+      "exam": "전기기사 2019년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-100",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_100_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_100_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_100_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_02/images/EE19_02_100_4.png"
+      ],
+      "exam": "전기기사 2019년 2회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-102",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_082_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_082_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_082_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_082_4.png"
+      ],
+      "exam": "전기기사 2019년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-111",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_091_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_091_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_091_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_091_4.png"
+      ],
+      "exam": "전기기사 2019년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-115",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_095_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_095_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_095_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/19_03/images/EE19_03_095_4.png"
+      ],
+      "exam": "전기기사 2019년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-126",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_086_4.png"
+      ],
+      "exam": "전기기사 2020년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-133",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_093.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_093_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_093_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_093_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_093_4.png"
+      ],
+      "exam": "전기기사 2020년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-EL-138",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_098.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_098_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_098_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_098_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_01/images/EE20_01_098_4.png"
+      ],
+      "exam": "전기기사 2020년 1회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-154",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_094.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_094_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_094_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_094_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_094_4.png"
+      ],
+      "exam": "전기기사 2020년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-156",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_096.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_096_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_096_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_096_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_096_4.png"
+      ],
+      "exam": "전기기사 2020년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-157",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_097.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_097_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_097_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_097_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_03/images/EE20_03_097_4.png"
+      ],
+      "exam": "전기기사 2020년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-164",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_084.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_084_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_084_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_084_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_084_4.png"
+      ],
+      "exam": "전기기사 2020년 4회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-171",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_091.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_091_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_091_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_091_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_091_4.png"
+      ],
+      "exam": "전기기사 2020년 4회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-176",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_096.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_096_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_096_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_096_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_096_4.png"
+      ],
+      "exam": "전기기사 2020년 4회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-178",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_098.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_098_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_098_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_098_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/20_04/images/EE20_04_098_4.png"
+      ],
+      "exam": "전기기사 2020년 4회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-281",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_001.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_001_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_001_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_001_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_001_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-282",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_002.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_002_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_002_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_002_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_002_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-283",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_003.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_003_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_003_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_003_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_003_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-284",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_004.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_004_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_004_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_004_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_004_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-EM-285",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_005.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_005_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_005_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_005_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_005_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-286",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_006.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_006_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_006_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_006_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_006_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-287",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_007.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_007_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_007_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_007_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_007_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-288",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_008.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_008_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_008_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_008_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_008_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-289",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_009.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_009_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_009_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_009_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_009_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-290",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_010.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_010_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_010_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_010_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_010_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-291",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_011.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_011_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_011_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_011_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_011_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-292",
+      "q_img": "/Files/2/EDITOR2020/202508/20250818171244924_2.PNG",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_012_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_012_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_012_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_012_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        false,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-293",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_013.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_013_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_013_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_013_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_013_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-294",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_014.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_014_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_014_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_014_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_014_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-295",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_015.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_015_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_015_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_015_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_015_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-296",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_016.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_016_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_016_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_016_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_016_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-EM-297",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_017.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_017_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_017_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_017_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_017_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-298",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_018.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_018_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_018_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_018_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_018_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-299",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_019.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_019_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_019_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_019_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_019_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EM-300",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_020.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_020_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_020_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_020_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_020_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기자기학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-561",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_021.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_021_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_021_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_021_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_021_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-562",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_022.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_022_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_022_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_022_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_022_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-563",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_023.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_023_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_023_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_023_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_023_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-564",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_024.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_024_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_024_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_024_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_024_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-565",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_025.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_025_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_025_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_025_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_025_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-566",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_026.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_026_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_026_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_026_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_026_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-567",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_027.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_027_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_027_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_027_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_027_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-568",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_028.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_028_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_028_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_028_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_028_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-XX-569",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_029.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_029_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_029_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_029_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_029_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-570",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_030.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_030_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_030_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_030_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_030_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-571",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_031.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_031_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_031_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_031_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_031_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-572",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_032.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_032_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_032_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_032_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_032_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-573",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_033.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_033_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_033_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_033_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_033_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-574",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_034.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_034_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_034_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_034_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_034_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-575",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_035.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_035_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_035_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_035_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_035_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-576",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_036.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_036_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_036_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_036_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_036_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-577",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_037.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_037_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_037_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_037_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_037_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-578",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_038.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_038_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_038_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_038_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_038_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-579",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_039.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_039_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_039_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_039_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_039_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-580",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_040.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_040_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_040_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_040_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_040_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전력공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-XX-581",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_041.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_041_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_041_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_041_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_041_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-582",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_042.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_042_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_042_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_042_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_042_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-583",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_043.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_043_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_043_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_043_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_043_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-584",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_044.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_044_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_044_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_044_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_044_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-585",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_045.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_045_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_045_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_045_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_045_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-586",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_046.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_046_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_046_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_046_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_046_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-587",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_047.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_047_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_047_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_047_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_047_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-588",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_048.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_048_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_048_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_048_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_048_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-589",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_049.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_049_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_049_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_049_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_049_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-590",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_050.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_050_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_050_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_050_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_050_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-591",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_051.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_051_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_051_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_051_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_051_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-592",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_052.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_052_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_052_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_052_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_052_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-XX-593",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_053.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_053_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_053_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_053_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_053_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-594",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_054.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_054_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_054_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_054_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_054_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-595",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_055.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_055_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_055_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_055_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_055_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-596",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_056.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_056_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_056_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_056_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_056_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-597",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_057.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_057_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_057_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_057_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_057_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-598",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_058.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_058_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_058_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_058_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_058_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-599",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_059.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_059_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_059_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_059_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_059_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-XX-600",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_060.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_060_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_060_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_060_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_060_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기기기",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-281",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_061.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_061_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_061_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_061_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_061_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-282",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_062.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_062_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_062_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_062_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_062_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-283",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_063.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_063_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_063_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_063_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_063_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-284",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_064.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_064_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_064_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_064_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_064_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-CC-285",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_065.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_065_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_065_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_065_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_065_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-286",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_066.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_066_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_066_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_066_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_066_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-287",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_067.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_067_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_067_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_067_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_067_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-288",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_068.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_068_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_068_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_068_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_068_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-289",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_069.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_069_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_069_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_069_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_069_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-290",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_070.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_070_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_070_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_070_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_070_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-291",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_071.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_071_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_071_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_071_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_071_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-292",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_072.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_072_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_072_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_072_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_072_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-293",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_073.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_073_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_073_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_073_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_073_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-294",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_074.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_074_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_074_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_074_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_074_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-295",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_075.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_075_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_075_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_075_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_075_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-296",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_076.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_076_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_076_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_076_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_076_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-CC-297",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_077.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_077_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_077_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_077_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_077_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-298",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_078.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_078_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_078_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_078_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_078_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-299",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_079.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_079_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_079_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_079_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_079_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-CC-300",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_080.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_080_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_080_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_080_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_080_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "회로이론 및 제어공학",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-281",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_081.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_081_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_081_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_081_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_081_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-282",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_082.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_082_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_082_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_082_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_082_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-283",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_083.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_083_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_083_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_083_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_083_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-284",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_084.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_084_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_084_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_084_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_084_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-285",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_085.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_085_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_085_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_085_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_085_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-286",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_086.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_086_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_086_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_086_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_086_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-287",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_087.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_087_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_087_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_087_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_087_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-288",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_088.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_088_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_088_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_088_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_088_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  [
+    {
+      "code": "ELEC-E-EL-289",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_089.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_089_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_089_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_089_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_089_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-290",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_090.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_090_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_090_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_090_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_090_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-291",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_091.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_091_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_091_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_091_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_091_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-292",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_092.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_092_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_092_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_092_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_092_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-293",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_093.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_093_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_093_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_093_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_093_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-294",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_094.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_094_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_094_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_094_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_094_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-295",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_095.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_095_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_095_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_095_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_095_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-296",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_096.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_096_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_096_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_096_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_096_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-297",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_097.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_097_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_097_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_097_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_097_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-298",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_098.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_098_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_098_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_098_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_098_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-299",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_099.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_099_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_099_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_099_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_099_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "code": "ELEC-E-EL-300",
+      "q_img": "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_100.png",
+      "c_imgs": [
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_100_1.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_100_2.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_100_3.png",
+        "https://image.engineerlab.co.kr/ibt/ee_pil/ee_pil_prev/25_03/images/EE25_03_100_4.png"
+      ],
+      "exam": "전기기사 2025년 3회",
+      "subj": "전기설비기술기준",
+      "available": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ]
+]

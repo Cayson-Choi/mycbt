@@ -173,58 +173,56 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
               return (
                 <div
                   key={question.question_id}
-                  className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border dark:border-gray-700 ${borderColor}`}
+                  className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 border-l-4 border dark:border-gray-700 ${borderColor}`}
                 >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div
-                      className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold ${badgeBg}`}
+                  <div className="flex items-center gap-2 mb-3">
+                    <span
+                      className={`inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${badgeBg}`}
                     >
                       {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          {question.subject_name}
+                    </span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {question.subject_name}
+                    </span>
+                    {isSubjective && (
+                      <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-1.5 py-0.5 rounded font-medium">
+                        {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
+                      </span>
+                    )}
+                    {isSubjective ? (
+                      question.grading_status === 'PENDING' ? (
+                        <span className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">
+                          채점 대기 중
                         </span>
-                        {isSubjective && (
-                          <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-1.5 py-0.5 rounded font-medium">
-                            {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
-                          </span>
-                        )}
-                        {isSubjective ? (
-                          question.grading_status === 'PENDING' ? (
-                            <span className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">
-                              채점 대기 중
-                            </span>
-                          ) : (
-                            <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                              {question.awarded_points}/{question.points}점
-                            </span>
-                          )
-                        ) : (
-                          <span
-                            className={`text-sm font-semibold ${
-                              question.is_correct ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-                            }`}
-                          >
-                            {question.is_correct ? '정답' : '오답'}
-                          </span>
-                        )}
-                      </div>
-
-                      <MathText
-                        text={question.question_text}
-                        className="text-lg font-medium mb-4 block dark:text-white"
-                      />
+                      ) : (
+                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                          {question.awarded_points}/{question.points}점
+                        </span>
+                      )
+                    ) : (
+                      <span
+                        className={`text-sm font-semibold ${
+                          question.is_correct ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                        }`}
+                      >
+                        {question.is_correct ? '정답' : '오답'}
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <MathText
+                      text={question.question_text}
+                      className="text-base sm:text-lg font-medium mb-4 block dark:text-white"
+                    />
 
                       {question.image_url && (
-                        <div className="mb-4 relative w-full max-w-lg">
+                        <div className="mb-4">
                           <Image
                             src={question.image_url}
                             alt="문제 이미지"
-                            width={600}
-                            height={400}
-                            className="w-full h-auto rounded"
+                            width={400}
+                            height={280}
+                            className="max-w-sm max-h-[280px] w-auto h-auto rounded border border-gray-200"
                             loading="lazy"
                           />
                         </div>
@@ -303,7 +301,6 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                           />
                         </div>
                       )}
-                    </div>
                   </div>
                 </div>
               )

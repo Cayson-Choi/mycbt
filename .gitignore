@@ -40,10 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# supabase
-supabase/.temp/
-supabase keys.txt
-
 # claude (commands는 포함)
 .claude/*
 !.claude/commands/
@@ -51,6 +47,13 @@ supabase keys.txt
 # prisma generated
 /lib/generated/
 
-# backup files (old supabase code)
 *_backup*
 *.bak
+
+# 문제 이미지 원본/OCR 데이터 (용량 큼)
+data/ocr-images/
+data/ocr-images-*/
+data/diagram-images/
+data/diagram-originals/
+test_*.png
+hwp_mcp_server.log

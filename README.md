@@ -12,9 +12,8 @@ npm install
 ### 2. 환경 변수 설정
 `.env.local` 파일을 생성하고 필요한 정보를 입력하세요:
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your-project-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+DATABASE_URL=your-neon-database-url
+NEXTAUTH_SECRET=your-nextauth-secret
 CRON_SECRET=your-cron-secret
 OPENROUTER_API_KEY=your-openrouter-api-key
 OPENROUTER_MODEL=deepseek/deepseek-v3.2
@@ -43,9 +42,10 @@ npm run dev
 
 - **Frontend**: Next.js 15, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes
-- **Database**: Supabase (PostgreSQL)
-- **Auth**: Supabase Auth (Google, Kakao OAuth)
-- **Storage**: Supabase Storage
+- **Database**: Neon (PostgreSQL)
+- **ORM**: Prisma
+- **Auth**: NextAuth v5 (Google, Kakao OAuth)
+- **Storage**: Cloudinary
 - **AI**: OpenRouter API
 
 ## 문서

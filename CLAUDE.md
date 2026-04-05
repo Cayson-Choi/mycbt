@@ -6,9 +6,10 @@
 ## 기술 스택
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes
-- **Database**: Supabase (PostgreSQL)
-- **Auth**: Supabase Auth (Google, Kakao 소셜 로그인)
-- **Storage**: Supabase Storage (문제 이미지)
+- **Database**: Neon (PostgreSQL)
+- **ORM**: Prisma
+- **Auth**: NextAuth v5 (Google, Kakao 소셜 로그인)
+- **Storage**: Cloudinary (문제 이미지)
 - **AI**: OpenRouter API (주관식/서술형 자동 채점)
 
 ## 핵심 규칙 (절대 준수)
@@ -42,7 +43,7 @@
 
 ## 인증 플로우
 1. 로그인 페이지에서 Google 또는 Kakao 소셜 로그인
-2. Supabase OAuth → 콜백에서 프로필 존재 여부 확인
+2. NextAuth OAuth → 콜백에서 프로필 존재 여부 확인
 3. 프로필 없음 → `/complete-profile` (추가정보기입: 이름, 전화번호, 개인정보 동의)
 4. 프로필 있음 → 홈으로 이동
 
@@ -69,7 +70,7 @@
   Leaderboard.tsx - 랭킹 (10초 폴링)
   ExamCards.tsx   - 시험 카드 목록 (10초 폴링)
 /lib
-  /supabase       - Supabase 클라이언트 (client, server, admin)
+  /generated      - Prisma 생성 파일
   openrouter.ts   - OpenRouter AI 채점 (주관식/서술형)
 /types            - TypeScript 타입 정의
 /public/fonts     - 커스텀 폰트 (따악단단 등)
@@ -94,9 +95,8 @@
 ### 환경 변수 설정
 `.env.local` 파일 생성 (`.env.example` 참조):
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your-project-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+DATABASE_URL=your-neon-database-url
+NEXTAUTH_SECRET=your-nextauth-secret
 CRON_SECRET=your-cron-secret
 OPENROUTER_API_KEY=your-openrouter-api-key
 OPENROUTER_MODEL=deepseek/deepseek-v3.2
@@ -114,6 +114,109 @@ npm run dev
 - 요청하지 않은 파일 수정 금지
 - 큰 변경은 계획(plan) 먼저 제시
 
+## 문제 등록 프로세스 (시험 문제 추가 시 반드시 따를 것)
+
+### 전체 흐름
+```
+1. 원본 파싱 → 2. 이미지 다운로드 → 3. OCR(텍스트 추출) → 4. 이미지 처리 → 5. DB 입력
+```
+
+### 1단계: 원본 파싱
+- `.doc` 파일은 실제로 HTML임 (UTF-8 BOM + `<html>`)
+- BeautifulSoup으로 파싱, 두 가지 HTML 구조 존재:
+  - 구형: CSS 클래스 `qb/qh/qi/ch/ci/ab/cc`
+  - 신형: `question-block/q-header/q-title-img/choices/choice/answer-box/correct-choice`
+- 추출 항목: 문제 이미지 URL, 보기 1~4 이미지 URL, 정답 번호
+- 참고 스크립트: `scripts/parse-exam-docs.py`
+
+### 2단계: 이미지 다운로드
+- 원본 이미지를 로컬에 다운로드 (`data/ocr-images/` 또는 `data/ocr-images-{년도-회차}/`)
+- 네이밍: `{QUESTION_CODE}_{0-4}.png` (0=문제, 1-4=보기)
+- 403 에러 시 → 규정 개정으로 무효화된 문제일 가능성 있음
+
+### 3단계: OCR (텍스트 추출) ⭐ 중요
+- **반드시 Claude 자체 비전(Read tool)으로 수행** — OpenRouter 등 외부 API 사용 금지
+- 10개 병렬 에이전트로 배치 처리 (16개/에이전트)
+- 각 에이전트가 이미지를 직접 읽고 텍스트 추출
+- **수학 공식은 KaTeX 문법으로 변환:**
+  - 인라인: `$수식$`
+  - 행렬/큰 수식: `$$수식$$` (줄바꿈 포함)
+  - `\begin{bmatrix}`, `\begin{cases}` 등은 반드시 `$$...$$`로 감싸기
+  - **분수는 반드시 `\dfrac` 사용** (`\frac` 금지) — `\frac`은 인라인에서 너무 작게 렌더링됨
+- **[그림]** 표시: 텍스트로 표현 불가능한 도표/회로도/그래프가 있으면 `[그림]` 삽입
+- 출력: JSON `{"code":"...", "q":"문제텍스트", "c1":"보기1", "c2":"보기2", "c3":"보기3", "c4":"보기4"}`
+
+### 4단계: 이미지 처리 ⭐⭐ 가장 중요
+**원칙: 텍스트만 있는 문제는 이미지 불필요, 그림이 있는 문제만 그림 부분을 Cloudinary에 업로드**
+
+#### 텍스트만 있는 문제 (이미지 불필요)
+- `image_url` = NULL
+- `choice_N_image` = NULL
+- 텍스트는 `question_text`, `choice_1`~`choice_4`에 저장
+
+#### [그림]이 있는 문제 (이미지 필요)
+1. **원본 이미지 다운로드** (engineerlab 등 외부 소스)
+2. **텍스트 부분 제거, 그림만 크롭** — 핵심!
+   - 원본 이미지 = 텍스트(위) + 그림(아래)
+   - 텍스트는 이미 `question_text`에 OCR로 들어가 있으므로 이미지에서 제거
+   - **자동 크롭은 정확도가 낮음** → Agent 비전으로 정확한 크롭 좌표 결정
+3. **Agent 비전 크롭 방법:**
+   - 10개 에이전트 병렬 실행 (16개/에이전트)
+   - 각 에이전트가 이미지를 Read tool로 직접 보고 `crop_y` (그림 시작 Y좌표) 반환
+   - 텍스트와 그림이 겹치는 경우 `crop_y = 0` (전체 이미지 유지)
+   - PIL로 `img.crop((0, crop_y, width, height))` 실행
+4. **Cloudinary 업로드** (크롭된 이미지)
+   - `public_id`: `electric-jjang/questions/{QUESTION_CODE}_q`
+   - 반환된 `secure_url`을 DB `image_url`에 저장
+5. **보기 이미지도 동일 처리**
+   - 보기에 [그림]이 있으면 해당 보기 이미지를 Cloudinary에 업로드
+   - `public_id`: `electric-jjang/questions/{QUESTION_CODE}_c{N}`
+   - `choice_N_image`에 URL 저장
+
+#### ❌ 절대 하면 안 되는 것
+- **engineerlab.co.kr 등 외부 URL을 직접 DB에 저장** → 앱에서 안 보임
+- **이미지를 그레이스케일로 변환** → 색상 손실
+- **자동 크롭만으로 처리** → 텍스트 잔존 또는 그림 잘림 발생
+- **텍스트만 있는 문제에 이미지 URL 넣기** → 불필요
+- **분수에 `\frac` 사용** → 인라인에서 너무 작게 보임. 반드시 `\dfrac` 사용
+
+### 5단계: DB 입력
+- `questions` 테이블에 INSERT/UPDATE
+- 필수 컬럼: `question_code`, `exam_id`, `subject_id`, `question_type`, `question_text`, `choice_1`~`choice_4`, `answer`, `points`, `image_url`(있으면)
+- `question_type`: 'MULTIPLE_CHOICE'
+- `points`: 5 (기본)
+- `is_active`: true (규정 개정 문제도 일단 올림)
+
+### "공통" 과목 처리
+- 일부 시험(예: 2025년 2회)은 5과목이 아닌 "공통 100문제"로 출제됨
+- 이 경우 **각 문제를 내용에 따라 5과목으로 분류**하여 DB에 넣어야 함
+- 과목 분류는 OCR 시 에이전트가 함께 수행
+- 5과목: 전기자기학(EM), 전력공학(PC), 전기기기(MA), 회로이론 및 제어공학(CC), 전기설비기술기준(EL)
+- 각 과목 20문제씩 균등 배분 확인
+
+### Cloudinary 설정
+```
+CLOUDINARY_CLOUD_NAME=dwulm3bd0
+CLOUDINARY_API_KEY=225368121665588
+CLOUDINARY_API_SECRET=P1HI0k-tz5-guQFTr5Zw6UVVgWg
+```
+
+### 프론트엔드 이미지 표시 규격
+- 문제 이미지: `max-w-sm max-h-[280px] w-auto h-auto rounded border border-gray-200`
+- 보기 이미지: `inline-block max-h-16 align-middle`
+- 적용 파일: `ExamAttemptClient.tsx`, `ExamResultContent.tsx`
+
+### 관련 스크립트 목록
+| 스크립트 | 용도 |
+|----------|------|
+| `scripts/parse-exam-docs.py` | .doc(HTML) 파싱 → JSON |
+| `scripts/parse-2025-2.py` | HTML 파싱 + 이미지 다운로드 |
+| `scripts/precise-crop-upload.py` | Agent 크롭 좌표로 정밀 크롭 + Cloudinary 업로드 |
+| `scripts/insert-2025-2.py` | 2025년 2회 DB 입력 (공통→5과목 분류) |
+| `scripts/update-db-ocr.py` | OCR 결과를 DB에 반영 |
+| `scripts/fix-frac-display.py` | 보기의 `\frac` → `\dfrac` 일괄 변환 |
+
 ## 참고 문서
 - `prd.md` - 전체 요구사항 명세서
 - `CURRENT_STATE.md` - 현재 개발 진행 상태
+- `QUESTION_CODE_MAPPING.md` - 문제 코드 체계

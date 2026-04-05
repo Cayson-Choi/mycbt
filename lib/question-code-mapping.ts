@@ -56,6 +56,9 @@ export const SUBJECT_TO_CODE: Record<string, string> = {
   '제어공학': 'CT',
   '전기설비기술기준': 'EL',
   '전력공학': 'PC',
+  '전기자기학': 'EM',
+  '회로이론 및 제어공학': 'CC',
+  '공통': 'GN',
 
   // 소방 분야 (예시 - 실제 과목명에 맞게 수정 필요)
   '소방원론': 'FR',

@@ -33,13 +33,13 @@ function ExamTimer({ expiresAt, onExpire }: { expiresAt: string; onExpire: () =>
   return (
     <div className="text-right">
       <div
-        className={`text-2xl font-bold ${
+        className={`text-lg sm:text-2xl font-bold ${
           timeLeft < 300 ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'
         }`}
       >
         {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
       </div>
-      <div className="text-xs text-gray-500 dark:text-gray-400">남은 시간</div>
+      <div className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">남은 시간</div>
     </div>
   )
 }
@@ -63,33 +63,32 @@ const QuestionCard = memo(function QuestionCard({
   const questionType = question.question_type || 'MULTIPLE_CHOICE'
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border dark:border-gray-700">
-      <div className="flex items-start gap-4 mb-4">
-        <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center font-bold text-blue-700 dark:text-blue-300">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 border dark:border-gray-700">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/40 rounded-full font-bold text-sm text-blue-700 dark:text-blue-300">
           {index + 1}
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
-            <span>{question.subject_name}</span>
-            {questionType !== 'MULTIPLE_CHOICE' && (
-              <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">
-                {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
-              </span>
-            )}
-          </div>
-          <MathText
-            text={question.question_text}
-            className="text-lg font-medium mb-4 block dark:text-white"
-          />
+        </span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">{question.subject_name}</span>
+        {questionType !== 'MULTIPLE_CHOICE' && (
+          <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">
+            {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
+          </span>
+        )}
+      </div>
+      <div>
+        <MathText
+          text={question.question_text}
+          className="text-base sm:text-lg font-medium mb-4 block dark:text-white"
+        />
 
           {question.image_url && (
-            <div className="mb-4 relative w-full max-w-lg">
+            <div className="mb-4">
               <Image
                 src={question.image_url}
                 alt="문제 이미지"
-                width={600}
-                height={400}
-                className="w-full h-auto rounded"
+                width={400}
+                height={280}
+                className="max-w-sm max-h-[280px] w-auto h-auto rounded border border-gray-200"
                 loading="lazy"
               />
             </div>
@@ -145,7 +144,6 @@ const QuestionCard = memo(function QuestionCard({
               className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none bg-white dark:bg-gray-700 dark:text-white resize-vertical"
             />
           )}
-        </div>
       </div>
     </div>
   )
@@ -167,9 +165,10 @@ function QuitButton({ attemptId }: { attemptId: string }) {
     <>
       <button
         onClick={() => setShowQuit(true)}
-        className="px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+        className="px-2 py-1.5 sm:px-3 sm:py-2 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
       >
-        중단하고 나가기
+        <span className="hidden sm:inline">중단하고 나가기</span>
+        <span className="sm:hidden">중단</span>
       </button>
       <ConfirmDialog
         open={showQuit}
@@ -418,22 +417,22 @@ export default function ExamAttemptClient({
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* 상단 고정 바 */}
         <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 fixed top-0 left-0 right-0 z-50 shadow-sm">
-          <div className="max-w-5xl mx-auto px-4 py-3">
+          <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
             <div className="flex justify-between items-center">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-base sm:text-lg font-bold dark:text-white truncate">{paper.exam_name}</h1>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h1 className="text-sm sm:text-lg font-bold dark:text-white truncate">{paper.exam_name}</h1>
                   {paper.exam_mode === 'OFFICIAL' && (
-                    <span className="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-semibold shrink-0">
+                    <span className="text-[10px] sm:text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-1.5 py-0.5 rounded-full font-semibold shrink-0">
                       공식
                     </span>
                   )}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+                <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   답안: {answeredCount} / {totalCount}
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                 <ExamTimer expiresAt={paper.expires_at} onExpire={handleExpire} />
                 <QuitButton attemptId={attemptId} />
               </div>

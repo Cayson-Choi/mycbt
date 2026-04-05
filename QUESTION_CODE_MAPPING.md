@@ -54,6 +54,9 @@
 | CT | 제어공학 | Control |
 | EL | 전기설비기술기준 | Electric Law |
 | PC | 전력공학 | Power Circuit |
+| EM | 전기자기�� | Electromagnetics (전기기사) |
+| CC | 회로이론 및 제어공학 | Circuit+Control (전기기사) |
+| GN | 공통 | General (과목 미분류) |
 
 ### 전자 분야 (ELET)
 
