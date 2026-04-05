@@ -161,16 +161,16 @@ export default function WhySection() {
 
         {/* CTA */}
         <ScrollReveal>
-          <div className="text-center bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-700 rounded-2xl py-8 sm:py-10 px-5">
-            <h3 className="text-2xl sm:text-4xl font-black text-white mb-2">
+          <div className="text-center bg-gradient-to-r from-emerald-600 to-teal-700 dark:from-emerald-700 dark:to-teal-800 rounded-2xl py-8 sm:py-10 px-5">
+            <h3 className="text-xl sm:text-4xl font-black text-white mb-2 whitespace-nowrap">
               <TypeWriter text="합격! 운이 아니라 전략입니다." />
             </h3>
-            <p className="text-blue-100 mb-4 text-xs sm:text-base">
+            <p className="text-emerald-100 mb-4 text-xs sm:text-base">
               지금 바로 실전 모의고사를 풀어보세요. 회원가입 후 무료로 시작할 수 있습니다.
             </p>
             <a
               href="#exams"
-              className="inline-block bg-white text-blue-700 font-bold px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors text-sm sm:text-base"
+              className="inline-block bg-white text-emerald-700 font-bold px-8 py-3 rounded-xl hover:bg-emerald-50 transition-colors text-sm sm:text-base"
             >
               시험 보러 가기
             </a>
