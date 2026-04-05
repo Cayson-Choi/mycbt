@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react"
 import { useState } from "react"
+import Link from "next/link"
 
 function isKakaoInApp() {
   if (typeof window === "undefined") return false
@@ -91,7 +92,22 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        setError("이메일 또는 비밀번호가 올바르지 않습니다")
+        // 미가입 이메일인지 확인
+        const checkRes = await fetch("/api/auth/check-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        })
+        const checkData = await checkRes.json()
+
+        if (!checkData.exists) {
+          setError("가입되지 않은 이메일입니다. 회원가입을 진행해주세요.")
+          setMode("signup")
+        } else if (!checkData.hasPassword) {
+          setError("소셜 로그인으로 가입된 계정입니다. 소셜 로그인을 이용하거나 회원가입에서 비밀번호를 설정해주세요.")
+        } else {
+          setError("비밀번호가 올바르지 않습니다.")
+        }
         setLoading(false)
       } else {
         window.location.href = "/"
@@ -246,6 +262,18 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
+
+            {mode === "login" && (
+              <div className="flex justify-center gap-4 text-xs text-gray-400 dark:text-gray-500">
+                <Link href="/forgot-password" className="hover:text-gray-600 dark:hover:text-gray-300 hover:underline">
+                  비밀번호를 잊으셨나요?
+                </Link>
+                <span>·</span>
+                <Link href="/find-email" className="hover:text-gray-600 dark:hover:text-gray-300 hover:underline">
+                  이메일을 잊으셨나요?
+                </Link>
+              </div>
+            )}
           </>
         )}
       </div>

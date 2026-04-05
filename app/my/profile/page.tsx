@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from 'next/link'
 import ProfileForm from './ProfileForm'
+import PasswordForm from './PasswordForm'
 
 export default async function ProfilePage() {
   const session = await auth()
@@ -17,6 +18,7 @@ export default async function ProfilePage() {
       nickname: true,
       email: true,
       phone: true,
+      password: true,
     },
   })
 
@@ -39,6 +41,9 @@ export default async function ProfilePage() {
           email={user.email || ''}
           phone={user.phone || ''}
         />
+
+        {/* 비밀번호 변경 폼 */}
+        <PasswordForm hasPassword={!!user.password} />
 
         {/* 회원 탈퇴 링크 */}
         <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-4">
