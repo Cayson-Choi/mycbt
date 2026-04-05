@@ -167,11 +167,7 @@ export default function ExamSettingsSection({ exams }: Props) {
           return (
           <CategoryAccordionClient key={catName} categoryName={catName}>
             <div className="space-y-2">
-              {writtenExams.length > 0 && practicalExams.length > 0 && (
-                <div className="text-xs font-bold text-blue-600 dark:text-blue-400 px-1">필기</div>
-              )}
-              {[...writtenExams, ...(practicalExams.length > 0 ? [{_separator: true} as any] : []), ...practicalExams].map((exam) => {
-                if (exam._separator) return <div key="sep" className="text-xs font-bold text-emerald-600 dark:text-emerald-400 px-1 mt-3">실기</div>
+              {catExams.map((exam) => {
                 const examSubjects = getSubjectsForExam(exam.id)
                 if (examSubjects.length === 0) return null
 
@@ -180,6 +176,13 @@ export default function ExamSettingsSection({ exams }: Props) {
                 return (
                   <div key={exam.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                        exam.exam_type === 'PRACTICAL'
+                          ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                          : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+                      }`}>
+                        {exam.exam_type === 'PRACTICAL' ? '실기' : '필기'}
+                      </span>
                       <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
                         {exam.name}
                       </h3>

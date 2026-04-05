@@ -105,42 +105,20 @@ export default async function AdminPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
           <h2 className="text-xl font-bold mb-4 dark:text-white">📚 시험별 문제 현황</h2>
           <div className="space-y-3">
-            {Array.from(examsByCategory.entries()).map(([catName, catExams]) => {
-              const writtenExams = catExams.filter(e => e.examType === 'WRITTEN')
-              const practicalExams = catExams.filter(e => e.examType === 'PRACTICAL')
-              return (
-                <CategoryAccordion key={catName} categoryName={catName}>
-                  <div className="space-y-2 mt-2">
-                    {writtenExams.length > 0 && (
-                      <>
-                        {practicalExams.length > 0 && (
-                          <div className="text-xs font-bold text-blue-600 dark:text-blue-400 px-1">필기</div>
-                        )}
-                        {writtenExams.map((exam) => (
-                          <ExamQuestionCount
-                            key={exam.id}
-                            examId={exam.id}
-                            examName={exam.year ? `${exam.year}년 ${exam.round}회` : exam.name}
-                          />
-                        ))}
-                      </>
-                    )}
-                    {practicalExams.length > 0 && (
-                      <>
-                        <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 px-1 mt-3">실기</div>
-                        {practicalExams.map((exam) => (
-                          <ExamQuestionCount
-                            key={exam.id}
-                            examId={exam.id}
-                            examName={exam.year ? `실기 ${exam.year}년 ${exam.round}회` : exam.name}
-                          />
-                        ))}
-                      </>
-                    )}
-                  </div>
-                </CategoryAccordion>
-              )
-            })}
+            {Array.from(examsByCategory.entries()).map(([catName, catExams]) => (
+              <CategoryAccordion key={catName} categoryName={catName}>
+                <div className="space-y-2 mt-2">
+                  {catExams.map((exam) => (
+                    <ExamQuestionCount
+                      key={exam.id}
+                      examId={exam.id}
+                      examName={exam.year ? `${exam.year}년 ${exam.round}회` : exam.name}
+                      examType={exam.examType}
+                    />
+                  ))}
+                </div>
+              </CategoryAccordion>
+            ))}
           </div>
         </div>
 
@@ -241,9 +219,11 @@ export default async function AdminPage() {
 async function ExamQuestionCount({
   examId,
   examName,
+  examType,
 }: {
   examId: number
   examName: string
+  examType: string
 }) {
   const [count, subjects] = await Promise.all([
     prisma.question.count({ where: { examId } }),
@@ -266,7 +246,16 @@ async function ExamQuestionCount({
   return (
     <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
       <div className="flex items-center justify-between mb-1">
-        <span className="font-medium dark:text-gray-200">{examName}</span>
+        <div className="flex items-center gap-2">
+          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+            examType === 'PRACTICAL'
+              ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+              : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+          }`}>
+            {examType === 'PRACTICAL' ? '실기' : '필기'}
+          </span>
+          <span className="font-medium dark:text-gray-200">{examName}</span>
+        </div>
         <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
           {count}개
         </span>
