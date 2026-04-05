@@ -247,14 +247,18 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                                 }`}
                               >
                                 <div className="flex items-center gap-2">
-                                  {isCorrect && (
-                                    <span className="text-green-600 dark:text-green-400 font-bold">O</span>
-                                  )}
-                                  {isSelected && !isCorrect && (
-                                    <span className="text-red-600 dark:text-red-400 font-bold">X</span>
-                                  )}
-                                  <span className="dark:text-gray-200">
-                                    {choice}.{' '}
+                                  <span
+                                    className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold ${
+                                      isCorrect
+                                        ? 'bg-green-500 text-white'
+                                        : isSelected
+                                        ? 'bg-red-500 text-white'
+                                        : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
+                                    }`}
+                                  >
+                                    {isCorrect ? 'O' : isSelected ? 'X' : choice}
+                                  </span>
+                                  <span className="flex-1 dark:text-gray-200">
                                     {question[`choice_${choice}_image` as keyof QuestionResult] ? (
                                       <img
                                         src={question[`choice_${choice}_image` as keyof QuestionResult] as string}

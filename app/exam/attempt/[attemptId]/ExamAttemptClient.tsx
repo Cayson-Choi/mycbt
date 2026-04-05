@@ -110,10 +110,18 @@ const QuestionCard = memo(function QuestionCard({
                     name={`question-${question.question_id}`}
                     checked={selectedAnswer === choice}
                     onChange={() => onAnswer(question.question_id, choice)}
-                    className="mt-1"
+                    className="sr-only"
                   />
+                  <span
+                    className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+                      selectedAnswer === choice
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
+                    }`}
+                  >
+                    {choice}
+                  </span>
                   <span className="flex-1 dark:text-gray-200">
-                    {choice}.{' '}
                     {question[`choice_${choice}_image` as keyof PaperQuestion] ? (
                       <img
                         src={question[`choice_${choice}_image` as keyof PaperQuestion] as string}
