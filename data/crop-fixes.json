@@ -1,0 +1,106 @@
+{
+  "2024-1_CC-13": {
+    "page": "2024-1_p19.png",
+    "left": 516,
+    "top": 1474,
+    "right": 921,
+    "bottom": 1861,
+    "description": "Circuit with 6ohm, 7A, 12ohm, 8A, 4ohm network. Excludes question text and choice text."
+  },
+  "2024-1_CC-10_c1": {
+    "page": "2024-1_p18.png",
+    "left": 1310,
+    "top": 394,
+    "right": 2090,
+    "bottom": 528,
+    "description": "Choice 1 block diagram transformation (X1,G,X2 blocks). Excludes choice number and question text."
+  },
+  "2024-1_CC-10_c2": {
+    "page": "2024-1_p18.png",
+    "left": 1310,
+    "top": 557,
+    "right": 2090,
+    "bottom": 692,
+    "description": "Choice 2 block diagram transformation. Excludes choice number."
+  },
+  "2024-1_CC-10_c3": {
+    "page": "2024-1_p18.png",
+    "left": 1310,
+    "top": 719,
+    "right": 2090,
+    "bottom": 868,
+    "description": "Choice 3 block diagram transformation with 1/G block. Excludes choice number."
+  },
+  "2024-1_CC-10_c4": {
+    "page": "2024-1_p18.png",
+    "left": 1310,
+    "top": 895,
+    "right": 2090,
+    "bottom": 1030,
+    "description": "Choice 4 block diagram transformation. Excludes choice number."
+  },
+  "2024-1_CC-02": {
+    "page": "2024-1_p16.png",
+    "left": 513,
+    "top": 2314,
+    "right": 925,
+    "bottom": 2447,
+    "description": "AND+OR logic gate circuit with inputs A,B and output X. Excludes question text and choices."
+  },
+  "2024-2_CC-16": {
+    "page": "2024-2_p19.png",
+    "left": 1633,
+    "top": 2058,
+    "right": 2097,
+    "bottom": 2243,
+    "description": "RLC circuit with e_i(t) source, R resistor, L inductor, C capacitor, i(t) loop current. e_i(t) not cut off. Excludes choice formulas."
+  },
+  "2024-2_MA-04": {
+    "page": "2024-2_p11.png",
+    "left": 1685,
+    "top": 2003,
+    "right": 2008,
+    "bottom": 2245,
+    "description": "DC motor circuit with field coil F, commutation coil C, armature A. No text artifacts."
+  },
+  "2024-2_CC-13": {
+    "page": "2024-2_p19.png",
+    "left": 550,
+    "top": 387,
+    "right": 891,
+    "bottom": 764,
+    "description": "Main transistor circuit with +V, resistors, T1, T2 transistors, X/Y inputs, D output, ground symbols."
+  },
+  "2024-2_CC-13_c1": {
+    "page": "2024-2_p19.png",
+    "left": 355,
+    "top": 805,
+    "right": 660,
+    "bottom": 905,
+    "description": "Choice 1 gate: NOR gate (OR with NOT bubble). X,Y inputs, D output. Excludes choice number."
+  },
+  "2024-2_CC-13_c2": {
+    "page": "2024-2_p19.png",
+    "left": 800,
+    "top": 805,
+    "right": 1133,
+    "bottom": 905,
+    "description": "Choice 2 gate: NOR variant (AND-NOT). X,Y inputs, D output. Excludes choice number."
+  },
+  "2024-2_CC-13_c3": {
+    "page": "2024-2_p19.png",
+    "left": 355,
+    "top": 925,
+    "right": 670,
+    "bottom": 1030,
+    "description": "Choice 3 gate: AND gate. X,Y inputs, D output. Excludes choice number."
+  },
+  "2024-2_CC-13_c4": {
+    "page": "2024-2_p19.png",
+    "left": 800,
+    "top": 925,
+    "right": 1095,
+    "bottom": 1030,
+    "description": "Choice 4 gate: OR gate. X,Y inputs, D output. Excludes choice number."
+  }
+}
