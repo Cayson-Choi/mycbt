@@ -92,22 +92,7 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        // 미가입 이메일인지 확인
-        const checkRes = await fetch("/api/auth/check-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        })
-        const checkData = await checkRes.json()
-
-        if (!checkData.exists) {
-          setError("가입되지 않은 이메일입니다. 회원가입을 진행해주세요.")
-          setMode("signup")
-        } else if (!checkData.hasPassword) {
-          setError("소셜 로그인으로 가입된 계정입니다. 소셜 로그인을 이용하거나 회원가입에서 비밀번호를 설정해주세요.")
-        } else {
-          setError("비밀번호가 올바르지 않습니다.")
-        }
+        setError("이메일 또는 비밀번호가 올바르지 않습니다. 가입하지 않은 이메일이라면 회원가입을 진행해주세요.")
         setLoading(false)
       } else {
         window.location.href = "/"

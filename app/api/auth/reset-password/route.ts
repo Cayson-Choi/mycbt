@@ -16,7 +16,10 @@ function verifyResetToken(token: string): string {
   const data = `${tokenEmail}:${tokenExpiry}`
   const expectedSig = crypto.createHmac("sha256", secret).update(data).digest("hex")
 
-  if (tokenSig !== expectedSig) {
+  if (
+    tokenSig.length !== expectedSig.length ||
+    !crypto.timingSafeEqual(Buffer.from(tokenSig), Buffer.from(expectedSig))
+  ) {
     throw new Error("유효하지 않은 토큰입니다")
   }
   if (Date.now() > Number(tokenExpiry)) {
