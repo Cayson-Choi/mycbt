@@ -23,7 +23,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-14">
           {/* 로고 */}
           <Link href="/" className="flex items-center gap-1.5">
-            <img src="/logo.png" alt="" className="w-7 h-7 object-contain" />
+            <span className="text-2xl">⚡</span>
             <span className="text-xl font-black tracking-tight animate-rainbow-text">전기짱</span>
             <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300 ml-1.5 font-semibold">차원이 다른 CBT</span>
           </Link>

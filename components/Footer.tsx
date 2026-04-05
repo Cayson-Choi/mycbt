@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <img src="/logo.png" alt="" className="w-7 h-7 object-contain" />
+              <span className="text-2xl">⚡</span>
               <span className="text-white font-bold">전기짱</span>
             </div>
           </div>
