@@ -418,21 +418,22 @@ export default function ExamAttemptClient({
         {/* 상단 고정 바 */}
         <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 fixed top-0 left-0 right-0 z-50 shadow-sm">
           <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
-            <div className="flex justify-between items-center">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <h1 className="text-sm sm:text-lg font-bold dark:text-white truncate">{paper.exam_name}</h1>
+            {/* 모바일: 2줄 (시험명 | 시간+중단), PC: 1줄 */}
+            <div className="flex justify-between items-center gap-2">
+              <div className="min-w-0">
+                <h1 className="text-sm sm:text-lg font-bold dark:text-white truncate">
+                  {paper.exam_name}
                   {paper.exam_mode === 'OFFICIAL' && (
-                    <span className="text-[10px] sm:text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-1.5 py-0.5 rounded-full font-semibold shrink-0">
+                    <span className="ml-1.5 text-[10px] sm:text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-1.5 py-0.5 rounded-full font-semibold align-middle">
                       공식
                     </span>
                   )}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                </h1>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
                   답안: {answeredCount} / {totalCount}
                 </div>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 <ExamTimer expiresAt={paper.expires_at} onExpire={handleExpire} />
                 <QuitButton attemptId={attemptId} />
               </div>
