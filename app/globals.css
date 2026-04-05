@@ -27,26 +27,9 @@ body {
 }
 
 /* Animations */
-@keyframes slideInFromRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
-}
-
-@keyframes crownBounce {
-  0%, 100% { transform: translateY(0) rotate(-20deg); }
-  25% { transform: translateY(-3px) rotate(-23deg); }
-  75% { transform: translateY(-3px) rotate(-17deg); }
-}
-
-@keyframes pulseRing {
-  0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
-  70% { box-shadow: 0 0 8px 10px rgba(251, 191, 36, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
 }
 
 @keyframes fadeIn {
@@ -55,54 +38,9 @@ body {
 }
 .animate-fade-in { animation: fadeIn 0.4s ease-out; }
 
-/* Marquee */
-@keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-.animate-marquee { animation: marquee 5s linear infinite; }
-
-/* Airport board flip */
-.board-flip-wrap { perspective: none; }
-@keyframes boardFlip {
-  0% { transform: rotateX(180deg); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: rotateX(0deg); opacity: 1; }
-}
-.board-flip {
-  animation: boardFlip 0.8s ease-out;
-  transform-origin: center center;
-}
-
-
-.animate-slide-in-right {
-  animation: slideInFromRight 0.3s ease-out forwards;
-}
-
 .float-animation { animation: float 3s ease-in-out infinite; }
 .float-animation-delay { animation: float 3s ease-in-out 0.5s infinite; }
 .float-animation-delay2 { animation: float 3s ease-in-out 1s infinite; }
-.crown-bounce { animation: crownBounce 2s ease-in-out infinite; }
-
-@keyframes sparkleText {
-  0% { color: #ffa0a0; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(255,160,160,0.6); }
-  14% { color: #ffcb8a; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(255,203,138,0.6); }
-  28% { color: #fff48a; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(255,244,138,0.6); }
-  42% { color: #a0ffb0; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(160,255,176,0.6); }
-  56% { color: #a0d4ff; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(160,212,255,0.6); }
-  70% { color: #b0a0ff; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(176,160,255,0.6); }
-  84% { color: #ffa0e0; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(255,160,224,0.6); }
-  100% { color: #ffa0a0; text-shadow: 0 0 10px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1), 0 0 20px rgba(255,160,160,0.6); }
-}
-.sparkle-text { animation: sparkleText 60s ease-in-out infinite; }
-
-.pulse-gold { animation: pulseRing 2s ease-out infinite; }
-
-
-.gold-glow {
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.1), 0 0 20px rgba(251, 191, 36, 0.05);
-}
-
 /* Hero title fonts */
 @font-face {
   font-family: 'NanumSquareNeo';
@@ -180,27 +118,6 @@ body {
   background: linear-gradient(90deg, transparent, #ffd700, transparent);
 }
 
-/* 모바일에서만 세로 텍스트 */
-.mobile-vertical {
-  writing-mode: vertical-rl;
-}
-@media (min-width: 1024px) {
-  .mobile-vertical {
-    writing-mode: horizontal-tb;
-  }
-}
-
-/* Pulse animation for "1등" */
-@keyframes rankPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-}
-
-.rank-pulse {
-  display: inline-block;
-  animation: rankPulse 2s ease-in-out infinite;
-}
-
 /* Header rainbow text - 1분 주기 빨주노초파남보 */
 @keyframes rainbowText {
   0%, 100% { color: #ef4444; }
@@ -219,11 +136,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .float-animation,
   .float-animation-delay,
-  .float-animation-delay2,
-  .crown-bounce,
-  .pulse-gold,
-  .animate-slide-in-right,
-  .rank-pulse {
+  .float-animation-delay2 {
     animation: none;
   }
 }

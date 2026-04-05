@@ -197,10 +197,9 @@ components/
 ├── ExamCards.tsx               # 카테고리 카드 (필기/실기 배지 + 입장하기)
 ├── HomeExamCards.tsx           # 홈페이지 카테고리 카드 (서버 컴포넌트)
 ├── WhySection.tsx              # WHY 전기짱 섹션 (인터랙티브 클라이언트 컴포넌트)
-├── ScrollReveal.tsx            # 스크롤 애니메이션 + CountUp 컴포넌트
+├── ScrollReveal.tsx            # 스크롤 애니메이션 + CountUp + TypeWriter 컴포넌트
 ├── MathText.tsx                # 수학 표기법 렌더링
 ├── ConfirmDialog.tsx           # 확인 다이얼로그
-├── FullscreenEnforcer.tsx      # 전체화면 강제 (OFFICIAL 모드)
 ├── ExamSettingsSection.tsx     # 시험 설정 관리
 ├── ResetAttemptsSection.tsx    # 응시 기록 초기화
 ├── DuplicateQuestionsSection.tsx # 중복 문제 관리
