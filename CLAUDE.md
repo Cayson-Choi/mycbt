@@ -6,11 +6,14 @@
 ## 기술 스택
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes
-- **Database**: Neon (PostgreSQL)
-- **ORM**: Prisma
-- **Auth**: NextAuth v5 (Google, Kakao 소셜 로그인)
-- **Storage**: Cloudinary (문제 이미지)
+- **Database**: Neon PostgreSQL (Singapore region) + Prisma 7 (PrismaPg adapter)
+- **Auth**: NextAuth v5 (JWT 전략, PrismaAdapter)
+  - Google / Kakao / Naver OAuth
+  - 이메일+비밀번호 로그인 (Credentials provider, bcryptjs)
+  - 이메일 매직링크 (Nodemailer, 회원가입 인증용)
+- **Storage**: Cloudinary (문제 이미지, cloud_name: dwulm3bd0)
 - **AI**: OpenRouter API (주관식/서술형 자동 채점)
+- **배포**: Vercel
 
 ## 핵심 규칙 (절대 준수)
 
@@ -233,8 +236,17 @@ CLOUDINARY_API_SECRET=P1HI0k-tz5-guQFTr5Zw6UVVgWg
 | `scripts/insert-2025-2.py` | 2025년 2회 DB 입력 (공통→5과목 분류) |
 | `scripts/update-db-ocr.py` | OCR 결과를 DB에 반영 |
 | `scripts/fix-frac-display.py` | 보기의 `\frac` → `\dfrac` 일괄 변환 |
+| `scripts/update-review-xlsx.py` | 문제 검토 오류목록 Excel 생성 (2018~2025 통합) |
+
+## 문제 검토 현황 (2026-04-06)
+- 전체 2,100문제 AI 검토 완료 → `data/전기기사_문제검토_오류목록.xlsx`
+- 정답 오류 41건 / 규정 변경 2건 / OCR·텍스트 오류 15건 (총 58건)
+- OCR 오류 3건 DB 수정 완료 (CC-381, CC-394, CC-399)
+- 정답 오류 41건 DB 미수정 (Excel 조치사항 참조)
+- 관련 스크립트: `scripts/update-review-xlsx.py`
 
 ## 참고 문서
 - `prd.md` - 전체 요구사항 명세서
 - `CURRENT_STATE.md` - 현재 개발 진행 상태
 - `QUESTION_CODE_MAPPING.md` - 문제 코드 체계
+- `data/전기기사_문제검토_오류목록.xlsx` - 문제 검토 오류 목록 (통합)
