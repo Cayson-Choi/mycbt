@@ -31,7 +31,7 @@ export default function ExamCards({
 }) {
   return (
     <div
-      className={`grid gap-3 sm:gap-6 max-w-xs sm:max-w-5xl mx-auto ${
+      className={`grid gap-3 sm:gap-6 max-w-sm sm:max-w-5xl mx-auto ${
         categories.length <= 3
           ? "grid-cols-1 sm:grid-cols-3"
           : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
