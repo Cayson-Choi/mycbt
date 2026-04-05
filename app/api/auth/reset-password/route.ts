@@ -9,6 +9,9 @@ function verifyResetToken(token: string): string {
   // email may contain colons (unlikely but safe), so split from the right
   const lastColon = decoded.lastIndexOf(":")
   const secondLastColon = decoded.lastIndexOf(":", lastColon - 1)
+  if (secondLastColon <= 0 || lastColon <= secondLastColon) {
+    throw new Error("유효하지 않은 토큰입니다")
+  }
   const tokenEmail = decoded.substring(0, secondLastColon)
   const tokenExpiry = decoded.substring(secondLastColon + 1, lastColon)
   const tokenSig = decoded.substring(lastColon + 1)
