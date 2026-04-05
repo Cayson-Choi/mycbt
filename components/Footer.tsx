@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center mb-2">
               <span className="text-2xl leading-none">⚡</span>
-              <span className="text-white font-bold -ml-0.5">전기짱</span>
+              <span className="text-xl text-white font-black -ml-0.5">전기짱</span>
             </div>
           </div>
           <div className="text-sm text-center md:text-right">
