@@ -78,7 +78,7 @@ const QuestionCard = memo(function QuestionCard({
       <div>
         <MathText
           text={question.question_text}
-          className="text-base sm:text-lg font-medium mb-4 block dark:text-white"
+          className="text-sm sm:text-base font-medium mb-4 block dark:text-white"
         />
 
           {question.image_url && (
@@ -99,7 +99,7 @@ const QuestionCard = memo(function QuestionCard({
               {[1, 2, 3, 4].map((choice) => (
                 <label
                   key={choice}
-                  className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
+                  className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${
                     selectedAnswer === choice
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
                       : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -121,7 +121,7 @@ const QuestionCard = memo(function QuestionCard({
                   >
                     {choice}
                   </span>
-                  <span className="flex-1 dark:text-gray-200">
+                  <span className="flex-1 text-sm sm:text-base dark:text-gray-200">
                     {question[`choice_${choice}_image` as keyof PaperQuestion] ? (
                       <img
                         src={question[`choice_${choice}_image` as keyof PaperQuestion] as string}
