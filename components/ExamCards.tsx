@@ -43,34 +43,28 @@ export default function ExamCards({
           <Link
             key={cat.id}
             href={`/category/${cat.id}`}
-            className={`bg-gradient-to-br ${style.gradient} rounded-xl sm:rounded-2xl p-5 sm:p-6 text-white shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1.5 ${floatClasses[index % floatClasses.length]} group relative overflow-hidden`}
+            className={`bg-gradient-to-br ${style.gradient} rounded-xl sm:rounded-2xl px-4 py-3 sm:px-5 sm:py-4 text-white shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1.5 ${floatClasses[index % floatClasses.length]} group relative overflow-hidden`}
           >
             {/* 배경 장식 */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full" />
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-white/5 rounded-full" />
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/10 rounded-full" />
 
             {/* 내용 */}
-            <div className="relative pt-2">
-              <div className="flex items-center gap-1.5 mb-2">
-                <span className="text-[11px] font-bold bg-white/20 px-1.5 py-0.5 rounded">
+            <div className="relative">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-[10px] font-bold bg-white/20 px-1.5 py-0.5 rounded">
                   필기 {cat.writtenCount}
                 </span>
-                <span className="text-[11px] font-bold bg-white/20 px-1.5 py-0.5 rounded">
+                <span className="text-[10px] font-bold bg-white/20 px-1.5 py-0.5 rounded">
                   실기 {cat.practicalCount}
                 </span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold mb-1">
+              <h3 className="text-base sm:text-lg font-bold">
                 {cat.name}
               </h3>
-              {cat.description && (
-                <p className="text-sm text-white/70 mb-3 line-clamp-2">
-                  {cat.description}
-                </p>
-              )}
-              <div className="flex items-center text-sm font-medium text-white/90 group-hover:text-white transition-colors">
+              <div className="flex items-center text-xs font-medium text-white/80 group-hover:text-white transition-colors">
                 입장하기
                 <svg
-                  className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
+                  className="w-3.5 h-3.5 ml-0.5 group-hover:translate-x-1 transition-transform"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
