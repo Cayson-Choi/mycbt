@@ -4,12 +4,39 @@ import Google from "next-auth/providers/google"
 import Kakao from "next-auth/providers/kakao"
 import Naver from "next-auth/providers/naver"
 import Nodemailer from "next-auth/providers/nodemailer"
+import Credentials from "next-auth/providers/credentials"
 import { createTransport } from "nodemailer"
+import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
+    Credentials({
+      name: "credentials",
+      credentials: {
+        email: { label: "이메일", type: "email" },
+        password: { label: "비밀번호", type: "password" },
+      },
+      async authorize(credentials) {
+        const email = credentials?.email as string
+        const password = credentials?.password as string
+
+        if (!email || !password) return null
+
+        const user = await prisma.user.findUnique({
+          where: { email },
+          select: { id: true, email: true, name: true, image: true, password: true },
+        })
+
+        if (!user || !user.password) return null
+
+        const isValid = await bcrypt.compare(password, user.password)
+        if (!isValid) return null
+
+        return { id: user.id, email: user.email, name: user.name, image: user.image }
+      },
+    }),
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,

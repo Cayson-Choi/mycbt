@@ -10,24 +10,23 @@ function isKakaoInApp() {
 }
 
 function openExternalBrowser(url: string) {
-  // 카카오톡 인앱: intent 스킴으로 외부 브라우저 열기
   const intentUrl =
     `intent://${url.replace(/^https?:\/\//, "")}#Intent;scheme=https;package=com.android.chrome;end`
-  // iOS 카카오톡은 Safari로 열리도록 itms-apps 대신 직접 location 변경
   const ua = navigator.userAgent.toLowerCase()
   if (ua.includes("iphone") || ua.includes("ipad")) {
-    // iOS: 카카오톡 내에서 Safari 열기
     window.location.href = url
   } else {
-    // Android: Chrome intent
     window.location.href = intentUrl
   }
 }
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
-  const [emailSent, setEmailSent] = useState(false)
+  const [password, setPassword] = useState("")
+  const [mode, setMode] = useState<"login" | "signup">("login")
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
   const [kakaoAlert, setKakaoAlert] = useState(false)
   const [socialLoading, setSocialLoading] = useState<string | null>(null)
 
@@ -48,12 +47,48 @@ export default function LoginPage() {
     signIn(provider, { callbackUrl: "/" })
   }
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError("")
+    setMessage("")
     setLoading(true)
-    await signIn("nodemailer", { email, redirect: false, callbackUrl: "/" })
-    setEmailSent(true)
-    setLoading(false)
+
+    if (mode === "signup") {
+      // 회원가입
+      try {
+        const res = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        })
+        const data = await res.json()
+        if (!res.ok) {
+          setError(data.error)
+          setLoading(false)
+          return
+        }
+        setMessage(data.message)
+        setMode("login")
+        setLoading(false)
+      } catch {
+        setError("오류가 발생했습니다")
+        setLoading(false)
+      }
+    } else {
+      // 로그인
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        setError("이메일 또는 비밀번호가 올바르지 않습니다")
+        setLoading(false)
+      } else {
+        window.location.href = "/"
+      }
+    }
   }
 
   return (
@@ -132,35 +167,71 @@ export default function LoginPage() {
           <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600" />
         </div>
 
-        {/* 이메일 로그인 */}
-        {emailSent ? (
-          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-            <p className="text-green-700 dark:text-green-300 font-medium">
-              인증 메일을 발송했습니다
-            </p>
-            <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-              {email}로 보낸 메일의 링크를 클릭하세요
-            </p>
+        {/* 이메일+비밀번호 로그인/회원가입 */}
+        {error && (
+          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-sm text-red-700 dark:text-red-300">
+            {error}
           </div>
-        ) : (
-          <form onSubmit={handleEmailLogin} className="space-y-3">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="이메일 주소 입력"
-              required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full px-4 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors disabled:opacity-50"
-            >
-              {loading ? "발송 중..." : "이메일로 로그인"}
-            </button>
-          </form>
         )}
+        {message && (
+          <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-sm text-green-700 dark:text-green-300">
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일 주소 입력"
+            required
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder={mode === "signup" ? "비밀번호 설정 (6자 이상)" : "비밀번호"}
+            required
+            minLength={mode === "signup" ? 6 : undefined}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full px-4 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors disabled:opacity-50"
+          >
+            {loading
+              ? (mode === "signup" ? "가입 중..." : "로그인 중...")
+              : (mode === "signup" ? "회원가입" : "로그인")
+            }
+          </button>
+        </form>
+
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+          {mode === "login" ? (
+            <p>
+              계정이 없으신가요?{" "}
+              <button
+                onClick={() => { setMode("signup"); setError(""); setMessage("") }}
+                className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+              >
+                회원가입
+              </button>
+            </p>
+          ) : (
+            <p>
+              이미 계정이 있으신가요?{" "}
+              <button
+                onClick={() => { setMode("login"); setError(""); setMessage("") }}
+                className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+              >
+                로그인
+              </button>
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )
