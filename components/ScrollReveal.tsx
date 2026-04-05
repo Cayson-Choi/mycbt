@@ -103,11 +103,11 @@ export function CountUp({ target, suffix = '', className = '' }: { target: numbe
   return <span ref={ref} className={className}>{count}{suffix}</span>
 }
 
-// 타이핑 애니메이션: 한 글자씩 → 3번 깜빡임 → 다시 반복
+// 타이핑 애니메이션: 한 글자씩 제자리에서 나타남 → 3번 깜빡임 → 다시 반복
 export function TypeWriter({ text, className = '' }: { text: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null)
-  const [displayText, setDisplayText] = useState('')
-  const [showCursor, setShowCursor] = useState(true)
+  const [charCount, setCharCount] = useState(0)
+  const [visible, setVisible] = useState(true)
   const [started, setStarted] = useState(false)
 
   useEffect(() => {
@@ -136,35 +136,35 @@ export function TypeWriter({ text, className = '' }: { text: string; className?:
     const runCycle = async () => {
       if (cancelled) return
 
-      // 타이핑
+      setVisible(true)
+
+      // 타이핑: 한 글자씩 나타남
       for (let i = 0; i <= text.length; i++) {
         if (cancelled) return
-        setDisplayText(text.slice(0, i))
+        setCharCount(i)
         await new Promise(r => setTimeout(r, 80))
       }
 
-      // 3번 깜빡임 (전체 텍스트 유지한 채로)
+      // 3번 깜빡임 (전체 텍스트가 보였다 안 보였다)
       for (let blink = 0; blink < 3; blink++) {
         if (cancelled) return
-        setShowCursor(false)
+        setVisible(false)
         await new Promise(r => setTimeout(r, 300))
         if (cancelled) return
-        setShowCursor(true)
+        setVisible(true)
         await new Promise(r => setTimeout(r, 300))
       }
 
       // 2초 유지
       await new Promise(r => setTimeout(r, 2000))
 
-      // 텍스트 지우기
-      for (let i = text.length; i >= 0; i--) {
-        if (cancelled) return
-        setDisplayText(text.slice(0, i))
-        await new Promise(r => setTimeout(r, 30))
-      }
+      // 사라짐
+      setVisible(false)
+      await new Promise(r => setTimeout(r, 400))
 
-      // 잠시 대기 후 반복
-      await new Promise(r => setTimeout(r, 500))
+      // 리셋 후 반복
+      setCharCount(0)
+      await new Promise(r => setTimeout(r, 300))
       if (!cancelled) runCycle()
     }
 
@@ -173,9 +173,15 @@ export function TypeWriter({ text, className = '' }: { text: string; className?:
   }, [started, text])
 
   return (
-    <span ref={ref} className={className}>
-      {displayText}
-      <span className={`inline-block w-[3px] h-[1em] bg-current ml-0.5 align-middle ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`} />
+    <span ref={ref} className={`${className} relative inline-block`}>
+      {/* 투명 텍스트로 공간 확보 */}
+      <span className="invisible">{text}</span>
+      {/* 실제 보이는 텍스트: 제자리에서 글자가 나타남 */}
+      <span className={`absolute inset-0 transition-opacity duration-200 ${visible ? 'opacity-100' : 'opacity-0'}`}>
+        {text.split('').map((char, i) => (
+          <span key={i} className={i < charCount ? 'opacity-100' : 'opacity-0'}>{char}</span>
+        ))}
+      </span>
     </span>
   )
 }

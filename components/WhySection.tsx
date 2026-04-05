@@ -162,7 +162,7 @@ export default function WhySection() {
         {/* CTA */}
         <ScrollReveal>
           <div className="text-center bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-700 rounded-2xl py-8 sm:py-10 px-5">
-            <h3 className="text-2xl sm:text-4xl font-black text-white mb-2 min-h-[2.5em] sm:min-h-[1.5em] flex items-center justify-center">
+            <h3 className="text-2xl sm:text-4xl font-black text-white mb-2">
               <TypeWriter text="합격! 운이 아니라 전략입니다." />
             </h3>
             <p className="text-blue-100 mb-4 text-xs sm:text-base">
