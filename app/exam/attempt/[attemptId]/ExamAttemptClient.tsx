@@ -327,6 +327,12 @@ export default function ExamAttemptClient({
 }) {
   const router = useRouter()
 
+  // 결과 페이지 prefetch
+  useEffect(() => {
+    router.prefetch(`/exam/result/${attemptId}`)
+    router.prefetch('/')
+  }, [router, attemptId])
+
   const [answers, setAnswers] = useState<Map<number, number>>(() => {
     const map = new Map<number, number>()
     paper.questions.forEach((q) => {

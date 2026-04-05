@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import MathText from '@/components/MathText'
@@ -57,7 +58,13 @@ interface ExamResultData {
 }
 
 export default function ExamResultContent({ result }: { result: ExamResultData }) {
+  const router = useRouter()
   const [showExplanations, setShowExplanations] = useState(false)
+
+  useEffect(() => {
+    router.prefetch('/my')
+    router.prefetch('/')
+  }, [router])
 
   const passed = (result.total_score ?? 0) >= 60
   const isOfficial = result.exam_mode === 'OFFICIAL'

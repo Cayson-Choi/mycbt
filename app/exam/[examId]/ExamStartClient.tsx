@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -40,6 +40,11 @@ export default function ExamStartClient({
   const router = useRouter()
   const [starting, setStarting] = useState(false)
   const [error, setError] = useState('')
+
+  // 홈/취소 prefetch
+  useEffect(() => {
+    router.prefetch('/')
+  }, [router])
 
   // OFFICIAL 시험용 상태
   const [password, setPassword] = useState('')

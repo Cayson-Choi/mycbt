@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import MathText from '@/components/MathText'
 
@@ -41,7 +42,13 @@ interface WrongAnswersData {
 }
 
 export default function WrongAnswersContent({ data }: { data: WrongAnswersData }) {
+  const router = useRouter()
   const [filter, setFilter] = useState<'all' | number>('all')
+
+  useEffect(() => {
+    router.prefetch('/my')
+    router.prefetch('/')
+  }, [router])
 
   const filteredAnswers =
     filter === 'all'
