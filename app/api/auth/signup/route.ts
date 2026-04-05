@@ -39,20 +39,20 @@ export async function POST(req: Request) {
         where: { email },
         data: { password: hashed },
       })
-      return NextResponse.json({ message: "비밀번호가 설정되었습니다. 로그인해주세요." })
+      return NextResponse.json({ message: "비밀번호가 설정되었습니다.", sendVerification: false })
     }
 
-    // 신규 가입
+    // 신규 가입: 비밀번호 저장, 이메일 인증은 아직 안 함
     const hashed = await bcrypt.hash(password, 10)
     await prisma.user.create({
       data: {
         email,
         password: hashed,
-        emailVerified: new Date(), // 이메일 인증 완료 처리
+        // emailVerified는 null → 인증 메일 클릭 후 설정됨
       },
     })
 
-    return NextResponse.json({ message: "회원가입 완료! 로그인해주세요." })
+    return NextResponse.json({ message: "인증 메일을 발송합니다.", sendVerification: true })
   } catch (error) {
     console.error("Signup error:", error)
     return NextResponse.json(
