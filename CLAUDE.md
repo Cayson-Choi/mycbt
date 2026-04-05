@@ -42,10 +42,28 @@
 - 새 시험 시작 시 기존 IN_PROGRESS 시험도 자동 삭제
 
 ## 인증 플로우
-1. 로그인 페이지에서 Google 또는 Kakao 소셜 로그인
+
+### 소셜 로그인 (Google/Kakao/Naver)
+1. 로그인 페이지에서 소셜 로그인 버튼 클릭
 2. NextAuth OAuth → 콜백에서 프로필 존재 여부 확인
-3. 프로필 없음 → `/complete-profile` (추가정보기입: 이름, 전화번호, 개인정보 동의)
+3. 프로필 없음 → `/complete-profile` (추가정보기입: 아이디, 전화번호, 개인정보 동의)
 4. 프로필 있음 → 홈으로 이동
+
+### 이메일+비밀번호 회원가입
+1. 로그인 페이지에서 "회원가입" 모드 전환
+2. 이메일 + 비밀번호(6자 이상) 입력 → `/api/auth/signup` (bcrypt 해시 저장)
+3. Nodemailer로 인증 메일 발송 → 사용자가 링크 클릭
+4. emailVerified 설정 → `/complete-profile` (아이디, 전화번호)
+5. 다음 로그인: 이메일 + 비밀번호 → Credentials provider → 즉시 로그인
+
+### 비밀번호 찾기
+1. `/forgot-password` → 이메일 입력 → HMAC-SHA256 토큰 생성 (1시간 만료)
+2. 재설정 링크 메일 발송 → `/reset-password?token=xxx`
+3. 새 비밀번호 입력 → 토큰 검증 (timingSafeEqual) → 비밀번호 변경
+
+### 이메일 찾기
+1. `/find-email` → 전화번호 입력
+2. DB에서 전화번호로 조회 → 마스킹된 이메일 표시 (ca****@gmail.com)
 
 ## 프로젝트 구조
 
