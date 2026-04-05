@@ -1,8 +1,8 @@
 """
-Re-crop all diagram images with proper trimming:
-1. Apply crop_y to remove text
-2. Trim whitespace from all 4 sides (find content bounding box)
-3. Add uniform padding around content
+Re-crop all diagram images with smart text remnant removal:
+1. Apply original crop_y (no extra margin)
+2. Detect and remove text remnants at top (small text cluster + gap pattern)
+3. Trim whitespace from all 4 sides with uniform padding
 4. Upload to Cloudinary
 """
 import os, sys, io, json, psycopg2
@@ -17,7 +17,6 @@ cloudinary.config(cloud_name='dwulm3bd0', api_key='225368121665588', api_secret=
 
 DL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'diagram-originals')
 
-# Load crop_y from precise-crop-upload.py
 CROP_Y = {
 "ELEC-E-CC-006": 42, "ELEC-E-CC-008": 46, "ELEC-E-CC-010": 24, "ELEC-E-CC-012": 88,
 "ELEC-E-CC-014": 62, "ELEC-E-CC-017": 26, "ELEC-E-CC-019": 0, "ELEC-E-CC-021": 20,
@@ -64,35 +63,82 @@ CROP_Y = {
 "ELEC-E-XX-537": 208, "ELEC-E-XX-570": 82, "ELEC-E-XX-571": 100,
 }
 
-PADDING = 10  # uniform padding in pixels
+PADDING = 8
+
+
+def remove_text_remnant(gray_array):
+    """
+    After crop_y, check if there's a small text remnant at the top
+    (a few rows of sparse content followed by a white gap before the main diagram).
+    If found, return the y where the main diagram starts. Otherwise return 0.
+    """
+    h, w = gray_array.shape
+    ink_per_row = np.sum(gray_array < 200, axis=1)
+    has_content = ink_per_row > (w * 0.003)
+
+    if not has_content[0:5].any():
+        # Top rows are already white, no remnant
+        return 0
+
+    # Find end of first content block
+    first_block_end = 0
+    for i in range(h):
+        if has_content[i]:
+            first_block_end = i
+        elif first_block_end > 0:
+            break
+
+    # If first block is small (< 35px, likely text remnant like "는?" or "기는?")
+    # AND there's a gap after it (>= 5 white rows)
+    # AND there's more content after the gap (the actual diagram)
+    if first_block_end < 35:
+        gap_start = first_block_end + 1
+        gap_end = gap_start
+        for i in range(gap_start, min(gap_start + 30, h)):
+            if not has_content[i]:
+                gap_end = i
+            else:
+                break
+
+        gap_size = gap_end - gap_start + 1
+        if gap_size >= 5:
+            # Check there's content after the gap
+            if gap_end < h and has_content[gap_end + 1:].any():
+                return gap_end  # Skip past the remnant + gap
+
+    return 0
 
 
 def crop_and_trim(image_path, crop_y):
-    """Crop at crop_y, then trim whitespace from all 4 sides with uniform padding."""
+    """Crop at crop_y, remove text remnants, trim whitespace uniformly."""
     img = Image.open(image_path).convert('RGB')
     w, h = img.size
 
-    # Step 1: crop_y to remove text (add extra margin to avoid text remnants)
-    effective_crop = crop_y + 20 if crop_y > 0 else 0
-    if effective_crop > 0 and effective_crop < h - 10:
-        img = img.crop((0, effective_crop, w, h))
+    # Step 1: apply crop_y (original value, no extra margin)
+    if crop_y > 0 and crop_y < h - 10:
+        img = img.crop((0, crop_y, w, h))
 
-    # Step 2: find content bounding box (non-white pixels)
+    # Step 2: detect and remove text remnant at top
     gray = np.array(img.convert('L'))
-    # threshold: anything darker than 240 is "content"
+    remnant_skip = remove_text_remnant(gray)
+    if remnant_skip > 0:
+        img = img.crop((0, remnant_skip, img.size[0], img.size[1]))
+        gray = np.array(img.convert('L'))
+
+    # Step 3: find content bounding box
     mask = gray < 240
     rows_with_content = np.any(mask, axis=1)
     cols_with_content = np.any(mask, axis=0)
 
     if not np.any(rows_with_content):
-        return img  # all white, return as-is
+        return img
 
     top = np.argmax(rows_with_content)
     bottom = len(rows_with_content) - np.argmax(rows_with_content[::-1])
     left = np.argmax(cols_with_content)
     right = len(cols_with_content) - np.argmax(cols_with_content[::-1])
 
-    # Step 3: add uniform padding
+    # Step 4: add uniform padding
     ch, cw = img.size[1], img.size[0]
     top = max(0, top - PADDING)
     bottom = min(ch, bottom + PADDING)
@@ -101,7 +147,6 @@ def crop_and_trim(image_path, crop_y):
 
     trimmed = img.crop((left, top, right, bottom))
 
-    # Sanity check
     tw, th = trimmed.size
     if tw < 20 or th < 20:
         return img
