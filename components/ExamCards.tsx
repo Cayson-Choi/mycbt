@@ -60,11 +60,20 @@ export default function ExamCards({
                 </p>
               )}
               <div className="flex items-center justify-between">
-                <span className="text-sm text-white/80">
-                  {cat.examCount > 0
-                    ? `필기 ${cat.writtenCount}${cat.practicalCount > 0 ? ` / 실기 ${cat.practicalCount}` : ""}`
-                    : "준비 중"}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  {cat.examCount > 0 ? (
+                    <>
+                      <span className="text-[11px] font-bold bg-white/20 px-1.5 py-0.5 rounded">
+                        필기 {cat.writtenCount}
+                      </span>
+                      <span className="text-[11px] font-bold bg-white/20 px-1.5 py-0.5 rounded">
+                        실기 {cat.practicalCount}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm text-white/80">준비 중</span>
+                  )}
+                </div>
                 <div className="flex items-center text-sm font-medium text-white/90 group-hover:text-white transition-colors">
                   입장하기
                   <svg
