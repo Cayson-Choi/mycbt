@@ -7,6 +7,7 @@ interface Exam {
   name: string
   category_name?: string
   exam_mode?: string
+  exam_type?: string
   duration_minutes?: number
 }
 
@@ -160,10 +161,17 @@ export default function ExamSettingsSection({ exams }: Props) {
       </h2>
 
       <div className="space-y-3">
-        {Array.from(groupedExams.entries()).map(([catName, catExams]) => (
+        {Array.from(groupedExams.entries()).map(([catName, catExams]) => {
+          const writtenExams = catExams.filter(e => e.exam_type !== 'PRACTICAL')
+          const practicalExams = catExams.filter(e => e.exam_type === 'PRACTICAL')
+          return (
           <CategoryAccordionClient key={catName} categoryName={catName}>
             <div className="space-y-2">
-              {catExams.map((exam) => {
+              {writtenExams.length > 0 && practicalExams.length > 0 && (
+                <div className="text-xs font-bold text-blue-600 dark:text-blue-400 px-1">필기</div>
+              )}
+              {[...writtenExams, ...(practicalExams.length > 0 ? [{_separator: true} as any] : []), ...practicalExams].map((exam) => {
+                if (exam._separator) return <div key="sep" className="text-xs font-bold text-emerald-600 dark:text-emerald-400 px-1 mt-3">실기</div>
                 const examSubjects = getSubjectsForExam(exam.id)
                 if (examSubjects.length === 0) return null
 
@@ -224,7 +232,8 @@ export default function ExamSettingsSection({ exams }: Props) {
               })}
             </div>
           </CategoryAccordionClient>
-        ))}
+          )
+        })}
       </div>
 
       <div className="mt-4 flex items-center gap-3">

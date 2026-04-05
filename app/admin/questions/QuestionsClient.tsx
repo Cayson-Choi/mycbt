@@ -17,6 +17,7 @@ export default function QuestionsClient() {
   const [filteredQuestions, setFilteredQuestions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  const [examTypeFilter, setExamTypeFilter] = useState<string>('all')
   const [examFilter, setExamFilter] = useState<string>(searchParams.get('exam') || 'all')
   const [subjectFilter, setSubjectFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -49,7 +50,7 @@ export default function QuestionsClient() {
 
   useEffect(() => {
     loadQuestions()
-  }, [examFilter, categoryFilter])
+  }, [examFilter, categoryFilter, examTypeFilter])
 
   // 과목 목록 로드
   useEffect(() => {
@@ -123,6 +124,7 @@ export default function QuestionsClient() {
         // 카테고리 선택 + 전체 시험: 해당 카테고리의 모든 exam_id를 쿼리
         const catExamIds = exams
           .filter((e: any) => e.category_name === categoryFilter)
+          .filter((e: any) => examTypeFilter === 'all' || e.exam_type === examTypeFilter)
           .map((e: any) => e.id)
         if (catExamIds.length > 0) {
           url = `/api/admin/questions?exam_ids=${catExamIds.join(',')}`
@@ -312,6 +314,7 @@ export default function QuestionsClient() {
               value={categoryFilter}
               onChange={(e) => {
                 setCategoryFilter(e.target.value)
+                setExamTypeFilter('all')
                 setExamFilter('all')
                 setSubjectFilter('all')
               }}
@@ -325,7 +328,24 @@ export default function QuestionsClient() {
               ))}
             </select>
 
-            {/* 2단계: 시험 (카테고리 선택 시) */}
+            {/* 2단계: 필기/실기 (카테고리 선택 시) */}
+            {categoryFilter !== 'all' && (
+              <select
+                value={examTypeFilter}
+                onChange={(e) => {
+                  setExamTypeFilter(e.target.value)
+                  setExamFilter('all')
+                  setSubjectFilter('all')
+                }}
+                className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              >
+                <option value="all">전체 유형</option>
+                <option value="WRITTEN">필기</option>
+                <option value="PRACTICAL">실기</option>
+              </select>
+            )}
+
+            {/* 3단계: 시험 (카테고리 선택 시) */}
             {categoryFilter !== 'all' && (
               <select
                 value={examFilter}
@@ -338,6 +358,7 @@ export default function QuestionsClient() {
                 <option value="all">전체 시험</option>
                 {exams
                   .filter((e: any) => e.category_name === categoryFilter)
+                  .filter((e: any) => examTypeFilter === 'all' || e.exam_type === examTypeFilter)
                   .map((exam: any) => (
                     <option key={exam.id} value={exam.id.toString()}>
                       {exam.name}

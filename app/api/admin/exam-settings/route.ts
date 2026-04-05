@@ -23,6 +23,7 @@ export async function GET() {
         year: true,
         round: true,
         examMode: true,
+        examType: true,
         durationMinutes: true,
         sortOrder: true,
         category: { select: { name: true } },
@@ -57,10 +58,11 @@ export async function GET() {
       exams: exams.map((e) => ({
         id: e.id,
         name: e.year
-          ? `${e.category?.name} ${e.year}년 ${e.round}회`
+          ? `${e.category?.name} ${e.examType === 'PRACTICAL' ? '실기 ' : ''}${e.year}년 ${e.round}회`
           : e.name,
         category_name: e.category?.name || "",
         exam_mode: e.examMode,
+        exam_type: e.examType,
         duration_minutes: e.durationMinutes,
         sort_order: e.sortOrder,
       })),

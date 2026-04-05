@@ -256,7 +256,7 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                                         : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
                                     }`}
                                   >
-                                    {isCorrect ? 'O' : isSelected ? 'X' : choice}
+                                    {choice}
                                   </span>
                                   <span className="flex-1 dark:text-gray-200">
                                     {question[`choice_${choice}_image` as keyof QuestionResult] ? (
@@ -269,6 +269,9 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                                       <MathText text={question[`choice_${choice}` as keyof QuestionResult] as string || ''} />
                                     )}
                                   </span>
+                                  {isCorrect && (
+                                    <span className="text-green-600 dark:text-green-400 text-xs font-bold">(정답)</span>
+                                  )}
                                 </div>
                               </div>
                             )
