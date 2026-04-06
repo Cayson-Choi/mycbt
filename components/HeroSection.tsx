@@ -18,7 +18,7 @@ const slides: Slide[] = [
   {
     badge: '인기',
     badgeColor: 'bg-red-500',
-    title: '전기기사 필기',
+    title: '전기기사',
     description: '2018~2025년 기출문제 2,100문제\n전문가가 직접 검증한 정확한 문제와 해설',
     bgColor: 'from-[#0f1729] to-[#1a2744]',
     accentColor: '#4f8cff',
@@ -28,7 +28,7 @@ const slides: Slide[] = [
   {
     badge: '준비중',
     badgeColor: 'bg-emerald-500',
-    title: '전기기능사 필기',
+    title: '전기기능사',
     description: '전기이론·전기기기·전기설비\n3과목 60분 실전 모의고사',
     bgColor: 'from-[#071a12] to-[#0f2e1f]',
     accentColor: '#34d399',
@@ -38,7 +38,7 @@ const slides: Slide[] = [
   {
     badge: '준비중',
     badgeColor: 'bg-violet-500',
-    title: '전기산업기사 필기',
+    title: '전기산업기사',
     description: '전기자기학·전력공학·전기기기·회로이론\n체계적인 과목별 학습으로 합격까지',
     bgColor: 'from-[#150d24] to-[#251840]',
     accentColor: '#a78bfa',
@@ -48,7 +48,7 @@ const slides: Slide[] = [
   {
     badge: '준비중',
     badgeColor: 'bg-amber-500',
-    title: '전기기능장 필기',
+    title: '전기기능장',
     description: '최고 등급 자격증에 도전하세요\n깊이 있는 문제와 상세한 해설 제공',
     bgColor: 'from-[#1a1200] to-[#302000]',
     accentColor: '#fbbf24',
