@@ -10,7 +10,6 @@ interface Slide {
   description: string
   bgColor: string
   accentColor: string
-  icon: string
   personImage: string
   personAlt: string
 }
@@ -19,51 +18,48 @@ const slides: Slide[] = [
   {
     badge: '인기',
     badgeColor: 'bg-red-500',
-    title: '전기기사 필기 CBT',
+    title: '전기기사 필기',
     description: '2018~2025년 기출문제 2,100문제\n전문가가 직접 검증한 정확한 문제와 해설',
     bgColor: 'from-[#0f1729] to-[#1a2744]',
     accentColor: '#4f8cff',
-    icon: '⚡',
     personImage: '/hero/man.png',
     personAlt: '전기기사 강사',
   },
   {
     badge: '준비중',
     badgeColor: 'bg-emerald-500',
-    title: '전기기능사 필기 CBT',
+    title: '전기기능사 필기',
     description: '전기이론·전기기기·전기설비\n3과목 60분 실전 모의고사',
     bgColor: 'from-[#071a12] to-[#0f2e1f]',
     accentColor: '#34d399',
-    icon: '🔌',
     personImage: '/hero/woman.png',
     personAlt: '전기기능사 강사',
   },
   {
-    badge: 'AI 채점',
+    badge: '준비중',
     badgeColor: 'bg-violet-500',
-    title: 'AI 자동 채점 시스템',
-    description: '주관식·서술형 문제도 AI가 자동 채점\n즉각적인 피드백으로 실력 향상',
+    title: '전기산업기사 필기',
+    description: '전기자기학·전력공학·전기기기·회로이론\n체계적인 과목별 학습으로 합격까지',
     bgColor: 'from-[#150d24] to-[#251840]',
     accentColor: '#a78bfa',
-    icon: '🤖',
     personImage: '/hero/man.png',
-    personAlt: 'AI 채점 시스템',
+    personAlt: '전기산업기사 강사',
   },
   {
-    badge: '실시간',
+    badge: '준비중',
     badgeColor: 'bg-amber-500',
-    title: '실시간 랭킹 시스템',
-    description: '오늘의 Top5 랭킹 실시간 업데이트\n다른 수험생과 실력을 비교해 보세요',
+    title: '전기기능장 필기',
+    description: '최고 등급 자격증에 도전하세요\n깊이 있는 문제와 상세한 해설 제공',
     bgColor: 'from-[#1a1200] to-[#302000]',
     accentColor: '#fbbf24',
-    icon: '🏆',
     personImage: '/hero/woman.png',
-    personAlt: '랭킹 시스템',
+    personAlt: '전기기능장 강사',
   },
 ]
 
 export default function HeroSection() {
   const [current, setCurrent] = useState(0)
+  const [displayIndex, setDisplayIndex] = useState(0)
   const [animPhase, setAnimPhase] = useState<'enter' | 'idle' | 'exit'>('enter')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const touchStartX = useRef(0)
@@ -76,12 +72,12 @@ export default function HeroSection() {
 
   const goTo = useCallback((index: number) => {
     clearTimer()
-    // exit → 바뀐 뒤 enter
     setAnimPhase('exit')
     setTimeout(() => {
+      setDisplayIndex(index)
       setCurrent(index)
       setAnimPhase('enter')
-    }, 400)
+    }, 500)
   }, [])
 
   const next = useCallback(() => {
@@ -117,7 +113,7 @@ export default function HeroSection() {
     }
   }
 
-  const slide = slides[current]
+  const slide = slides[displayIndex]
   const isVisible = animPhase === 'enter' || animPhase === 'idle'
 
   return (
@@ -128,21 +124,14 @@ export default function HeroSection() {
     >
       {/* ===== 배경 장식 ===== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* 메인 글로우 */}
         <div
           className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000"
-          style={{
-            background: `radial-gradient(circle, ${slide.accentColor}18, transparent 70%)`,
-          }}
+          style={{ background: `radial-gradient(circle, ${slide.accentColor}18, transparent 70%)` }}
         />
-        {/* 보조 글로우 */}
         <div
           className="absolute left-1/4 bottom-0 w-[400px] h-[400px] rounded-full transition-all duration-1000"
-          style={{
-            background: `radial-gradient(circle, ${slide.accentColor}0a, transparent 70%)`,
-          }}
+          style={{ background: `radial-gradient(circle, ${slide.accentColor}0a, transparent 70%)` }}
         />
-        {/* 격자 패턴 */}
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
@@ -150,19 +139,12 @@ export default function HeroSection() {
             backgroundSize: '50px 50px',
           }}
         />
-        {/* 떠다니는 원형 장식 */}
-        <div
-          className="hero-float-slow absolute w-3 h-3 rounded-full"
-          style={{ background: slide.accentColor, opacity: 0.15, top: '20%', left: '15%' }}
-        />
-        <div
-          className="hero-float-med absolute w-2 h-2 rounded-full"
-          style={{ background: slide.accentColor, opacity: 0.1, top: '60%', left: '10%' }}
-        />
-        <div
-          className="hero-float-fast absolute w-4 h-4 rounded-full"
-          style={{ background: slide.accentColor, opacity: 0.08, top: '30%', right: '40%' }}
-        />
+        <div className="hero-float-slow absolute w-3 h-3 rounded-full"
+          style={{ background: slide.accentColor, opacity: 0.15, top: '20%', left: '15%' }} />
+        <div className="hero-float-med absolute w-2 h-2 rounded-full"
+          style={{ background: slide.accentColor, opacity: 0.1, top: '60%', left: '10%' }} />
+        <div className="hero-float-fast absolute w-4 h-4 rounded-full"
+          style={{ background: slide.accentColor, opacity: 0.08, top: '30%', right: '40%' }} />
       </div>
 
       {/* ===== 메인 콘텐츠 ===== */}
@@ -171,19 +153,16 @@ export default function HeroSection() {
 
           {/* 텍스트 영역 */}
           <div className="flex-1 z-10 pb-2 sm:pb-0">
-            {/* 배지 */}
             <div
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white mb-3 sm:mb-4
+              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white mb-3 sm:mb-4
                 ${slide.badgeColor} shadow-lg
                 transition-all duration-600 ease-out
                 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
               style={{ transitionDelay: isVisible ? '100ms' : '0ms' }}
             >
-              <span>{slide.icon}</span>
-              <span>{slide.badge}</span>
+              {slide.badge}
             </div>
 
-            {/* 제목 */}
             <h2
               className={`text-2xl sm:text-4xl lg:text-[3.25rem] xl:text-6xl font-black text-white mb-3 sm:mb-4 leading-tight
                 transition-all duration-600 ease-out
@@ -193,7 +172,6 @@ export default function HeroSection() {
               {slide.title}
             </h2>
 
-            {/* 설명 */}
             <p
               className={`text-sm sm:text-base lg:text-lg text-white/55 leading-relaxed whitespace-pre-line max-w-lg
                 transition-all duration-600 ease-out
@@ -203,7 +181,6 @@ export default function HeroSection() {
               {slide.description}
             </p>
 
-            {/* CTA 버튼 */}
             <div
               className={`mt-4 sm:mt-5 transition-all duration-600 ease-out
                 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
@@ -225,64 +202,38 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* ===== 사람 이미지 ===== */}
+          {/* ===== 사람 이미지 (크로스페이드) ===== */}
           <div className="relative flex-shrink-0 w-[140px] sm:w-[220px] lg:w-[320px] h-[200px] sm:h-[300px] lg:h-[400px]">
             {/* 이미지 뒤 글로우 */}
             <div
-              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[40%] rounded-full blur-3xl transition-all duration-700
+              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[40%] rounded-full blur-3xl transition-opacity duration-700
                 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-              style={{
-                background: `radial-gradient(ellipse, ${slide.accentColor}25, transparent 70%)`,
-                transitionDelay: isVisible ? '300ms' : '0ms',
-              }}
+              style={{ background: `radial-gradient(ellipse, ${slide.accentColor}25, transparent 70%)` }}
             />
 
-            {/* 사람 이미지 */}
-            <div
-              className={`absolute inset-0 transition-all duration-700 ease-out
-                ${isVisible
-                  ? 'opacity-100 translate-y-0 scale-100'
-                  : 'opacity-0 translate-y-10 scale-95'}`}
-              style={{ transitionDelay: isVisible ? '250ms' : '0ms' }}
-            >
-              <Image
-                src={slide.personImage}
-                alt={slide.personAlt}
-                fill
-                className="object-contain object-bottom drop-shadow-2xl"
-                sizes="(max-width: 640px) 140px, (max-width: 1024px) 200px, 260px"
-                priority={current === 0}
-              />
-            </div>
-
-            {/* 떠다니는 아이콘 장식 (이미지 주변) */}
-            <div
-              className={`absolute -top-2 -right-2 sm:top-2 sm:right-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-lg hero-float-slow
-                transition-all duration-600
-                ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}
-              style={{
-                background: `linear-gradient(135deg, ${slide.accentColor}30, ${slide.accentColor}10)`,
-                backdropFilter: 'blur(8px)',
-                border: `1px solid ${slide.accentColor}20`,
-                transitionDelay: isVisible ? '600ms' : '0ms',
-              }}
-            >
-              {slide.icon}
-            </div>
-
-            <div
-              className={`absolute bottom-16 -left-4 sm:bottom-20 sm:-left-6 w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm shadow-lg hero-float-med
-                transition-all duration-600
-                ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}
-              style={{
-                background: `linear-gradient(135deg, ${slide.accentColor}25, ${slide.accentColor}08)`,
-                backdropFilter: 'blur(8px)',
-                border: `1px solid ${slide.accentColor}15`,
-                transitionDelay: isVisible ? '750ms' : '0ms',
-              }}
-            >
-              ✓
-            </div>
+            {/* 모든 이미지를 렌더링하고 현재 슬라이드만 보이도록 크로스페이드 */}
+            {slides.map((s, i) => (
+              <div
+                key={i}
+                className="absolute inset-0 transition-all duration-700 ease-out"
+                style={{
+                  opacity: i === displayIndex && isVisible ? 1 : 0,
+                  transform: i === displayIndex && isVisible
+                    ? 'translateY(0) scale(1)'
+                    : 'translateY(24px) scale(0.97)',
+                  transitionDelay: i === displayIndex && isVisible ? '200ms' : '0ms',
+                }}
+              >
+                <Image
+                  src={s.personImage}
+                  alt={s.personAlt}
+                  fill
+                  className="object-contain object-bottom drop-shadow-2xl"
+                  sizes="(max-width: 640px) 140px, (max-width: 1024px) 220px, 320px"
+                  priority={i <= 1}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -290,7 +241,6 @@ export default function HeroSection() {
       {/* ===== 하단 네비게이션 ===== */}
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pb-4 sm:pb-5">
         <div className="flex items-center gap-3">
-          {/* 도트 */}
           <div className="flex gap-2">
             {slides.map((s, i) => (
               <button
@@ -311,12 +261,10 @@ export default function HeroSection() {
             ))}
           </div>
 
-          {/* 슬라이드 번호 */}
           <span className="text-[11px] text-white/25 tabular-nums ml-1">
             {String(current + 1).padStart(2, '0')}/{String(slides.length).padStart(2, '0')}
           </span>
 
-          {/* 화살표 (데스크탑) */}
           <div className="hidden sm:flex items-center gap-1.5 ml-auto">
             <button
               onClick={prev}
@@ -339,7 +287,6 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* 진행 바 */}
         <div className="mt-3 h-[2px] bg-white/[0.06] rounded-full overflow-hidden">
           <div
             key={current}
