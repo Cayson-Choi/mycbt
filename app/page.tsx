@@ -3,8 +3,6 @@ import HomeExamCards from "@/components/HomeExamCards"
 import ProfileGuard from "@/components/ProfileGuard"
 import WhySection from "@/components/WhySection"
 
-export const revalidate = 60
-
 export default function Home() {
   return (
     <div>
@@ -14,10 +12,10 @@ export default function Home() {
         <HeroSection />
       </section>
 
-      {/* 등급별 자격증 */}
+      {/* 등급 카드 */}
       <section
         id="exams"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 relative z-10 pb-2"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 relative z-10"
       >
         <div className="text-center mb-8 sm:mb-10">
           <h2 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mb-2">

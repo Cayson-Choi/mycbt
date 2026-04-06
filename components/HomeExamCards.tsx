@@ -1,52 +1,55 @@
-import { prisma } from "@/lib/prisma"
-import { unstable_cache } from "next/cache"
-import GradeSections from "./GradeSections"
+'use client'
 
-const getCategories = unstable_cache(
-  async () => {
-    return prisma.examCategory.findMany({
-      where: { isActive: true },
-      include: {
-        exams: {
-          where: { isPublished: true, examMode: "PRACTICE" },
-          select: { id: true, examType: true },
-        },
-      },
-      orderBy: { sortOrder: "asc" },
-    })
-  },
-  ["exam-categories-v2"],
-  { revalidate: 60 }
-)
+import Link from "next/link"
 
-// 등급 정의 (고정)
-const gradeConfig = [
-  { grade: '기능사', color: 'emerald', icon: '🔧', description: '자격증 취득의 첫 걸음' },
-  { grade: '산업기사', color: 'violet', icon: '⚙️', description: '전문 기술인의 시작' },
-  { grade: '기사', color: 'blue', icon: '⚡', description: '엔지니어의 필수 자격' },
-  { grade: '기능장', color: 'amber', icon: '🏅', description: '최고 등급 도전' },
-  { grade: '공기업', color: 'cyan', icon: '🏢', description: '공기업 채용 대비' },
-] as const
+const grades = [
+  { id: '기능사', label: '기능사', sub: '전기·승강기·위험물·가스', count: 4 },
+  { id: '산업기사', label: '산업기사', sub: '전기·소방·에너지·공조냉동·산업안전', count: 6 },
+  { id: '기사', label: '기사', sub: '전기·소방·가스', count: 4 },
+  { id: '기능장', label: '기능장', sub: '전기기능장', count: 1 },
+  { id: '공기업', label: '공기업', sub: '한전·한수원 등', count: 0 },
+  { id: '과정평가형', label: '과정평가형', sub: 'NCS 기반 과정평가', count: 0 },
+]
 
-export default async function HomeExamCards() {
-  const categories = await getCategories()
-
-  const gradeGroups = gradeConfig.map((config) => {
-    const cats = categories
-      .filter((c) => c.grade === config.grade)
-      .map((cat) => ({
-        id: cat.id,
-        name: cat.name,
-        examCount: cat.exams.length,
-        writtenCount: cat.exams.filter((e) => e.examType === "WRITTEN").length,
-        practicalCount: cat.exams.filter((e) => e.examType === "PRACTICAL").length,
-      }))
-
-    return {
-      ...config,
-      categories: cats,
-    }
-  })
-
-  return <GradeSections grades={gradeGroups} />
+export default function HomeExamCards() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+      {grades.map((g) => {
+        const isReady = g.count > 0
+        return (
+          <Link
+            key={g.id}
+            href={isReady ? `/grade/${encodeURIComponent(g.id)}` : '#'}
+            className={`relative border rounded-xl p-5 sm:p-6 transition-all group
+              ${isReady
+                ? 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md'
+                : 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 cursor-default opacity-60'
+              }`}
+            onClick={isReady ? undefined : (e) => e.preventDefault()}
+          >
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1">
+              {g.label}
+            </h3>
+            <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
+              {g.sub}
+            </p>
+            <div className="flex items-center justify-between">
+              {isReady ? (
+                <>
+                  <span className="text-[11px] font-medium text-gray-400 dark:text-gray-500">
+                    {g.count}개 자격증
+                  </span>
+                  <svg className="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </>
+              ) : (
+                <span className="text-[11px] font-medium text-gray-400 dark:text-gray-500">준비중</span>
+              )}
+            </div>
+          </Link>
+        )
+      })}
+    </div>
+  )
 }
