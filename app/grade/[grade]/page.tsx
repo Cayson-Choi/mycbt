@@ -15,7 +15,7 @@ const gradeInfo: Record<string, { title: string; description: string }> = {
 }
 
 export async function generateStaticParams() {
-  return validGrades.map((grade) => ({ grade: encodeURIComponent(grade) }))
+  return validGrades.map((grade) => ({ grade }))
 }
 
 const getCategoriesByGrade = unstable_cache(
@@ -40,8 +40,7 @@ export default async function GradePage({
 }: {
   params: Promise<{ grade: string }>
 }) {
-  const { grade: rawGrade } = await params
-  const grade = decodeURIComponent(rawGrade)
+  const { grade } = await params
 
   if (!validGrades.includes(grade as typeof validGrades[number])) {
     notFound()

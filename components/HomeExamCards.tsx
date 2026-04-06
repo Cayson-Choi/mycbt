@@ -19,7 +19,7 @@ export default function HomeExamCards() {
         return (
           <Link
             key={g.id}
-            href={isReady ? `/grade/${encodeURIComponent(g.id)}` : '#'}
+            href={isReady ? `/grade/${g.id}` : '#'}
             className={`relative border rounded-xl p-5 sm:p-6 transition-all group
               ${isReady
                 ? 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md'
