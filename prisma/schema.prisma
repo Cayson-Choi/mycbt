@@ -149,6 +149,7 @@ model ExamCategory {
   id          Int     @id @default(autoincrement())
   name        String  @unique
   description String? @db.Text
+  grade       String  @default("기타") @db.VarChar(20)
   sortOrder   Int     @default(0) @map("sort_order")
   isActive    Boolean @default(true) @map("is_active")
 
