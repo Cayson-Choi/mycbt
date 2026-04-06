@@ -1,297 +1,353 @@
 'use client'
 
-import { useEffect, useRef, ReactNode } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import Image from 'next/image'
 
-export default function HeroSection({ children }: { children?: ReactNode }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+interface Slide {
+  badge: string
+  badgeColor: string
+  title: string
+  description: string
+  bgColor: string
+  accentColor: string
+  icon: string
+  personImage: string
+  personAlt: string
+}
 
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+const slides: Slide[] = [
+  {
+    badge: '인기',
+    badgeColor: 'bg-red-500',
+    title: '전기기사 필기 CBT',
+    description: '2018~2025년 기출문제 2,100문제\n전문가가 직접 검증한 정확한 문제와 해설',
+    bgColor: 'from-[#0f1729] to-[#1a2744]',
+    accentColor: '#4f8cff',
+    icon: '⚡',
+    personImage: '/hero/man.png',
+    personAlt: '전기기사 강사',
+  },
+  {
+    badge: '준비중',
+    badgeColor: 'bg-emerald-500',
+    title: '전기기능사 필기 CBT',
+    description: '전기이론·전기기기·전기설비\n3과목 60분 실전 모의고사',
+    bgColor: 'from-[#071a12] to-[#0f2e1f]',
+    accentColor: '#34d399',
+    icon: '🔌',
+    personImage: '/hero/woman.png',
+    personAlt: '전기기능사 강사',
+  },
+  {
+    badge: 'AI 채점',
+    badgeColor: 'bg-violet-500',
+    title: 'AI 자동 채점 시스템',
+    description: '주관식·서술형 문제도 AI가 자동 채점\n즉각적인 피드백으로 실력 향상',
+    bgColor: 'from-[#150d24] to-[#251840]',
+    accentColor: '#a78bfa',
+    icon: '🤖',
+    personImage: '/hero/man.png',
+    personAlt: 'AI 채점 시스템',
+  },
+  {
+    badge: '실시간',
+    badgeColor: 'bg-amber-500',
+    title: '실시간 랭킹 시스템',
+    description: '오늘의 Top5 랭킹 실시간 업데이트\n다른 수험생과 실력을 비교해 보세요',
+    bgColor: 'from-[#1a1200] to-[#302000]',
+    accentColor: '#fbbf24',
+    icon: '🏆',
+    personImage: '/hero/woman.png',
+    personAlt: '랭킹 시스템',
+  },
+]
 
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
+export default function HeroSection() {
+  const [current, setCurrent] = useState(0)
+  const [animPhase, setAnimPhase] = useState<'enter' | 'idle' | 'exit'>('enter')
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const touchStartX = useRef(0)
 
-    let animationId: number
-    let width = 0
-    let height = 0
-    let isVisible = true
+  const INTERVAL = 5000
 
-    const resize = () => {
-      const parent = canvas.parentElement
-      if (!parent) return
-      width = parent.offsetWidth
-      height = parent.offsetHeight
-      canvas.width = width * window.devicePixelRatio
-      canvas.height = height * window.devicePixelRatio
-      canvas.style.width = `${width}px`
-      canvas.style.height = `${height}px`
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
-    }
+  const clearTimer = () => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+  }
 
-    resize()
-    window.addEventListener('resize', resize)
-
-    // 탭 비활성 시 애니메이션 중지
-    const handleVisibility = () => {
-      isVisible = !document.hidden
-      if (isVisible) {
-        animationId = requestAnimationFrame(animate)
-      } else {
-        cancelAnimationFrame(animationId)
-      }
-    }
-    document.addEventListener('visibilitychange', handleVisibility)
-
-    // 전기 파티클 (모바일에서는 파티클 수 감소)
-    interface Particle {
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-      opacity: number
-      color: string
-      pulse: number
-      pulseSpeed: number
-      cellX: number
-      cellY: number
-    }
-
-    const isMobile = width < 768
-    const PARTICLE_COUNT = isMobile ? 30 : 60
-    const CONNECTION_DIST = 120
-    const CELL_SIZE = CONNECTION_DIST
-
-    const particles: Particle[] = []
-    const colors = ['#f0c27f', '#e8d5b7', '#ffd700', '#ffb347', '#ff6b35']
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const x = Math.random() * width
-      const y = Math.random() * height
-      particles.push({
-        x,
-        y,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.5 + 0.1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: Math.random() * 0.02 + 0.01,
-        cellX: Math.floor(x / CELL_SIZE),
-        cellY: Math.floor(y / CELL_SIZE),
-      })
-    }
-
-    // 번개 효과
-    interface Lightning {
-      startX: number
-      startY: number
-      segments: { x: number; y: number }[]
-      opacity: number
-      life: number
-      maxLife: number
-    }
-
-    const lightnings: Lightning[] = []
-
-    const createLightning = () => {
-      const startX = Math.random() * width
-      const startY = Math.random() * height * 0.3
-      const segments: { x: number; y: number }[] = [{ x: startX, y: startY }]
-      let x = startX
-      let y = startY
-      const steps = Math.floor(Math.random() * 5) + 3
-
-      for (let i = 0; i < steps; i++) {
-        x += (Math.random() - 0.5) * 60
-        y += Math.random() * 30 + 10
-        segments.push({ x, y })
-      }
-
-      lightnings.push({
-        startX,
-        startY,
-        segments,
-        opacity: 0.8,
-        life: 0,
-        maxLife: 20 + Math.random() * 15,
-      })
-    }
-
-    // 연결선 - 공간 분할(spatial grid)로 O(n*k) 복잡도 최적화
-    const drawConnections = () => {
-      // 그리드 구축
-      const grid: Map<string, number[]> = new Map()
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i]
-        p.cellX = Math.floor(p.x / CELL_SIZE)
-        p.cellY = Math.floor(p.y / CELL_SIZE)
-        const key = `${p.cellX},${p.cellY}`
-        const cell = grid.get(key)
-        if (cell) {
-          cell.push(i)
-        } else {
-          grid.set(key, [i])
-        }
-      }
-
-      // 인접 셀만 검사하여 연결선 그리기
-      const distSq = CONNECTION_DIST * CONNECTION_DIST
-      for (let i = 0; i < particles.length; i++) {
-        const pi = particles[i]
-        // 현재 셀과 인접 셀 검사 (오른쪽, 아래, 대각선만 - 중복 방지)
-        for (let dx = 0; dx <= 1; dx++) {
-          for (let dy = -1; dy <= 1; dy++) {
-            if (dx === 0 && dy <= 0 && !(dx === 0 && dy === 0)) continue
-            const key = `${pi.cellX + dx},${pi.cellY + dy}`
-            const cell = grid.get(key)
-            if (!cell) continue
-            for (const j of cell) {
-              if (j <= i) continue
-              const pj = particles[j]
-              const ddx = pi.x - pj.x
-              const ddy = pi.y - pj.y
-              const d = ddx * ddx + ddy * ddy
-              if (d < distSq) {
-                const dist = Math.sqrt(d)
-                const opacity = (1 - dist / CONNECTION_DIST) * 0.08
-                ctx.beginPath()
-                ctx.strokeStyle = `rgba(255, 200, 100, ${opacity})`
-                ctx.lineWidth = 0.5
-                ctx.moveTo(pi.x, pi.y)
-                ctx.lineTo(pj.x, pj.y)
-                ctx.stroke()
-              }
-            }
-          }
-        }
-      }
-    }
-
-    let frame = 0
-
-    const animate = () => {
-      if (!isVisible) return
-
-      ctx.clearRect(0, 0, width, height)
-      frame++
-
-      // 연결선
-      drawConnections()
-
-      // 파티클 업데이트 & 렌더
-      for (const p of particles) {
-        p.x += p.vx
-        p.y += p.vy
-        p.pulse += p.pulseSpeed
-
-        if (p.x < 0) p.x = width
-        if (p.x > width) p.x = 0
-        if (p.y < 0) p.y = height
-        if (p.y > height) p.y = 0
-
-        const pulsedOpacity = p.opacity + Math.sin(p.pulse) * 0.15
-        const pulsedSize = p.size + Math.sin(p.pulse) * 0.5
-
-        // 글로우
-        ctx.beginPath()
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pulsedSize * 4)
-        gradient.addColorStop(0, `rgba(255, 200, 100, ${pulsedOpacity * 0.3})`)
-        gradient.addColorStop(1, 'rgba(255, 200, 100, 0)')
-        ctx.fillStyle = gradient
-        ctx.arc(p.x, p.y, pulsedSize * 4, 0, Math.PI * 2)
-        ctx.fill()
-
-        // 코어
-        ctx.beginPath()
-        ctx.fillStyle = p.color
-        ctx.globalAlpha = pulsedOpacity
-        ctx.arc(p.x, p.y, pulsedSize, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.globalAlpha = 1
-      }
-
-      // 번개 생성 (랜덤)
-      if (frame % 90 === 0 && Math.random() > 0.4) {
-        createLightning()
-      }
-
-      // 번개 렌더
-      for (let i = lightnings.length - 1; i >= 0; i--) {
-        const l = lightnings[i]
-        l.life++
-
-        if (l.life > l.maxLife) {
-          lightnings.splice(i, 1)
-          continue
-        }
-
-        const progress = l.life / l.maxLife
-        const opacity = l.opacity * (1 - progress)
-
-        ctx.beginPath()
-        ctx.strokeStyle = `rgba(255, 215, 0, ${opacity})`
-        ctx.lineWidth = 1.5 * (1 - progress)
-        ctx.shadowColor = '#ffd700'
-        ctx.shadowBlur = 10 * (1 - progress)
-
-        ctx.moveTo(l.segments[0].x, l.segments[0].y)
-        for (let s = 1; s < l.segments.length; s++) {
-          ctx.lineTo(l.segments[s].x, l.segments[s].y)
-        }
-        ctx.stroke()
-
-        ctx.shadowBlur = 0
-      }
-
-      animationId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      cancelAnimationFrame(animationId)
-      window.removeEventListener('resize', resize)
-      document.removeEventListener('visibilitychange', handleVisibility)
-    }
+  const goTo = useCallback((index: number) => {
+    clearTimer()
+    // exit → 바뀐 뒤 enter
+    setAnimPhase('exit')
+    setTimeout(() => {
+      setCurrent(index)
+      setAnimPhase('enter')
+    }, 400)
   }, [])
 
-  return (
-    <div className="relative overflow-hidden hero-bg">
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none"
-      />
-      <div className="absolute inset-0 hero-gradient" />
+  const next = useCallback(() => {
+    goTo((current + 1) % slides.length)
+  }, [current, goTo])
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 lg:pt-8 pb-4 lg:pb-6">
-        <div className="text-center">
-          {/* 번개 아이콘 */}
-          <div className="inline-flex items-center justify-center mb-2">
-            <span className="hero-bolt text-3xl lg:text-4xl">&#x26A1;</span>
+  const prev = useCallback(() => {
+    goTo((current - 1 + slides.length) % slides.length)
+  }, [current, goTo])
+
+  // 자동 회전
+  useEffect(() => {
+    timerRef.current = setTimeout(next, INTERVAL)
+    return clearTimer
+  }, [current, next])
+
+  // enter 후 idle로 전환
+  useEffect(() => {
+    if (animPhase === 'enter') {
+      const t = setTimeout(() => setAnimPhase('idle'), 800)
+      return () => clearTimeout(t)
+    }
+  }, [animPhase])
+
+  // 터치 스와이프
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? next() : prev()
+    }
+  }
+
+  const slide = slides[current]
+  const isVisible = animPhase === 'enter' || animPhase === 'idle'
+
+  return (
+    <div
+      className={`relative overflow-hidden bg-gradient-to-br ${slide.bgColor} transition-colors duration-700`}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* ===== 배경 장식 ===== */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* 메인 글로우 */}
+        <div
+          className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000"
+          style={{
+            background: `radial-gradient(circle, ${slide.accentColor}18, transparent 70%)`,
+          }}
+        />
+        {/* 보조 글로우 */}
+        <div
+          className="absolute left-1/4 bottom-0 w-[400px] h-[400px] rounded-full transition-all duration-1000"
+          style={{
+            background: `radial-gradient(circle, ${slide.accentColor}0a, transparent 70%)`,
+          }}
+        />
+        {/* 격자 패턴 */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(${slide.accentColor} 1px, transparent 1px), linear-gradient(90deg, ${slide.accentColor} 1px, transparent 1px)`,
+            backgroundSize: '50px 50px',
+          }}
+        />
+        {/* 떠다니는 원형 장식 */}
+        <div
+          className="hero-float-slow absolute w-3 h-3 rounded-full"
+          style={{ background: slide.accentColor, opacity: 0.15, top: '20%', left: '15%' }}
+        />
+        <div
+          className="hero-float-med absolute w-2 h-2 rounded-full"
+          style={{ background: slide.accentColor, opacity: 0.1, top: '60%', left: '10%' }}
+        />
+        <div
+          className="hero-float-fast absolute w-4 h-4 rounded-full"
+          style={{ background: slide.accentColor, opacity: 0.08, top: '30%', right: '40%' }}
+        />
+      </div>
+
+      {/* ===== 메인 콘텐츠 ===== */}
+      <div className="relative max-w-6xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="flex items-end sm:items-center min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] py-8 sm:py-10 lg:py-12">
+
+          {/* 텍스트 영역 */}
+          <div className="flex-1 z-10 pb-2 sm:pb-0">
+            {/* 배지 */}
+            <div
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white mb-3 sm:mb-4
+                ${slide.badgeColor} shadow-lg
+                transition-all duration-600 ease-out
+                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
+              style={{ transitionDelay: isVisible ? '100ms' : '0ms' }}
+            >
+              <span>{slide.icon}</span>
+              <span>{slide.badge}</span>
+            </div>
+
+            {/* 제목 */}
+            <h2
+              className={`text-2xl sm:text-4xl lg:text-5xl font-black text-white mb-3 sm:mb-4 leading-tight
+                transition-all duration-600 ease-out
+                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              style={{ transitionDelay: isVisible ? '200ms' : '0ms' }}
+            >
+              {slide.title}
+            </h2>
+
+            {/* 설명 */}
+            <p
+              className={`text-sm sm:text-base text-white/55 leading-relaxed whitespace-pre-line max-w-md
+                transition-all duration-600 ease-out
+                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              style={{ transitionDelay: isVisible ? '350ms' : '0ms' }}
+            >
+              {slide.description}
+            </p>
+
+            {/* CTA 버튼 */}
+            <div
+              className={`mt-4 sm:mt-5 transition-all duration-600 ease-out
+                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              style={{ transitionDelay: isVisible ? '500ms' : '0ms' }}
+            >
+              <a
+                href="#exams"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                style={{
+                  background: `linear-gradient(135deg, ${slide.accentColor}, ${slide.accentColor}bb)`,
+                  boxShadow: `0 4px 20px ${slide.accentColor}40`,
+                }}
+              >
+                시험 보러 가기
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </a>
+            </div>
           </div>
 
-          <h1 className="hero-title text-5xl lg:text-8xl font-black mb-2 leading-none tracking-tighter">
-            전기짱
-          </h1>
+          {/* ===== 사람 이미지 ===== */}
+          <div className="relative flex-shrink-0 w-[140px] sm:w-[200px] lg:w-[260px] h-[200px] sm:h-[280px] lg:h-[340px]">
+            {/* 이미지 뒤 글로우 */}
+            <div
+              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[40%] rounded-full blur-3xl transition-all duration-700
+                ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+              style={{
+                background: `radial-gradient(ellipse, ${slide.accentColor}25, transparent 70%)`,
+                transitionDelay: isVisible ? '300ms' : '0ms',
+              }}
+            />
 
-          <div className="hero-divider mx-auto mb-2" />
+            {/* 사람 이미지 */}
+            <div
+              className={`absolute inset-0 transition-all duration-700 ease-out
+                ${isVisible
+                  ? 'opacity-100 translate-y-0 scale-100'
+                  : 'opacity-0 translate-y-10 scale-95'}`}
+              style={{ transitionDelay: isVisible ? '250ms' : '0ms' }}
+            >
+              <Image
+                src={slide.personImage}
+                alt={slide.personAlt}
+                fill
+                className="object-contain object-bottom drop-shadow-2xl"
+                sizes="(max-width: 640px) 140px, (max-width: 1024px) 200px, 260px"
+                priority={current === 0}
+              />
+            </div>
 
-          <p className="text-sm lg:text-base text-amber-100/70 leading-relaxed max-w-md mx-auto font-light">
-            전문가가 엄선하고 검증한 실전 기출문제<br />
-            시중 CBT와는 차원이 다릅니다.
-          </p>
+            {/* 떠다니는 아이콘 장식 (이미지 주변) */}
+            <div
+              className={`absolute -top-2 -right-2 sm:top-2 sm:right-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-lg hero-float-slow
+                transition-all duration-600
+                ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}
+              style={{
+                background: `linear-gradient(135deg, ${slide.accentColor}30, ${slide.accentColor}10)`,
+                backdropFilter: 'blur(8px)',
+                border: `1px solid ${slide.accentColor}20`,
+                transitionDelay: isVisible ? '600ms' : '0ms',
+              }}
+            >
+              {slide.icon}
+            </div>
+
+            <div
+              className={`absolute bottom-16 -left-4 sm:bottom-20 sm:-left-6 w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm shadow-lg hero-float-med
+                transition-all duration-600
+                ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}
+              style={{
+                background: `linear-gradient(135deg, ${slide.accentColor}25, ${slide.accentColor}08)`,
+                backdropFilter: 'blur(8px)',
+                border: `1px solid ${slide.accentColor}15`,
+                transitionDelay: isVisible ? '750ms' : '0ms',
+              }}
+            >
+              ✓
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Children (Leaderboard 등) - 캔버스 위에 겹쳐서 표시 */}
-      {children && (
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 lg:pb-6">
-          {children}
+      {/* ===== 하단 네비게이션 ===== */}
+      <div className="relative max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 pb-4 sm:pb-5">
+        <div className="flex items-center gap-3">
+          {/* 도트 */}
+          <div className="flex gap-2">
+            {slides.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                className="group relative h-6 flex items-center"
+                aria-label={`슬라이드 ${i + 1}`}
+              >
+                <div
+                  className={`h-[3px] rounded-full transition-all duration-500
+                    ${i === current
+                      ? 'w-8 sm:w-10'
+                      : 'w-3 sm:w-4 group-hover:w-5 opacity-30 group-hover:opacity-50'
+                    }`}
+                  style={{ backgroundColor: i === current ? s.accentColor : '#ffffff' }}
+                />
+              </button>
+            ))}
+          </div>
+
+          {/* 슬라이드 번호 */}
+          <span className="text-[11px] text-white/25 tabular-nums ml-1">
+            {String(current + 1).padStart(2, '0')}/{String(slides.length).padStart(2, '0')}
+          </span>
+
+          {/* 화살표 (데스크탑) */}
+          <div className="hidden sm:flex items-center gap-1.5 ml-auto">
+            <button
+              onClick={prev}
+              className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all"
+              aria-label="이전"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={next}
+              className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all"
+              aria-label="다음"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
-      )}
+
+        {/* 진행 바 */}
+        <div className="mt-3 h-[2px] bg-white/[0.06] rounded-full overflow-hidden">
+          <div
+            key={current}
+            className="h-full rounded-full hero-progress-bar"
+            style={{ backgroundColor: slide.accentColor }}
+          />
+        </div>
+      </div>
     </div>
   )
 }

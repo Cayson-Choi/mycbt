@@ -69,53 +69,34 @@ body {
   font-display: swap;
 }
 
-/* Hero section */
-.hero-bg {
-  background: #000000;
+/* Hero carousel */
+@keyframes heroProgress {
+  from { width: 0%; }
+  to { width: 100%; }
 }
 
-.dark .hero-bg {
-  background: #000000;
+.hero-progress-bar {
+  animation: heroProgress 5s linear forwards;
 }
 
-.hero-gradient {
-  background: transparent;
+/* 떠다니는 장식 */
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
 }
 
-.hero-title {
-  font-family: 'DdakDanDan', sans-serif;
-  letter-spacing: 0.08em;
-  -webkit-text-stroke: 1.5px rgba(255, 200, 50, 0.3);
-  paint-order: stroke fill;
-  background: linear-gradient(135deg, #ffd700 0%, #ffb347 25%, #ffffff 50%, #ffd700 75%, #ff8c00 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: heroShine 4s ease-in-out infinite;
-  filter: drop-shadow(0 0 30px rgba(255, 200, 50, 0.3));
+.hero-float-slow {
+  animation: heroFloat 4s ease-in-out infinite;
 }
 
-@keyframes heroShine {
-  0%, 100% { background-position: 0% center; }
-  50% { background-position: 200% center; }
+.hero-float-med {
+  animation: heroFloat 3s ease-in-out infinite;
+  animation-delay: -1s;
 }
 
-.hero-bolt {
-  display: inline-block;
-  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
-  animation: boltPulse 2s ease-in-out infinite;
-}
-
-@keyframes boltPulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)); }
-  50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)); }
-}
-
-.hero-divider {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+.hero-float-fast {
+  animation: heroFloat 2.5s ease-in-out infinite;
+  animation-delay: -0.5s;
 }
 
 /* Header rainbow text - 1분 주기 빨주노초파남보 */
