@@ -166,8 +166,8 @@ export default function HeroSection() {
       </div>
 
       {/* ===== 메인 콘텐츠 ===== */}
-      <div className="relative max-w-6xl mx-auto px-5 sm:px-8 lg:px-12">
-        <div className="flex items-end sm:items-center min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] py-8 sm:py-10 lg:py-12">
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
+        <div className="flex items-end sm:items-center min-h-[260px] sm:min-h-[300px] lg:min-h-[380px] py-8 sm:py-10 lg:py-14">
 
           {/* 텍스트 영역 */}
           <div className="flex-1 z-10 pb-2 sm:pb-0">
@@ -185,7 +185,7 @@ export default function HeroSection() {
 
             {/* 제목 */}
             <h2
-              className={`text-2xl sm:text-4xl lg:text-5xl font-black text-white mb-3 sm:mb-4 leading-tight
+              className={`text-2xl sm:text-4xl lg:text-[3.25rem] xl:text-6xl font-black text-white mb-3 sm:mb-4 leading-tight
                 transition-all duration-600 ease-out
                 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{ transitionDelay: isVisible ? '200ms' : '0ms' }}
@@ -195,7 +195,7 @@ export default function HeroSection() {
 
             {/* 설명 */}
             <p
-              className={`text-sm sm:text-base text-white/55 leading-relaxed whitespace-pre-line max-w-md
+              className={`text-sm sm:text-base lg:text-lg text-white/55 leading-relaxed whitespace-pre-line max-w-lg
                 transition-all duration-600 ease-out
                 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{ transitionDelay: isVisible ? '350ms' : '0ms' }}
@@ -226,7 +226,7 @@ export default function HeroSection() {
           </div>
 
           {/* ===== 사람 이미지 ===== */}
-          <div className="relative flex-shrink-0 w-[140px] sm:w-[200px] lg:w-[260px] h-[200px] sm:h-[280px] lg:h-[340px]">
+          <div className="relative flex-shrink-0 w-[140px] sm:w-[220px] lg:w-[320px] h-[200px] sm:h-[300px] lg:h-[400px]">
             {/* 이미지 뒤 글로우 */}
             <div
               className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[40%] rounded-full blur-3xl transition-all duration-700
@@ -288,7 +288,7 @@ export default function HeroSection() {
       </div>
 
       {/* ===== 하단 네비게이션 ===== */}
-      <div className="relative max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 pb-4 sm:pb-5">
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pb-4 sm:pb-5">
         <div className="flex items-center gap-3">
           {/* 도트 */}
           <div className="flex gap-2">
