@@ -3,12 +3,12 @@
 import Link from "next/link"
 
 const grades = [
-  { id: '기능사', label: '기능사', sub: '전기·승강기·위험물·가스', count: 4 },
-  { id: '산업기사', label: '산업기사', sub: '전기·소방·에너지·공조냉동·산업안전', count: 6 },
-  { id: '기사', label: '기사', sub: '전기·소방·가스', count: 4 },
-  { id: '기능장', label: '기능장', sub: '전기기능장', count: 1 },
-  { id: '공기업', label: '공기업', sub: '한전·한수원 등', count: 0 },
-  { id: '과정평가형', label: '과정평가형', sub: 'NCS 기반 과정평가', count: 0 },
+  { id: 'technician', label: '기능사', sub: '전기·승강기·위험물·가스', count: 4 },
+  { id: 'industrial', label: '산업기사', sub: '전기·소방·에너지·공조냉동·산업안전', count: 6 },
+  { id: 'engineer', label: '기사', sub: '전기·소방·가스', count: 4 },
+  { id: 'master', label: '기능장', sub: '전기기능장', count: 1 },
+  { id: 'public', label: '공기업', sub: '한전·한수원 등', count: 0 },
+  { id: 'ncs', label: '과정평가형', sub: 'NCS 기반 과정평가', count: 0 },
 ]
 
 export default function HomeExamCards() {

@@ -5,23 +5,21 @@ import { unstable_cache } from "next/cache"
 
 export const revalidate = 60
 
-const validGrades = ['기능사', '산업기사', '기사', '기능장'] as const
-
-const gradeInfo: Record<string, { title: string; description: string }> = {
-  '기능사': { title: '기능사', description: '자격증 취득의 첫 걸음, 기초부터 탄탄하게' },
-  '산업기사': { title: '산업기사', description: '전문 기술인의 시작, 산업 현장의 핵심 인력' },
-  '기사': { title: '기사', description: '엔지니어의 필수 자격, 전문성을 증명하세요' },
-  '기능장': { title: '기능장', description: '최고 등급 자격증에 도전하세요' },
+const gradeMap: Record<string, { dbGrade: string; title: string; description: string }> = {
+  technician: { dbGrade: '기능사', title: '기능사', description: '자격증 취득의 첫 걸음, 기초부터 탄탄하게' },
+  industrial: { dbGrade: '산업기사', title: '산업기사', description: '전문 기술인의 시작, 산업 현장의 핵심 인력' },
+  engineer: { dbGrade: '기사', title: '기사', description: '엔지니어의 필수 자격, 전문성을 증명하세요' },
+  master: { dbGrade: '기능장', title: '기능장', description: '최고 등급 자격증에 도전하세요' },
 }
 
 export async function generateStaticParams() {
-  return validGrades.map((grade) => ({ grade }))
+  return Object.keys(gradeMap).map((grade) => ({ grade }))
 }
 
 const getCategoriesByGrade = unstable_cache(
-  async (grade: string) => {
+  async (dbGrade: string) => {
     return prisma.examCategory.findMany({
-      where: { grade, isActive: true },
+      where: { grade: dbGrade, isActive: true },
       include: {
         exams: {
           where: { isPublished: true, examMode: "PRACTICE" },
@@ -41,13 +39,13 @@ export default async function GradePage({
   params: Promise<{ grade: string }>
 }) {
   const { grade } = await params
+  const info = gradeMap[grade]
 
-  if (!validGrades.includes(grade as typeof validGrades[number])) {
+  if (!info) {
     notFound()
   }
 
-  const info = gradeInfo[grade]
-  const categories = await getCategoriesByGrade(grade)
+  const categories = await getCategoriesByGrade(info.dbGrade)
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 sm:py-12">
