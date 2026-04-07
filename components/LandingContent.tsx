@@ -319,23 +319,23 @@ export default function LandingContent() {
 
           {/* 탭 */}
           <Reveal delay={100}>
-            <div className="flex gap-1.5 mb-8 overflow-x-auto scrollbar-hide pb-1">
+            <div className="flex gap-0 bg-gray-100 dark:bg-gray-900 rounded-xl p-1.5 mb-8 overflow-x-auto scrollbar-hide max-w-fit">
               {grades.map((g, i) => (
                 <button
                   key={g.id}
                   onClick={() => setActiveTab(i)}
-                  className={`px-5 sm:px-7 py-2.5 text-sm font-bold whitespace-nowrap rounded-full border-2 transition-all
+                  className={`px-4 sm:px-6 py-2.5 text-sm font-bold whitespace-nowrap rounded-lg transition-all
                     ${activeTab === i
-                      ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/25'
-                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-300 hover:text-blue-600 dark:hover:border-blue-700'
+                      ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-md'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                     }`}
                 >
                   {g.label}
                   {g.count > 0 && (
-                    <span className={`ml-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full
+                    <span className={`ml-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded
                       ${activeTab === i
-                        ? 'bg-white/25 text-white'
-                        : 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                       }`}>
                       {g.count}
                     </span>
