@@ -80,40 +80,6 @@ const testimonials = [
   },
 ]
 
-/* ─── 강점 데이터 (컬러풀 SVG) ─── */
-/* ─── 카운터 애니메이션 훅 ─── */
-function useCountUp(end: number, duration = 2000, startOnView = true) {
-  const [count, setCount] = useState(0)
-  const [started, setStarted] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!startOnView || !ref.current) return
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true) },
-      { threshold: 0.3 }
-    )
-    observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [startOnView, started])
-
-  useEffect(() => {
-    if (!started) return
-    let frame: number
-    const start = performance.now()
-    const step = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.floor(eased * end))
-      if (progress < 1) frame = requestAnimationFrame(step)
-    }
-    frame = requestAnimationFrame(step)
-    return () => cancelAnimationFrame(frame)
-  }, [started, end, duration])
-
-  return { count, ref }
-}
-
 /* ─── CAYSON이 다른 이유 — 인터랙티브 섹션 ─── */
 function WhyCaysonSection() {
   const [activeFeature, setActiveFeature] = useState(0)
