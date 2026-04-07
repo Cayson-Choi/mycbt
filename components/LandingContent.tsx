@@ -27,105 +27,103 @@ const grades = [
   { id: 'ncs', label: '과정평가형', count: 0 },
 ]
 
-/* ─── 이벤트 데이터 (컬러풀 SVG) ─── */
+/* ─── 이벤트 데이터 (engineerlab 스타일 — 좌상 제목 + 우상 뱃지 + 좌하 CTA + 우하 일러스트) ─── */
 const events = [
   {
-    title: '전 강좌 무료',
-    desc: '회원가입 후 모든 기출문제 무료 이용',
-    iconBg: 'bg-rose-50 dark:bg-rose-950/30',
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="6" y="18" width="28" height="16" rx="2.5" fill="#fda4af" />
-        <rect x="4" y="14" width="32" height="6" rx="2" fill="#fb7185" />
-        <rect x="18" y="14" width="4" height="20" rx="0.5" fill="#e11d48" />
-        <path d="M20 14c-2-4-6-6-8-4s0 6 4 7h4" fill="#fbbf24" />
-        <path d="M20 14c2-4 6-6 8-4s0 6-4 7h-4" fill="#f59e0b" />
-        <circle cx="20" cy="14" r="2.5" fill="#e11d48" />
+    title: '전 강좌\n무료 이벤트',
+    badge: '가입혜택',
+    cta: '추가 무료/할인 혜택,\n무료 교재까지',
+    illust: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+        <rect x="20" y="35" width="40" height="32" rx="4" fill="#60a5fa" />
+        <rect x="18" y="30" width="44" height="10" rx="3" fill="#3b82f6" />
+        <rect x="36" y="30" width="8" height="37" rx="1" fill="#2563eb" opacity="0.6" />
+        <path d="M40 30c-4-8-12-10-14-6s2 10 8 12h6" fill="#f472b6" />
+        <path d="M40 30c4-8 12-10 14-6s-2 10-8 12h-6" fill="#fb7185" />
+        <circle cx="40" cy="30" r="4" fill="#e11d48" />
+        <path d="M22 22c0-2 2-4 4-2s-1 5-4 6" fill="#f9a8d4" />
+        <path d="M58 18c0-2-2-4-4-2s1 5 4 6" fill="#fda4af" />
+        <circle cx="28" cy="16" r="2" fill="#fbbf24" />
+        <circle cx="54" cy="22" r="1.5" fill="#fb923c" />
       </svg>
     ),
   },
   {
-    title: '환승/재수강 할인',
-    desc: '타 사이트 이용자 환승 시 혜택 제공',
-    iconBg: 'bg-orange-50 dark:bg-orange-950/30',
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="4" y="10" width="32" height="20" rx="3" fill="#fed7aa" />
-        <rect x="4" y="10" width="13" height="20" rx="3" fill="#fdba74" />
-        <circle cx="4" cy="18" r="3" fill="white" /><circle cx="4" cy="24" r="3" fill="white" />
-        <circle cx="36" cy="18" r="3" fill="white" /><circle cx="36" cy="24" r="3" fill="white" />
-        <line x1="17" y1="10" x2="17" y2="30" stroke="#ea580c" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
-        <text x="6" y="24" fontSize="10" fontWeight="900" fill="#ea580c" fontFamily="system-ui">%</text>
-        <circle cx="26" cy="17" r="2.5" stroke="#ea580c" strokeWidth="1.5" fill="none" />
-        <circle cx="32" cy="23" r="2.5" stroke="#ea580c" strokeWidth="1.5" fill="none" />
-        <line x1="26" y1="24" x2="32" y2="16" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" />
+    title: '환승/재수강/\n내배카 할인',
+    badge: '전원',
+    cta: '인증 시 인강\n할인 혜택',
+    illust: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+        <rect x="12" y="20" width="48" height="38" rx="6" fill="#fde68a" />
+        <rect x="12" y="20" width="48" height="14" rx="6" fill="#fbbf24" />
+        <rect x="30" y="28" width="12" height="18" rx="2" fill="white" opacity="0.7" />
+        <text x="32" y="42" fontSize="14" fontWeight="900" fill="#ea580c" fontFamily="system-ui">%</text>
+        <path d="M52 16l3-4 3 2-4 4" fill="#f472b6" />
+        <path d="M58 22l4-2 2 3-4 2" fill="#a78bfa" />
+        <circle cx="18" cy="18" r="3" fill="#34d399" />
+        <rect x="62" y="38" width="6" height="6" rx="1" transform="rotate(15 62 38)" fill="#fb923c" />
+        <circle cx="10" cy="44" r="2" fill="#60a5fa" />
       </svg>
     ),
   },
   {
-    title: '실기 복원 참여',
-    desc: '실기 시험 복원에 참여하고 포인트 받기',
-    iconBg: 'bg-emerald-50 dark:bg-emerald-950/30',
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="6" y="4" width="20" height="28" rx="2" fill="#a7f3d0" />
-        <rect x="10" y="10" width="10" height="1.5" rx="0.5" fill="#059669" opacity="0.5" />
-        <rect x="10" y="14" width="12" height="1.5" rx="0.5" fill="#059669" opacity="0.4" />
-        <rect x="10" y="18" width="8" height="1.5" rx="0.5" fill="#059669" opacity="0.35" />
-        <rect x="10" y="22" width="11" height="1.5" rx="0.5" fill="#059669" opacity="0.3" />
-        <path d="M28 14l-3 15-1.5 1.5 1.5-1L37 14l-1.5-1.5L28 14z" fill="#fbbf24" />
-        <path d="M35.5 12.5l2 2 1.2-1.2c.4-.4.4-1 0-1.4l-.6-.6c-.4-.4-1-.4-1.4 0l-1.2 1.2z" fill="#f59e0b" />
-        <rect x="27" y="13.5" width="1.5" height="8" rx="0.5" transform="rotate(-15 27 13.5)" fill="#d97706" opacity="0.3" />
+    title: '실기 복원\n사전 신청',
+    badge: '전원',
+    cta: '전기기사 복원\n참여하면 합격지원',
+    illust: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+        <circle cx="40" cy="40" r="28" fill="#fecdd3" />
+        <circle cx="40" cy="40" r="22" fill="#fb7185" />
+        <circle cx="40" cy="40" r="16" fill="#e11d48" />
+        <polygon points="35,30 35,50 55,40" fill="white" />
       </svg>
     ),
   },
   {
-    title: '기출 1200제',
-    desc: '전기기사 기출 1200제 무료 제공',
-    iconBg: 'bg-violet-50 dark:bg-violet-950/30',
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <path d="M20 8C16 6 10 5 4 6v24c6-1 12 0 16 2" fill="#ddd6fe" />
-        <path d="M20 8c4-2 10-3 16-2v24c-6-1-12 0-16 2" fill="#c4b5fd" />
-        <line x1="20" y1="8" x2="20" y2="32" stroke="#7c3aed" strokeWidth="1.5" opacity="0.5" />
-        <rect x="7" y="12" width="8" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.4" />
-        <rect x="7" y="15.5" width="6" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.3" />
-        <rect x="7" y="19" width="7" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.35" />
-        <rect x="24" y="12" width="7" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.5" />
-        <rect x="24" y="15.5" width="5" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.4" />
-        <rect x="24" y="19" width="8" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.45" />
-        <text x="23" y="28" fontSize="7" fontWeight="800" fill="#7c3aed" fontFamily="system-ui">1200</text>
+    title: '필수기출1200제\nYoutube',
+    badge: 'ONLY',
+    cta: '전기기사\n대표유형 뽀개기',
+    illust: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+        <rect x="18" y="10" width="38" height="60" rx="8" fill="#fca5a5" />
+        <rect x="20" y="16" width="34" height="48" rx="4" fill="white" />
+        <rect x="22" y="18" width="30" height="36" rx="2" fill="#fee2e2" />
+        <circle cx="37" cy="36" r="10" fill="#ef4444" />
+        <polygon points="34,30 34,42 44,36" fill="white" />
+        <rect x="32" y="58" width="10" height="3" rx="1.5" fill="#d1d5db" />
       </svg>
     ),
   },
   {
-    title: '친구 추천 이벤트',
-    desc: '친구 추천 시 양쪽 모두 혜택',
-    iconBg: 'bg-pink-50 dark:bg-pink-950/30',
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <circle cx="13" cy="15" r="5" fill="#fbcfe8" />
-        <path d="M4 32c0-5 4-9 9-9s9 4 9 9" fill="#f9a8d4" />
-        <circle cx="27" cy="15" r="5" fill="#f9a8d4" />
-        <path d="M18 32c0-5 4-9 9-9s9 4 9 9" fill="#f472b6" />
-        <path d="M20 6l1.8 3L24.5 6.5c1.8-1.8 4.5 0 3.5 3-1.2 3-4.5 5.5-8 7-3.5-1.5-6.8-4-8-7-1-3 1.7-4.8 3.5-3L18.2 9 20 6z" fill="#ef4444" />
+    title: '카톡 친구\n추천 이벤트',
+    badge: '전원',
+    cta: '교재, 강의,\n기프티콘 등 선물',
+    illust: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+        <path d="M14 55V30c0-2 2-4 4-4h44c2 0 4 2 4 4v25l-26 12-26-12z" fill="#fbbf24" />
+        <path d="M14 30l26 18 26-18" fill="#f59e0b" />
+        <path d="M14 55l26-12 26 12" fill="#fde68a" />
+        <path d="M34 20c0-4 3-7 6-7s6 3 6 7c0 5-6 9-6 9s-6-4-6-9z" fill="#f472b6" />
+        <path d="M28 26c0-3 2-5 4-5s4 2 4 5c0 4-4 6-4 6s-4-2-4-6z" fill="#fb7185" opacity="0.7" />
+        <path d="M44 24c0-3 2-5 4-5s4 2 4 5c0 4-4 6-4 6s-4-2-4-6z" fill="#fda4af" opacity="0.8" />
       </svg>
     ),
   },
   {
-    title: '합격자 리얼 후기',
-    desc: '합격생들의 생생한 후기 확인',
-    iconBg: 'bg-cyan-50 dark:bg-cyan-950/30',
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="3" y="5" width="22" height="16" rx="3" fill="#a5f3fc" />
-        <path d="M9 21l-3 6 6-3.5" fill="#a5f3fc" />
-        <rect x="7" y="10" width="14" height="1.5" rx="0.5" fill="#0891b2" opacity="0.4" />
-        <rect x="7" y="14" width="10" height="1.5" rx="0.5" fill="#0891b2" opacity="0.3" />
-        <rect x="15" y="17" width="22" height="14" rx="3" fill="#06b6d4" />
-        <path d="M31 31l3 5-5.5-3" fill="#06b6d4" />
-        <rect x="19" y="21.5" width="13" height="1.5" rx="0.5" fill="white" opacity="0.7" />
-        <rect x="19" y="25.5" width="9" height="1.5" rx="0.5" fill="white" opacity="0.5" />
+    title: '합격자들의\n리얼 합격후기',
+    badge: null,
+    cta: '생생한 합격후기를\n남겨주세요!',
+    illust: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+        <rect x="16" y="8" width="40" height="52" rx="4" fill="#bfdbfe" />
+        <rect x="20" y="14" width="28" height="3" rx="1" fill="#3b82f6" opacity="0.4" />
+        <rect x="20" y="20" width="20" height="3" rx="1" fill="#3b82f6" opacity="0.3" />
+        <rect x="20" y="26" width="24" height="3" rx="1" fill="#3b82f6" opacity="0.35" />
+        <rect x="20" y="32" width="16" height="3" rx="1" fill="#3b82f6" opacity="0.25" />
+        <rect x="20" y="38" width="22" height="3" rx="1" fill="#3b82f6" opacity="0.3" />
+        <circle cx="56" cy="52" r="16" fill="#60a5fa" />
+        <circle cx="56" cy="46" r="6" fill="white" />
+        <path d="M46 60c0-5.5 4.5-10 10-10s10 4.5 10 10" fill="white" />
       </svg>
     ),
   },
@@ -357,18 +355,25 @@ export default function LandingContent() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {events.map((ev, i) => (
-              <Reveal key={ev.title} delay={i * 80}>
-                <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer">
-                  <div className="flex flex-col items-center text-center">
-                    <div className={`w-16 h-16 rounded-2xl ${ev.iconBg} flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
-                      {ev.icon}
+              <Reveal key={i} delay={i * 80}>
+                <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer relative overflow-hidden min-h-[160px]">
+                  {/* 좌상단: 제목 */}
+                  <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-white leading-tight whitespace-pre-line pr-16">
+                    {ev.title}
+                  </h3>
+                  {/* 우상단: 뱃지 */}
+                  {ev.badge && (
+                    <div className="absolute top-5 right-5 w-12 h-12 rounded-full bg-gray-600 dark:bg-gray-500 text-white text-[10px] font-bold flex items-center justify-center text-center leading-tight">
+                      {ev.badge}
                     </div>
-                    <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1.5">
-                      {ev.title}
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                      {ev.desc}
-                    </p>
+                  )}
+                  {/* 좌하단: CTA */}
+                  <p className="absolute bottom-5 left-5 sm:left-6 text-xs sm:text-sm text-rose-500 dark:text-rose-400 font-medium leading-snug whitespace-pre-line">
+                    {ev.cta} <span className="inline-block ml-0.5">&rarr;</span>
+                  </p>
+                  {/* 우하단: 일러스트 */}
+                  <div className="absolute bottom-2 right-2 transition-transform group-hover:scale-110">
+                    {ev.illust}
                   </div>
                 </div>
               </Reveal>
