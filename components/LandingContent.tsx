@@ -27,109 +27,105 @@ const grades = [
   { id: 'ncs', label: '과정평가형', count: 0 },
 ]
 
-/* ─── 이벤트 데이터 (내용에 맞는 상세 SVG) ─── */
+/* ─── 이벤트 데이터 (컬러풀 SVG) ─── */
 const events = [
   {
     title: '전 강좌 무료',
     desc: '회원가입 후 모든 기출문제 무료 이용',
+    iconBg: 'bg-rose-50 dark:bg-rose-950/30',
     icon: (
-      /* 선물 상자 — 리본 + 박스 */
       <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="6" y="18" width="28" height="16" rx="2.5" fill="currentColor" opacity="0.2" />
-        <rect x="8" y="20" width="24" height="12" rx="1.5" fill="currentColor" opacity="0.12" />
-        <rect x="4" y="14" width="32" height="6" rx="2" fill="currentColor" opacity="0.35" />
-        <rect x="18" y="14" width="4" height="20" rx="0.5" fill="currentColor" opacity="0.5" />
-        <path d="M20 14c-2-4-6-6-8-4s0 6 4 7h4" fill="currentColor" opacity="0.4" />
-        <path d="M20 14c2-4 6-6 8-4s0 6-4 7h-4" fill="currentColor" opacity="0.4" />
-        <circle cx="20" cy="14" r="2" fill="currentColor" opacity="0.7" />
+        <rect x="6" y="18" width="28" height="16" rx="2.5" fill="#fda4af" />
+        <rect x="4" y="14" width="32" height="6" rx="2" fill="#fb7185" />
+        <rect x="18" y="14" width="4" height="20" rx="0.5" fill="#e11d48" />
+        <path d="M20 14c-2-4-6-6-8-4s0 6 4 7h4" fill="#fbbf24" />
+        <path d="M20 14c2-4 6-6 8-4s0 6-4 7h-4" fill="#f59e0b" />
+        <circle cx="20" cy="14" r="2.5" fill="#e11d48" />
       </svg>
     ),
   },
   {
     title: '환승/재수강 할인',
     desc: '타 사이트 이용자 환승 시 혜택 제공',
+    iconBg: 'bg-orange-50 dark:bg-orange-950/30',
     icon: (
-      /* 할인 티켓 — 톱니 가장자리 + % 표시 */
       <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="4" y="10" width="32" height="20" rx="3" fill="currentColor" opacity="0.2" />
-        <circle cx="4" cy="18" r="3" fill="white" />
-        <circle cx="4" cy="24" r="3" fill="white" />
-        <circle cx="36" cy="18" r="3" fill="white" />
-        <circle cx="36" cy="24" r="3" fill="white" />
-        <line x1="15" y1="10" x2="15" y2="30" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" opacity="0.3" />
-        <circle cx="22" cy="17" r="2" stroke="currentColor" strokeWidth="1.5" opacity="0.6" fill="none" />
-        <circle cx="30" cy="23" r="2" stroke="currentColor" strokeWidth="1.5" opacity="0.6" fill="none" />
-        <line x1="22" y1="24" x2="30" y2="16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" opacity="0.7" />
-        <text x="8" y="23" fontSize="8" fontWeight="900" fill="currentColor" opacity="0.7" fontFamily="system-ui">%</text>
+        <rect x="4" y="10" width="32" height="20" rx="3" fill="#fed7aa" />
+        <rect x="4" y="10" width="13" height="20" rx="3" fill="#fdba74" />
+        <circle cx="4" cy="18" r="3" fill="white" /><circle cx="4" cy="24" r="3" fill="white" />
+        <circle cx="36" cy="18" r="3" fill="white" /><circle cx="36" cy="24" r="3" fill="white" />
+        <line x1="17" y1="10" x2="17" y2="30" stroke="#ea580c" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
+        <text x="6" y="24" fontSize="10" fontWeight="900" fill="#ea580c" fontFamily="system-ui">%</text>
+        <circle cx="26" cy="17" r="2.5" stroke="#ea580c" strokeWidth="1.5" fill="none" />
+        <circle cx="32" cy="23" r="2.5" stroke="#ea580c" strokeWidth="1.5" fill="none" />
+        <line x1="26" y1="24" x2="32" y2="16" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
   },
   {
     title: '실기 복원 참여',
     desc: '실기 시험 복원에 참여하고 포인트 받기',
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/30',
     icon: (
-      /* 시험지 + 연필 — 복원 참여 */
       <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="8" y="4" width="20" height="28" rx="2" fill="currentColor" opacity="0.15" />
-        <rect x="12" y="10" width="10" height="1.5" rx="0.5" fill="currentColor" opacity="0.4" />
-        <rect x="12" y="14" width="12" height="1.5" rx="0.5" fill="currentColor" opacity="0.3" />
-        <rect x="12" y="18" width="8" height="1.5" rx="0.5" fill="currentColor" opacity="0.3" />
-        <rect x="12" y="22" width="11" height="1.5" rx="0.5" fill="currentColor" opacity="0.25" />
-        <path d="M28 16l-2.5 12.5L24 30l1.5-1.5L38 16l-2-2-8 2z" fill="currentColor" opacity="0.6" />
-        <path d="M36 14l2 2 1.5-1.5c.4-.4.4-1.1 0-1.5l-.5-.5c-.4-.4-1.1-.4-1.5 0L36 14z" fill="currentColor" opacity="0.8" />
-        <line x1="28" y1="16" x2="30" y2="18" stroke="white" strokeWidth="0.8" opacity="0.5" />
+        <rect x="6" y="4" width="20" height="28" rx="2" fill="#a7f3d0" />
+        <rect x="10" y="10" width="10" height="1.5" rx="0.5" fill="#059669" opacity="0.5" />
+        <rect x="10" y="14" width="12" height="1.5" rx="0.5" fill="#059669" opacity="0.4" />
+        <rect x="10" y="18" width="8" height="1.5" rx="0.5" fill="#059669" opacity="0.35" />
+        <rect x="10" y="22" width="11" height="1.5" rx="0.5" fill="#059669" opacity="0.3" />
+        <path d="M28 14l-3 15-1.5 1.5 1.5-1L37 14l-1.5-1.5L28 14z" fill="#fbbf24" />
+        <path d="M35.5 12.5l2 2 1.2-1.2c.4-.4.4-1 0-1.4l-.6-.6c-.4-.4-1-.4-1.4 0l-1.2 1.2z" fill="#f59e0b" />
+        <rect x="27" y="13.5" width="1.5" height="8" rx="0.5" transform="rotate(-15 27 13.5)" fill="#d97706" opacity="0.3" />
       </svg>
     ),
   },
   {
     title: '기출 1200제',
     desc: '전기기사 기출 1200제 무료 제공',
+    iconBg: 'bg-violet-50 dark:bg-violet-950/30',
     icon: (
-      /* 펼쳐진 책 + 페이지 — 문제집 */
       <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <path d="M20 8C16 6 10 5 4 6v24c6-1 12 0 16 2" fill="currentColor" opacity="0.15" />
-        <path d="M20 8c4-2 10-3 16-2v24c-6-1-12 0-16 2" fill="currentColor" opacity="0.25" />
-        <line x1="20" y1="8" x2="20" y2="32" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
-        <rect x="7" y="12" width="8" height="1" rx="0.5" fill="currentColor" opacity="0.35" />
-        <rect x="7" y="15" width="6" height="1" rx="0.5" fill="currentColor" opacity="0.25" />
-        <rect x="7" y="18" width="7" height="1" rx="0.5" fill="currentColor" opacity="0.3" />
-        <rect x="7" y="21" width="5" height="1" rx="0.5" fill="currentColor" opacity="0.2" />
-        <rect x="24" y="12" width="7" height="1" rx="0.5" fill="currentColor" opacity="0.4" />
-        <rect x="24" y="15" width="5" height="1" rx="0.5" fill="currentColor" opacity="0.3" />
-        <rect x="24" y="18" width="8" height="1" rx="0.5" fill="currentColor" opacity="0.35" />
-        <rect x="24" y="21" width="6" height="1" rx="0.5" fill="currentColor" opacity="0.25" />
-        <text x="25" y="28" fontSize="7" fontWeight="800" fill="currentColor" opacity="0.5" fontFamily="system-ui">1200</text>
+        <path d="M20 8C16 6 10 5 4 6v24c6-1 12 0 16 2" fill="#ddd6fe" />
+        <path d="M20 8c4-2 10-3 16-2v24c-6-1-12 0-16 2" fill="#c4b5fd" />
+        <line x1="20" y1="8" x2="20" y2="32" stroke="#7c3aed" strokeWidth="1.5" opacity="0.5" />
+        <rect x="7" y="12" width="8" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.4" />
+        <rect x="7" y="15.5" width="6" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.3" />
+        <rect x="7" y="19" width="7" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.35" />
+        <rect x="24" y="12" width="7" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.5" />
+        <rect x="24" y="15.5" width="5" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.4" />
+        <rect x="24" y="19" width="8" height="1.2" rx="0.5" fill="#7c3aed" opacity="0.45" />
+        <text x="23" y="28" fontSize="7" fontWeight="800" fill="#7c3aed" fontFamily="system-ui">1200</text>
       </svg>
     ),
   },
   {
     title: '친구 추천 이벤트',
     desc: '친구 추천 시 양쪽 모두 혜택',
+    iconBg: 'bg-pink-50 dark:bg-pink-950/30',
     icon: (
-      /* 두 사람 + 하트 — 친구 추천 */
       <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <circle cx="13" cy="14" r="5" fill="currentColor" opacity="0.3" />
-        <path d="M4 30c0-5 4-9 9-9s9 4 9 9" fill="currentColor" opacity="0.2" />
-        <circle cx="27" cy="14" r="5" fill="currentColor" opacity="0.3" />
-        <path d="M18 30c0-5 4-9 9-9s9 4 9 9" fill="currentColor" opacity="0.2" />
-        <path d="M20 8l1.5 2.5L24 8c1.5-1.5 4 0 3 2.5-1 2.5-4 5-7 6.5-3-1.5-6-4-7-6.5-1-2.5 1.5-4 3-2.5l2 2.5z" fill="currentColor" opacity="0.6" />
+        <circle cx="13" cy="15" r="5" fill="#fbcfe8" />
+        <path d="M4 32c0-5 4-9 9-9s9 4 9 9" fill="#f9a8d4" />
+        <circle cx="27" cy="15" r="5" fill="#f9a8d4" />
+        <path d="M18 32c0-5 4-9 9-9s9 4 9 9" fill="#f472b6" />
+        <path d="M20 6l1.8 3L24.5 6.5c1.8-1.8 4.5 0 3.5 3-1.2 3-4.5 5.5-8 7-3.5-1.5-6.8-4-8-7-1-3 1.7-4.8 3.5-3L18.2 9 20 6z" fill="#ef4444" />
       </svg>
     ),
   },
   {
     title: '합격자 리얼 후기',
     desc: '합격생들의 생생한 후기 확인',
+    iconBg: 'bg-cyan-50 dark:bg-cyan-950/30',
     icon: (
-      /* 말풍선 두 개 겹침 — 후기/대화 */
       <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
-        <rect x="4" y="6" width="22" height="16" rx="3" fill="currentColor" opacity="0.25" />
-        <path d="M10 22l-2 5 5-3" fill="currentColor" opacity="0.25" />
-        <rect x="8" y="11" width="14" height="1.2" rx="0.5" fill="currentColor" opacity="0.3" />
-        <rect x="8" y="14.5" width="10" height="1.2" rx="0.5" fill="currentColor" opacity="0.2" />
-        <rect x="14" y="16" width="22" height="14" rx="3" fill="currentColor" opacity="0.4" />
-        <path d="M30 30l2 4.5-4.5-2.5" fill="currentColor" opacity="0.4" />
-        <rect x="18" y="20.5" width="12" height="1.2" rx="0.5" fill="white" opacity="0.6" />
-        <rect x="18" y="24" width="8" height="1.2" rx="0.5" fill="white" opacity="0.4" />
+        <rect x="3" y="5" width="22" height="16" rx="3" fill="#a5f3fc" />
+        <path d="M9 21l-3 6 6-3.5" fill="#a5f3fc" />
+        <rect x="7" y="10" width="14" height="1.5" rx="0.5" fill="#0891b2" opacity="0.4" />
+        <rect x="7" y="14" width="10" height="1.5" rx="0.5" fill="#0891b2" opacity="0.3" />
+        <rect x="15" y="17" width="22" height="14" rx="3" fill="#06b6d4" />
+        <path d="M31 31l3 5-5.5-3" fill="#06b6d4" />
+        <rect x="19" y="21.5" width="13" height="1.5" rx="0.5" fill="white" opacity="0.7" />
+        <rect x="19" y="25.5" width="9" height="1.5" rx="0.5" fill="white" opacity="0.5" />
       </svg>
     ),
   },
@@ -164,20 +160,20 @@ const testimonials = [
   },
 ]
 
-/* ─── 강점 데이터 (내용에 맞는 상세 SVG) ─── */
+/* ─── 강점 데이터 (컬러풀 SVG) ─── */
 const strengths = [
   {
     title: '원본 대조 검증',
     desc: '인터넷 복사가 아닙니다. 실제 시험지 원본과 한 문제씩 대조하여 정답과 선택지를 검증합니다.',
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/30',
     icon: (
-      /* 두 장의 문서를 겹쳐놓고 체크마크 — 원본 대조 */
       <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <rect x="4" y="2" width="16" height="20" rx="2" fill="currentColor" opacity="0.2" />
-        <rect x="8" y="6" width="16" height="20" rx="2" fill="currentColor" opacity="0.35" />
-        <rect x="11" y="10" width="4" height="1.5" rx="0.5" fill="currentColor" opacity="0.5" />
-        <rect x="11" y="14" width="8" height="1.5" rx="0.5" fill="currentColor" opacity="0.5" />
-        <rect x="11" y="18" width="6" height="1.5" rx="0.5" fill="currentColor" opacity="0.5" />
-        <circle cx="24" cy="24" r="7" fill="currentColor" opacity="0.9" />
+        <rect x="4" y="2" width="16" height="20" rx="2" fill="#a7f3d0" />
+        <rect x="8" y="6" width="16" height="20" rx="2" fill="#6ee7b7" />
+        <rect x="11" y="10" width="4" height="1.5" rx="0.5" fill="#047857" opacity="0.5" />
+        <rect x="11" y="14" width="8" height="1.5" rx="0.5" fill="#047857" opacity="0.4" />
+        <rect x="11" y="18" width="6" height="1.5" rx="0.5" fill="#047857" opacity="0.35" />
+        <circle cx="24" cy="24" r="7" fill="#059669" />
         <path d="M21 24l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
@@ -185,52 +181,53 @@ const strengths = [
   {
     title: '실전 동일 환경',
     desc: '한국산업인력공단 CBT와 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
+    iconBg: 'bg-indigo-50 dark:bg-indigo-950/30',
     icon: (
-      /* 모니터 안에 시험 문제 보기가 보이는 CBT 화면 */
       <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <rect x="3" y="4" width="26" height="18" rx="2.5" fill="currentColor" opacity="0.2" />
-        <rect x="5" y="6" width="22" height="14" rx="1" fill="currentColor" opacity="0.15" />
-        <rect x="8" y="9" width="9" height="1.2" rx="0.5" fill="currentColor" opacity="0.6" />
-        <circle cx="8.6" cy="13" r="1.2" fill="currentColor" opacity="0.4" />
-        <rect x="11" y="12.2" width="7" height="1.2" rx="0.5" fill="currentColor" opacity="0.4" />
-        <circle cx="8.6" cy="16.5" r="1.2" fill="currentColor" opacity="0.9" />
-        <rect x="11" y="15.7" width="7" height="1.2" rx="0.5" fill="currentColor" opacity="0.6" />
-        <rect x="20" y="9" width="5" height="9" rx="1" fill="currentColor" opacity="0.12" />
-        <rect x="21" y="15" width="3" height="2" rx="0.5" fill="currentColor" opacity="0.8" />
-        <rect x="11" y="24" width="10" height="2" rx="1" fill="currentColor" opacity="0.3" />
-        <rect x="13" y="22" width="6" height="2" fill="currentColor" opacity="0.2" />
+        <rect x="3" y="4" width="26" height="18" rx="2.5" fill="#c7d2fe" />
+        <rect x="5" y="6" width="22" height="14" rx="1" fill="#818cf8" opacity="0.3" />
+        <rect x="8" y="9" width="9" height="1.2" rx="0.5" fill="#4338ca" opacity="0.6" />
+        <circle cx="8.6" cy="13" r="1.2" fill="#a5b4fc" />
+        <rect x="11" y="12.2" width="7" height="1.2" rx="0.5" fill="#4338ca" opacity="0.4" />
+        <circle cx="8.6" cy="16.5" r="1.2" fill="#4f46e5" />
+        <rect x="11" y="15.7" width="7" height="1.2" rx="0.5" fill="#4338ca" opacity="0.5" />
+        <rect x="20" y="9" width="5" height="9" rx="1" fill="#e0e7ff" />
+        <rect x="21" y="15" width="3" height="2" rx="0.5" fill="#4f46e5" />
+        <rect x="11" y="24" width="10" height="2" rx="1" fill="#a5b4fc" />
+        <rect x="13" y="22" width="6" height="2" fill="#c7d2fe" />
       </svg>
     ),
   },
   {
     title: '자동 오답 분석',
     desc: '틀린 문제를 자동으로 분류하고 과목별 약점을 분석합니다. 같은 실수를 반복하지 않도록.',
+    iconBg: 'bg-amber-50 dark:bg-amber-950/30',
     icon: (
-      /* 막대 그래프 + 돋보기 — 분석 */
       <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <rect x="4" y="18" width="4" height="8" rx="1" fill="currentColor" opacity="0.3" />
-        <rect x="10" y="12" width="4" height="14" rx="1" fill="currentColor" opacity="0.5" />
-        <rect x="16" y="8" width="4" height="18" rx="1" fill="currentColor" opacity="0.7" />
-        <rect x="22" y="14" width="4" height="12" rx="1" fill="currentColor" opacity="0.4" />
-        <rect x="3" y="26" width="24" height="1.5" rx="0.5" fill="currentColor" opacity="0.2" />
-        <circle cx="24" cy="10" r="5" stroke="currentColor" strokeWidth="2" opacity="0.8" fill="none" />
-        <line x1="27.5" y1="13.5" x2="30" y2="16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+        <rect x="4" y="18" width="4" height="8" rx="1" fill="#fcd34d" />
+        <rect x="10" y="12" width="4" height="14" rx="1" fill="#f59e0b" />
+        <rect x="16" y="8" width="4" height="18" rx="1" fill="#d97706" />
+        <rect x="22" y="14" width="4" height="12" rx="1" fill="#fbbf24" />
+        <rect x="3" y="26" width="24" height="1.5" rx="0.5" fill="#92400e" opacity="0.2" />
+        <circle cx="24" cy="10" r="5" stroke="#ea580c" strokeWidth="2" fill="white" opacity="0.9" />
+        <line x1="27.5" y1="13.5" x2="30" y2="16" stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     ),
   },
   {
     title: '24시간 오류 수정',
     desc: '오류가 발견되면 24시간 이내에 수정합니다. 규정 개정 사항도 실시간으로 반영합니다.',
+    iconBg: 'bg-violet-50 dark:bg-violet-950/30',
     icon: (
-      /* 시계 + 렌치(수리 도구) — 빠른 수정 */
       <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <circle cx="14" cy="16" r="10" fill="currentColor" opacity="0.15" />
-        <circle cx="14" cy="16" r="8" stroke="currentColor" strokeWidth="1.8" opacity="0.6" fill="none" />
-        <line x1="14" y1="10" x2="14" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-        <line x1="14" y1="16" x2="18.5" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-        <path d="M26 11l-3.5 3.5M22.5 14.5l1.5 1.5 5-5-1.5-1.5M22.5 14.5l-1.5-1.5" fill="currentColor" opacity="0.7" />
-        <path d="M24 9.5l2.5-2.5c.5-.5 1.3-.5 1.8 0l.7.7c.5.5.5 1.3 0 1.8L26.5 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" fill="none" />
-        <rect x="21.5" y="13" width="2.5" height="5" rx="0.8" transform="rotate(-45 21.5 13)" fill="currentColor" opacity="0.6" />
+        <circle cx="14" cy="16" r="10" fill="#ede9fe" />
+        <circle cx="14" cy="16" r="8" stroke="#7c3aed" strokeWidth="1.8" fill="none" />
+        <line x1="14" y1="10" x2="14" y2="16" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" />
+        <line x1="14" y1="16" x2="18.5" y2="16" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="14" cy="16" r="1.5" fill="#7c3aed" />
+        <path d="M24 9.5l2.5-2.5c.5-.5 1.3-.5 1.8 0l.7.7c.5.5.5 1.3 0 1.8L26.5 12" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+        <rect x="22" y="13" width="2.5" height="5.5" rx="0.8" transform="rotate(-45 22 13)" fill="#fbbf24" />
+        <rect x="24.5" y="10.5" width="2" height="3" rx="0.5" transform="rotate(-45 24.5 10.5)" fill="#f59e0b" />
       </svg>
     ),
   },
@@ -294,15 +291,14 @@ export default function LandingContent() {
                 <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-900 border border-blue-100 dark:border-gray-800 rounded-2xl p-6 sm:p-8">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center">
-                        {/* 자격증 문서 + 체크 */}
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                         <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-                          <rect x="3" y="1" width="11" height="15" rx="1.5" fill="white" opacity="0.3" />
-                          <rect x="5" y="4" width="6" height="1" rx="0.5" fill="white" opacity="0.5" />
-                          <rect x="5" y="7" width="4" height="1" rx="0.5" fill="white" opacity="0.4" />
-                          <rect x="5" y="10" width="5" height="1" rx="0.5" fill="white" opacity="0.35" />
-                          <circle cx="14" cy="14" r="5" fill="white" opacity="0.9" />
-                          <path d="M11.5 14l1.5 1.5 3-3" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <rect x="3" y="1" width="11" height="15" rx="1.5" fill="white" opacity="0.35" />
+                          <rect x="5" y="4" width="6" height="1" rx="0.5" fill="white" opacity="0.6" />
+                          <rect x="5" y="7" width="4" height="1" rx="0.5" fill="white" opacity="0.5" />
+                          <rect x="5" y="10" width="5" height="1" rx="0.5" fill="white" opacity="0.45" />
+                          <circle cx="14" cy="14" r="5" fill="white" />
+                          <path d="M11.5 14l1.5 1.5 3-3" stroke="#4f46e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
                       <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
@@ -364,7 +360,7 @@ export default function LandingContent() {
               <Reveal key={ev.title} delay={i * 80}>
                 <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer">
                   <div className="flex flex-col items-center text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white dark:group-hover:bg-blue-600 transition-colors">
+                    <div className={`w-16 h-16 rounded-2xl ${ev.iconBg} flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
                       {ev.icon}
                     </div>
                     <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1.5">
@@ -463,7 +459,7 @@ export default function LandingContent() {
             {strengths.map((s, i) => (
               <Reveal key={s.title} delay={i * 100}>
                 <div className="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 h-full transition-all hover:border-blue-200 dark:hover:border-blue-800 hover:shadow-xl hover:shadow-blue-50/50 dark:hover:shadow-blue-950/20 hover:-translate-y-0.5">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white dark:group-hover:bg-blue-600 transition-colors">
+                  <div className={`w-14 h-14 rounded-2xl ${s.iconBg} flex items-center justify-center mb-5 transition-transform group-hover:scale-110`}>
                     {s.icon}
                   </div>
                   <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
