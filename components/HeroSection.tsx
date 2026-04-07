@@ -275,20 +275,22 @@ export default function HeroSection() {
               )
             })}
 
-            {/* 하단 그라디언트 페이드 + 인물 소개 */}
+            {/* 인물 네임태그 */}
             <div
-              className={`absolute bottom-0 left-0 right-0 z-10 transition-all duration-700
-                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-              style={{ transitionDelay: isVisible ? '400ms' : '0ms' }}
+              className={`absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 z-10 transition-all duration-600
+                ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-3 scale-95'}`}
+              style={{ transitionDelay: isVisible ? '450ms' : '0ms' }}
             >
-              {/* 그라디언트 페이드 */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent rounded-b-xl" />
-              {/* 텍스트 */}
-              <div className="relative px-3 py-2.5 sm:px-4 sm:py-3 text-center">
-                <div className="text-[11px] sm:text-xs font-bold text-white leading-tight">
+              <div
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-center whitespace-nowrap shadow-lg"
+                style={{
+                  background: slide.accentColor,
+                }}
+              >
+                <div className="text-[10px] sm:text-xs font-bold text-white leading-tight">
                   {slide.personName}
                 </div>
-                <div className="text-[9px] sm:text-[10px] text-white/70 mt-0.5">
+                <div className="text-[8px] sm:text-[10px] text-white/80 mt-px">
                   {slide.personRole}
                 </div>
               </div>
