@@ -116,29 +116,186 @@ function useCountUp(end: number, duration = 2000, startOnView = true) {
 
 /* ─── CAYSON이 다른 이유 — 인터랙티브 섹션 ─── */
 function WhyCaysonSection() {
-  const stat1 = useCountUp(2100)
-  const stat2 = useCountUp(100)
-  const stat3 = useCountUp(58)
-  const stat4 = useCountUp(21)
+  const [activeFeature, setActiveFeature] = useState(0)
+  const triggerRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
 
-  const compareRows = [
-    { label: '문제 출처', others: '인터넷 복사', cayson: '시험지 원본 대조', icon: '1' },
-    { label: '정답 검증', others: '검증 없음', cayson: 'AI + 수동 이중 검증', icon: '2' },
-    { label: '오류 수정', others: '미수정 방치', cayson: '발견 즉시 수정 (58건)', icon: '3' },
-    { label: '시험 환경', others: '단순 문제풀이', cayson: '실제 CBT 동일 구현', icon: '4' },
-    { label: '오답 분석', others: '정답만 표시', cayson: '과목별 자동 약점 분석', icon: '5' },
-    { label: '규정 반영', others: '업데이트 없음', cayson: '개정 사항 실시간 반영', icon: '6' },
+  useEffect(() => {
+    if (!triggerRef.current) return
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true) }, { threshold: 0.2 })
+    obs.observe(triggerRef.current)
+    return () => obs.disconnect()
+  }, [])
+
+  // 자동 로테이션
+  useEffect(() => {
+    if (!visible) return
+    const id = setInterval(() => setActiveFeature(p => (p + 1) % 6), 4000)
+    return () => clearInterval(id)
+  }, [visible])
+
+  const features = [
+    {
+      tab: '원본 대조',
+      title: '시험지 원본과 한 문제씩 직접 대조',
+      desc: '인터넷에 떠도는 문제를 그대로 복사하지 않습니다. 실제 시험지 원본과 정답, 선택지를 한 문제씩 대조하여 검증합니다.',
+      accent: 'blue',
+      visual: (
+        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 rounded-xl flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 sm:gap-6 px-4">
+            <div className="w-[42%] bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 border border-gray-200 dark:border-gray-700 transform -rotate-2 transition-transform duration-500 hover:rotate-0">
+              <div className="h-2 w-16 bg-gray-200 dark:bg-gray-600 rounded mb-2" />
+              <div className="h-2 w-12 bg-gray-100 dark:bg-gray-700 rounded mb-3" />
+              <div className="space-y-1.5">{[1,2,3,4].map(n => <div key={n} className="flex items-center gap-2"><span className="w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-600 text-[8px] flex items-center justify-center text-gray-500 font-bold">{n}</span><div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded flex-1" /></div>)}</div>
+              <p className="text-[8px] sm:text-[10px] text-gray-400 mt-2 text-center">원본 시험지</p>
+            </div>
+            <svg className={`w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 transition-all duration-700 ${visible ? 'text-blue-500 scale-100 opacity-100' : 'text-gray-300 scale-50 opacity-0'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <div className="w-[42%] bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 border-2 border-blue-400 dark:border-blue-500 transform rotate-2 transition-transform duration-500 hover:rotate-0">
+              <div className="h-2 w-16 bg-blue-200 dark:bg-blue-800 rounded mb-2" />
+              <div className="h-2 w-12 bg-blue-100 dark:bg-blue-900 rounded mb-3" />
+              <div className="space-y-1.5">{[1,2,3,4].map(n => <div key={n} className="flex items-center gap-2"><span className="w-4 h-4 rounded-full bg-blue-500 text-[8px] flex items-center justify-center text-white font-bold">{n}</span><div className="h-1.5 bg-blue-100 dark:bg-blue-900 rounded flex-1" /></div>)}</div>
+              <p className="text-[8px] sm:text-[10px] text-blue-500 mt-2 text-center font-semibold">CAYSON 검증</p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      tab: 'AI 이중 검증',
+      title: 'AI + 수동 이중 검증 시스템',
+      desc: 'AI가 전체 문제를 자동 검토한 후, 수동으로 한 번 더 확인합니다. 이중 검증을 통해 정답 오류를 원천 차단합니다.',
+      accent: 'emerald',
+      visual: (
+        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950/30 dark:to-emerald-900/20 rounded-xl flex items-center justify-center overflow-hidden">
+          <div className="flex flex-col items-center gap-2 sm:gap-3">
+            <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-700 ${visible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-200 dark:border-gray-700 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">1차 AI 검토</div>
+              <div className="w-8 sm:w-12 h-0.5 bg-emerald-300" />
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+            </div>
+            <svg className="w-4 h-4 text-emerald-300" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clipRule="evenodd" /></svg>
+            <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-700 delay-300 ${visible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-200 dark:border-gray-700 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">2차 수동 검증</div>
+              <div className="w-8 sm:w-12 h-0.5 bg-emerald-300" />
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+            </div>
+            <svg className="w-4 h-4 text-emerald-300" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clipRule="evenodd" /></svg>
+            <div className={`bg-emerald-500 text-white rounded-lg shadow-lg px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-bold transition-all duration-700 delay-500 ${visible ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`}>검증 완료</div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      tab: '즉시 수정',
+      title: '오류 발견 즉시 수정, 방치 없음',
+      desc: '오류를 발견하면 방치하지 않습니다. 확인 즉시 수정하고 규정 개정 사항도 실시간으로 반영합니다.',
+      accent: 'amber',
+      visual: (
+        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/20 rounded-xl flex items-center justify-center overflow-hidden px-4">
+          <div className="flex items-center gap-3 sm:gap-5 w-full max-w-xs sm:max-w-sm">
+            <div className={`flex-1 bg-white dark:bg-gray-800 rounded-lg shadow border border-red-200 dark:border-red-800 p-3 sm:p-4 transition-all duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}>
+              <div className="flex items-center gap-1.5 mb-2"><div className="w-2 h-2 rounded-full bg-red-400" /><span className="text-[9px] sm:text-[11px] text-red-500 font-semibold">오류 발견</span></div>
+              <div className="h-1.5 bg-red-100 dark:bg-red-900/40 rounded w-full mb-1" />
+              <div className="h-1.5 bg-red-100 dark:bg-red-900/40 rounded w-3/4" />
+            </div>
+            <svg className={`w-5 h-5 sm:w-7 sm:h-7 text-amber-500 flex-shrink-0 transition-all duration-700 delay-300 ${visible ? 'rotate-0 opacity-100' : 'rotate-180 opacity-0'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <div className={`flex-1 bg-white dark:bg-gray-800 rounded-lg shadow border-2 border-emerald-400 dark:border-emerald-500 p-3 sm:p-4 transition-all duration-500 delay-500 ${visible ? 'opacity-100' : 'opacity-0'}`}>
+              <div className="flex items-center gap-1.5 mb-2"><div className="w-2 h-2 rounded-full bg-emerald-400" /><span className="text-[9px] sm:text-[11px] text-emerald-600 font-semibold">수정 완료</span></div>
+              <div className="h-1.5 bg-emerald-100 dark:bg-emerald-900/40 rounded w-full mb-1" />
+              <div className="h-1.5 bg-emerald-100 dark:bg-emerald-900/40 rounded w-3/4" />
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      tab: '실전 CBT',
+      title: '한국산업인력공단 CBT 동일 구현',
+      desc: '단순 문제풀이가 아닙니다. 실제 시험과 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
+      accent: 'violet',
+      visual: (
+        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-violet-50 to-violet-100 dark:from-violet-950/30 dark:to-violet-900/20 rounded-xl flex items-center justify-center overflow-hidden">
+          <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 w-[85%] sm:w-[75%] p-3 sm:p-4 transition-all duration-700 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <div className="flex items-center justify-between mb-2 sm:mb-3">
+              <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-violet-500" /><span className="text-[9px] sm:text-xs font-bold text-gray-700 dark:text-gray-300">전기기사 필기 CBT</span></div>
+              <span className="text-[8px] sm:text-[10px] font-mono text-red-500 font-bold bg-red-50 dark:bg-red-950/40 px-1.5 py-0.5 rounded">02:29:45</span>
+            </div>
+            <div className="flex gap-1 mb-2">{['전기자기학','전력공학','전기기기','회로이론','전기설비'].map((s,i) => <span key={s} className={`text-[6px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 rounded font-medium ${i===0 ? 'bg-violet-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'}`}>{s}</span>)}</div>
+            <div className="space-y-1">{[1,2,3].map(n => <div key={n} className="flex items-start gap-2"><span className="text-[8px] sm:text-[10px] font-bold text-gray-400 mt-0.5">{n}.</span><div className="flex-1"><div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded w-full mb-1" /><div className="grid grid-cols-2 gap-1">{[1,2,3,4].map(c => <div key={c} className={`h-3 sm:h-4 rounded text-[6px] sm:text-[7px] flex items-center justify-center font-medium ${c===2 ? 'bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 ring-1 ring-violet-300' : 'bg-gray-50 dark:bg-gray-700 text-gray-400'}`}>{c}</div>)}</div></div></div>)}</div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      tab: '약점 분석',
+      title: '과목별 약점을 자동으로 분석',
+      desc: '시험 종료 즉시 과목별 정답률과 약점을 자동 분석합니다. 어디가 부족한지 한눈에 파악하고 집중 학습하세요.',
+      accent: 'pink',
+      visual: (
+        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-950/30 dark:to-pink-900/20 rounded-xl flex items-center justify-center overflow-hidden px-4 sm:px-6">
+          <div className="w-full max-w-xs sm:max-w-sm space-y-2 sm:space-y-2.5">
+            {[
+              { name: '전기자기학', pct: 95, color: 'bg-blue-500' },
+              { name: '전력공학', pct: 72, color: 'bg-emerald-500' },
+              { name: '전기기기', pct: 88, color: 'bg-violet-500' },
+              { name: '회로이론', pct: 45, color: 'bg-pink-500' },
+              { name: '전기설비', pct: 80, color: 'bg-amber-500' },
+            ].map((sub, i) => (
+              <div key={sub.name} className="flex items-center gap-2 sm:gap-3">
+                <span className="text-[8px] sm:text-[10px] font-semibold text-gray-500 dark:text-gray-400 w-12 sm:w-16 text-right flex-shrink-0">{sub.name}</span>
+                <div className="flex-1 h-3 sm:h-4 bg-white dark:bg-gray-800 rounded-full overflow-hidden shadow-inner">
+                  <div className={`h-full ${sub.color} rounded-full transition-all duration-1000 ease-out`} style={{ width: visible ? `${sub.pct}%` : '0%', transitionDelay: `${i * 150}ms` }} />
+                </div>
+                <span className={`text-[9px] sm:text-xs font-bold tabular-nums ${sub.pct < 60 ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'}`}>{visible ? sub.pct : 0}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
+    {
+      tab: '실시간 반영',
+      title: '규정 개정 사항 실시간 반영',
+      desc: '전기 관련 법규와 규정이 바뀌면 즉시 문제에 반영합니다. 항상 최신 기준으로 학습할 수 있습니다.',
+      accent: 'teal',
+      visual: (
+        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-950/30 dark:to-teal-900/20 rounded-xl flex items-center justify-center overflow-hidden">
+          <div className="flex flex-col items-center gap-2 sm:gap-3">
+            {[
+              { label: '규정 개정 감지', delay: '0ms' },
+              { label: '문제 자동 업데이트', delay: '200ms' },
+              { label: '최신 기준 적용 완료', delay: '400ms' },
+            ].map((step, i) => (
+              <div key={step.label} className={`flex items-center gap-2 sm:gap-3 transition-all duration-500 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ transitionDelay: step.delay }}>
+                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-white text-xs font-bold ${i === 2 ? 'bg-teal-500' : 'bg-teal-400'}`}>{i + 1}</div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-200 dark:border-gray-700 text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300">{step.label}</div>
+                {i < 2 && <svg className="w-3 h-3 text-teal-300 rotate-90 -ml-1 hidden sm:block" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clipRule="evenodd" /></svg>}
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
   ]
+
+  const accentMap: Record<string, { tab: string; border: string; ring: string }> = {
+    blue: { tab: 'bg-blue-600 text-white shadow-blue-600/25', border: 'border-blue-200 dark:border-blue-800', ring: 'ring-blue-500/20' },
+    emerald: { tab: 'bg-emerald-600 text-white shadow-emerald-600/25', border: 'border-emerald-200 dark:border-emerald-800', ring: 'ring-emerald-500/20' },
+    amber: { tab: 'bg-amber-500 text-white shadow-amber-500/25', border: 'border-amber-200 dark:border-amber-800', ring: 'ring-amber-500/20' },
+    violet: { tab: 'bg-violet-600 text-white shadow-violet-600/25', border: 'border-violet-200 dark:border-violet-800', ring: 'ring-violet-500/20' },
+    pink: { tab: 'bg-pink-500 text-white shadow-pink-500/25', border: 'border-pink-200 dark:border-pink-800', ring: 'ring-pink-500/20' },
+    teal: { tab: 'bg-teal-600 text-white shadow-teal-600/25', border: 'border-teal-200 dark:border-teal-800', ring: 'ring-teal-500/20' },
+  }
+
+  const f = features[activeFeature]
+  const a = accentMap[f.accent]
 
   return (
     <section className="bg-white dark:bg-gray-950 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        {/* 헤더 */}
+      <div ref={triggerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <Reveal>
-          <div className="text-center mb-12 sm:mb-16">
-            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">
-              Why CAYSON
-            </p>
+          <div className="text-center mb-10 sm:mb-14">
+            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">Why CAYSON</p>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
               왜 <span className="text-blue-600">CAYSON</span>이어야 할까요?
             </h2>
@@ -146,72 +303,57 @@ function WhyCaysonSection() {
           </div>
         </Reveal>
 
-        {/* 숫자 스탯 리본 */}
+        {/* 탭 네비 */}
         <Reveal delay={100}>
-          <div ref={stat1.ref} className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
-            {[
-              { val: stat1.count, suffix: '+', label: '검증된 문제', color: 'from-blue-600 to-blue-400' },
-              { val: stat2.count, suffix: '%', label: '원본 일치율', color: 'from-emerald-600 to-emerald-400' },
-              { val: stat3.count, suffix: '건', label: '오류 수정 완료', color: 'from-amber-600 to-amber-400' },
-              { val: stat4.count, suffix: '개', label: '시험 종류', color: 'from-violet-600 to-violet-400' },
-            ].map((s) => (
-              <div key={s.label} className="relative group text-center bg-gray-50 dark:bg-gray-900 rounded-2xl p-5 sm:p-7 border border-gray-100 dark:border-gray-800 transition-all hover:shadow-lg hover:-translate-y-0.5 overflow-hidden">
-                <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${s.color} transition-all duration-700`} style={{ width: `${stat1.count > 0 ? 100 : 0}%` }} />
-                <p className={`text-3xl sm:text-4xl lg:text-5xl font-black tabular-nums bg-gradient-to-r ${s.color} text-transparent bg-clip-text`}>
-                  {s.val.toLocaleString()}<span className="text-xl sm:text-2xl">{s.suffix}</span>
-                </p>
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1.5 font-medium">{s.label}</p>
-              </div>
+          <div className="flex gap-1.5 sm:gap-2 justify-center flex-wrap mb-8 sm:mb-10">
+            {features.map((ft, i) => (
+              <button
+                key={ft.tab}
+                onClick={() => setActiveFeature(i)}
+                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
+                  i === activeFeature
+                    ? `${accentMap[ft.accent].tab} shadow-lg scale-105`
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                }`}
+              >
+                {ft.tab}
+              </button>
             ))}
           </div>
         </Reveal>
 
-        {/* 비교 테이블 */}
-        <Reveal delay={200}>
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
-            {/* 테이블 헤더 */}
-            <div className="grid grid-cols-[1fr_1fr_1fr] sm:grid-cols-[1.5fr_1fr_1fr] text-center">
-              <div className="p-3 sm:p-4" />
-              <div className="p-3 sm:p-4 bg-gray-100 dark:bg-gray-800/50">
-                <p className="text-xs sm:text-sm font-bold text-gray-400 dark:text-gray-500">다른 CBT 사이트</p>
-              </div>
-              <div className="p-3 sm:p-4 bg-blue-600">
-                <p className="text-xs sm:text-sm font-bold text-white">CAYSON</p>
+        {/* 콘텐츠 카드 */}
+        <div className={`bg-white dark:bg-gray-900 rounded-2xl border-2 ${a.border} ring-4 ${a.ring} shadow-xl transition-all duration-500 overflow-hidden`}>
+          <div className="grid lg:grid-cols-2 gap-0">
+            {/* 좌: 비주얼 */}
+            <div className="p-5 sm:p-8">
+              <div className="transition-all duration-500" key={activeFeature}>
+                {f.visual}
               </div>
             </div>
-            {/* 비교 행 */}
-            {compareRows.map((row, i) => (
-              <Reveal key={row.label} delay={250 + i * 60}>
-                <div className="grid grid-cols-[1fr_1fr_1fr] sm:grid-cols-[1.5fr_1fr_1fr] items-center border-t border-gray-200 dark:border-gray-800 group hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors">
-                  {/* 항목명 */}
-                  <div className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-[10px] sm:text-xs font-bold flex items-center justify-center">
-                      {row.icon}
-                    </span>
-                    <span className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">{row.label}</span>
-                  </div>
-                  {/* 다른 사이트 */}
-                  <div className="p-3 sm:p-4 text-center bg-gray-100/50 dark:bg-gray-800/30">
-                    <div className="flex items-center justify-center gap-1.5">
-                      <svg className="w-4 h-4 text-red-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" /></svg>
-                      <span className="text-[10px] sm:text-xs text-gray-400 leading-tight">{row.others}</span>
+            {/* 우: 설명 */}
+            <div className="p-5 sm:p-8 flex flex-col justify-center">
+              <div key={activeFeature} className="transition-all duration-500">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 dark:text-white leading-tight mb-4">{f.title}</h3>
+                <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed mb-6">{f.desc}</p>
+                {/* 프로그레스 인디케이터 */}
+                <div className="flex gap-1.5">
+                  {features.map((_, i) => (
+                    <div key={i} className="h-1 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${i === activeFeature ? `bg-${f.accent}-500` : i < activeFeature ? `bg-${f.accent}-300` : ''}`}
+                        style={{ width: i === activeFeature ? '100%' : i < activeFeature ? '100%' : '0%', transition: i === activeFeature ? 'width 4s linear' : 'width 0.3s' }}
+                      />
                     </div>
-                  </div>
-                  {/* CAYSON */}
-                  <div className="p-3 sm:p-4 text-center bg-blue-50/60 dark:bg-blue-950/30">
-                    <div className="flex items-center justify-center gap-1.5">
-                      <svg className="w-4 h-4 text-blue-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                      <span className="text-[10px] sm:text-xs text-blue-700 dark:text-blue-300 font-semibold leading-tight">{row.cayson}</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              </Reveal>
-            ))}
+              </div>
+            </div>
           </div>
-        </Reveal>
+        </div>
 
-        {/* 하단 CTA */}
-        <Reveal delay={600}>
+        {/* CTA */}
+        <Reveal delay={300}>
           <div className="mt-10 sm:mt-14 text-center">
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">검증된 문제로 공부하면 합격이 가까워집니다</p>
             <Link
