@@ -12,6 +12,7 @@ interface Slide {
   accentColor: string
   personImage: string
   personAlt: string
+  imageScale?: number
 }
 
 const slides: Slide[] = [
@@ -44,6 +45,7 @@ const slides: Slide[] = [
     accentColor: '#4f8cff',
     personImage: '/hero/man2.png',
     personAlt: '기사 자격증',
+    imageScale: 1.35,
   },
   {
     badge: '최고 등급',
@@ -232,15 +234,17 @@ export default function HeroSection() {
             />
 
             {/* 모든 이미지를 렌더링하고 현재 슬라이드만 보이도록 크로스페이드 */}
-            {slides.map((s, i) => (
+            {slides.map((s, i) => {
+              const scale = s.imageScale || 1
+              return (
               <div
                 key={i}
                 className="absolute inset-0 transition-all duration-700 ease-out"
                 style={{
                   opacity: i === displayIndex && isVisible ? 1 : 0,
                   transform: i === displayIndex && isVisible
-                    ? 'translateY(0) scale(1)'
-                    : 'translateY(24px) scale(0.97)',
+                    ? `translateY(0) scale(${scale})`
+                    : `translateY(24px) scale(${scale * 0.97})`,
                   transitionDelay: i === displayIndex && isVisible ? '200ms' : '0ms',
                 }}
               >
@@ -253,7 +257,8 @@ export default function HeroSection() {
                   priority={i <= 1}
                 />
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </div>
