@@ -119,7 +119,7 @@ const slides: Slide[] = [
     personAlt: '산업기사',
     // 말풍선(머리 우측) + 다이아몬드/링/스파클
     floats: [
-      { type: 'bubble', text: '6개 종목\n한번에 준비!', right: '-10%', top: '2%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
+      { type: 'bubble', text: '6개 종목\n한번에 준비!', right: '-3%', top: '2%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
       { type: 'diamond', right: '22%', top: '18%', size: 22, color: '#c084fc', delay: 1100, anim: 'float1' },
       { type: 'diamond', right: '24%', top: '55%', size: 16, color: '#a78bfa', rotate: 15, delay: 1350, anim: 'float3' },
       { type: 'ring', right: '20%', top: '35%', size: 44, color: '#a78bfa', delay: 1200, anim: 'float2' },
@@ -179,7 +179,7 @@ const slides: Slide[] = [
     personAlt: '공기업',
     // 말풍선(머리 우측) + 레터블록/링/스파클
     floats: [
-      { type: 'bubble', text: '공기업 전공시험\n완벽 대비!', right: '-10%', top: '2%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
+      { type: 'bubble', text: '공기업 전공시험\n완벽 대비!', right: '-3%', top: '2%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
       { type: 'block', letter: 'K', right: '22%', top: '18%', size: 42, rotate: 8, delay: 1200, anim: 'float2' },
       { type: 'block', letter: 'P', right: '24%', top: '55%', size: 36, rotate: -10, delay: 1400, anim: 'float1' },
       { type: 'ring', right: '20%', top: '38%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
@@ -285,7 +285,7 @@ export default function HeroSection() {
 
       {/* 메인 콘텐츠 */}
       <div className="relative z-[2] max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
-        <div className="relative flex items-end min-h-[280px] sm:min-h-[340px] lg:min-h-[420px]">
+        <div className="relative flex items-end min-h-[320px] sm:min-h-[360px] lg:min-h-[420px]">
 
           {/* ===== 장식 레이어 (말풍선 제외: 사람 뒤 z-0) ===== */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
@@ -480,7 +480,7 @@ export default function HeroSection() {
           </div>
 
           {/* 사람 이미지 (말풍선 위) */}
-          <div className="relative flex-shrink-0 w-[100px] sm:w-[160px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
+          <div className="relative flex-shrink-0 w-[140px] sm:w-[180px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
             {slides.map((s, i) => {
               const scale = s.imageScale || 1
               const isActive = i === current
@@ -501,7 +501,7 @@ export default function HeroSection() {
                     alt={s.personAlt}
                     fill
                     className="object-contain object-bottom"
-                    sizes="(max-width: 640px) 100px, (max-width: 1024px) 160px, 260px"
+                    sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 260px"
                     priority={i <= 1}
                   />
                 </div>

@@ -97,7 +97,7 @@ const events = [
     badge: '가입혜택',
     cta: '추가 무료/할인 혜택,\n무료 교재까지',
     illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <rect x="20" y="35" width="40" height="32" rx="4" fill="#60a5fa" />
         <rect x="18" y="30" width="44" height="10" rx="3" fill="#3b82f6" />
         <rect x="36" y="30" width="8" height="37" rx="1" fill="#2563eb" opacity="0.6" />
@@ -116,7 +116,7 @@ const events = [
     badge: '전원',
     cta: '인증 시 인강\n할인 혜택',
     illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <rect x="12" y="20" width="48" height="38" rx="6" fill="#fde68a" />
         <rect x="12" y="20" width="48" height="14" rx="6" fill="#fbbf24" />
         <rect x="30" y="28" width="12" height="18" rx="2" fill="white" opacity="0.7" />
@@ -134,7 +134,7 @@ const events = [
     badge: '전원',
     cta: '전기기사 복원\n참여하면 합격지원',
     illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <circle cx="40" cy="40" r="28" fill="#fecdd3" />
         <circle cx="40" cy="40" r="22" fill="#fb7185" />
         <circle cx="40" cy="40" r="16" fill="#e11d48" />
@@ -147,7 +147,7 @@ const events = [
     badge: 'ONLY',
     cta: '전기기사\n대표유형 뽀개기',
     illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <rect x="18" y="10" width="38" height="60" rx="8" fill="#fca5a5" />
         <rect x="20" y="16" width="34" height="48" rx="4" fill="white" />
         <rect x="22" y="18" width="30" height="36" rx="2" fill="#fee2e2" />
@@ -162,7 +162,7 @@ const events = [
     badge: '전원',
     cta: '교재, 강의,\n기프티콘 등 선물',
     illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <path d="M14 55V30c0-2 2-4 4-4h44c2 0 4 2 4 4v25l-26 12-26-12z" fill="#fbbf24" />
         <path d="M14 30l26 18 26-18" fill="#f59e0b" />
         <path d="M14 55l26-12 26 12" fill="#fde68a" />
@@ -177,7 +177,7 @@ const events = [
     badge: null,
     cta: '생생한 합격후기를\n남겨주세요!',
     illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-[72px] h-[72px]">
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <rect x="16" y="8" width="40" height="52" rx="4" fill="#bfdbfe" />
         <rect x="20" y="14" width="28" height="3" rx="1" fill="#3b82f6" opacity="0.4" />
         <rect x="20" y="20" width="20" height="3" rx="1" fill="#3b82f6" opacity="0.3" />
@@ -412,23 +412,23 @@ export default function LandingContent() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {events.map((ev, i) => (
               <Reveal key={i} delay={i * 80}>
-                <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer relative overflow-hidden min-h-[160px]">
+                <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer relative overflow-hidden min-h-[150px] sm:min-h-[170px]">
                   {/* 좌상단: 제목 */}
-                  <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-white leading-tight whitespace-pre-line pr-16">
+                  <h3 className="text-base sm:text-xl font-extrabold text-gray-900 dark:text-white leading-tight whitespace-pre-line pr-14 sm:pr-16">
                     {ev.title}
                   </h3>
                   {/* 우상단: 뱃지 */}
                   {ev.badge && (
-                    <div className="absolute top-5 right-5 w-12 h-12 rounded-full bg-gray-600 dark:bg-gray-500 text-white text-[10px] font-bold flex items-center justify-center text-center leading-tight">
+                    <div className="absolute top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-600 dark:bg-gray-500 text-white text-[9px] sm:text-[10px] font-bold flex items-center justify-center text-center leading-tight">
                       {ev.badge}
                     </div>
                   )}
                   {/* 좌하단: CTA */}
-                  <p className="absolute bottom-5 left-5 sm:left-6 text-xs sm:text-sm text-rose-500 dark:text-rose-400 font-medium leading-snug whitespace-pre-line">
+                  <p className="absolute bottom-4 left-5 sm:bottom-5 sm:left-6 text-xs sm:text-sm text-rose-500 dark:text-rose-400 font-medium leading-snug whitespace-pre-line max-w-[55%]">
                     {ev.cta} <span className="inline-block ml-0.5">&rarr;</span>
                   </p>
                   {/* 우하단: 일러스트 */}
-                  <div className="absolute bottom-2 right-2 transition-transform group-hover:scale-110">
+                  <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 transition-transform group-hover:scale-110 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px]">
                     {ev.illust}
                   </div>
                 </div>
@@ -467,7 +467,7 @@ export default function LandingContent() {
               {[...testimonials, ...testimonials].map((t, i) => (
                 <div
                   key={`${t.name}-${i}`}
-                  className="flex-shrink-0 w-[300px] sm:w-[340px] bg-white dark:bg-gray-800 rounded-2xl p-6 border border-amber-100 dark:border-gray-700 shadow-sm"
+                  className="flex-shrink-0 w-[260px] sm:w-[320px] lg:w-[340px] bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 border border-amber-100 dark:border-gray-700 shadow-sm"
                 >
                   <div className="flex gap-0.5 mb-3">
                     {[...Array(5)].map((_, s) => (
@@ -550,7 +550,7 @@ export default function LandingContent() {
             <Reveal>
               <div className="lg:flex-shrink-0 lg:w-[340px]">
                 <p className="text-white/60 text-lg sm:text-xl mb-4 leading-relaxed">
-                  <span className="text-white font-bold">CAYSON</span>은<br />언제나 열려있습니다
+                  <span className="text-emerald-400 font-bold">CAYSON</span>은<br />언제나 열려있습니다
                 </p>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
                   여러분의 <span className="text-amber-400">합격</span>만을<br />위해 노력하겠습니다
