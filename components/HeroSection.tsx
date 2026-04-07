@@ -3,16 +3,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 
+/* ── 타입 ── */
 interface FloatingEl {
-  type: 'laurel' | 'bubble' | 'sparkle' | 'dot'
+  type: 'block' | 'bubble' | 'sparkle' | 'dot' | 'pill' | 'ring' | 'swirl' | 'diamond'
   text?: string
-  sub?: string
-  x: string
-  y: string
+  letter?: string
+  right: string
+  top: string
   delay: number
   color?: string
   size?: number
-  anim?: 'float1' | 'float2' | 'float3' | 'shimmer' | 'pulse' | 'wobble'
+  rotate?: number
+  anim: string
 }
 
 interface Slide {
@@ -27,51 +29,17 @@ interface Slide {
   floats: FloatingEl[]
 }
 
-/* ── 월계관 SVG 컴포넌트 (에어클래스 스타일) ── */
-function LaurelBadge({ text, sub, accentColor }: { text: string; sub?: string; accentColor: string }) {
+/* ── 3D 레터블록 SVG (에어클래스 OPIC 스타일) ── */
+function LetterBlock({ letter, size = 44 }: { letter: string; size?: number }) {
+  const h = Math.round(size * 1.18)
   return (
-    <div className="relative w-[110px] h-[110px] lg:w-[130px] lg:h-[130px]">
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 140 140" fill="none">
-        {/* 왼쪽 월계관 */}
-        <g opacity="0.9">
-          <ellipse cx="28" cy="105" rx="8" ry="16" transform="rotate(30 28 105)" fill={accentColor} opacity="0.5" />
-          <ellipse cx="28" cy="105" rx="6" ry="13" transform="rotate(30 28 105)" fill={accentColor} opacity="0.7" />
-          <ellipse cx="20" cy="88" rx="7" ry="15" transform="rotate(20 20 88)" fill={accentColor} opacity="0.55" />
-          <ellipse cx="20" cy="88" rx="5" ry="12" transform="rotate(20 20 88)" fill={accentColor} opacity="0.75" />
-          <ellipse cx="16" cy="70" rx="7" ry="14" transform="rotate(8 16 70)" fill={accentColor} opacity="0.6" />
-          <ellipse cx="16" cy="70" rx="5" ry="11" transform="rotate(8 16 70)" fill={accentColor} opacity="0.8" />
-          <ellipse cx="18" cy="52" rx="7" ry="14" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.55" />
-          <ellipse cx="18" cy="52" rx="5" ry="11" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.75" />
-          <ellipse cx="25" cy="36" rx="7" ry="13" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.5" />
-          <ellipse cx="25" cy="36" rx="5" ry="10" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.7" />
-          <ellipse cx="36" cy="24" rx="6" ry="12" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.45" />
-          <ellipse cx="36" cy="24" rx="4" ry="9" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.65" />
-          <path d="M35 110 C22 95 14 75 16 55 C18 40 25 28 40 18" stroke={accentColor} strokeWidth="1.5" opacity="0.3" fill="none" />
-        </g>
-        {/* 오른쪽 월계관 (좌우 대칭) */}
-        <g opacity="0.9" transform="translate(140,0) scale(-1,1)">
-          <ellipse cx="28" cy="105" rx="8" ry="16" transform="rotate(30 28 105)" fill={accentColor} opacity="0.5" />
-          <ellipse cx="28" cy="105" rx="6" ry="13" transform="rotate(30 28 105)" fill={accentColor} opacity="0.7" />
-          <ellipse cx="20" cy="88" rx="7" ry="15" transform="rotate(20 20 88)" fill={accentColor} opacity="0.55" />
-          <ellipse cx="20" cy="88" rx="5" ry="12" transform="rotate(20 20 88)" fill={accentColor} opacity="0.75" />
-          <ellipse cx="16" cy="70" rx="7" ry="14" transform="rotate(8 16 70)" fill={accentColor} opacity="0.6" />
-          <ellipse cx="16" cy="70" rx="5" ry="11" transform="rotate(8 16 70)" fill={accentColor} opacity="0.8" />
-          <ellipse cx="18" cy="52" rx="7" ry="14" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.55" />
-          <ellipse cx="18" cy="52" rx="5" ry="11" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.75" />
-          <ellipse cx="25" cy="36" rx="7" ry="13" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.5" />
-          <ellipse cx="25" cy="36" rx="5" ry="10" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.7" />
-          <ellipse cx="36" cy="24" rx="6" ry="12" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.45" />
-          <ellipse cx="36" cy="24" rx="4" ry="9" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.65" />
-          <path d="M35 110 C22 95 14 75 16 55 C18 40 25 28 40 18" stroke={accentColor} strokeWidth="1.5" opacity="0.3" fill="none" />
-        </g>
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[66px] h-[66px] lg:w-[78px] lg:h-[78px] rounded-full bg-white/95 shadow-lg flex flex-col items-center justify-center">
-          <div className="text-[10px] lg:text-[11px] font-black tracking-wide leading-tight" style={{ color: accentColor }}>{text}</div>
-          {sub && <div className="text-[9px] lg:text-[10px] font-extrabold text-gray-700 leading-tight mt-0.5">{sub}</div>}
-        </div>
-      </div>
-    </div>
+    <svg width={size} height={h} viewBox="0 0 44 52" fill="none">
+      <rect x="5" y="12" width="35" height="35" rx="8" fill="#78350f" opacity="0.15" />
+      <rect x="4" y="9" width="35" height="35" rx="8" fill="#ca8a04" opacity="0.45" />
+      <rect x="4" y="5" width="35" height="35" rx="8" fill="#fde68a" />
+      <rect x="8" y="9" width="27" height="27" rx="5" fill="#fefce8" />
+      <text x="21.5" y="29" textAnchor="middle" fontSize="18" fontWeight="800" fill="#b45309" fontFamily="system-ui, -apple-system, sans-serif">{letter}</text>
+    </svg>
   )
 }
 
@@ -79,15 +47,47 @@ function LaurelBadge({ text, sub, accentColor }: { text: string; sub?: string; a
 function Sparkle({ color, size = 24 }: { color: string; size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M12 0 C12.5 8 16 11.5 24 12 C16 12.5 12.5 16 12 24 C11.5 16 8 12.5 0 12 C8 11.5 11.5 8 12 0Z" fill={color} />
+    </svg>
+  )
+}
+
+/* ── 장식 곡선 스월 SVG (에어클래스 리본 스타일) ── */
+function Swirl({ color, size = 60 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 60 60" fill="none">
       <path
-        d="M12 0 C12.5 8 16 11.5 24 12 C16 12.5 12.5 16 12 24 C11.5 16 8 12.5 0 12 C8 11.5 11.5 8 12 0Z"
-        fill={color}
+        d="M8,48 C12,28 28,10 44,22 C56,31 42,46 32,40 C22,34 34,24 42,30"
+        stroke={color}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.6"
       />
     </svg>
   )
 }
 
-/* ── 각 슬라이드별 고유한 장식 배치 ── */
+/* ── 다이아몬드(마름모) SVG ── */
+function Diamond({ color, size = 20 }: { color: string; size?: number }) {
+  const half = size / 2
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none">
+      <rect
+        x={half}
+        y="0"
+        width={half * 0.92}
+        height={half * 0.92}
+        rx="2"
+        transform={`rotate(45 ${half} ${half})`}
+        fill={color}
+        opacity="0.7"
+      />
+    </svg>
+  )
+}
+
+/* ── 슬라이드별 고유 장식 데이터 ── */
 const slides: Slide[] = [
   {
     badge: '4개 자격증',
@@ -97,15 +97,16 @@ const slides: Slide[] = [
     accentColor: '#34d399',
     personImage: '/hero/woman1.png',
     personAlt: '기능사',
+    // 레터블록 + 스월 + 스파클 + 도트
     floats: [
-      { type: 'laurel', text: 'CAYSON', sub: '합격률 94%', x: '-70%', y: '0%', delay: 600, anim: 'float1' },
-      { type: 'bubble', text: '필기+실기 완벽 대비', x: '45%', y: '-2%', delay: 800, color: '#34d399', anim: 'wobble' },
-      { type: 'sparkle', x: '-45%', y: '60%', delay: 500, color: '#fbbf24', size: 30, anim: 'shimmer' },
-      { type: 'sparkle', x: '85%', y: '25%', delay: 700, color: '#34d399', size: 20, anim: 'float3' },
-      { type: 'sparkle', x: '-20%', y: '30%', delay: 900, color: '#fbbf24', size: 14, anim: 'shimmer' },
-      { type: 'dot', x: '-55%', y: '40%', delay: 400, size: 10, anim: 'pulse' },
-      { type: 'dot', x: '70%', y: '60%', delay: 600, size: 8, anim: 'float2' },
-      { type: 'dot', x: '-30%', y: '80%', delay: 800, size: 6, anim: 'pulse' },
+      { type: 'block', letter: 'C', right: '22%', top: '8%', size: 48, rotate: -12, delay: 1000, anim: 'float1' },
+      { type: 'block', letter: 'S', right: '5%', top: '42%', size: 40, rotate: 10, delay: 1200, anim: 'float3' },
+      { type: 'swirl', right: '28%', top: '50%', size: 55, color: '#34d399', delay: 1100, anim: 'float2' },
+      { type: 'sparkle', right: '10%', top: '68%', size: 22, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'sparkle', right: '33%', top: '25%', size: 14, color: '#fbbf24', delay: 1500, anim: 'shimmer' },
+      { type: 'dot', right: '24%', top: '32%', size: 10, delay: 1050, anim: 'pulse' },
+      { type: 'dot', right: '34%', top: '62%', size: 7, delay: 1400, anim: 'float1' },
+      { type: 'dot', right: '8%', top: '78%', size: 5, delay: 1550, anim: 'pulse' },
     ],
   },
   {
@@ -116,15 +117,16 @@ const slides: Slide[] = [
     accentColor: '#a78bfa',
     personImage: '/hero/man1.png',
     personAlt: '산업기사',
+    // 말풍선 + 다이아몬드 + 링 + 스파클
     floats: [
-      { type: 'bubble', text: '6개 종목 한번에!', x: '-60%', y: '-2%', delay: 600, color: '#a78bfa', anim: 'float1' },
-      { type: 'laurel', text: '전문가', sub: '검증 완료', x: '50%', y: '30%', delay: 800, anim: 'float2' },
-      { type: 'sparkle', x: '80%', y: '5%', delay: 500, color: '#fbbf24', size: 26, anim: 'shimmer' },
-      { type: 'sparkle', x: '-50%', y: '50%', delay: 700, color: '#c084fc', size: 18, anim: 'float3' },
-      { type: 'sparkle', x: '60%', y: '70%', delay: 900, color: '#a78bfa', size: 22, anim: 'shimmer' },
-      { type: 'dot', x: '-35%', y: '25%', delay: 400, size: 9, anim: 'pulse' },
-      { type: 'dot', x: '75%', y: '50%', delay: 650, size: 7, anim: 'float1' },
-      { type: 'dot', x: '-60%', y: '75%', delay: 850, size: 11, anim: 'pulse' },
+      { type: 'bubble', text: '6개 종목 준비!', right: '12%', top: '5%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
+      { type: 'diamond', right: '28%', top: '32%', size: 22, color: '#c084fc', delay: 1100, anim: 'float1' },
+      { type: 'diamond', right: '8%', top: '60%', size: 16, color: '#a78bfa', rotate: 15, delay: 1350, anim: 'float3' },
+      { type: 'ring', right: '6%', top: '42%', size: 44, color: '#a78bfa', delay: 1200, anim: 'float2' },
+      { type: 'sparkle', right: '30%', top: '55%', size: 20, color: '#fbbf24', delay: 1250, anim: 'shimmer' },
+      { type: 'sparkle', right: '32%', top: '15%', size: 14, color: '#c084fc', delay: 1450, anim: 'shimmer' },
+      { type: 'dot', right: '20%', top: '48%', size: 9, delay: 1150, anim: 'pulse' },
+      { type: 'dot', right: '15%', top: '78%', size: 6, delay: 1500, anim: 'pulse' },
     ],
   },
   {
@@ -136,15 +138,15 @@ const slides: Slide[] = [
     personImage: '/hero/man2.png',
     personAlt: '기사',
     imageScale: 0.95,
+    // 레터블록 산개 + 필 뱃지 + 스파클
     floats: [
-      { type: 'laurel', text: 'BEST', sub: '인기 1위', x: '-65%', y: '5%', delay: 600, anim: 'float1' },
-      { type: 'laurel', text: '2025', sub: '최신 기출', x: '55%', y: '35%', delay: 900, anim: 'float3' },
-      { type: 'sparkle', x: '75%', y: '0%', delay: 500, color: '#fbbf24', size: 28, anim: 'shimmer' },
-      { type: 'sparkle', x: '-40%', y: '65%', delay: 750, color: '#4f8cff', size: 16, anim: 'float2' },
-      { type: 'dot', x: '-50%', y: '35%', delay: 400, size: 12, anim: 'pulse' },
-      { type: 'dot', x: '85%', y: '55%', delay: 600, size: 8, anim: 'float3' },
-      { type: 'dot', x: '-25%', y: '85%', delay: 800, size: 6, anim: 'pulse' },
-      { type: 'dot', x: '50%', y: '10%', delay: 700, size: 7, anim: 'float2' },
+      { type: 'block', letter: 'N', right: '24%', top: '5%', size: 46, rotate: -8, delay: 1000, anim: 'float2' },
+      { type: 'block', letter: 'o', right: '6%', top: '32%', size: 38, rotate: 14, delay: 1200, anim: 'float1' },
+      { type: 'block', letter: '1', right: '28%', top: '55%', size: 34, rotate: -5, delay: 1400, anim: 'float3' },
+      { type: 'pill', text: '인기 1위', right: '8%', top: '62%', color: '#4f8cff', delay: 1300, anim: 'float1' },
+      { type: 'sparkle', right: '32%', top: '30%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'dot', right: '18%', top: '45%', size: 8, delay: 1150, anim: 'pulse' },
+      { type: 'dot', right: '34%', top: '72%', size: 6, delay: 1350, anim: 'float2' },
     ],
   },
   {
@@ -155,15 +157,16 @@ const slides: Slide[] = [
     accentColor: '#fbbf24',
     personImage: '/hero/man3.png',
     personAlt: '기능장',
+    // 금색 스파클 + 스월 + 링 + 다이아몬드 (전부 금빛 테마)
     floats: [
-      { type: 'bubble', text: '최고 등급에 도전!', x: '45%', y: '-5%', delay: 600, color: '#f59e0b', anim: 'wobble' },
-      { type: 'laurel', text: 'TOP', sub: '기능장', x: '-70%', y: '25%', delay: 800, anim: 'float3' },
-      { type: 'sparkle', x: '-40%', y: '0%', delay: 500, color: '#fbbf24', size: 32, anim: 'shimmer' },
-      { type: 'sparkle', x: '80%', y: '40%', delay: 700, color: '#fbbf24', size: 20, anim: 'float1' },
-      { type: 'sparkle', x: '-55%', y: '70%', delay: 900, color: '#f59e0b', size: 16, anim: 'shimmer' },
-      { type: 'dot', x: '65%', y: '15%', delay: 450, size: 10, anim: 'pulse' },
-      { type: 'dot', x: '-30%', y: '55%', delay: 650, size: 8, anim: 'float1' },
-      { type: 'dot', x: '80%', y: '75%', delay: 850, size: 6, anim: 'pulse' },
+      { type: 'swirl', right: '22%', top: '5%', size: 65, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'sparkle', right: '6%', top: '30%', size: 28, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'sparkle', right: '30%', top: '48%', size: 18, color: '#f59e0b', delay: 1250, anim: 'shimmer' },
+      { type: 'sparkle', right: '12%', top: '68%', size: 14, color: '#fbbf24', delay: 1400, anim: 'float3' },
+      { type: 'diamond', right: '28%', top: '28%', size: 20, color: '#fbbf24', delay: 1150, anim: 'float1' },
+      { type: 'ring', right: '8%', top: '52%', size: 36, color: '#f59e0b', delay: 1300, anim: 'float1' },
+      { type: 'dot', right: '32%', top: '65%', size: 10, delay: 1200, anim: 'pulse' },
+      { type: 'dot', right: '18%', top: '80%', size: 7, delay: 1450, anim: 'pulse' },
     ],
   },
   {
@@ -174,15 +177,15 @@ const slides: Slide[] = [
     accentColor: '#22d3ee',
     personImage: '/hero/woman3.png',
     personAlt: '공기업',
+    // 말풍선 + 레터블록 + 링 + 스파클
     floats: [
-      { type: 'laurel', text: 'KEPCO', sub: '한전 대비', x: '50%', y: '0%', delay: 600, anim: 'float2' },
-      { type: 'bubble', text: '공기업 전공 특화', x: '-65%', y: '45%', delay: 800, color: '#06b6d4', anim: 'float1' },
-      { type: 'sparkle', x: '-45%', y: '5%', delay: 500, color: '#22d3ee', size: 24, anim: 'shimmer' },
-      { type: 'sparkle', x: '85%', y: '50%', delay: 700, color: '#fbbf24', size: 18, anim: 'float3' },
-      { type: 'sparkle', x: '-25%', y: '75%', delay: 900, color: '#22d3ee', size: 14, anim: 'shimmer' },
-      { type: 'dot', x: '70%', y: '30%', delay: 450, size: 11, anim: 'pulse' },
-      { type: 'dot', x: '-55%', y: '65%', delay: 700, size: 7, anim: 'float3' },
-      { type: 'dot', x: '55%', y: '80%', delay: 850, size: 9, anim: 'pulse' },
+      { type: 'bubble', text: '전공시험 특화', right: '15%', top: '3%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
+      { type: 'block', letter: 'K', right: '5%', top: '35%', size: 42, rotate: 8, delay: 1200, anim: 'float2' },
+      { type: 'block', letter: 'P', right: '28%', top: '58%', size: 36, rotate: -10, delay: 1400, anim: 'float1' },
+      { type: 'ring', right: '30%', top: '32%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
+      { type: 'sparkle', right: '10%', top: '68%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
+      { type: 'dot', right: '22%', top: '42%', size: 9, delay: 1100, anim: 'pulse' },
+      { type: 'dot', right: '34%', top: '75%', size: 6, delay: 1350, anim: 'float1' },
     ],
   },
   {
@@ -193,15 +196,16 @@ const slides: Slide[] = [
     accentColor: '#fb7185',
     personImage: '/hero/woman2.png',
     personAlt: '과정평가형',
+    // 필 뱃지 + 스월 + 다이아몬드 + 스파클
     floats: [
-      { type: 'laurel', text: 'NCS', sub: '기반 평가', x: '-65%', y: '-2%', delay: 600, anim: 'float1' },
-      { type: 'bubble', text: '현장 실무 역량!', x: '50%', y: '5%', delay: 800, color: '#f43f5e', anim: 'wobble' },
-      { type: 'sparkle', x: '85%', y: '35%', delay: 500, color: '#fb7185', size: 26, anim: 'shimmer' },
-      { type: 'sparkle', x: '-50%', y: '55%', delay: 700, color: '#fbbf24', size: 20, anim: 'float1' },
-      { type: 'sparkle', x: '60%', y: '70%', delay: 900, color: '#fb7185', size: 14, anim: 'shimmer' },
-      { type: 'dot', x: '-35%', y: '30%', delay: 400, size: 10, anim: 'pulse' },
-      { type: 'dot', x: '75%', y: '55%', delay: 650, size: 8, anim: 'float2' },
-      { type: 'dot', x: '-60%', y: '80%', delay: 850, size: 6, anim: 'pulse' },
+      { type: 'pill', text: 'NCS', right: '22%', top: '8%', color: '#f43f5e', delay: 1000, anim: 'float1' },
+      { type: 'pill', text: '실무 역량', right: '5%', top: '52%', color: '#e11d48', delay: 1250, anim: 'float2' },
+      { type: 'swirl', right: '25%', top: '35%', size: 50, color: '#fb7185', delay: 1100, anim: 'float3' },
+      { type: 'diamond', right: '30%', top: '62%', size: 18, color: '#fb7185', delay: 1350, anim: 'float1' },
+      { type: 'sparkle', right: '8%', top: '25%', size: 22, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
+      { type: 'sparkle', right: '32%', top: '75%', size: 13, color: '#fb7185', delay: 1450, anim: 'shimmer' },
+      { type: 'dot', right: '15%', top: '40%', size: 10, delay: 1200, anim: 'pulse' },
+      { type: 'dot', right: '33%', top: '18%', size: 7, delay: 1050, anim: 'float3' },
     ],
   },
 ]
@@ -209,7 +213,6 @@ const slides: Slide[] = [
 const DURATION = 5000
 const FADE_MS = 400
 
-/* ── 애니메이션 매핑 (CSS keyframe name → duration) ── */
 const animConfig: Record<string, { name: string; dur: string }> = {
   float1: { name: 'heroDecFloat1', dur: '3.5s' },
   float2: { name: 'heroDecFloat2', dur: '4s' },
@@ -226,7 +229,6 @@ export default function HeroSection() {
   const [paused, setPaused] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const touchStartX = useRef(0)
-  const dotRef = useRef<HTMLDivElement>(null)
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null }
@@ -244,13 +246,8 @@ export default function HeroSection() {
     }, FADE_MS)
   }, [current, clearTimer])
 
-  const goNext = useCallback(() => {
-    goTo((current + 1) % slides.length)
-  }, [current, goTo])
-
-  const goPrev = useCallback(() => {
-    goTo((current - 1 + slides.length) % slides.length)
-  }, [current, goTo])
+  const goNext = useCallback(() => goTo((current + 1) % slides.length), [current, goTo])
+  const goPrev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo])
 
   useEffect(() => {
     if (paused) return
@@ -275,33 +272,114 @@ export default function HeroSection() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* ===== 배경 ===== */}
+      {/* 배경 */}
       {prevSlide && (
-        <div
-          className="absolute inset-0 z-0 transition-opacity"
-          style={{ backgroundColor: prevSlide.bgColor, opacity: 0, transitionDuration: `${FADE_MS}ms` }}
-        />
+        <div className="absolute inset-0 z-0 transition-opacity" style={{ backgroundColor: prevSlide.bgColor, opacity: 0, transitionDuration: `${FADE_MS}ms` }} />
       )}
-      <div
-        className="absolute inset-0 z-0 transition-opacity"
-        style={{ backgroundColor: slide.bgColor, opacity: 1, transitionDuration: `${FADE_MS}ms` }}
-      />
+      <div className="absolute inset-0 z-0 transition-opacity" style={{ backgroundColor: slide.bgColor, opacity: 1, transitionDuration: `${FADE_MS}ms` }} />
 
-      {/* 배경 그라데이션 장식 */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-        <div
-          className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000"
-          style={{ background: `radial-gradient(circle, ${slide.accentColor}15, transparent 70%)` }}
-        />
-        <div
-          className="absolute left-1/4 bottom-0 w-[400px] h-[400px] rounded-full transition-all duration-1000"
-          style={{ background: `radial-gradient(circle, ${slide.accentColor}08, transparent 70%)` }}
-        />
+        <div className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000" style={{ background: `radial-gradient(circle, ${slide.accentColor}15, transparent 70%)` }} />
+        <div className="absolute left-1/4 bottom-0 w-[400px] h-[400px] rounded-full transition-all duration-1000" style={{ background: `radial-gradient(circle, ${slide.accentColor}08, transparent 70%)` }} />
       </div>
 
-      {/* ===== 메인 콘텐츠 ===== */}
+      {/* 메인 콘텐츠 */}
       <div className="relative z-[2] max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
-        <div className="flex items-end min-h-[280px] sm:min-h-[340px] lg:min-h-[420px]">
+        <div className="relative flex items-end min-h-[280px] sm:min-h-[340px] lg:min-h-[420px]">
+
+          {/* ===== 장식 레이어 (사람 뒤, 섹션 안) ===== */}
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
+            {slide.floats.map((f, fi) => {
+              const isActive = textVisible
+              const ac = animConfig[f.anim]
+              return (
+                <div
+                  key={`${current}-${fi}`}
+                  className="absolute"
+                  style={{ right: f.right, top: f.top }}
+                >
+                  {/* 등장 애니메이션 (외부) */}
+                  <div
+                    className="transition-all ease-out"
+                    style={{
+                      opacity: isActive ? 1 : 0,
+                      transform: isActive
+                        ? `rotate(${f.rotate || 0}deg) scale(1)`
+                        : `rotate(${f.rotate || 0}deg) scale(0.4)`,
+                      transitionDuration: '500ms',
+                      transitionDelay: isActive ? `${f.delay}ms` : '0ms',
+                    }}
+                  >
+                    {/* 떠다니는 애니메이션 (내부) */}
+                    <div style={{ animation: ac ? `${ac.name} ${ac.dur} ease-in-out infinite` : 'none' }}>
+
+                      {/* 3D 레터블록 */}
+                      {f.type === 'block' && <LetterBlock letter={f.letter || ''} size={f.size || 44} />}
+
+                      {/* 말풍선 */}
+                      {f.type === 'bubble' && (
+                        <div className="relative">
+                          <div
+                            className="relative px-5 py-2.5 rounded-2xl shadow-xl text-[12px] lg:text-[13px] font-bold text-white whitespace-nowrap overflow-hidden"
+                            style={{ backgroundColor: f.color || slide.accentColor }}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
+                            <span className="relative">{f.text}</span>
+                          </div>
+                          <div
+                            className="absolute -bottom-[10px] left-6 w-0 h-0"
+                            style={{
+                              borderLeft: '8px solid transparent',
+                              borderRight: '8px solid transparent',
+                              borderTop: `12px solid ${f.color || slide.accentColor}`,
+                            }}
+                          />
+                        </div>
+                      )}
+
+                      {/* 반짝이 */}
+                      {f.type === 'sparkle' && <Sparkle color={f.color || slide.accentColor} size={f.size || 24} />}
+
+                      {/* 도트 */}
+                      {f.type === 'dot' && (
+                        <div className="rounded-full bg-white/70" style={{ width: f.size || 8, height: f.size || 8 }} />
+                      )}
+
+                      {/* 필 뱃지 */}
+                      {f.type === 'pill' && (
+                        <div
+                          className="relative px-4 py-1.5 rounded-full text-[10px] font-bold text-white shadow-lg whitespace-nowrap overflow-hidden"
+                          style={{ backgroundColor: f.color || slide.accentColor }}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent rounded-full" />
+                          <span className="relative">{f.text}</span>
+                        </div>
+                      )}
+
+                      {/* 링 */}
+                      {f.type === 'ring' && (
+                        <div
+                          className="rounded-full"
+                          style={{
+                            width: f.size || 40,
+                            height: f.size || 40,
+                            border: `2.5px solid ${f.color || slide.accentColor}`,
+                            opacity: 0.35,
+                          }}
+                        />
+                      )}
+
+                      {/* 스월 곡선 */}
+                      {f.type === 'swirl' && <Swirl color={f.color || slide.accentColor} size={f.size || 60} />}
+
+                      {/* 다이아몬드 */}
+                      {f.type === 'diamond' && <Diamond color={f.color || slide.accentColor} size={f.size || 20} />}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
 
           {/* 텍스트 */}
           <div className="flex-1 z-10 pb-14 sm:pb-16 lg:pb-20 pt-10 sm:pt-14 lg:pt-16">
@@ -365,81 +443,15 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* ===== 사람 이미지 + 장식 ===== */}
-          <div className="relative flex-shrink-0 w-[100px] sm:w-[160px] lg:w-[220px] xl:w-[260px] self-stretch">
-            {/* 장식 요소 (이미지 뒤) */}
-            {slide.floats.map((f, fi) => {
-              const isActive = textVisible
-              const ac = f.anim ? animConfig[f.anim] : undefined
-              return (
-                <div
-                  key={`${current}-${fi}`}
-                  className="absolute z-[1] hidden sm:block transition-all ease-out pointer-events-none"
-                  style={{
-                    left: f.x,
-                    top: f.y,
-                    opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.7)',
-                    transitionDuration: '600ms',
-                    transitionDelay: isActive ? `${f.delay}ms` : '0ms',
-                    animation: isActive && ac ? `${ac.name} ${ac.dur} ease-in-out infinite` : 'none',
-                    animationDelay: `${f.delay}ms`,
-                  }}
-                >
-                  {/* 월계관 뱃지 */}
-                  {f.type === 'laurel' && (
-                    <LaurelBadge
-                      text={f.text || ''}
-                      sub={f.sub}
-                      accentColor={f.color || slide.accentColor}
-                    />
-                  )}
-
-                  {/* 말풍선 */}
-                  {f.type === 'bubble' && (
-                    <div className="relative">
-                      <div
-                        className="px-5 py-3 rounded-2xl shadow-xl text-[12px] lg:text-[13px] font-bold text-white whitespace-nowrap"
-                        style={{ backgroundColor: f.color || slide.accentColor }}
-                      >
-                        {f.text}
-                      </div>
-                      {/* 말풍선 꼬리 */}
-                      <div
-                        className="absolute -bottom-[10px] left-6 w-0 h-0"
-                        style={{
-                          borderLeft: '8px solid transparent',
-                          borderRight: '8px solid transparent',
-                          borderTop: `12px solid ${f.color || slide.accentColor}`,
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  {/* 4각 반짝이 */}
-                  {f.type === 'sparkle' && (
-                    <Sparkle color={f.color || slide.accentColor} size={f.size || 24} />
-                  )}
-
-                  {/* 흰 도트 */}
-                  {f.type === 'dot' && (
-                    <div
-                      className="rounded-full bg-white/70"
-                      style={{ width: f.size || 8, height: f.size || 8 }}
-                    />
-                  )}
-                </div>
-              )
-            })}
-
-            {/* 사람 이미지 (장식 위) */}
+          {/* 사람 이미지 (장식 위) */}
+          <div className="relative flex-shrink-0 w-[100px] sm:w-[160px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
             {slides.map((s, i) => {
               const scale = s.imageScale || 1
               const isActive = i === current
               return (
                 <div
                   key={i}
-                  className="absolute inset-0 z-[2] transition-all ease-out"
+                  className="absolute inset-0 transition-all ease-out"
                   style={{
                     opacity: isActive && textVisible ? 1 : 0,
                     transform: isActive && textVisible ? `scale(${scale})` : `translateY(16px) scale(${scale * 0.97})`,
@@ -463,34 +475,21 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ===== 좌우 화살표 (호버 시 표시) ===== */}
-      <button
-        onClick={goPrev}
-        className="absolute left-0 top-0 bottom-0 z-[4] w-14 sm:w-20 hidden sm:flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer group"
-        aria-label="이전"
-      >
+      {/* 좌우 화살표 */}
+      <button onClick={goPrev} className="absolute left-0 top-0 bottom-0 z-[4] w-14 sm:w-20 hidden sm:flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer group" aria-label="이전">
         <span className="text-white/60 group-hover:text-white text-3xl sm:text-4xl font-light transition-colors select-none">&lt;</span>
       </button>
-      <button
-        onClick={goNext}
-        className="absolute right-0 top-0 bottom-0 z-[4] w-14 sm:w-20 hidden sm:flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer group"
-        aria-label="다음"
-      >
+      <button onClick={goNext} className="absolute right-0 top-0 bottom-0 z-[4] w-14 sm:w-20 hidden sm:flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer group" aria-label="다음">
         <span className="text-white/60 group-hover:text-white text-3xl sm:text-4xl font-light transition-colors select-none">&gt;</span>
       </button>
 
-      {/* ===== 하단 네비게이션 ===== */}
+      {/* 하단 네비게이션 */}
       <div className="absolute bottom-0 left-0 right-0 z-[3]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pb-4 sm:pb-5">
           <div className="flex items-center gap-3">
-            <div className="flex gap-1.5" ref={dotRef}>
+            <div className="flex gap-1.5">
               {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goTo(i)}
-                  className="relative h-6 flex items-center"
-                  aria-label={`슬라이드 ${i + 1}`}
-                >
+                <button key={i} onClick={() => goTo(i)} className="relative h-6 flex items-center" aria-label={`슬라이드 ${i + 1}`}>
                   <div className="w-8 h-[3px] rounded-full bg-white/15 overflow-hidden">
                     {i === current && (
                       <div
@@ -503,14 +502,11 @@ export default function HeroSection() {
                         }}
                       />
                     )}
-                    {i < current && (
-                      <div className="h-full w-full rounded-full bg-white/40" />
-                    )}
+                    {i < current && <div className="h-full w-full rounded-full bg-white/40" />}
                   </div>
                 </button>
               ))}
             </div>
-
             <span className="text-[11px] text-white/20 tabular-nums ml-1">
               {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
             </span>
