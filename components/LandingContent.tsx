@@ -324,7 +324,7 @@ export default function LandingContent() {
                 <button
                   key={g.id}
                   onClick={() => setActiveTab(i)}
-                  className={`px-4 sm:px-6 py-2.5 text-sm font-bold whitespace-nowrap rounded-lg transition-all
+                  className={`px-3 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-bold whitespace-nowrap rounded-lg transition-all
                     ${activeTab === i
                       ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-md'
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -349,23 +349,23 @@ export default function LandingContent() {
           <Reveal delay={150}>
             <div className="min-h-[120px]">
               {grades[activeTab].count > 0 ? (
-                <div className="flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 sm:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 sm:p-8 gap-4 sm:gap-0">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${grades[activeTab].gradient} flex items-center justify-center shadow-lg`}>
+                      <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br ${grades[activeTab].gradient} flex items-center justify-center shadow-lg`}>
                         {grades[activeTab].icon}
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                      <h3 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
                         {grades[activeTab].label}
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 ml-[52px]">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 ml-[46px] sm:ml-[52px]">
                       {grades[activeTab].count}개 자격증 필기/실기 준비
                     </p>
                   </div>
                   <Link
                     href={`/grade/${grades[activeTab].id}`}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors flex-shrink-0 shadow-lg shadow-blue-600/25"
+                    className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl transition-colors flex-shrink-0 shadow-lg shadow-blue-600/25 w-full sm:w-auto"
                   >
                     자격증 선택
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -412,23 +412,23 @@ export default function LandingContent() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {events.map((ev, i) => (
               <Reveal key={i} delay={i * 80}>
-                <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer relative overflow-hidden min-h-[150px] sm:min-h-[170px]">
+                <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 sm:p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer relative overflow-hidden min-h-[140px] sm:min-h-[170px]">
                   {/* 좌상단: 제목 */}
-                  <h3 className="text-base sm:text-xl font-extrabold text-gray-900 dark:text-white leading-tight whitespace-pre-line pr-14 sm:pr-16">
+                  <h3 className="text-sm sm:text-xl font-extrabold text-gray-900 dark:text-white leading-tight whitespace-pre-line pr-12 sm:pr-16">
                     {ev.title}
                   </h3>
                   {/* 우상단: 뱃지 */}
                   {ev.badge && (
-                    <div className="absolute top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-600 dark:bg-gray-500 text-white text-[9px] sm:text-[10px] font-bold flex items-center justify-center text-center leading-tight">
+                    <div className="absolute top-3 right-3 sm:top-5 sm:right-5 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-gray-600 dark:bg-gray-500 text-white text-[8px] sm:text-[10px] font-bold flex items-center justify-center text-center leading-tight">
                       {ev.badge}
                     </div>
                   )}
                   {/* 좌하단: CTA */}
-                  <p className="absolute bottom-4 left-5 sm:bottom-5 sm:left-6 text-xs sm:text-sm text-rose-500 dark:text-rose-400 font-medium leading-snug whitespace-pre-line max-w-[55%]">
+                  <p className="absolute bottom-3 left-4 sm:bottom-5 sm:left-6 text-[11px] sm:text-sm text-blue-600 dark:text-blue-400 font-medium leading-snug whitespace-pre-line max-w-[55%]">
                     {ev.cta} <span className="inline-block ml-0.5">&rarr;</span>
                   </p>
                   {/* 우하단: 일러스트 */}
-                  <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 transition-transform group-hover:scale-110 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px]">
+                  <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 transition-transform group-hover:scale-110 w-[48px] h-[48px] sm:w-[72px] sm:h-[72px]">
                     {ev.illust}
                   </div>
                 </div>
@@ -441,7 +441,7 @@ export default function LandingContent() {
       {/* ════════════════════════════════════════
           SECTION 3 -- 합격 수기
          ════════════════════════════════════════ */}
-      <section className="bg-amber-50 dark:bg-amber-950/20">
+      <section className="bg-amber-50 dark:bg-amber-950/20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <Reveal>
             <div className="mb-10 sm:mb-14 text-center">
@@ -467,7 +467,7 @@ export default function LandingContent() {
               {[...testimonials, ...testimonials].map((t, i) => (
                 <div
                   key={`${t.name}-${i}`}
-                  className="flex-shrink-0 w-[260px] sm:w-[320px] lg:w-[340px] bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 border border-amber-100 dark:border-gray-700 shadow-sm"
+                  className="flex-shrink-0 w-[240px] sm:w-[320px] lg:w-[340px] bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-amber-100 dark:border-gray-700 shadow-sm"
                 >
                   <div className="flex gap-0.5 mb-3">
                     {[...Array(5)].map((_, s) => (
@@ -544,26 +544,26 @@ export default function LandingContent() {
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/80 to-gray-900/60" />
         <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-24">
+          <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-16">
             {/* 좌측: 텍스트 */}
             <Reveal>
               <div className="lg:flex-shrink-0 lg:w-[340px]">
-                <p className="text-white/60 text-lg sm:text-xl mb-4 leading-relaxed">
+                <p className="text-white/60 text-base sm:text-xl mb-3 sm:mb-4 leading-relaxed">
                   <span className="text-emerald-400 font-bold">CAYSON</span>은<br />언제나 열려있습니다
                 </p>
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                <h3 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
                   여러분의 <span className="text-amber-400">합격</span>만을<br />위해 노력하겠습니다
                 </h3>
               </div>
             </Reveal>
 
             {/* 우측: 3개 카드 */}
-            <div className="grid sm:grid-cols-3 gap-4 flex-1 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 flex-1 w-full">
               <Reveal delay={100}>
-                <div className="bg-slate-700/80 backdrop-blur rounded-xl p-6 h-full flex flex-col">
-                  <h4 className="text-white font-bold text-lg mb-1">CAYSON</h4>
-                  <h4 className="text-white font-bold text-lg mb-4">고객센터</h4>
+                <div className="bg-slate-700/80 backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-1">CAYSON</h4>
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">고객센터</h4>
                   <div className="text-sm text-gray-300 space-y-1 mb-auto">
                     <p>평일: 10:00~18:00</p>
                     <p>점심시간: 12:30~13:30</p>
@@ -576,9 +576,9 @@ export default function LandingContent() {
               </Reveal>
 
               <Reveal delay={200}>
-                <div className="bg-slate-600/80 backdrop-blur rounded-xl p-6 h-full flex flex-col">
-                  <h4 className="text-white font-bold text-lg mb-1">오류 신고</h4>
-                  <h4 className="text-white font-bold text-lg mb-4">센터</h4>
+                <div className="bg-slate-600/80 backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-1">오류 신고</h4>
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">센터</h4>
                   <div className="text-sm text-gray-300 space-y-1 mb-auto">
                     <p>24시간 접수 가능</p>
                     <p>확인 후 즉시 수정</p>
@@ -591,9 +591,9 @@ export default function LandingContent() {
               </Reveal>
 
               <Reveal delay={300}>
-                <div className="bg-blue-400/40 backdrop-blur rounded-xl p-6 h-full flex flex-col">
-                  <h4 className="text-white font-bold text-lg mb-1">CAYSON</h4>
-                  <h4 className="text-white font-bold text-lg mb-4">자주 묻는 질문</h4>
+                <div className="bg-blue-400/40 backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-1">CAYSON</h4>
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">자주 묻는 질문</h4>
                   <div className="text-sm text-gray-200 space-y-1 mb-auto">
                     <p>회원가입, 시험 응시,</p>
                     <p>점수 확인, 오답노트 등</p>

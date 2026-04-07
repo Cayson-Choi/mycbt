@@ -285,7 +285,7 @@ export default function HeroSection() {
 
       {/* 메인 콘텐츠 */}
       <div className="relative z-[2] max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
-        <div className="relative flex items-end min-h-[320px] sm:min-h-[360px] lg:min-h-[420px]">
+        <div className="relative flex items-end min-h-[280px] sm:min-h-[360px] lg:min-h-[420px]">
 
           {/* ===== 장식 레이어 (말풍선 제외: 사람 뒤 z-0) ===== */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
@@ -378,7 +378,7 @@ export default function HeroSection() {
           </div>
 
           {/* 텍스트 */}
-          <div className="flex-1 z-10 pb-14 sm:pb-16 lg:pb-20 pt-10 sm:pt-14 lg:pt-16">
+          <div className="flex-1 z-10 pb-12 sm:pb-16 lg:pb-20 pt-8 sm:pt-14 lg:pt-16">
             <div
               className="inline-block px-3 py-1 rounded text-[11px] font-bold text-white mb-4 transition-all ease-out"
               style={{
@@ -393,7 +393,7 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 leading-[1.1] tracking-tight transition-all ease-out"
+              className="text-2xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-2 sm:mb-4 leading-[1.1] tracking-tight transition-all ease-out"
               style={{
                 fontFamily: "'NanumSquareNeo', sans-serif",
                 opacity: textVisible ? 1 : 0,
@@ -406,7 +406,7 @@ export default function HeroSection() {
             </h2>
 
             <p
-              className="text-sm sm:text-base lg:text-lg text-white/50 leading-relaxed whitespace-pre-line max-w-lg transition-all ease-out"
+              className="text-xs sm:text-base lg:text-lg text-white/50 leading-relaxed whitespace-pre-line max-w-lg transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
@@ -418,7 +418,7 @@ export default function HeroSection() {
             </p>
 
             <div
-              className="mt-5 sm:mt-6 transition-all ease-out"
+              className="mt-4 sm:mt-6 transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
@@ -428,7 +428,7 @@ export default function HeroSection() {
             >
               <a
                 href="#exams"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-lg transition-all duration-200 hover:brightness-110"
+                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white rounded-lg transition-all duration-200 hover:brightness-110"
                 style={{ backgroundColor: slide.accentColor }}
               >
                 자격증 선택
@@ -480,7 +480,7 @@ export default function HeroSection() {
           </div>
 
           {/* 사람 이미지 (말풍선 위) */}
-          <div className="relative flex-shrink-0 w-[140px] sm:w-[180px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
+          <div className="relative flex-shrink-0 w-[120px] sm:w-[180px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
             {slides.map((s, i) => {
               const scale = s.imageScale || 1
               const isActive = i === current
@@ -501,7 +501,7 @@ export default function HeroSection() {
                     alt={s.personAlt}
                     fill
                     className="object-contain object-bottom"
-                    sizes="(max-width: 640px) 140px, (max-width: 1024px) 180px, 260px"
+                    sizes="(max-width: 640px) 120px, (max-width: 1024px) 180px, 260px"
                     priority={i <= 1}
                   />
                 </div>
@@ -521,12 +521,12 @@ export default function HeroSection() {
 
       {/* 하단 네비게이션 */}
       <div className="absolute bottom-0 left-0 right-0 z-[3]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pb-4 sm:pb-5">
-          <div className="flex items-center gap-3">
-            <div className="flex gap-1.5">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pb-3 sm:pb-5">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex gap-1 sm:gap-1.5">
               {slides.map((_, i) => (
                 <button key={i} onClick={() => goTo(i)} className="relative h-6 flex items-center" aria-label={`슬라이드 ${i + 1}`}>
-                  <div className="w-8 h-[3px] rounded-full bg-white/15 overflow-hidden">
+                  <div className="w-6 sm:w-8 h-[3px] rounded-full bg-white/15 overflow-hidden">
                     {i === current && (
                       <div
                         key={`p-${current}`}
