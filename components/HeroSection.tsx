@@ -275,26 +275,6 @@ export default function HeroSection() {
               )
             })}
 
-            {/* 인물 네임태그 */}
-            <div
-              className={`absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 z-10 transition-all duration-600
-                ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-3 scale-95'}`}
-              style={{ transitionDelay: isVisible ? '450ms' : '0ms' }}
-            >
-              <div
-                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-center whitespace-nowrap shadow-lg"
-                style={{
-                  background: slide.accentColor,
-                }}
-              >
-                <div className="text-[10px] sm:text-xs font-bold text-white leading-tight">
-                  {slide.personName}
-                </div>
-                <div className="text-[8px] sm:text-[10px] text-white/80 mt-px">
-                  {slide.personRole}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
