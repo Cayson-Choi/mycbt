@@ -514,7 +514,7 @@ export default function LandingContent() {
             </Reveal>
 
             {/* 우측: 3개 카드 */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 flex-1 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 flex-1 w-full">
               <Reveal delay={100}>
                 <div className="bg-slate-700/80 backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
                   <h4 className="text-white font-bold text-base sm:text-lg mb-1">CAYSON</h4>
@@ -545,20 +545,6 @@ export default function LandingContent() {
                 </div>
               </Reveal>
 
-              <Reveal delay={300}>
-                <div className="bg-blue-400/40 backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-1">CAYSON</h4>
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">자주 묻는 질문</h4>
-                  <div className="text-sm text-gray-200 space-y-1 mb-auto">
-                    <p>회원가입, 시험 응시,</p>
-                    <p>점수 확인, 오답노트 등</p>
-                    <p>궁금한 점을 확인하세요</p>
-                  </div>
-                  <a href="#exams" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
-                    FAQ 확인하기
-                  </a>
-                </div>
-              </Reveal>
             </div>
           </div>
 
