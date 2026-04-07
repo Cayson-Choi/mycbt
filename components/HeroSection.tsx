@@ -4,13 +4,15 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 
 interface FloatingEl {
-  type: 'laurel' | 'bubble' | 'ribbon' | 'badge'
-  text: string
+  type: 'laurel' | 'bubble' | 'sparkle' | 'dot'
+  text?: string
   sub?: string
   x: string
   y: string
   delay: number
-  color?: string  // 배경색 override
+  color?: string
+  size?: number
+  anim?: 'float1' | 'float2' | 'float3' | 'shimmer' | 'pulse' | 'wobble'
 }
 
 interface Slide {
@@ -25,6 +27,67 @@ interface Slide {
   floats: FloatingEl[]
 }
 
+/* ── 월계관 SVG 컴포넌트 (에어클래스 스타일) ── */
+function LaurelBadge({ text, sub, accentColor }: { text: string; sub?: string; accentColor: string }) {
+  return (
+    <div className="relative w-[110px] h-[110px] lg:w-[130px] lg:h-[130px]">
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 140 140" fill="none">
+        {/* 왼쪽 월계관 */}
+        <g opacity="0.9">
+          <ellipse cx="28" cy="105" rx="8" ry="16" transform="rotate(30 28 105)" fill={accentColor} opacity="0.5" />
+          <ellipse cx="28" cy="105" rx="6" ry="13" transform="rotate(30 28 105)" fill={accentColor} opacity="0.7" />
+          <ellipse cx="20" cy="88" rx="7" ry="15" transform="rotate(20 20 88)" fill={accentColor} opacity="0.55" />
+          <ellipse cx="20" cy="88" rx="5" ry="12" transform="rotate(20 20 88)" fill={accentColor} opacity="0.75" />
+          <ellipse cx="16" cy="70" rx="7" ry="14" transform="rotate(8 16 70)" fill={accentColor} opacity="0.6" />
+          <ellipse cx="16" cy="70" rx="5" ry="11" transform="rotate(8 16 70)" fill={accentColor} opacity="0.8" />
+          <ellipse cx="18" cy="52" rx="7" ry="14" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.55" />
+          <ellipse cx="18" cy="52" rx="5" ry="11" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.75" />
+          <ellipse cx="25" cy="36" rx="7" ry="13" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.5" />
+          <ellipse cx="25" cy="36" rx="5" ry="10" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.7" />
+          <ellipse cx="36" cy="24" rx="6" ry="12" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.45" />
+          <ellipse cx="36" cy="24" rx="4" ry="9" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.65" />
+          <path d="M35 110 C22 95 14 75 16 55 C18 40 25 28 40 18" stroke={accentColor} strokeWidth="1.5" opacity="0.3" fill="none" />
+        </g>
+        {/* 오른쪽 월계관 (좌우 대칭) */}
+        <g opacity="0.9" transform="translate(140,0) scale(-1,1)">
+          <ellipse cx="28" cy="105" rx="8" ry="16" transform="rotate(30 28 105)" fill={accentColor} opacity="0.5" />
+          <ellipse cx="28" cy="105" rx="6" ry="13" transform="rotate(30 28 105)" fill={accentColor} opacity="0.7" />
+          <ellipse cx="20" cy="88" rx="7" ry="15" transform="rotate(20 20 88)" fill={accentColor} opacity="0.55" />
+          <ellipse cx="20" cy="88" rx="5" ry="12" transform="rotate(20 20 88)" fill={accentColor} opacity="0.75" />
+          <ellipse cx="16" cy="70" rx="7" ry="14" transform="rotate(8 16 70)" fill={accentColor} opacity="0.6" />
+          <ellipse cx="16" cy="70" rx="5" ry="11" transform="rotate(8 16 70)" fill={accentColor} opacity="0.8" />
+          <ellipse cx="18" cy="52" rx="7" ry="14" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.55" />
+          <ellipse cx="18" cy="52" rx="5" ry="11" transform="rotate(-5 18 52)" fill={accentColor} opacity="0.75" />
+          <ellipse cx="25" cy="36" rx="7" ry="13" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.5" />
+          <ellipse cx="25" cy="36" rx="5" ry="10" transform="rotate(-20 25 36)" fill={accentColor} opacity="0.7" />
+          <ellipse cx="36" cy="24" rx="6" ry="12" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.45" />
+          <ellipse cx="36" cy="24" rx="4" ry="9" transform="rotate(-35 36 24)" fill={accentColor} opacity="0.65" />
+          <path d="M35 110 C22 95 14 75 16 55 C18 40 25 28 40 18" stroke={accentColor} strokeWidth="1.5" opacity="0.3" fill="none" />
+        </g>
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[66px] h-[66px] lg:w-[78px] lg:h-[78px] rounded-full bg-white/95 shadow-lg flex flex-col items-center justify-center">
+          <div className="text-[10px] lg:text-[11px] font-black tracking-wide leading-tight" style={{ color: accentColor }}>{text}</div>
+          {sub && <div className="text-[9px] lg:text-[10px] font-extrabold text-gray-700 leading-tight mt-0.5">{sub}</div>}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── 4각 반짝이 SVG ── */
+function Sparkle({ color, size = 24 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 0 C12.5 8 16 11.5 24 12 C16 12.5 12.5 16 12 24 C11.5 16 8 12.5 0 12 C8 11.5 11.5 8 12 0Z"
+        fill={color}
+      />
+    </svg>
+  )
+}
+
+/* ── 각 슬라이드별 고유한 장식 배치 ── */
 const slides: Slide[] = [
   {
     badge: '4개 자격증',
@@ -35,9 +98,14 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '기능사',
     floats: [
-      { type: 'laurel', text: 'CAYSON', sub: '합격률 94%', x: '-55%', y: '5%', delay: 700 },
-      { type: 'bubble', text: '필기+실기 완벽 대비', x: '55%', y: '2%', delay: 900, color: '#34d399' },
-      { type: 'badge', text: '4개 종목', x: '-35%', y: '55%', delay: 1100, color: '#059669' },
+      { type: 'laurel', text: 'CAYSON', sub: '합격률 94%', x: '-70%', y: '0%', delay: 600, anim: 'float1' },
+      { type: 'bubble', text: '필기+실기 완벽 대비', x: '45%', y: '-2%', delay: 800, color: '#34d399', anim: 'wobble' },
+      { type: 'sparkle', x: '-45%', y: '60%', delay: 500, color: '#fbbf24', size: 30, anim: 'shimmer' },
+      { type: 'sparkle', x: '85%', y: '25%', delay: 700, color: '#34d399', size: 20, anim: 'float3' },
+      { type: 'sparkle', x: '-20%', y: '30%', delay: 900, color: '#fbbf24', size: 14, anim: 'shimmer' },
+      { type: 'dot', x: '-55%', y: '40%', delay: 400, size: 10, anim: 'pulse' },
+      { type: 'dot', x: '70%', y: '60%', delay: 600, size: 8, anim: 'float2' },
+      { type: 'dot', x: '-30%', y: '80%', delay: 800, size: 6, anim: 'pulse' },
     ],
   },
   {
@@ -49,24 +117,34 @@ const slides: Slide[] = [
     personImage: '/hero/man1.png',
     personAlt: '산업기사',
     floats: [
-      { type: 'laurel', text: '전문가', sub: '검증 완료', x: '-55%', y: '5%', delay: 700 },
-      { type: 'bubble', text: '6개 종목 한번에 준비', x: '55%', y: '2%', delay: 900, color: '#a78bfa' },
-      { type: 'badge', text: '실시간 업데이트', x: '-35%', y: '55%', delay: 1100, color: '#7c3aed' },
+      { type: 'bubble', text: '6개 종목 한번에!', x: '-60%', y: '-2%', delay: 600, color: '#a78bfa', anim: 'float1' },
+      { type: 'laurel', text: '전문가', sub: '검증 완료', x: '50%', y: '30%', delay: 800, anim: 'float2' },
+      { type: 'sparkle', x: '80%', y: '5%', delay: 500, color: '#fbbf24', size: 26, anim: 'shimmer' },
+      { type: 'sparkle', x: '-50%', y: '50%', delay: 700, color: '#c084fc', size: 18, anim: 'float3' },
+      { type: 'sparkle', x: '60%', y: '70%', delay: 900, color: '#a78bfa', size: 22, anim: 'shimmer' },
+      { type: 'dot', x: '-35%', y: '25%', delay: 400, size: 9, anim: 'pulse' },
+      { type: 'dot', x: '75%', y: '50%', delay: 650, size: 7, anim: 'float1' },
+      { type: 'dot', x: '-60%', y: '75%', delay: 850, size: 11, anim: 'pulse' },
     ],
   },
   {
     badge: '인기',
     title: '기사',
-    description: '전기기사 · 소방설비기사(전기/기계) · 가스기사\n2,100문제 기출 완비, 전문가 검증 해설',
+    description: '전기기사 · 소방설비기사(전기/기계) · 가스기사\n전문가 검증 기출, 합격까지 한 번에',
     bgColor: '#0f1729',
     accentColor: '#4f8cff',
     personImage: '/hero/man2.png',
     personAlt: '기사',
     imageScale: 0.95,
     floats: [
-      { type: 'laurel', text: 'BEST', sub: '인기 1위', x: '-55%', y: '5%', delay: 700 },
-      { type: 'bubble', text: '전문가 검증 해설 수록', x: '55%', y: '2%', delay: 900, color: '#4f8cff' },
-      { type: 'badge', text: '합격 전략', x: '-35%', y: '55%', delay: 1100, color: '#2563eb' },
+      { type: 'laurel', text: 'BEST', sub: '인기 1위', x: '-65%', y: '5%', delay: 600, anim: 'float1' },
+      { type: 'laurel', text: '2025', sub: '최신 기출', x: '55%', y: '35%', delay: 900, anim: 'float3' },
+      { type: 'sparkle', x: '75%', y: '0%', delay: 500, color: '#fbbf24', size: 28, anim: 'shimmer' },
+      { type: 'sparkle', x: '-40%', y: '65%', delay: 750, color: '#4f8cff', size: 16, anim: 'float2' },
+      { type: 'dot', x: '-50%', y: '35%', delay: 400, size: 12, anim: 'pulse' },
+      { type: 'dot', x: '85%', y: '55%', delay: 600, size: 8, anim: 'float3' },
+      { type: 'dot', x: '-25%', y: '85%', delay: 800, size: 6, anim: 'pulse' },
+      { type: 'dot', x: '50%', y: '10%', delay: 700, size: 7, anim: 'float2' },
     ],
   },
   {
@@ -78,9 +156,14 @@ const slides: Slide[] = [
     personImage: '/hero/man3.png',
     personAlt: '기능장',
     floats: [
-      { type: 'laurel', text: '최고', sub: '등급', x: '-55%', y: '5%', delay: 700 },
-      { type: 'bubble', text: '실기까지 완벽 대비', x: '55%', y: '2%', delay: 900, color: '#fbbf24' },
-      { type: 'badge', text: '심화 학습', x: '-35%', y: '55%', delay: 1100, color: '#d97706' },
+      { type: 'bubble', text: '최고 등급에 도전!', x: '45%', y: '-5%', delay: 600, color: '#f59e0b', anim: 'wobble' },
+      { type: 'laurel', text: 'TOP', sub: '기능장', x: '-70%', y: '25%', delay: 800, anim: 'float3' },
+      { type: 'sparkle', x: '-40%', y: '0%', delay: 500, color: '#fbbf24', size: 32, anim: 'shimmer' },
+      { type: 'sparkle', x: '80%', y: '40%', delay: 700, color: '#fbbf24', size: 20, anim: 'float1' },
+      { type: 'sparkle', x: '-55%', y: '70%', delay: 900, color: '#f59e0b', size: 16, anim: 'shimmer' },
+      { type: 'dot', x: '65%', y: '15%', delay: 450, size: 10, anim: 'pulse' },
+      { type: 'dot', x: '-30%', y: '55%', delay: 650, size: 8, anim: 'float1' },
+      { type: 'dot', x: '80%', y: '75%', delay: 850, size: 6, anim: 'pulse' },
     ],
   },
   {
@@ -92,9 +175,14 @@ const slides: Slide[] = [
     personImage: '/hero/woman3.png',
     personAlt: '공기업',
     floats: [
-      { type: 'laurel', text: 'KEPCO', sub: '한전 대비', x: '-55%', y: '5%', delay: 700 },
-      { type: 'bubble', text: '공기업 전공시험 특화', x: '55%', y: '2%', delay: 900, color: '#22d3ee' },
-      { type: 'badge', text: '채용 대비', x: '-35%', y: '55%', delay: 1100, color: '#0891b2' },
+      { type: 'laurel', text: 'KEPCO', sub: '한전 대비', x: '50%', y: '0%', delay: 600, anim: 'float2' },
+      { type: 'bubble', text: '공기업 전공 특화', x: '-65%', y: '45%', delay: 800, color: '#06b6d4', anim: 'float1' },
+      { type: 'sparkle', x: '-45%', y: '5%', delay: 500, color: '#22d3ee', size: 24, anim: 'shimmer' },
+      { type: 'sparkle', x: '85%', y: '50%', delay: 700, color: '#fbbf24', size: 18, anim: 'float3' },
+      { type: 'sparkle', x: '-25%', y: '75%', delay: 900, color: '#22d3ee', size: 14, anim: 'shimmer' },
+      { type: 'dot', x: '70%', y: '30%', delay: 450, size: 11, anim: 'pulse' },
+      { type: 'dot', x: '-55%', y: '65%', delay: 700, size: 7, anim: 'float3' },
+      { type: 'dot', x: '55%', y: '80%', delay: 850, size: 9, anim: 'pulse' },
     ],
   },
   {
@@ -106,15 +194,30 @@ const slides: Slide[] = [
     personImage: '/hero/woman2.png',
     personAlt: '과정평가형',
     floats: [
-      { type: 'laurel', text: 'NCS', sub: '기반 평가', x: '-55%', y: '5%', delay: 700 },
-      { type: 'bubble', text: '현장 실무 역량 평가', x: '55%', y: '2%', delay: 900, color: '#fb7185' },
-      { type: 'badge', text: '과정평가', x: '-35%', y: '55%', delay: 1100, color: '#e11d48' },
+      { type: 'laurel', text: 'NCS', sub: '기반 평가', x: '-65%', y: '-2%', delay: 600, anim: 'float1' },
+      { type: 'bubble', text: '현장 실무 역량!', x: '50%', y: '5%', delay: 800, color: '#f43f5e', anim: 'wobble' },
+      { type: 'sparkle', x: '85%', y: '35%', delay: 500, color: '#fb7185', size: 26, anim: 'shimmer' },
+      { type: 'sparkle', x: '-50%', y: '55%', delay: 700, color: '#fbbf24', size: 20, anim: 'float1' },
+      { type: 'sparkle', x: '60%', y: '70%', delay: 900, color: '#fb7185', size: 14, anim: 'shimmer' },
+      { type: 'dot', x: '-35%', y: '30%', delay: 400, size: 10, anim: 'pulse' },
+      { type: 'dot', x: '75%', y: '55%', delay: 650, size: 8, anim: 'float2' },
+      { type: 'dot', x: '-60%', y: '80%', delay: 850, size: 6, anim: 'pulse' },
     ],
   },
 ]
 
 const DURATION = 5000
 const FADE_MS = 400
+
+/* ── 애니메이션 매핑 (CSS keyframe name → duration) ── */
+const animConfig: Record<string, { name: string; dur: string }> = {
+  float1: { name: 'heroDecFloat1', dur: '3.5s' },
+  float2: { name: 'heroDecFloat2', dur: '4s' },
+  float3: { name: 'heroDecFloat3', dur: '3s' },
+  shimmer: { name: 'heroDecShimmer', dur: '2.5s' },
+  pulse: { name: 'heroDecPulse', dur: '2s' },
+  wobble: { name: 'heroDecWobble', dur: '3s' },
+}
 
 export default function HeroSection() {
   const [current, setCurrent] = useState(0)
@@ -132,11 +235,9 @@ export default function HeroSection() {
   const goTo = useCallback((index: number) => {
     if (index === current) return
     clearTimer()
-    // 텍스트 + 이미지 동시 퇴장
     setTextVisible(false)
     setPrev(current)
     setCurrent(index)
-    // 동시 입장 (퇴장 FADE_MS 후)
     setTimeout(() => {
       setTextVisible(true)
       setPrev(-1)
@@ -151,14 +252,12 @@ export default function HeroSection() {
     goTo((current - 1 + slides.length) % slides.length)
   }, [current, goTo])
 
-  // 자동 회전
   useEffect(() => {
     if (paused) return
     timerRef.current = setTimeout(goNext, DURATION)
     return clearTimer
   }, [current, paused, goNext, clearTimer])
 
-  // 터치
   const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX }
   const handleTouchEnd = (e: React.TouchEvent) => {
     const diff = touchStartX.current - e.changedTouches[0].clientX
@@ -176,7 +275,7 @@ export default function HeroSection() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* ===== 배경 레이어 (페이드 전환) ===== */}
+      {/* ===== 배경 ===== */}
       {prevSlide && (
         <div
           className="absolute inset-0 z-0 transition-opacity"
@@ -188,7 +287,7 @@ export default function HeroSection() {
         style={{ backgroundColor: slide.bgColor, opacity: 1, transitionDuration: `${FADE_MS}ms` }}
       />
 
-      {/* 배경 장식 */}
+      {/* 배경 그라데이션 장식 */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         <div
           className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000"
@@ -206,7 +305,6 @@ export default function HeroSection() {
 
           {/* 텍스트 */}
           <div className="flex-1 z-10 pb-14 sm:pb-16 lg:pb-20 pt-10 sm:pt-14 lg:pt-16">
-            {/* 배지 */}
             <div
               className="inline-block px-3 py-1 rounded text-[11px] font-bold text-white mb-4 transition-all ease-out"
               style={{
@@ -220,7 +318,6 @@ export default function HeroSection() {
               {slide.badge}
             </div>
 
-            {/* 제목 */}
             <h2
               className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 leading-[1.1] tracking-tight transition-all ease-out"
               style={{
@@ -234,7 +331,6 @@ export default function HeroSection() {
               {slide.title}
             </h2>
 
-            {/* 설명 */}
             <p
               className="text-sm sm:text-base lg:text-lg text-white/50 leading-relaxed whitespace-pre-line max-w-lg transition-all ease-out"
               style={{
@@ -247,7 +343,6 @@ export default function HeroSection() {
               {slide.description}
             </p>
 
-            {/* CTA */}
             <div
               className="mt-5 sm:mt-6 transition-all ease-out"
               style={{
@@ -275,9 +370,10 @@ export default function HeroSection() {
             {/* 장식 요소 (이미지 뒤) */}
             {slide.floats.map((f, fi) => {
               const isActive = textVisible
+              const ac = f.anim ? animConfig[f.anim] : undefined
               return (
                 <div
-                  key={fi}
+                  key={`${current}-${fi}`}
                   className="absolute z-[1] hidden sm:block transition-all ease-out pointer-events-none"
                   style={{
                     left: f.x,
@@ -286,67 +382,51 @@ export default function HeroSection() {
                     transform: isActive ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.7)',
                     transitionDuration: '600ms',
                     transitionDelay: isActive ? `${f.delay}ms` : '0ms',
+                    animation: isActive && ac ? `${ac.name} ${ac.dur} ease-in-out infinite` : 'none',
+                    animationDelay: `${f.delay}ms`,
                   }}
                 >
                   {/* 월계관 뱃지 */}
                   {f.type === 'laurel' && (
-                    <div className="relative">
-                      {/* 월계관 SVG */}
-                      <svg className="absolute -left-3 -top-2 w-[calc(100%+24px)] h-[calc(100%+16px)]" viewBox="0 0 120 80" fill="none">
-                        <path d="M20 65 C10 50 8 30 18 18 C22 14 26 16 24 22 C22 28 16 36 18 48 C20 55 22 60 20 65Z" fill={`${slide.accentColor}40`} />
-                        <path d="M15 58 C8 46 6 28 14 18 C17 15 20 17 18 22 C16 28 12 34 14 44 C15 50 16 54 15 58Z" fill={`${slide.accentColor}25`} />
-                        <path d="M100 65 C110 50 112 30 102 18 C98 14 94 16 96 22 C98 28 104 36 102 48 C100 55 98 60 100 65Z" fill={`${slide.accentColor}40`} />
-                        <path d="M105 58 C112 46 114 28 106 18 C103 15 100 17 102 22 C104 28 108 34 106 44 C105 50 104 54 105 58Z" fill={`${slide.accentColor}25`} />
-                      </svg>
-                      <div className="relative bg-white/95 dark:bg-white/90 rounded-xl px-4 py-2.5 shadow-xl text-center min-w-[80px]">
-                        <div className="text-[10px] font-black tracking-wider" style={{ color: slide.accentColor }}>{f.text}</div>
-                        {f.sub && <div className="text-[11px] font-extrabold text-gray-800 leading-tight mt-0.5">{f.sub}</div>}
-                      </div>
-                    </div>
+                    <LaurelBadge
+                      text={f.text || ''}
+                      sub={f.sub}
+                      accentColor={f.color || slide.accentColor}
+                    />
                   )}
 
                   {/* 말풍선 */}
                   {f.type === 'bubble' && (
                     <div className="relative">
                       <div
-                        className="px-4 py-2.5 rounded-2xl shadow-xl text-[11px] font-bold text-white whitespace-nowrap"
+                        className="px-5 py-3 rounded-2xl shadow-xl text-[12px] lg:text-[13px] font-bold text-white whitespace-nowrap"
                         style={{ backgroundColor: f.color || slide.accentColor }}
                       >
                         {f.text}
-                        {/* 말풍선 꼬리 */}
-                        <div
-                          className="absolute -bottom-2 left-5 w-0 h-0"
-                          style={{
-                            borderLeft: '6px solid transparent',
-                            borderRight: '6px solid transparent',
-                            borderTop: `8px solid ${f.color || slide.accentColor}`,
-                          }}
-                        />
                       </div>
+                      {/* 말풍선 꼬리 */}
+                      <div
+                        className="absolute -bottom-[10px] left-6 w-0 h-0"
+                        style={{
+                          borderLeft: '8px solid transparent',
+                          borderRight: '8px solid transparent',
+                          borderTop: `12px solid ${f.color || slide.accentColor}`,
+                        }}
+                      />
                     </div>
                   )}
 
-                  {/* 리본 뱃지 */}
-                  {f.type === 'ribbon' && (
-                    <div
-                      className="px-4 py-1.5 text-[10px] font-bold text-white shadow-lg"
-                      style={{
-                        backgroundColor: f.color || slide.accentColor,
-                        clipPath: 'polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%)',
-                      }}
-                    >
-                      {f.text}
-                    </div>
+                  {/* 4각 반짝이 */}
+                  {f.type === 'sparkle' && (
+                    <Sparkle color={f.color || slide.accentColor} size={f.size || 24} />
                   )}
 
-                  {/* 원형 뱃지 */}
-                  {f.type === 'badge' && (
+                  {/* 흰 도트 */}
+                  {f.type === 'dot' && (
                     <div
-                      className="px-3.5 py-1.5 rounded-full text-[10px] font-bold text-white shadow-lg whitespace-nowrap"
-                      style={{ backgroundColor: f.color || slide.accentColor }}
-                    >
-                      {f.text}
-                    </div>
+                      className="rounded-full bg-white/70"
+                      style={{ width: f.size || 8, height: f.size || 8 }}
+                    />
                   )}
                 </div>
               )
@@ -383,11 +463,26 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ===== 하단 네비게이션 (히어로 내부 하단 고정) ===== */}
+      {/* ===== 좌우 화살표 (호버 시 표시) ===== */}
+      <button
+        onClick={goPrev}
+        className="absolute left-0 top-0 bottom-0 z-[4] w-14 sm:w-20 hidden sm:flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer group"
+        aria-label="이전"
+      >
+        <span className="text-white/60 group-hover:text-white text-3xl sm:text-4xl font-light transition-colors select-none">&lt;</span>
+      </button>
+      <button
+        onClick={goNext}
+        className="absolute right-0 top-0 bottom-0 z-[4] w-14 sm:w-20 hidden sm:flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer group"
+        aria-label="다음"
+      >
+        <span className="text-white/60 group-hover:text-white text-3xl sm:text-4xl font-light transition-colors select-none">&gt;</span>
+      </button>
+
+      {/* ===== 하단 네비게이션 ===== */}
       <div className="absolute bottom-0 left-0 right-0 z-[3]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 pb-4 sm:pb-5">
           <div className="flex items-center gap-3">
-            {/* 도트 + 진행 바 통합 */}
             <div className="flex gap-1.5" ref={dotRef}>
               {slides.map((_, i) => (
                 <button
@@ -416,32 +511,9 @@ export default function HeroSection() {
               ))}
             </div>
 
-            {/* 번호 */}
             <span className="text-[11px] text-white/20 tabular-nums ml-1">
               {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
             </span>
-
-            {/* 화살표 (데스크탑) */}
-            <div className="hidden lg:flex items-center gap-1.5 ml-auto">
-              <button
-                onClick={goPrev}
-                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all"
-                aria-label="이전"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button
-                onClick={goNext}
-                className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all"
-                aria-label="다음"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
           </div>
         </div>
       </div>

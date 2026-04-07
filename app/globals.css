@@ -97,24 +97,44 @@ body {
   animation: heroProgress 5s linear forwards;
 }
 
-/* 떠다니는 장식 */
-@keyframes heroFloat {
+/* 히어로 장식 애니메이션 - 각각 다른 움직임 */
+
+/* float1: 위아래 부드럽게 떠다님 */
+@keyframes heroDecFloat1 {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
+  50% { transform: translateY(-10px); }
 }
 
-.hero-float-slow {
-  animation: heroFloat 4s ease-in-out infinite;
+/* float2: 대각선으로 떠다님 */
+@keyframes heroDecFloat2 {
+  0%, 100% { transform: translate(0px, 0px); }
+  33% { transform: translate(4px, -8px); }
+  66% { transform: translate(-3px, -4px); }
 }
 
-.hero-float-med {
-  animation: heroFloat 3s ease-in-out infinite;
-  animation-delay: -1s;
+/* float3: 살짝 회전하며 떠다님 */
+@keyframes heroDecFloat3 {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(6deg); }
 }
 
-.hero-float-fast {
-  animation: heroFloat 2.5s ease-in-out infinite;
-  animation-delay: -0.5s;
+/* shimmer: 빛나듯 깜빡임 (반짝이용) */
+@keyframes heroDecShimmer {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* pulse: 제자리 맥박 (도트용) */
+@keyframes heroDecPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+
+/* wobble: 좌우 미세 흔들림 (말풍선용) */
+@keyframes heroDecWobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(1.5deg); }
+  75% { transform: rotate(-1.5deg); }
 }
 
 /* Header rainbow text - 1분 주기 빨주노초파남보 */
