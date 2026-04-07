@@ -20,33 +20,51 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
 /* ─── 등급 데이터 (탭별 고유 색상 + SVG) ─── */
 const grades = [
   {
-    id: 'technician', label: '기능사', count: 4,
-    gradient: 'from-teal-50 to-cyan-100 dark:from-teal-950/50 dark:to-cyan-900/30',
+    id: 'technician', label: '기능사', count: 4, color: 'emerald',
+    desc: '전기기능사, 승강기기능사, 위험물기능사, 가스기능사',
+    sub: '자격증 취득의 첫 걸음, 기초부터 탄탄하게',
+    gradient: 'from-emerald-500 to-teal-500',
+    iconBg: 'bg-emerald-500',
     icon: <img src="/hero/deco/425117-achievement-reward-award.svg" alt="" className="w-8 h-8" />,
   },
   {
-    id: 'industrial', label: '산업기사', count: 6,
-    gradient: 'from-pink-50 to-fuchsia-100 dark:from-pink-950/50 dark:to-fuchsia-900/30',
+    id: 'industrial', label: '산업기사', count: 6, color: 'violet',
+    desc: '전기산업기사 외 5개 자격증',
+    sub: '실무 능력 검증, 현장 전문가로의 도약',
+    gradient: 'from-violet-500 to-purple-500',
+    iconBg: 'bg-violet-500',
     icon: <img src="/hero/deco/429900-setting-configuration-gear.svg" alt="" className="w-8 h-8" />,
   },
   {
-    id: 'engineer', label: '기사', count: 4,
-    gradient: 'from-indigo-50 to-purple-100 dark:from-indigo-950/50 dark:to-purple-900/30',
+    id: 'engineer', label: '기사', count: 4, color: 'blue',
+    desc: '전기기사 외 3개 자격증',
+    sub: '엔지니어의 필수 자격, 체계적 합격 전략',
+    gradient: 'from-blue-500 to-indigo-500',
+    iconBg: 'bg-blue-500',
     icon: <img src="/hero/deco/382151-education-graduation-learning-school-study.svg" alt="" className="w-8 h-8" />,
   },
   {
-    id: 'master', label: '기능장', count: 1,
-    gradient: 'from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/30',
+    id: 'master', label: '기능장', count: 1, color: 'amber',
+    desc: '전기기능장',
+    sub: '최고 등급 자격증에 도전하세요',
+    gradient: 'from-amber-500 to-orange-500',
+    iconBg: 'bg-amber-500',
     icon: <img src="/hero/deco/475312-trophy.svg" alt="" className="w-8 h-8" />,
   },
   {
-    id: 'public', label: '공기업', count: 0,
-    gradient: 'from-amber-50 to-yellow-100 dark:from-amber-950/50 dark:to-yellow-900/30',
+    id: 'public', label: '공기업', count: 0, color: 'cyan',
+    desc: '한국전력공사, 한국수력원자력 등',
+    sub: '공기업 채용 대비 전공시험',
+    gradient: 'from-cyan-500 to-blue-500',
+    iconBg: 'bg-cyan-500',
     icon: <img src="/hero/deco/421954-apartment-block-building.svg" alt="" className="w-8 h-8" />,
   },
   {
-    id: 'ncs', label: '과정평가형', count: 0,
-    gradient: 'from-blue-50 to-sky-100 dark:from-blue-950/50 dark:to-sky-900/30',
+    id: 'ncs', label: '과정평가형', count: 0, color: 'rose',
+    desc: 'NCS 기반 과정평가형 자격',
+    sub: '교육훈련 과정을 통한 자격 취득',
+    gradient: 'from-rose-500 to-pink-500',
+    iconBg: 'bg-rose-500',
     icon: <img src="/hero/deco/375339-certificate-authority-service.svg" alt="" className="w-8 h-8" />,
   },
 ]
@@ -341,7 +359,6 @@ function WhyCaysonSection() {
 }
 
 export default function LandingContent() {
-  const [activeTab, setActiveTab] = useState(0)
 
 
   return (
@@ -363,78 +380,64 @@ export default function LandingContent() {
             </div>
           </Reveal>
 
-          {/* 탭 */}
-          <Reveal delay={100}>
-            <div className="flex gap-0 bg-gray-100 dark:bg-gray-900 rounded-xl p-1.5 mb-8 overflow-x-auto scrollbar-hide max-w-fit">
-              {grades.map((g, i) => (
-                <button
-                  key={g.id}
-                  onClick={() => setActiveTab(i)}
-                  className={`px-3 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-bold whitespace-nowrap rounded-lg transition-all
-                    ${activeTab === i
-                      ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-md'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                    }`}
-                >
-                  {g.label}
-                  {g.count > 0 && (
-                    <span className={`ml-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded
-                      ${activeTab === i
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-                      }`}>
-                      {g.count}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          {/* 탭 콘텐츠 */}
-          <Reveal delay={150}>
-            <div className="min-h-[120px]">
-              {grades[activeTab].count > 0 ? (
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 sm:p-8 gap-4 sm:gap-0">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br ${grades[activeTab].gradient} flex items-center justify-center shadow-lg`}>
-                        {grades[activeTab].icon}
-                      </div>
-                      <h3 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-                        {grades[activeTab].label}
-                      </h3>
-                    </div>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 ml-[46px] sm:ml-[52px]">
-                      {grades[activeTab].count}개 자격증 필기/실기 준비
-                    </p>
-                  </div>
+          {/* 등급 카드 그리드 */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {grades.map((g, i) => (
+              <Reveal key={g.id} delay={i * 80}>
+                {g.count > 0 ? (
                   <Link
-                    href={`/grade/${grades[activeTab].id}`}
-                    className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl transition-colors flex-shrink-0 shadow-lg shadow-blue-600/25 w-full sm:w-auto"
+                    href={`/grade/${g.id}`}
+                    className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-transparent block h-full"
                   >
-                    자격증 선택
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
+                    {/* 호버 시 상단 그라데이션 바 */}
+                    <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${g.gradient} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500`} />
+
+                    {/* 아이콘 */}
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${g.iconBg} flex items-center justify-center mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                      {g.icon}
+                    </div>
+
+                    {/* 라벨 + 카운트 */}
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <h3 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">{g.label}</h3>
+                      <span className={`text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r ${g.gradient} text-white`}>
+                        {g.count}개
+                      </span>
+                    </div>
+
+                    {/* 설명 */}
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-1">{g.desc}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500">{g.sub}</p>
+
+                    {/* CTA */}
+                    <div className="mt-4 flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                      자격증 선택
+                      <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </div>
                   </Link>
-                </div>
-              ) : (
-                <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center">
-                  <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-gray-800 text-gray-400 flex items-center justify-center mx-auto mb-3">
-                    {/* 공사중 표시 — 삼각형 + 느낌표 */}
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 3L2 21h20L12 3z" fill="currentColor" opacity="0.2" />
-                      <path d="M12 3L2 21h20L12 3z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" opacity="0.5" fill="none" />
-                      <line x1="12" y1="10" x2="12" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-                      <circle cx="12" cy="17.5" r="1" fill="currentColor" opacity="0.6" />
-                    </svg>
+                ) : (
+                  <div className="group relative overflow-hidden rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 p-5 sm:p-6 h-full">
+                    {/* 아이콘 */}
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center mb-4 opacity-40">
+                      {g.icon}
+                    </div>
+
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <h3 className="text-lg sm:text-xl font-black text-gray-400 dark:text-gray-600">{g.label}</h3>
+                      <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500">
+                        준비중
+                      </span>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-600 leading-relaxed mb-1">{g.desc}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-300 dark:text-gray-700">{g.sub}</p>
                   </div>
-                  <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">준비 중입니다. 곧 서비스가 시작됩니다.</p>
-                </div>
-              )}
-            </div>
-          </Reveal>
+                )}
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
