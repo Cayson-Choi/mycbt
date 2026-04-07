@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: "https://www.mycbt.xyz",
     images: [
       {
-        url: "https://www.mycbt.xyz/og.png",
+        url: "https://www.mycbt.xyz/og-v2.png",
         width: 1200,
         height: 630,
       },
