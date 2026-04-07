@@ -118,123 +118,105 @@ function useCountUp(end: number, duration = 2000, startOnView = true) {
 function WhyCaysonSection() {
   const stat1 = useCountUp(2100)
   const stat2 = useCountUp(100)
-  const stat3 = useCountUp(24)
-  const stat4 = useCountUp(58)
+  const stat3 = useCountUp(58)
+  const stat4 = useCountUp(21)
 
-  const features = [
-    {
-      icon: <img src="/hero/deco/302553-shield.svg" alt="" className="w-10 h-10" />,
-      title: '원본 대조 검증',
-      stat: stat1,
-      statSuffix: '문제+',
-      statLabel: '검증 완료',
-      desc: '인터넷 복사가 아닙니다. 실제 시험지 원본과 한 문제씩 대조하여 정답과 선택지를 검증합니다.',
-      barColor: 'from-red-500 to-rose-400',
-      barWidth: 100,
-      accent: 'text-red-500',
-      glow: 'group-hover:shadow-red-500/20',
-    },
-    {
-      icon: <img src="/hero/deco/314978-laptop-open.svg" alt="" className="w-10 h-10" />,
-      title: '실전 동일 환경',
-      stat: stat2,
-      statSuffix: '%',
-      statLabel: '환경 동일',
-      desc: '한국산업인력공단 CBT와 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
-      barColor: 'from-blue-500 to-indigo-400',
-      barWidth: 100,
-      accent: 'text-blue-500',
-      glow: 'group-hover:shadow-blue-500/20',
-    },
-    {
-      icon: <img src="/hero/deco/429901-profit-chart-bar-report.svg" alt="" className="w-10 h-10" />,
-      title: '자동 오답 분석',
-      stat: stat3,
-      statSuffix: '시간',
-      statLabel: '이내 분석',
-      desc: '시험 종료 즉시 과목별 약점을 자동 분석합니다. 같은 실수를 반복하지 않도록.',
-      barColor: 'from-pink-500 to-fuchsia-400',
-      barWidth: 92,
-      accent: 'text-pink-500',
-      glow: 'group-hover:shadow-pink-500/20',
-    },
-    {
-      icon: <img src="/hero/deco/341443-equipment-maintenance-screwdriver-tools-wrench.svg" alt="" className="w-10 h-10" />,
-      title: '오류 발견 즉시 수정',
-      stat: stat4,
-      statSuffix: '건',
-      statLabel: '오류 수정 완료',
-      desc: 'AI 검토로 발견된 오류를 즉시 수정합니다. 규정 개정 사항도 실시간으로 반영합니다.',
-      barColor: 'from-teal-500 to-emerald-400',
-      barWidth: 97,
-      accent: 'text-teal-500',
-      glow: 'group-hover:shadow-teal-500/20',
-    },
+  const compareRows = [
+    { label: '문제 출처', others: '인터넷 복사', cayson: '시험지 원본 대조', icon: '1' },
+    { label: '정답 검증', others: '검증 없음', cayson: 'AI + 수동 이중 검증', icon: '2' },
+    { label: '오류 수정', others: '미수정 방치', cayson: '발견 즉시 수정 (58건)', icon: '3' },
+    { label: '시험 환경', others: '단순 문제풀이', cayson: '실제 CBT 동일 구현', icon: '4' },
+    { label: '오답 분석', others: '정답만 표시', cayson: '과목별 자동 약점 분석', icon: '5' },
+    { label: '규정 반영', others: '업데이트 없음', cayson: '개정 사항 실시간 반영', icon: '6' },
   ]
 
   return (
-    <section className="bg-gray-950 text-white overflow-hidden relative">
-      {/* 배경 그리드 패턴 */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-      {/* 상단 글로우 */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/10 rounded-full blur-[120px]" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <section className="bg-white dark:bg-gray-950 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        {/* 헤더 */}
         <Reveal>
-          <div className="text-center mb-14 sm:mb-20">
-            <p className="text-sm font-semibold text-blue-400 tracking-widest uppercase mb-3">
+          <div className="text-center mb-12 sm:mb-16">
+            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">
               Why CAYSON
             </p>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-snug">
-              다른 CBT 사이트와<br className="sm:hidden" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">비교하지 마세요</span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
+              왜 <span className="text-blue-600">CAYSON</span>이어야 할까요?
             </h2>
-            <p className="text-gray-400 mt-4 max-w-lg mx-auto text-sm sm:text-base">
-              2,100문제를 직접 원본 대조하고, AI로 검토하고, 오류를 수정한 곳은 CAYSON뿐입니다.
-            </p>
+            <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full mx-auto" />
           </div>
         </Reveal>
 
-        {/* 카드 그리드 */}
-        <div ref={stat1.ref} className="grid sm:grid-cols-2 gap-5 sm:gap-6">
-          {features.map((f, i) => (
-            <Reveal key={f.title} delay={i * 120}>
-              <div className={`group relative bg-white/[0.04] backdrop-blur border border-white/10 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:shadow-2xl ${f.glow} hover:-translate-y-1`}>
-                {/* 아이콘 + 숫자 상단 */}
-                <div className="flex items-start justify-between mb-5">
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    {f.icon}
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-3xl sm:text-4xl font-black tabular-nums ${f.accent}`}>
-                      {f.stat.count.toLocaleString()}<span className="text-lg sm:text-xl">{f.statSuffix}</span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-0.5">{f.statLabel}</p>
-                  </div>
-                </div>
-
-                {/* 제목 + 설명 */}
-                <h3 className="text-lg sm:text-xl font-bold mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed mb-5">{f.desc}</p>
-
-                {/* 프로그레스 바 */}
-                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${f.barColor} rounded-full transition-all duration-[2000ms] ease-out`}
-                    style={{ width: `${stat1.count > 0 ? f.barWidth : 0}%` }}
-                  />
-                </div>
+        {/* 숫자 스탯 리본 */}
+        <Reveal delay={100}>
+          <div ref={stat1.ref} className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
+            {[
+              { val: stat1.count, suffix: '+', label: '검증된 문제', color: 'from-blue-600 to-blue-400' },
+              { val: stat2.count, suffix: '%', label: '원본 일치율', color: 'from-emerald-600 to-emerald-400' },
+              { val: stat3.count, suffix: '건', label: '오류 수정 완료', color: 'from-amber-600 to-amber-400' },
+              { val: stat4.count, suffix: '개', label: '시험 종류', color: 'from-violet-600 to-violet-400' },
+            ].map((s) => (
+              <div key={s.label} className="relative group text-center bg-gray-50 dark:bg-gray-900 rounded-2xl p-5 sm:p-7 border border-gray-100 dark:border-gray-800 transition-all hover:shadow-lg hover:-translate-y-0.5 overflow-hidden">
+                <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${s.color} transition-all duration-700`} style={{ width: `${stat1.count > 0 ? 100 : 0}%` }} />
+                <p className={`text-3xl sm:text-4xl lg:text-5xl font-black tabular-nums bg-gradient-to-r ${s.color} text-transparent bg-clip-text`}>
+                  {s.val.toLocaleString()}<span className="text-xl sm:text-2xl">{s.suffix}</span>
+                </p>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1.5 font-medium">{s.label}</p>
               </div>
-            </Reveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* 비교 테이블 */}
+        <Reveal delay={200}>
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+            {/* 테이블 헤더 */}
+            <div className="grid grid-cols-[1fr_1fr_1fr] sm:grid-cols-[1.5fr_1fr_1fr] text-center">
+              <div className="p-3 sm:p-4" />
+              <div className="p-3 sm:p-4 bg-gray-100 dark:bg-gray-800/50">
+                <p className="text-xs sm:text-sm font-bold text-gray-400 dark:text-gray-500">다른 CBT 사이트</p>
+              </div>
+              <div className="p-3 sm:p-4 bg-blue-600">
+                <p className="text-xs sm:text-sm font-bold text-white">CAYSON</p>
+              </div>
+            </div>
+            {/* 비교 행 */}
+            {compareRows.map((row, i) => (
+              <Reveal key={row.label} delay={250 + i * 60}>
+                <div className="grid grid-cols-[1fr_1fr_1fr] sm:grid-cols-[1.5fr_1fr_1fr] items-center border-t border-gray-200 dark:border-gray-800 group hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors">
+                  {/* 항목명 */}
+                  <div className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-[10px] sm:text-xs font-bold flex items-center justify-center">
+                      {row.icon}
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">{row.label}</span>
+                  </div>
+                  {/* 다른 사이트 */}
+                  <div className="p-3 sm:p-4 text-center bg-gray-100/50 dark:bg-gray-800/30">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <svg className="w-4 h-4 text-red-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" /></svg>
+                      <span className="text-[10px] sm:text-xs text-gray-400 leading-tight">{row.others}</span>
+                    </div>
+                  </div>
+                  {/* CAYSON */}
+                  <div className="p-3 sm:p-4 text-center bg-blue-50/60 dark:bg-blue-950/30">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <svg className="w-4 h-4 text-blue-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                      <span className="text-[10px] sm:text-xs text-blue-700 dark:text-blue-300 font-semibold leading-tight">{row.cayson}</span>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Reveal>
 
         {/* 하단 CTA */}
-        <Reveal delay={500}>
-          <div className="mt-12 sm:mt-16 text-center">
-            <p className="text-gray-500 text-sm mb-5">검증된 문제로 공부하면 합격이 가까워집니다</p>
+        <Reveal delay={600}>
+          <div className="mt-10 sm:mt-14 text-center">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">검증된 문제로 공부하면 합격이 가까워집니다</p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base transition-all hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base transition-all hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/25 hover:scale-[1.02] active:scale-[0.98]"
             >
               지금 무료로 시작하기
               <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
@@ -362,181 +344,54 @@ export default function LandingContent() {
           </Reveal>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {/* 프로모 배너 카드 */}
+            {/* Y 프로모 배너 카드 — 전기기사 */}
             <Reveal>
-              <div className="rounded-xl overflow-hidden h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 p-5 sm:p-6 flex flex-col justify-between min-h-[220px] sm:min-h-[280px] relative">
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px)' }} />
-                <div className="relative">
-                  <h3 className="text-base sm:text-xl font-extrabold text-amber-400 leading-tight">
-                    합격을 앞당기는<br />전기 자격증 강의
+              <div className="rounded-xl overflow-hidden h-full bg-gradient-to-br from-orange-400 to-amber-500 p-5 sm:p-6 flex flex-col justify-between min-h-[220px] sm:min-h-[280px] relative cursor-pointer group">
+                {/* 배경 큰 Y 글자 */}
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] sm:text-[220px] font-black text-orange-300/40 select-none leading-none transition-transform duration-500 group-hover:scale-110">
+                  Y
+                </span>
+                <div className="relative z-10">
+                  <p className="text-[10px] sm:text-xs font-bold text-white/70 tracking-wider uppercase mb-1">Engineer</p>
+                  <h3 className="text-base sm:text-xl font-extrabold text-white leading-tight">
+                    전기기사<br />동영상 강의
                   </h3>
                 </div>
-                <p className="relative text-xs sm:text-sm text-amber-300/80 font-medium mt-4">
-                  더 보러 가기 <span className="ml-0.5">&rsaquo;</span>
+                <p className="relative z-10 text-xs sm:text-sm text-white/80 font-medium mt-4">
+                  더 보러 가기 <span className="ml-0.5 inline-block transition-transform group-hover:translate-x-1">&rsaquo;</span>
                 </p>
               </div>
             </Reveal>
 
-            {/* 강의 카드 1 */}
-            <Reveal delay={80}>
-              <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
-                    전기기사 필기 핵심정리 완전정복
-                  </h4>
-                  <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                    <span className="text-amber-500">&#9733;</span>
-                    <span>4.8(52)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>32시간</span>
+            {[
+              { title: '전기자기학 핵심 이론 완성', stars: '4.8(52)', hours: '32시간' },
+              { title: '전력공학 핵심 공식 마스터', stars: '4.7(29)', hours: '28시간' },
+              { title: '전기기기 구조와 원리 총정리', stars: '4.9(67)', hours: '26시간' },
+              { title: '회로이론 및 제어공학 집중반', stars: '4.5(41)', hours: '30시간' },
+              { title: '전기설비기술기준 조문 해설', stars: '4.8(33)', hours: '18시간' },
+              { title: '전기기사 필기 실전 모의고사', stars: '4.6(38)', hours: '24시간' },
+              { title: '전기기사 과목별 오답 분석 특강', stars: '4.9(45)', hours: '16시간' },
+            ].map((lec, i) => (
+              <Reveal key={lec.title} delay={(i + 1) * 80}>
+                <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
+                  <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                   </div>
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* 강의 카드 2 */}
-            <Reveal delay={160}>
-              <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
-                    전기산업기사 실기 실전 모의고사
-                  </h4>
-                  <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                    <span className="text-amber-500">&#9733;</span>
-                    <span>4.6(38)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>24시간</span>
+                  <div className="p-3 sm:p-4">
+                    <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">{lec.title}</h4>
+                    <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
+                    <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
+                      <span className="text-amber-500">&#9733;</span>
+                      <span>{lec.stars}</span>
+                      <span className="text-gray-300">|</span>
+                      <span>{lec.hours}</span>
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
                   </div>
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
                 </div>
-              </div>
-            </Reveal>
-
-            {/* 강의 카드 3 */}
-            <Reveal delay={240}>
-              <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
-                    전기기능사 이론 총정리 강의
-                  </h4>
-                  <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                    <span className="text-amber-500">&#9733;</span>
-                    <span>4.9(67)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>18시간</span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* 강의 카드 4 */}
-            <Reveal delay={100}>
-              <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
-                    전력공학 핵심 공식 마스터
-                  </h4>
-                  <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                    <span className="text-amber-500">&#9733;</span>
-                    <span>4.7(29)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>15시간</span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* 강의 카드 5 */}
-            <Reveal delay={180}>
-              <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
-                    회로이론 및 제어공학 집중 과정
-                  </h4>
-                  <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                    <span className="text-amber-500">&#9733;</span>
-                    <span>4.5(41)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>20시간</span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* 강의 카드 6 */}
-            <Reveal delay={260}>
-              <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
-                    전기설비기술기준 요약 및 기출
-                  </h4>
-                  <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                    <span className="text-amber-500">&#9733;</span>
-                    <span>4.8(33)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>12시간</span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* 강의 카드 7 */}
-            <Reveal delay={340}>
-              <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
-                    전기기기 과목별 오답 분석 특강
-                  </h4>
-                  <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                  <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                    <span className="text-amber-500">&#9733;</span>
-                    <span>4.9(45)</span>
-                    <span className="text-gray-300">|</span>
-                    <span>16시간</span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
-                </div>
-              </div>
-            </Reveal>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
