@@ -62,7 +62,7 @@ const slides: Slide[] = [
     description: '공기업 채용 대비 전공시험\n한국전력공사 · 한국수력원자력 등',
     bgColor: 'from-[#0a1a20] to-[#102a35]',
     accentColor: '#22d3ee',
-    personImage: '/hero/woman2.png',
+    personImage: '/hero/woman3.png',
     personAlt: '공기업 시험',
   },
   {
@@ -72,7 +72,7 @@ const slides: Slide[] = [
     description: 'NCS 기반 과정평가형 자격\n현장 중심 실무 역량을 평가합니다',
     bgColor: 'from-[#1a0d14] to-[#2d1520]',
     accentColor: '#fb7185',
-    personImage: '/hero/woman3.png',
+    personImage: '/hero/woman2.png',
     personAlt: '과정평가형 자격',
   },
 ]
