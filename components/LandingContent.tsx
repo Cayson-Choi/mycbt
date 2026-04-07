@@ -508,7 +508,7 @@ export default function LandingContent() {
                   <span className="text-emerald-400 font-bold">CAYSON</span>은<br />언제나 열려있습니다
                 </p>
                 <h3 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                  여러분의 <span className="text-amber-400">합격</span>만을<br />위해 노력하겠습니다
+                  여러분의 <span className="text-amber-400">합격</span>만을 위해<br />노력하겠습니다
                 </h3>
               </div>
             </Reveal>
@@ -524,8 +524,8 @@ export default function LandingContent() {
                     <p>점심시간: 12:30~13:30</p>
                     <p className="text-yellow-400">주말, 공휴일 휴무</p>
                   </div>
-                  <a href="mailto:support@mycbt.xyz" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
-                    이메일 문의하기
+                  <a href="https://open.kakao.com/o/smarimpi" target="_blank" rel="noopener noreferrer" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                    카카오톡 문의하기
                   </a>
                 </div>
               </Reveal>
