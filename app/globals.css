@@ -76,7 +76,7 @@ body {
 }
 
 .hero-progress-bar {
-  animation: heroProgress 6s linear forwards;
+  animation: heroProgress 3s linear forwards;
 }
 
 /* 떠다니는 장식 */

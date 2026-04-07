@@ -71,8 +71,8 @@ const slides: Slide[] = [
   },
 ]
 
-const DURATION = 6000
-const FADE_MS = 600
+const DURATION = 3000
+const FADE_MS = 400
 
 export default function HeroSection() {
   const [current, setCurrent] = useState(0)
@@ -90,17 +90,15 @@ export default function HeroSection() {
   const goTo = useCallback((index: number) => {
     if (index === current) return
     clearTimer()
-    // 1) 텍스트 퇴장
+    // 텍스트 + 이미지 동시 퇴장
     setTextVisible(false)
-    // 2) 배경+이미지 페이드 전환
+    setPrev(current)
+    setCurrent(index)
+    // 동시 입장 (퇴장 FADE_MS 후)
     setTimeout(() => {
-      setPrev(current)
-      setCurrent(index)
-      // 3) 텍스트 입장
-      setTimeout(() => setTextVisible(true), 100)
-      // 4) prev 레이어 제거
-      setTimeout(() => setPrev(-1), FADE_MS)
-    }, 300)
+      setTextVisible(true)
+      setPrev(-1)
+    }, FADE_MS)
   }, [current, clearTimer])
 
   const goNext = useCallback(() => {
