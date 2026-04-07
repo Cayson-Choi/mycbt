@@ -119,7 +119,7 @@ const slides: Slide[] = [
     personAlt: '산업기사',
     // 말풍선(머리 우측) + 다이아몬드/링/스파클
     floats: [
-      { type: 'bubble', text: '6개 종목 준비!', right: '3%', top: '3%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
+      { type: 'bubble', text: '6개 종목\n한번에 준비!', right: '2%', top: '2%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
       { type: 'diamond', right: '22%', top: '18%', size: 22, color: '#c084fc', delay: 1100, anim: 'float1' },
       { type: 'diamond', right: '24%', top: '55%', size: 16, color: '#a78bfa', rotate: 15, delay: 1350, anim: 'float3' },
       { type: 'ring', right: '20%', top: '35%', size: 44, color: '#a78bfa', delay: 1200, anim: 'float2' },
@@ -179,7 +179,7 @@ const slides: Slide[] = [
     personAlt: '공기업',
     // 말풍선(머리 우측) + 레터블록/링/스파클
     floats: [
-      { type: 'bubble', text: '전공시험 특화', right: '3%', top: '3%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
+      { type: 'bubble', text: '공기업 전공시험\n완벽 대비!', right: '2%', top: '2%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
       { type: 'block', letter: 'K', right: '22%', top: '18%', size: 42, rotate: 8, delay: 1200, anim: 'float2' },
       { type: 'block', letter: 'P', right: '24%', top: '55%', size: 36, rotate: -10, delay: 1400, anim: 'float1' },
       { type: 'ring', right: '20%', top: '38%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
@@ -316,24 +316,20 @@ export default function HeroSection() {
                       {/* 3D 레터블록 */}
                       {f.type === 'block' && <LetterBlock letter={f.letter || ''} size={f.size || 44} />}
 
-                      {/* 말풍선 */}
+                      {/* 말풍선 (에어클래스 스타일 — 크고 둥근 직사각형, 좌하단 꼬리) */}
                       {f.type === 'bubble' && (
                         <div className="relative">
                           <div
-                            className="relative px-5 py-3 lg:px-6 lg:py-4 rounded-[16px] shadow-xl text-[13px] lg:text-[15px] font-extrabold text-white whitespace-nowrap overflow-hidden"
+                            className="relative px-6 py-4 lg:px-8 lg:py-5 rounded-[20px] shadow-2xl text-[15px] lg:text-[18px] font-extrabold text-white overflow-hidden"
                             style={{ backgroundColor: f.color || slide.accentColor }}
                           >
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent rounded-[16px]" />
-                            <span className="relative">{f.text}</span>
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent rounded-[20px]" />
+                            <span className="relative whitespace-pre-line leading-snug">{f.text}</span>
                           </div>
-                          {/* 꼬리: 좌하단 (사람 머리 방향) */}
-                          <div
-                            className="absolute -bottom-[11px] left-4 w-0 h-0"
-                            style={{
-                              borderTop: `13px solid ${f.color || slide.accentColor}`,
-                              borderRight: '13px solid transparent',
-                            }}
-                          />
+                          {/* 꼬리 — 좌하단, 사람 머리 방향 */}
+                          <svg className="absolute -bottom-[14px] left-3" width="22" height="16" viewBox="0 0 22 16" fill="none">
+                            <path d="M0 0C4 8 2 14 0 16L22 0H0Z" fill={f.color || slide.accentColor} />
+                          </svg>
                         </div>
                       )}
 
