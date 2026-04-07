@@ -406,7 +406,7 @@ export default function HeroSection() {
             </h2>
 
             <p
-              className="text-xs sm:text-base lg:text-lg text-white/50 leading-relaxed whitespace-pre-line max-w-lg transition-all ease-out"
+              className="text-xs sm:text-base lg:text-lg text-white/50 leading-relaxed whitespace-pre-line max-w-xl transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
