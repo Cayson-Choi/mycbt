@@ -656,7 +656,7 @@ export default function LandingContent() {
                     <p>확인 후 즉시 수정</p>
                     <p className="text-yellow-400">규정 개정 실시간 반영</p>
                   </div>
-                  <a href="mailto:error@mycbt.xyz" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                  <a href="mailto:cayson0127@gmail.com?subject=[오류신고]%20문제%20오류%20신고합니다" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
                     오류 신고하기
                   </a>
                 </div>
