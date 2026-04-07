@@ -41,6 +41,7 @@ const slides: Slide[] = [
     accentColor: '#4f8cff',
     personImage: '/hero/man2.png',
     personAlt: '기사',
+    imageScale: 0.85,
   },
   {
     badge: '최고 등급',
