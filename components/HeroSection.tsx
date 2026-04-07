@@ -245,6 +245,7 @@ export default function HeroSection() {
                   transform: i === displayIndex && isVisible
                     ? `translateY(0) scale(${scale})`
                     : `translateY(24px) scale(${scale * 0.97})`,
+                  transformOrigin: 'bottom center',
                   transitionDelay: i === displayIndex && isVisible ? '200ms' : '0ms',
                 }}
               >
