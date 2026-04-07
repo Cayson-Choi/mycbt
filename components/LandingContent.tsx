@@ -17,14 +17,77 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   return <div ref={ref} className={`transition-all duration-700 ease-out ${v ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`}>{children}</div>
 }
 
-/* ─── 등급 데이터 ─── */
+/* ─── 등급 데이터 (탭별 고유 색상 + SVG) ─── */
 const grades = [
-  { id: 'technician', label: '기능사', count: 4 },
-  { id: 'industrial', label: '산업기사', count: 6 },
-  { id: 'engineer', label: '기사', count: 4 },
-  { id: 'master', label: '기능장', count: 1 },
-  { id: 'public', label: '공기업', count: 0 },
-  { id: 'ncs', label: '과정평가형', count: 0 },
+  {
+    id: 'technician', label: '기능사', count: 4,
+    gradient: 'from-emerald-500 to-teal-600',
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+        <rect x="3" y="3" width="14" height="14" rx="3" fill="white" opacity="0.3" />
+        <path d="M7 10l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    id: 'industrial', label: '산업기사', count: 6,
+    gradient: 'from-violet-500 to-purple-600',
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+        <rect x="2" y="5" width="16" height="11" rx="2" fill="white" opacity="0.3" />
+        <rect x="4" y="7" width="12" height="7" rx="1" fill="white" opacity="0.2" />
+        <circle cx="10" cy="10.5" r="2" fill="white" opacity="0.8" />
+        <rect x="7" y="16" width="6" height="1.5" rx="0.5" fill="white" opacity="0.4" />
+      </svg>
+    ),
+  },
+  {
+    id: 'engineer', label: '기사', count: 4,
+    gradient: 'from-blue-500 to-indigo-600',
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2l8 5v6l-8 5-8-5V7l8-5z" fill="white" opacity="0.25" />
+        <path d="M10 2l8 5-8 5-8-5 8-5z" fill="white" opacity="0.4" />
+        <circle cx="10" cy="10" r="2.5" fill="white" opacity="0.9" />
+      </svg>
+    ),
+  },
+  {
+    id: 'master', label: '기능장', count: 1,
+    gradient: 'from-amber-500 to-orange-600',
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.3-4.9-2.6L5.1 17l.9-5.3-4-3.9L7.5 7 10 2z" fill="white" opacity="0.9" />
+      </svg>
+    ),
+  },
+  {
+    id: 'public', label: '공기업', count: 0,
+    gradient: 'from-cyan-500 to-blue-600',
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+        <rect x="5" y="6" width="10" height="12" rx="1" fill="white" opacity="0.3" />
+        <rect x="3" y="4" width="14" height="4" rx="1" fill="white" opacity="0.4" />
+        <rect x="8" y="14" width="4" height="4" fill="white" opacity="0.5" />
+        <rect x="7" y="8" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
+        <rect x="11" y="8" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
+        <rect x="7" y="11.5" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
+        <rect x="11" y="11.5" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
+      </svg>
+    ),
+  },
+  {
+    id: 'ncs', label: '과정평가형', count: 0,
+    gradient: 'from-rose-500 to-pink-600',
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+        <rect x="3" y="2" width="14" height="16" rx="2" fill="white" opacity="0.3" />
+        <rect x="6" y="5" width="8" height="1.5" rx="0.5" fill="white" opacity="0.6" />
+        <rect x="6" y="8" width="5" height="1.5" rx="0.5" fill="white" opacity="0.4" />
+        <path d="M6 12l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
+      </svg>
+    ),
+  },
 ]
 
 /* ─── 이벤트 데이터 (engineerlab 스타일 — 좌상 제목 + 우상 뱃지 + 좌하 CTA + 우하 일러스트) ─── */
@@ -286,18 +349,11 @@ export default function LandingContent() {
           <Reveal delay={150}>
             <div className="min-h-[120px]">
               {grades[activeTab].count > 0 ? (
-                <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-900 border border-blue-100 dark:border-gray-800 rounded-2xl p-6 sm:p-8">
+                <div className="flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 sm:p-8">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                        <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-                          <rect x="3" y="1" width="11" height="15" rx="1.5" fill="white" opacity="0.35" />
-                          <rect x="5" y="4" width="6" height="1" rx="0.5" fill="white" opacity="0.6" />
-                          <rect x="5" y="7" width="4" height="1" rx="0.5" fill="white" opacity="0.5" />
-                          <rect x="5" y="10" width="5" height="1" rx="0.5" fill="white" opacity="0.45" />
-                          <circle cx="14" cy="14" r="5" fill="white" />
-                          <path d="M11.5 14l1.5 1.5 3-3" stroke="#4f46e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                      <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${grades[activeTab].gradient} flex items-center justify-center shadow-lg`}>
+                        {grades[activeTab].icon}
                       </div>
                       <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                         {grades[activeTab].label}
