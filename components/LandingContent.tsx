@@ -21,72 +21,33 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
 const grades = [
   {
     id: 'technician', label: '기능사', count: 4,
-    gradient: 'from-emerald-500 to-teal-600',
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-        <rect x="3" y="3" width="14" height="14" rx="3" fill="white" opacity="0.3" />
-        <path d="M7 10l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    gradient: 'from-teal-50 to-cyan-100 dark:from-teal-950/50 dark:to-cyan-900/30',
+    icon: <img src="/hero/deco/425117-achievement-reward-award.svg" alt="" className="w-8 h-8" />,
   },
   {
     id: 'industrial', label: '산업기사', count: 6,
-    gradient: 'from-violet-500 to-purple-600',
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="5" width="16" height="11" rx="2" fill="white" opacity="0.3" />
-        <rect x="4" y="7" width="12" height="7" rx="1" fill="white" opacity="0.2" />
-        <circle cx="10" cy="10.5" r="2" fill="white" opacity="0.8" />
-        <rect x="7" y="16" width="6" height="1.5" rx="0.5" fill="white" opacity="0.4" />
-      </svg>
-    ),
+    gradient: 'from-pink-50 to-fuchsia-100 dark:from-pink-950/50 dark:to-fuchsia-900/30',
+    icon: <img src="/hero/deco/429900-setting-configuration-gear.svg" alt="" className="w-8 h-8" />,
   },
   {
     id: 'engineer', label: '기사', count: 4,
-    gradient: 'from-blue-500 to-indigo-600',
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-        <path d="M10 2l8 5v6l-8 5-8-5V7l8-5z" fill="white" opacity="0.25" />
-        <path d="M10 2l8 5-8 5-8-5 8-5z" fill="white" opacity="0.4" />
-        <circle cx="10" cy="10" r="2.5" fill="white" opacity="0.9" />
-      </svg>
-    ),
+    gradient: 'from-indigo-50 to-purple-100 dark:from-indigo-950/50 dark:to-purple-900/30',
+    icon: <img src="/hero/deco/382151-education-graduation-learning-school-study.svg" alt="" className="w-8 h-8" />,
   },
   {
     id: 'master', label: '기능장', count: 1,
-    gradient: 'from-amber-500 to-orange-600',
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-        <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.3-4.9-2.6L5.1 17l.9-5.3-4-3.9L7.5 7 10 2z" fill="white" opacity="0.9" />
-      </svg>
-    ),
+    gradient: 'from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/30',
+    icon: <img src="/hero/deco/475312-trophy.svg" alt="" className="w-8 h-8" />,
   },
   {
     id: 'public', label: '공기업', count: 0,
-    gradient: 'from-cyan-500 to-blue-600',
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-        <rect x="5" y="6" width="10" height="12" rx="1" fill="white" opacity="0.3" />
-        <rect x="3" y="4" width="14" height="4" rx="1" fill="white" opacity="0.4" />
-        <rect x="8" y="14" width="4" height="4" fill="white" opacity="0.5" />
-        <rect x="7" y="8" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
-        <rect x="11" y="8" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
-        <rect x="7" y="11.5" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
-        <rect x="11" y="11.5" width="2" height="2" rx="0.5" fill="white" opacity="0.5" />
-      </svg>
-    ),
+    gradient: 'from-amber-50 to-yellow-100 dark:from-amber-950/50 dark:to-yellow-900/30',
+    icon: <img src="/hero/deco/421954-apartment-block-building.svg" alt="" className="w-8 h-8" />,
   },
   {
     id: 'ncs', label: '과정평가형', count: 0,
-    gradient: 'from-rose-500 to-pink-600',
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-        <rect x="3" y="2" width="14" height="16" rx="2" fill="white" opacity="0.3" />
-        <rect x="6" y="5" width="8" height="1.5" rx="0.5" fill="white" opacity="0.6" />
-        <rect x="6" y="8" width="5" height="1.5" rx="0.5" fill="white" opacity="0.4" />
-        <path d="M6 12l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
-      </svg>
-    ),
+    gradient: 'from-blue-50 to-sky-100 dark:from-blue-950/50 dark:to-sky-900/30',
+    icon: <img src="/hero/deco/375339-certificate-authority-service.svg" alt="" className="w-8 h-8" />,
   },
 ]
 
@@ -531,7 +492,7 @@ export default function LandingContent() {
               </Reveal>
 
               <Reveal delay={200}>
-                <div className="bg-slate-600/80 backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
+                <div className="bg-[#3d5a96] backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
                   <h4 className="text-white font-bold text-base sm:text-lg mb-1">오류 신고</h4>
                   <h4 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">센터</h4>
                   <div className="text-sm text-gray-300 space-y-1 mb-auto">
