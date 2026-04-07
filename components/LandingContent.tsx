@@ -481,24 +481,79 @@ export default function LandingContent() {
       </section>
 
       {/* ════════════════════════════════════════
-          SECTION 5 -- CTA
+          SECTION 5 -- 고객센터 + CTA (engineerlab 스타일)
          ════════════════════════════════════════ */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 text-center">
-          <Reveal>
-            <h3 className="text-2xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
-              지금 시작하면, 다음 시험이 마지막입니다
-            </h3>
-            <p className="text-blue-100 text-sm sm:text-base mb-8 max-w-lg mx-auto">
-              검증된 문제로 실전처럼 연습하세요. 회원가입 후 무료로 시작할 수 있습니다.
-            </p>
-            <a
-              href="#exams"
-              className="inline-block bg-white text-blue-600 font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/25"
-            >
-              무료로 시작하기
-            </a>
-          </Reveal>
+      <section className="relative bg-gray-900 overflow-hidden">
+        {/* 어두운 오버레이 배경 */}
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/80 to-gray-900/60" />
+        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
+            {/* 좌측: 텍스트 */}
+            <Reveal>
+              <div className="lg:flex-shrink-0 lg:w-[340px]">
+                <p className="text-white/60 text-lg sm:text-xl mb-4 leading-relaxed">
+                  CAYSON은<br />언제나 열려있습니다
+                </p>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                  여러분의 합격만을<br />위해 노력하겠습니다
+                </h3>
+              </div>
+            </Reveal>
+
+            {/* 우측: 3개 카드 */}
+            <div className="grid sm:grid-cols-3 gap-4 flex-1 w-full">
+              <Reveal delay={100}>
+                <div className="bg-slate-700/80 backdrop-blur rounded-xl p-6 h-full flex flex-col">
+                  <h4 className="text-white font-bold text-lg mb-1">CAYSON</h4>
+                  <h4 className="text-white font-bold text-lg mb-4">고객센터</h4>
+                  <div className="text-sm text-gray-300 space-y-1 mb-auto">
+                    <p>평일: 10:00~18:00</p>
+                    <p>점심시간: 12:30~13:30</p>
+                    <p className="text-yellow-400">주말, 공휴일 휴무</p>
+                  </div>
+                  <a href="mailto:support@mycbt.xyz" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                    이메일 문의하기
+                  </a>
+                </div>
+              </Reveal>
+
+              <Reveal delay={200}>
+                <div className="bg-slate-600/80 backdrop-blur rounded-xl p-6 h-full flex flex-col">
+                  <h4 className="text-white font-bold text-lg mb-1">오류 신고</h4>
+                  <h4 className="text-white font-bold text-lg mb-4">센터</h4>
+                  <div className="text-sm text-gray-300 space-y-1 mb-auto">
+                    <p>24시간 접수 가능</p>
+                    <p>확인 후 즉시 수정</p>
+                    <p className="text-yellow-400">규정 개정 실시간 반영</p>
+                  </div>
+                  <a href="mailto:error@mycbt.xyz" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                    오류 신고하기
+                  </a>
+                </div>
+              </Reveal>
+
+              <Reveal delay={300}>
+                <div className="bg-blue-400/40 backdrop-blur rounded-xl p-6 h-full flex flex-col">
+                  <h4 className="text-white font-bold text-lg mb-1">CAYSON</h4>
+                  <h4 className="text-white font-bold text-lg mb-4">자주 묻는 질문</h4>
+                  <div className="text-sm text-gray-200 space-y-1 mb-auto">
+                    <p>회원가입, 시험 응시,</p>
+                    <p>점수 확인, 오답노트 등</p>
+                    <p>궁금한 점을 확인하세요</p>
+                  </div>
+                  <a href="#exams" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                    FAQ 확인하기
+                  </a>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+
+          <p className="text-gray-500 text-xs mt-8 text-center lg:text-right">
+            * 문의는 이메일로 접수되며, 영업일 기준 24시간 이내 답변드립니다.
+          </p>
         </div>
       </section>
     </>
