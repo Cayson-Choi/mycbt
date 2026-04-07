@@ -469,8 +469,8 @@ export default function HeroSection() {
             })}
           </div>
 
-          {/* ===== 말풍선 레이어 (사람 위, z-[8], overflow 허용) ===== */}
-          <div className="absolute inset-0 z-[8] pointer-events-none hidden sm:block">
+          {/* ===== 말풍선 레이어 (사람 뒤, z-[3]) ===== */}
+          <div className="absolute inset-0 z-[3] pointer-events-none hidden sm:block">
             {slide.floats.filter(f => f.type === 'bubble').map((f, fi) => {
               const isActive = textVisible
               const ac = animConfig[f.anim]
