@@ -7,12 +7,12 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "전기짱",
+  title: "CAYSON",
   description: "전기 박사와 기술사들이 검증한 CBT 문제",
   openGraph: {
-    title: "전기짱",
+    title: "CAYSON",
     description: "전기 박사와 기술사들이 검증한 CBT 문제",
-    siteName: "전기짱",
+    siteName: "CAYSON",
     url: "https://www.mycbt.xyz",
     images: [
       {
