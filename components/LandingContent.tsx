@@ -81,32 +81,170 @@ const testimonials = [
 ]
 
 /* ─── 강점 데이터 (컬러풀 SVG) ─── */
-const strengths = [
-  {
-    title: '원본 대조 검증',
-    desc: '인터넷 복사가 아닙니다. 실제 시험지 원본과 한 문제씩 대조하여 정답과 선택지를 검증합니다.',
-    iconBg: 'bg-red-50 dark:bg-red-950/30',
-    icon: <img src="/hero/deco/302553-shield.svg" alt="" className="w-9 h-9" />,
-  },
-  {
-    title: '실전 동일 환경',
-    desc: '한국산업인력공단 CBT와 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
-    iconBg: 'bg-blue-50 dark:bg-blue-950/30',
-    icon: <img src="/hero/deco/314978-laptop-open.svg" alt="" className="w-9 h-9" />,
-  },
-  {
-    title: '자동 오답 분석',
-    desc: '틀린 문제를 자동으로 분류하고 과목별 약점을 분석합니다. 같은 실수를 반복하지 않도록.',
-    iconBg: 'bg-pink-50 dark:bg-pink-950/30',
-    icon: <img src="/hero/deco/429901-profit-chart-bar-report.svg" alt="" className="w-9 h-9" />,
-  },
-  {
-    title: '24시간 오류 수정',
-    desc: '오류가 발견되면 24시간 이내에 수정합니다. 규정 개정 사항도 실시간으로 반영합니다.',
-    iconBg: 'bg-teal-50 dark:bg-teal-950/30',
-    icon: <img src="/hero/deco/341443-equipment-maintenance-screwdriver-tools-wrench.svg" alt="" className="w-9 h-9" />,
-  },
-]
+/* ─── 카운터 애니메이션 훅 ─── */
+function useCountUp(end: number, duration = 2000, startOnView = true) {
+  const [count, setCount] = useState(0)
+  const [started, setStarted] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!startOnView || !ref.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true) },
+      { threshold: 0.3 }
+    )
+    observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [startOnView, started])
+
+  useEffect(() => {
+    if (!started) return
+    let frame: number
+    const start = performance.now()
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.floor(eased * end))
+      if (progress < 1) frame = requestAnimationFrame(step)
+    }
+    frame = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(frame)
+  }, [started, end, duration])
+
+  return { count, ref }
+}
+
+/* ─── CAYSON이 다른 이유 — 인터랙티브 섹션 ─── */
+function WhyCaysonSection() {
+  const stat1 = useCountUp(2100)
+  const stat2 = useCountUp(100)
+  const stat3 = useCountUp(24)
+  const stat4 = useCountUp(58)
+
+  const features = [
+    {
+      icon: <img src="/hero/deco/302553-shield.svg" alt="" className="w-10 h-10" />,
+      title: '원본 대조 검증',
+      stat: stat1,
+      statSuffix: '문제+',
+      statLabel: '검증 완료',
+      desc: '인터넷 복사가 아닙니다. 실제 시험지 원본과 한 문제씩 대조하여 정답과 선택지를 검증합니다.',
+      barColor: 'from-red-500 to-rose-400',
+      barWidth: 100,
+      accent: 'text-red-500',
+      glow: 'group-hover:shadow-red-500/20',
+    },
+    {
+      icon: <img src="/hero/deco/314978-laptop-open.svg" alt="" className="w-10 h-10" />,
+      title: '실전 동일 환경',
+      stat: stat2,
+      statSuffix: '%',
+      statLabel: '환경 동일',
+      desc: '한국산업인력공단 CBT와 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
+      barColor: 'from-blue-500 to-indigo-400',
+      barWidth: 100,
+      accent: 'text-blue-500',
+      glow: 'group-hover:shadow-blue-500/20',
+    },
+    {
+      icon: <img src="/hero/deco/429901-profit-chart-bar-report.svg" alt="" className="w-10 h-10" />,
+      title: '자동 오답 분석',
+      stat: stat3,
+      statSuffix: '시간',
+      statLabel: '이내 분석',
+      desc: '시험 종료 즉시 과목별 약점을 자동 분석합니다. 같은 실수를 반복하지 않도록.',
+      barColor: 'from-pink-500 to-fuchsia-400',
+      barWidth: 92,
+      accent: 'text-pink-500',
+      glow: 'group-hover:shadow-pink-500/20',
+    },
+    {
+      icon: <img src="/hero/deco/341443-equipment-maintenance-screwdriver-tools-wrench.svg" alt="" className="w-10 h-10" />,
+      title: '오류 발견 즉시 수정',
+      stat: stat4,
+      statSuffix: '건',
+      statLabel: '오류 수정 완료',
+      desc: 'AI 검토로 발견된 오류를 즉시 수정합니다. 규정 개정 사항도 실시간으로 반영합니다.',
+      barColor: 'from-teal-500 to-emerald-400',
+      barWidth: 97,
+      accent: 'text-teal-500',
+      glow: 'group-hover:shadow-teal-500/20',
+    },
+  ]
+
+  return (
+    <section className="bg-gray-950 text-white overflow-hidden relative">
+      {/* 배경 그리드 패턴 */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+      {/* 상단 글로우 */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/10 rounded-full blur-[120px]" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <Reveal>
+          <div className="text-center mb-14 sm:mb-20">
+            <p className="text-sm font-semibold text-blue-400 tracking-widest uppercase mb-3">
+              Why CAYSON
+            </p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-snug">
+              다른 CBT 사이트와<br className="sm:hidden" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">비교하지 마세요</span>
+            </h2>
+            <p className="text-gray-400 mt-4 max-w-lg mx-auto text-sm sm:text-base">
+              2,100문제를 직접 원본 대조하고, AI로 검토하고, 오류를 수정한 곳은 CAYSON뿐입니다.
+            </p>
+          </div>
+        </Reveal>
+
+        {/* 카드 그리드 */}
+        <div ref={stat1.ref} className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+          {features.map((f, i) => (
+            <Reveal key={f.title} delay={i * 120}>
+              <div className={`group relative bg-white/[0.04] backdrop-blur border border-white/10 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/20 hover:shadow-2xl ${f.glow} hover:-translate-y-1`}>
+                {/* 아이콘 + 숫자 상단 */}
+                <div className="flex items-start justify-between mb-5">
+                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    {f.icon}
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-3xl sm:text-4xl font-black tabular-nums ${f.accent}`}>
+                      {f.stat.count.toLocaleString()}<span className="text-lg sm:text-xl">{f.statSuffix}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-0.5">{f.statLabel}</p>
+                  </div>
+                </div>
+
+                {/* 제목 + 설명 */}
+                <h3 className="text-lg sm:text-xl font-bold mb-2">{f.title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed mb-5">{f.desc}</p>
+
+                {/* 프로그레스 바 */}
+                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full bg-gradient-to-r ${f.barColor} rounded-full transition-all duration-[2000ms] ease-out`}
+                    style={{ width: `${stat1.count > 0 ? f.barWidth : 0}%` }}
+                  />
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* 하단 CTA */}
+        <Reveal delay={500}>
+          <div className="mt-12 sm:mt-16 text-center">
+            <p className="text-gray-500 text-sm mb-5">검증된 문제로 공부하면 합격이 가까워집니다</p>
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base transition-all hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              지금 무료로 시작하기
+              <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
 
 export default function LandingContent() {
   const [activeTab, setActiveTab] = useState(0)
@@ -207,7 +345,7 @@ export default function LandingContent() {
       </section>
 
       {/* ════════════════════════════════════════
-          SECTION 2 -- 과정별 동영상 강의 (airklass 스타일)
+          SECTION 2 -- 동영상 강의 (airklass 스타일)
          ════════════════════════════════════════ */}
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
@@ -217,7 +355,7 @@ export default function LandingContent() {
                 Video Lectures
               </p>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                과정별 동영상 강의
+                동영상 강의
               </h2>
               <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full" />
             </div>
@@ -465,41 +603,9 @@ export default function LandingContent() {
       </section>
 
       {/* ════════════════════════════════════════
-          SECTION 4 -- CAYSON이 다른 이유
+          SECTION 4 -- CAYSON이 다른 이유 (인터랙티브)
          ════════════════════════════════════════ */}
-      <section className="bg-white dark:bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
-          <Reveal>
-            <div className="mb-10 sm:mb-14 text-center">
-              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">
-                Why CAYSON
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                CAYSON이 다른 이유
-              </h2>
-              <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full mx-auto" />
-            </div>
-          </Reveal>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            {strengths.map((s, i) => (
-              <Reveal key={s.title} delay={i * 100}>
-                <div className="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 h-full transition-all hover:border-blue-200 dark:hover:border-blue-800 hover:shadow-xl hover:shadow-blue-50/50 dark:hover:shadow-blue-950/20 hover:-translate-y-0.5">
-                  <div className={`w-14 h-14 rounded-2xl ${s.iconBg} flex items-center justify-center mb-5 transition-transform group-hover:scale-110`}>
-                    {s.icon}
-                  </div>
-                  <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
-                    {s.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                    {s.desc}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      <WhyCaysonSection />
 
       {/* ════════════════════════════════════════
           SECTION 5 -- 고객센터 + CTA (engineerlab 스타일)
