@@ -3,12 +3,12 @@
 import Link from "next/link"
 
 const grades = [
-  { id: 'technician', label: '기능사', sub: '전기·승강기·위험물·가스', count: 4, accent: 'emerald' },
-  { id: 'industrial', label: '산업기사', sub: '전기·소방·에너지·공조냉동·산업안전', count: 6, accent: 'violet' },
-  { id: 'engineer', label: '기사', sub: '전기·소방·가스', count: 4, accent: 'blue' },
-  { id: 'master', label: '기능장', sub: '전기기능장', count: 1, accent: 'amber' },
-  { id: 'public', label: '공기업', sub: '한전·한수원 등', count: 0, accent: 'cyan' },
-  { id: 'ncs', label: '과정평가형', sub: 'NCS 기반 과정평가', count: 0, accent: 'rose' },
+  { id: 'technician', label: '기능사', sub: '', count: 4, accent: 'emerald' },
+  { id: 'industrial', label: '산업기사', sub: '', count: 6, accent: 'violet' },
+  { id: 'engineer', label: '기사', sub: '', count: 4, accent: 'blue' },
+  { id: 'master', label: '기능장', sub: '', count: 1, accent: 'amber' },
+  { id: 'public', label: '공기업', sub: '', count: 0, accent: 'cyan' },
+  { id: 'ncs', label: '과정평가형', sub: '', count: 0, accent: 'rose' },
 ]
 
 const styles: Record<string, { bg: string; border: string; hover: string; dot: string; badge: string; title: string }> = {
@@ -88,9 +88,12 @@ export default function HomeExamCards() {
             <h3 className={`text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1 transition-colors ${isReady ? s.title : ''}`}>
               {g.label}
             </h3>
-            <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
-              {g.sub}
-            </p>
+            {g.sub && (
+              <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
+                {g.sub}
+              </p>
+            )}
+            {!g.sub && <div className="mb-3" />}
             <div className="flex items-center justify-between">
               {isReady ? (
                 <>
