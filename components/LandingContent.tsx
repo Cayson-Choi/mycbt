@@ -550,10 +550,10 @@ export default function LandingContent() {
             <Reveal>
               <div className="lg:flex-shrink-0 lg:w-[340px]">
                 <p className="text-white/60 text-lg sm:text-xl mb-4 leading-relaxed">
-                  CAYSON은<br />언제나 열려있습니다
+                  <span className="text-white font-bold">CAYSON</span>은<br />언제나 열려있습니다
                 </p>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                  여러분의 합격만을<br />위해 노력하겠습니다
+                  여러분의 <span className="text-amber-400">합격</span>만을<br />위해 노력하겠습니다
                 </h3>
               </div>
             </Reveal>
