@@ -360,9 +360,9 @@ function WhyCaysonSection() {
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">검증된 문제로 공부하면 합격이 가까워집니다</p>
             <Link
               href="/login"
-              className="group/btn relative inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base transition-all hover:shadow-xl hover:shadow-emerald-500/30 hover:scale-[1.03] active:scale-[0.97] overflow-hidden"
+              className="group/btn relative inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-500 text-white font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base transition-all hover:shadow-xl hover:shadow-violet-500/30 hover:scale-[1.03] active:scale-[0.97] overflow-hidden"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+              <span className="absolute inset-0 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-400 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{ animation: 'ctaShimmer 2.5s ease-in-out infinite' }} />
               <span className="relative">지금 무료로 시작하기</span>
               <svg className="relative w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
