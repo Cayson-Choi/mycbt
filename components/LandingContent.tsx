@@ -51,108 +51,6 @@ const grades = [
   },
 ]
 
-/* ─── 이벤트 데이터 (engineerlab 스타일 — 좌상 제목 + 우상 뱃지 + 좌하 CTA + 우하 일러스트) ─── */
-const events = [
-  {
-    title: '전 강좌\n무료 이벤트',
-    badge: '가입혜택',
-    cta: '추가 무료/할인 혜택,\n무료 교재까지',
-    illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <rect x="20" y="35" width="40" height="32" rx="4" fill="#60a5fa" />
-        <rect x="18" y="30" width="44" height="10" rx="3" fill="#3b82f6" />
-        <rect x="36" y="30" width="8" height="37" rx="1" fill="#2563eb" opacity="0.6" />
-        <path d="M40 30c-4-8-12-10-14-6s2 10 8 12h6" fill="#f472b6" />
-        <path d="M40 30c4-8 12-10 14-6s-2 10-8 12h-6" fill="#fb7185" />
-        <circle cx="40" cy="30" r="4" fill="#e11d48" />
-        <path d="M22 22c0-2 2-4 4-2s-1 5-4 6" fill="#f9a8d4" />
-        <path d="M58 18c0-2-2-4-4-2s1 5 4 6" fill="#fda4af" />
-        <circle cx="28" cy="16" r="2" fill="#fbbf24" />
-        <circle cx="54" cy="22" r="1.5" fill="#fb923c" />
-      </svg>
-    ),
-  },
-  {
-    title: '환승/재수강/\n내배카 할인',
-    badge: '전원',
-    cta: '인증 시 인강\n할인 혜택',
-    illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <rect x="12" y="20" width="48" height="38" rx="6" fill="#fde68a" />
-        <rect x="12" y="20" width="48" height="14" rx="6" fill="#fbbf24" />
-        <rect x="30" y="28" width="12" height="18" rx="2" fill="white" opacity="0.7" />
-        <text x="32" y="42" fontSize="14" fontWeight="900" fill="#ea580c" fontFamily="system-ui">%</text>
-        <path d="M52 16l3-4 3 2-4 4" fill="#f472b6" />
-        <path d="M58 22l4-2 2 3-4 2" fill="#a78bfa" />
-        <circle cx="18" cy="18" r="3" fill="#34d399" />
-        <rect x="62" y="38" width="6" height="6" rx="1" transform="rotate(15 62 38)" fill="#fb923c" />
-        <circle cx="10" cy="44" r="2" fill="#60a5fa" />
-      </svg>
-    ),
-  },
-  {
-    title: '실기 복원\n사전 신청',
-    badge: '전원',
-    cta: '전기기사 복원\n참여하면 합격지원',
-    illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <circle cx="40" cy="40" r="28" fill="#fecdd3" />
-        <circle cx="40" cy="40" r="22" fill="#fb7185" />
-        <circle cx="40" cy="40" r="16" fill="#e11d48" />
-        <polygon points="35,30 35,50 55,40" fill="white" />
-      </svg>
-    ),
-  },
-  {
-    title: '필수기출1200제\nYoutube',
-    badge: 'ONLY',
-    cta: '전기기사\n대표유형 뽀개기',
-    illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <rect x="18" y="10" width="38" height="60" rx="8" fill="#fca5a5" />
-        <rect x="20" y="16" width="34" height="48" rx="4" fill="white" />
-        <rect x="22" y="18" width="30" height="36" rx="2" fill="#fee2e2" />
-        <circle cx="37" cy="36" r="10" fill="#ef4444" />
-        <polygon points="34,30 34,42 44,36" fill="white" />
-        <rect x="32" y="58" width="10" height="3" rx="1.5" fill="#d1d5db" />
-      </svg>
-    ),
-  },
-  {
-    title: '카톡 친구\n추천 이벤트',
-    badge: '전원',
-    cta: '교재, 강의,\n기프티콘 등 선물',
-    illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <path d="M14 55V30c0-2 2-4 4-4h44c2 0 4 2 4 4v25l-26 12-26-12z" fill="#fbbf24" />
-        <path d="M14 30l26 18 26-18" fill="#f59e0b" />
-        <path d="M14 55l26-12 26 12" fill="#fde68a" />
-        <path d="M34 20c0-4 3-7 6-7s6 3 6 7c0 5-6 9-6 9s-6-4-6-9z" fill="#f472b6" />
-        <path d="M28 26c0-3 2-5 4-5s4 2 4 5c0 4-4 6-4 6s-4-2-4-6z" fill="#fb7185" opacity="0.7" />
-        <path d="M44 24c0-3 2-5 4-5s4 2 4 5c0 4-4 6-4 6s-4-2-4-6z" fill="#fda4af" opacity="0.8" />
-      </svg>
-    ),
-  },
-  {
-    title: '합격자들의\n리얼 합격후기',
-    badge: null,
-    cta: '생생한 합격후기를\n남겨주세요!',
-    illust: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <rect x="16" y="8" width="40" height="52" rx="4" fill="#bfdbfe" />
-        <rect x="20" y="14" width="28" height="3" rx="1" fill="#3b82f6" opacity="0.4" />
-        <rect x="20" y="20" width="20" height="3" rx="1" fill="#3b82f6" opacity="0.3" />
-        <rect x="20" y="26" width="24" height="3" rx="1" fill="#3b82f6" opacity="0.35" />
-        <rect x="20" y="32" width="16" height="3" rx="1" fill="#3b82f6" opacity="0.25" />
-        <rect x="20" y="38" width="22" height="3" rx="1" fill="#3b82f6" opacity="0.3" />
-        <circle cx="56" cy="52" r="16" fill="#60a5fa" />
-        <circle cx="56" cy="46" r="6" fill="white" />
-        <path d="M46 60c0-5.5 4.5-10 10-10s10 4.5 10 10" fill="white" />
-      </svg>
-    ),
-  },
-]
-
 /* ─── 합격 수기 데이터 ─── */
 const testimonials = [
   {
@@ -217,17 +115,17 @@ export default function LandingContent() {
   return (
     <>
       {/* ════════════════════════════════════════
-          SECTION 1 -- 교육과정 (등급 탭 + 카드)
+          SECTION 1 -- 과정별 CBT (등급 탭 + 카드)
          ════════════════════════════════════════ */}
       <section id="exams" className="bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <Reveal>
             <div className="mb-10 sm:mb-14">
               <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">
-                Curriculum
+                CBT Practice
               </p>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                교육과정
+                과정별 CBT
               </h2>
               <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full" />
             </div>
@@ -309,56 +207,22 @@ export default function LandingContent() {
       </section>
 
       {/* ════════════════════════════════════════
-          SECTION 2 -- 진행중인 이벤트
+          SECTION 2 -- 과정별 동영상 강의 (airklass 스타일)
          ════════════════════════════════════════ */}
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <Reveal>
             <div className="mb-10 sm:mb-14">
               <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">
-                Events
+                Video Lectures
               </p>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                진행중인 이벤트
+                과정별 동영상 강의
               </h2>
               <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full" />
             </div>
           </Reveal>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {events.map((ev, i) => (
-              <Reveal key={i} delay={i * 80}>
-                <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 sm:p-6 h-full transition-all hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 hover:-translate-y-0.5 cursor-pointer relative overflow-hidden min-h-[140px] sm:min-h-[170px]">
-                  {/* 좌상단: 제목 */}
-                  <h3 className="text-sm sm:text-xl font-extrabold text-gray-900 dark:text-white leading-tight whitespace-pre-line pr-12 sm:pr-16">
-                    {ev.title}
-                  </h3>
-                  {/* 우상단: 뱃지 */}
-                  {ev.badge && (
-                    <div className="absolute top-3 right-3 sm:top-5 sm:right-5 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-gray-600 dark:bg-gray-500 text-white text-[8px] sm:text-[10px] font-bold flex items-center justify-center text-center leading-tight">
-                      {ev.badge}
-                    </div>
-                  )}
-                  {/* 좌하단: CTA */}
-                  <p className="absolute bottom-3 left-4 sm:bottom-5 sm:left-6 text-[11px] sm:text-sm text-blue-600 dark:text-blue-400 font-medium leading-snug whitespace-pre-line max-w-[55%]">
-                    {ev.cta} <span className="inline-block ml-0.5">&rarr;</span>
-                  </p>
-                  {/* 우하단: 일러스트 */}
-                  <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 transition-transform group-hover:scale-110 w-[48px] h-[48px] sm:w-[72px] sm:h-[72px]">
-                    {ev.illust}
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════
-          SECTION 2.5 -- 추천 강의 (airklass 스타일)
-         ════════════════════════════════════════ */}
-      <section className="bg-white dark:bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {/* 프로모 배너 카드 */}
             <Reveal>
@@ -378,8 +242,9 @@ export default function LandingContent() {
             {/* 강의 카드 1 */}
             <Reveal delay={80}>
               <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
-                  <span className="text-white text-3xl sm:text-4xl font-black tracking-tight opacity-90">CBT</span>
+                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                 </div>
                 <div className="p-3 sm:p-4">
                   <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
@@ -400,10 +265,9 @@ export default function LandingContent() {
             {/* 강의 카드 2 */}
             <Reveal delay={160}>
               <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                  <svg className="w-12 h-12 sm:w-16 sm:h-16 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                 </div>
                 <div className="p-3 sm:p-4">
                   <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
@@ -424,10 +288,9 @@ export default function LandingContent() {
             {/* 강의 카드 3 */}
             <Reveal delay={240}>
               <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center">
-                  <svg className="w-12 h-12 sm:w-16 sm:h-16 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                 </div>
                 <div className="p-3 sm:p-4">
                   <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
@@ -448,10 +311,9 @@ export default function LandingContent() {
             {/* 강의 카드 4 */}
             <Reveal delay={100}>
               <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center">
-                  <svg className="w-12 h-12 sm:w-16 sm:h-16 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                 </div>
                 <div className="p-3 sm:p-4">
                   <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
@@ -472,10 +334,9 @@ export default function LandingContent() {
             {/* 강의 카드 5 */}
             <Reveal delay={180}>
               <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                  <svg className="w-12 h-12 sm:w-16 sm:h-16 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                 </div>
                 <div className="p-3 sm:p-4">
                   <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
@@ -496,11 +357,9 @@ export default function LandingContent() {
             {/* 강의 카드 6 */}
             <Reveal delay={260}>
               <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-                  <svg className="w-12 h-12 sm:w-16 sm:h-16 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M11.42 15.17l-5.384-3.19A1.5 1.5 0 015.25 10.68V7.32a1.5 1.5 0 01.786-1.3l5.384-3.19a1.5 1.5 0 011.572 0l5.384 3.19a1.5 1.5 0 01.786 1.3v3.36a1.5 1.5 0 01-.786 1.3l-5.384 3.19a1.5 1.5 0 01-1.572 0z" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 12v9m0 0l-3-3m3 3l3-3" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                 </div>
                 <div className="p-3 sm:p-4">
                   <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
@@ -521,10 +380,9 @@ export default function LandingContent() {
             {/* 강의 카드 7 */}
             <Reveal delay={340}>
               <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                <div className="aspect-[4/3] bg-gradient-to-br from-slate-600 to-gray-800 flex items-center justify-center">
-                  <svg className="w-12 h-12 sm:w-16 sm:h-16 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
                 </div>
                 <div className="p-3 sm:p-4">
                   <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">
