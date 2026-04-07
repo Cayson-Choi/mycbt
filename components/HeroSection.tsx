@@ -378,7 +378,7 @@ export default function HeroSection() {
           </div>
 
           {/* 텍스트 */}
-          <div className="flex-1 z-10 pb-12 sm:pb-16 lg:pb-20 pt-7 sm:pt-6 lg:pt-8">
+          <div className="flex-1 z-10 pb-12 sm:pb-24 lg:pb-28 pt-7 sm:pt-6 lg:pt-8">
             <div
               className="inline-block px-3 py-1 rounded text-[11px] font-bold text-white mb-4 transition-all ease-out"
               style={{
