@@ -32,7 +32,7 @@ const slides: Slide[] = [
     description: '전기산업기사 · 소방설비산업기사(전기/기계)\n에너지 · 공조냉동기계 · 산업안전산업기사',
     bgColor: 'from-[#150d24] to-[#251840]',
     accentColor: '#a78bfa',
-    personImage: '/hero/man.png',
+    personImage: '/hero/man2.png',
     personAlt: '산업기사 자격증',
   },
   {
@@ -52,7 +52,7 @@ const slides: Slide[] = [
     description: '전기기능장\n최고 등급 자격증에 도전하세요',
     bgColor: 'from-[#1a1200] to-[#302000]',
     accentColor: '#fbbf24',
-    personImage: '/hero/woman.png',
+    personImage: '/hero/woman2.png',
     personAlt: '기능장 자격증',
   },
   {
@@ -62,8 +62,18 @@ const slides: Slide[] = [
     description: '공기업 채용 대비 전공시험\n한국전력공사 · 한국수력원자력 등',
     bgColor: 'from-[#0a1a20] to-[#102a35]',
     accentColor: '#22d3ee',
-    personImage: '/hero/man.png',
+    personImage: '/hero/man3.png',
     personAlt: '공기업 시험',
+  },
+  {
+    badge: '준비중',
+    badgeColor: 'bg-rose-500',
+    title: '과정평가형',
+    description: 'NCS 기반 과정평가형 자격\n현장 중심 실무 역량을 평가합니다',
+    bgColor: 'from-[#1a0d14] to-[#2d1520]',
+    accentColor: '#fb7185',
+    personImage: '/hero/woman3.png',
+    personAlt: '과정평가형 자격',
   },
 ]
 
