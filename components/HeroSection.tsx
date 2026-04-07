@@ -86,7 +86,7 @@ export default function HeroSection() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const touchStartX = useRef(0)
 
-  const INTERVAL = 5000
+  const INTERVAL = 3000
 
   const clearTimer = () => {
     if (timerRef.current) clearTimeout(timerRef.current)
