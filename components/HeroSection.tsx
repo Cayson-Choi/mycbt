@@ -119,7 +119,7 @@ const slides: Slide[] = [
     personAlt: '산업기사',
     // 말풍선(머리 우측) + 다이아몬드/링/스파클
     floats: [
-      { type: 'bubble', text: '6개 종목\n한번에 준비!', right: '-5%', top: '2%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
+      { type: 'bubble', text: '6개 종목\n한번에 준비!', right: '-10%', top: '2%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
       { type: 'diamond', right: '22%', top: '18%', size: 22, color: '#c084fc', delay: 1100, anim: 'float1' },
       { type: 'diamond', right: '24%', top: '55%', size: 16, color: '#a78bfa', rotate: 15, delay: 1350, anim: 'float3' },
       { type: 'ring', right: '20%', top: '35%', size: 44, color: '#a78bfa', delay: 1200, anim: 'float2' },
@@ -179,7 +179,7 @@ const slides: Slide[] = [
     personAlt: '공기업',
     // 말풍선(머리 우측) + 레터블록/링/스파클
     floats: [
-      { type: 'bubble', text: '공기업 전공시험\n완벽 대비!', right: '-5%', top: '2%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
+      { type: 'bubble', text: '공기업 전공시험\n완벽 대비!', right: '-10%', top: '2%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
       { type: 'block', letter: 'K', right: '22%', top: '18%', size: 42, rotate: 8, delay: 1200, anim: 'float2' },
       { type: 'block', letter: 'P', right: '24%', top: '55%', size: 36, rotate: -10, delay: 1400, anim: 'float1' },
       { type: 'ring', right: '20%', top: '38%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
@@ -439,37 +439,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* 사람 이미지 (장식 위) */}
-          <div className="relative flex-shrink-0 w-[100px] sm:w-[160px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
-            {slides.map((s, i) => {
-              const scale = s.imageScale || 1
-              const isActive = i === current
-              return (
-                <div
-                  key={i}
-                  className="absolute inset-0 transition-all ease-out"
-                  style={{
-                    opacity: isActive && textVisible ? 1 : 0,
-                    transform: isActive && textVisible ? `scale(${scale})` : `translateY(16px) scale(${scale * 0.97})`,
-                    transformOrigin: 'bottom center',
-                    transitionDuration: '667ms',
-                    transitionDelay: isActive && textVisible ? '500ms' : '0ms',
-                  }}
-                >
-                  <Image
-                    src={s.personImage}
-                    alt={s.personAlt}
-                    fill
-                    className="object-contain object-bottom"
-                    sizes="(max-width: 640px) 100px, (max-width: 1024px) 160px, 260px"
-                    priority={i <= 1}
-                  />
-                </div>
-              )
-            })}
-          </div>
-
-          {/* ===== 말풍선 레이어 (사람 뒤, z-[3]) ===== */}
+          {/* ===== 말풍선 레이어 (사람 뒤 — DOM 순서로 사람보다 먼저 렌더) ===== */}
           <div className="absolute inset-0 z-[3] pointer-events-none hidden sm:block">
             {slide.floats.filter(f => f.type === 'bubble').map((f, fi) => {
               const isActive = textVisible
@@ -504,6 +474,36 @@ export default function HeroSection() {
                       </div>
                     </div>
                   </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* 사람 이미지 (말풍선 위) */}
+          <div className="relative flex-shrink-0 w-[100px] sm:w-[160px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
+            {slides.map((s, i) => {
+              const scale = s.imageScale || 1
+              const isActive = i === current
+              return (
+                <div
+                  key={i}
+                  className="absolute inset-0 transition-all ease-out"
+                  style={{
+                    opacity: isActive && textVisible ? 1 : 0,
+                    transform: isActive && textVisible ? `scale(${scale})` : `translateY(16px) scale(${scale * 0.97})`,
+                    transformOrigin: 'bottom center',
+                    transitionDuration: '667ms',
+                    transitionDelay: isActive && textVisible ? '500ms' : '0ms',
+                  }}
+                >
+                  <Image
+                    src={s.personImage}
+                    alt={s.personAlt}
+                    fill
+                    className="object-contain object-bottom"
+                    sizes="(max-width: 640px) 100px, (max-width: 1024px) 160px, 260px"
+                    priority={i <= 1}
+                  />
                 </div>
               )
             })}
