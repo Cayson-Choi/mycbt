@@ -13,6 +13,8 @@ interface Slide {
   personImage: string
   personAlt: string
   imageScale?: number
+  personName: string
+  personRole: string
 }
 
 const slides: Slide[] = [
@@ -25,6 +27,8 @@ const slides: Slide[] = [
     accentColor: '#34d399',
     personImage: '/hero/woman.png',
     personAlt: '기능사 자격증',
+    personName: '김서연 강사',
+    personRole: '전기기능사 합격률 94%',
   },
   {
     badge: '6개 자격증',
@@ -35,6 +39,8 @@ const slides: Slide[] = [
     accentColor: '#a78bfa',
     personImage: '/hero/man.png',
     personAlt: '산업기사 자격증',
+    personName: '박준혁 강사',
+    personRole: '현직 전기 엔지니어 12년',
   },
   {
     badge: '인기',
@@ -46,6 +52,8 @@ const slides: Slide[] = [
     personImage: '/hero/man2.png',
     personAlt: '기사 자격증',
     imageScale: 1.35,
+    personName: '이정우 강사',
+    personRole: '전기기사 문제 검증 전문가',
   },
   {
     badge: '최고 등급',
@@ -56,6 +64,8 @@ const slides: Slide[] = [
     accentColor: '#fbbf24',
     personImage: '/hero/man3.png',
     personAlt: '기능장 자격증',
+    personName: '최민수 강사',
+    personRole: '기능장 실기 지도 전문',
   },
   {
     badge: '준비중',
@@ -66,6 +76,8 @@ const slides: Slide[] = [
     accentColor: '#22d3ee',
     personImage: '/hero/woman3.png',
     personAlt: '공기업 시험',
+    personName: '한수민 강사',
+    personRole: '공기업 전공시험 컨설턴트',
   },
   {
     badge: '준비중',
@@ -76,6 +88,8 @@ const slides: Slide[] = [
     accentColor: '#fb7185',
     personImage: '/hero/woman2.png',
     personAlt: '과정평가형 자격',
+    personName: '정유진 강사',
+    personRole: 'NCS 과정평가 출제위원',
   },
 ]
 
@@ -260,6 +274,25 @@ export default function HeroSection() {
               </div>
               )
             })}
+
+            {/* 하단 그라디언트 페이드 + 인물 소개 */}
+            <div
+              className={`absolute bottom-0 left-0 right-0 z-10 transition-all duration-700
+                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              style={{ transitionDelay: isVisible ? '400ms' : '0ms' }}
+            >
+              {/* 그라디언트 페이드 */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent rounded-b-xl" />
+              {/* 텍스트 */}
+              <div className="relative px-3 py-2.5 sm:px-4 sm:py-3 text-center">
+                <div className="text-[11px] sm:text-xs font-bold text-white leading-tight">
+                  {slide.personName}
+                </div>
+                <div className="text-[9px] sm:text-[10px] text-white/70 mt-0.5">
+                  {slide.personRole}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
