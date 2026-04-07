@@ -3,6 +3,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 
+interface FloatingEl {
+  text: string
+  sub?: string
+  x: string   // CSS position
+  y: string
+  delay: number // ms
+  size?: 'sm' | 'md' | 'lg'
+}
+
 interface Slide {
   badge: string
   title: string
@@ -12,6 +21,7 @@ interface Slide {
   personImage: string
   personAlt: string
   imageScale?: number
+  floats: FloatingEl[]
 }
 
 const slides: Slide[] = [
@@ -23,6 +33,11 @@ const slides: Slide[] = [
     accentColor: '#34d399',
     personImage: '/hero/woman1.png',
     personAlt: '기능사',
+    floats: [
+      { text: '합격률', sub: '94%', x: '-40%', y: '10%', delay: 700, size: 'lg' },
+      { text: '필기+실기', x: '70%', y: '5%', delay: 900 },
+      { text: '4개 종목', x: '-30%', y: '55%', delay: 1100 },
+    ],
   },
   {
     badge: '6개 자격증',
@@ -32,6 +47,11 @@ const slides: Slide[] = [
     accentColor: '#a78bfa',
     personImage: '/hero/man1.png',
     personAlt: '산업기사',
+    floats: [
+      { text: '전문가', sub: '검증', x: '-35%', y: '8%', delay: 700, size: 'lg' },
+      { text: '6개 종목', x: '75%', y: '12%', delay: 900 },
+      { text: '실시간 업데이트', x: '-25%', y: '58%', delay: 1100 },
+    ],
   },
   {
     badge: '인기',
@@ -42,6 +62,11 @@ const slides: Slide[] = [
     personImage: '/hero/man2.png',
     personAlt: '기사',
     imageScale: 0.95,
+    floats: [
+      { text: '합격', sub: '보장', x: '-40%', y: '6%', delay: 700, size: 'lg' },
+      { text: '인기 1위', x: '70%', y: '10%', delay: 900 },
+      { text: '해설 수록', x: '-20%', y: '52%', delay: 1100 },
+    ],
   },
   {
     badge: '최고 등급',
@@ -51,6 +76,11 @@ const slides: Slide[] = [
     accentColor: '#fbbf24',
     personImage: '/hero/man3.png',
     personAlt: '기능장',
+    floats: [
+      { text: '최고', sub: '등급', x: '-35%', y: '8%', delay: 700, size: 'lg' },
+      { text: '실기 대비', x: '72%', y: '6%', delay: 900 },
+      { text: '심화 학습', x: '-25%', y: '55%', delay: 1100 },
+    ],
   },
   {
     badge: '준비중',
@@ -60,6 +90,11 @@ const slides: Slide[] = [
     accentColor: '#22d3ee',
     personImage: '/hero/woman3.png',
     personAlt: '공기업',
+    floats: [
+      { text: '한전', sub: 'KEPCO', x: '-40%', y: '10%', delay: 700, size: 'lg' },
+      { text: '한수원', x: '70%', y: '8%', delay: 900 },
+      { text: '전공시험', x: '-20%', y: '55%', delay: 1100 },
+    ],
   },
   {
     badge: '준비중',
@@ -69,6 +104,11 @@ const slides: Slide[] = [
     accentColor: '#fb7185',
     personImage: '/hero/woman2.png',
     personAlt: '과정평가형',
+    floats: [
+      { text: 'NCS', sub: '기반', x: '-35%', y: '8%', delay: 700, size: 'lg' },
+      { text: '현장 실무', x: '72%', y: '10%', delay: 900 },
+      { text: '역량 평가', x: '-25%', y: '55%', delay: 1100 },
+    ],
   },
 ]
 
@@ -229,15 +269,52 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* ===== 사람 이미지 ===== */}
+          {/* ===== 사람 이미지 + 장식 ===== */}
           <div className="relative flex-shrink-0 w-[100px] sm:w-[160px] lg:w-[220px] xl:w-[260px] self-stretch">
+            {/* 장식 요소 (이미지 뒤) */}
+            {slide.floats.map((f, fi) => {
+              const isActive = textVisible
+              const sizeClass = f.size === 'lg'
+                ? 'px-3 py-2 sm:px-4 sm:py-2.5'
+                : 'px-2.5 py-1.5 sm:px-3 sm:py-2'
+              return (
+                <div
+                  key={fi}
+                  className="absolute z-[1] hidden sm:block transition-all ease-out pointer-events-none"
+                  style={{
+                    left: f.x,
+                    top: f.y,
+                    opacity: isActive ? 1 : 0,
+                    transform: isActive ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.8)',
+                    transitionDuration: '500ms',
+                    transitionDelay: isActive ? `${f.delay}ms` : '0ms',
+                  }}
+                >
+                  <div
+                    className={`${sizeClass} rounded-xl backdrop-blur-md shadow-lg border border-white/10`}
+                    style={{ backgroundColor: `${slide.accentColor}18` }}
+                  >
+                    {f.sub ? (
+                      <div className="text-center">
+                        <div className="text-[10px] sm:text-xs font-bold text-white/90 leading-tight">{f.text}</div>
+                        <div className="text-xs sm:text-sm font-black text-white leading-tight">{f.sub}</div>
+                      </div>
+                    ) : (
+                      <div className="text-[10px] sm:text-xs font-bold text-white/90 whitespace-nowrap">{f.text}</div>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+
+            {/* 사람 이미지 (장식 위) */}
             {slides.map((s, i) => {
               const scale = s.imageScale || 1
               const isActive = i === current
               return (
                 <div
                   key={i}
-                  className="absolute inset-0 transition-all ease-out"
+                  className="absolute inset-0 z-[2] transition-all ease-out"
                   style={{
                     opacity: isActive && textVisible ? 1 : 0,
                     transform: isActive && textVisible ? `scale(${scale})` : `translateY(16px) scale(${scale * 0.97})`,
