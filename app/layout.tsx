@@ -8,10 +8,10 @@ import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: "CAYSON",
-  description: "전기 박사와 기술사들이 검증한 CBT 문제",
+  description: "기능사부터 기능장까지, 전문가가 검증한 자격증 시험 플랫폼",
   openGraph: {
     title: "CAYSON",
-    description: "기능사부터 기능장까지, 전문가가 검증한 자격증 CBT",
+    description: "기능사부터 기능장까지, 전문가가 검증한 자격증 시험 플랫폼",
     siteName: "CAYSON",
     url: "https://www.mycbt.xyz",
     images: [
