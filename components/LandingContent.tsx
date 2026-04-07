@@ -27,14 +27,21 @@ const grades = [
   { id: 'ncs', label: '과정평가형', count: 0 },
 ]
 
-/* ─── 이벤트 데이터 ─── */
+/* ─── 이벤트 데이터 (내용에 맞는 상세 SVG) ─── */
 const events = [
   {
     title: '전 강좌 무료',
     desc: '회원가입 후 모든 기출문제 무료 이용',
     icon: (
-      <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+      /* 선물 상자 — 리본 + 박스 */
+      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
+        <rect x="6" y="18" width="28" height="16" rx="2.5" fill="currentColor" opacity="0.2" />
+        <rect x="8" y="20" width="24" height="12" rx="1.5" fill="currentColor" opacity="0.12" />
+        <rect x="4" y="14" width="32" height="6" rx="2" fill="currentColor" opacity="0.35" />
+        <rect x="18" y="14" width="4" height="20" rx="0.5" fill="currentColor" opacity="0.5" />
+        <path d="M20 14c-2-4-6-6-8-4s0 6 4 7h4" fill="currentColor" opacity="0.4" />
+        <path d="M20 14c2-4 6-6 8-4s0 6-4 7h-4" fill="currentColor" opacity="0.4" />
+        <circle cx="20" cy="14" r="2" fill="currentColor" opacity="0.7" />
       </svg>
     ),
   },
@@ -42,8 +49,18 @@ const events = [
     title: '환승/재수강 할인',
     desc: '타 사이트 이용자 환승 시 혜택 제공',
     icon: (
-      <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+      /* 할인 티켓 — 톱니 가장자리 + % 표시 */
+      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
+        <rect x="4" y="10" width="32" height="20" rx="3" fill="currentColor" opacity="0.2" />
+        <circle cx="4" cy="18" r="3" fill="white" />
+        <circle cx="4" cy="24" r="3" fill="white" />
+        <circle cx="36" cy="18" r="3" fill="white" />
+        <circle cx="36" cy="24" r="3" fill="white" />
+        <line x1="15" y1="10" x2="15" y2="30" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" opacity="0.3" />
+        <circle cx="22" cy="17" r="2" stroke="currentColor" strokeWidth="1.5" opacity="0.6" fill="none" />
+        <circle cx="30" cy="23" r="2" stroke="currentColor" strokeWidth="1.5" opacity="0.6" fill="none" />
+        <line x1="22" y1="24" x2="30" y2="16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" opacity="0.7" />
+        <text x="8" y="23" fontSize="8" fontWeight="900" fill="currentColor" opacity="0.7" fontFamily="system-ui">%</text>
       </svg>
     ),
   },
@@ -51,8 +68,16 @@ const events = [
     title: '실기 복원 참여',
     desc: '실기 시험 복원에 참여하고 포인트 받기',
     icon: (
-      <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+      /* 시험지 + 연필 — 복원 참여 */
+      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
+        <rect x="8" y="4" width="20" height="28" rx="2" fill="currentColor" opacity="0.15" />
+        <rect x="12" y="10" width="10" height="1.5" rx="0.5" fill="currentColor" opacity="0.4" />
+        <rect x="12" y="14" width="12" height="1.5" rx="0.5" fill="currentColor" opacity="0.3" />
+        <rect x="12" y="18" width="8" height="1.5" rx="0.5" fill="currentColor" opacity="0.3" />
+        <rect x="12" y="22" width="11" height="1.5" rx="0.5" fill="currentColor" opacity="0.25" />
+        <path d="M28 16l-2.5 12.5L24 30l1.5-1.5L38 16l-2-2-8 2z" fill="currentColor" opacity="0.6" />
+        <path d="M36 14l2 2 1.5-1.5c.4-.4.4-1.1 0-1.5l-.5-.5c-.4-.4-1.1-.4-1.5 0L36 14z" fill="currentColor" opacity="0.8" />
+        <line x1="28" y1="16" x2="30" y2="18" stroke="white" strokeWidth="0.8" opacity="0.5" />
       </svg>
     ),
   },
@@ -60,8 +85,20 @@ const events = [
     title: '기출 1200제',
     desc: '전기기사 기출 1200제 무료 제공',
     icon: (
-      <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+      /* 펼쳐진 책 + 페이지 — 문제집 */
+      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
+        <path d="M20 8C16 6 10 5 4 6v24c6-1 12 0 16 2" fill="currentColor" opacity="0.15" />
+        <path d="M20 8c4-2 10-3 16-2v24c-6-1-12 0-16 2" fill="currentColor" opacity="0.25" />
+        <line x1="20" y1="8" x2="20" y2="32" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
+        <rect x="7" y="12" width="8" height="1" rx="0.5" fill="currentColor" opacity="0.35" />
+        <rect x="7" y="15" width="6" height="1" rx="0.5" fill="currentColor" opacity="0.25" />
+        <rect x="7" y="18" width="7" height="1" rx="0.5" fill="currentColor" opacity="0.3" />
+        <rect x="7" y="21" width="5" height="1" rx="0.5" fill="currentColor" opacity="0.2" />
+        <rect x="24" y="12" width="7" height="1" rx="0.5" fill="currentColor" opacity="0.4" />
+        <rect x="24" y="15" width="5" height="1" rx="0.5" fill="currentColor" opacity="0.3" />
+        <rect x="24" y="18" width="8" height="1" rx="0.5" fill="currentColor" opacity="0.35" />
+        <rect x="24" y="21" width="6" height="1" rx="0.5" fill="currentColor" opacity="0.25" />
+        <text x="25" y="28" fontSize="7" fontWeight="800" fill="currentColor" opacity="0.5" fontFamily="system-ui">1200</text>
       </svg>
     ),
   },
@@ -69,8 +106,13 @@ const events = [
     title: '친구 추천 이벤트',
     desc: '친구 추천 시 양쪽 모두 혜택',
     icon: (
-      <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+      /* 두 사람 + 하트 — 친구 추천 */
+      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
+        <circle cx="13" cy="14" r="5" fill="currentColor" opacity="0.3" />
+        <path d="M4 30c0-5 4-9 9-9s9 4 9 9" fill="currentColor" opacity="0.2" />
+        <circle cx="27" cy="14" r="5" fill="currentColor" opacity="0.3" />
+        <path d="M18 30c0-5 4-9 9-9s9 4 9 9" fill="currentColor" opacity="0.2" />
+        <path d="M20 8l1.5 2.5L24 8c1.5-1.5 4 0 3 2.5-1 2.5-4 5-7 6.5-3-1.5-6-4-7-6.5-1-2.5 1.5-4 3-2.5l2 2.5z" fill="currentColor" opacity="0.6" />
       </svg>
     ),
   },
@@ -78,8 +120,16 @@ const events = [
     title: '합격자 리얼 후기',
     desc: '합격생들의 생생한 후기 확인',
     icon: (
-      <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+      /* 말풍선 두 개 겹침 — 후기/대화 */
+      <svg className="w-10 h-10" viewBox="0 0 40 40" fill="none">
+        <rect x="4" y="6" width="22" height="16" rx="3" fill="currentColor" opacity="0.25" />
+        <path d="M10 22l-2 5 5-3" fill="currentColor" opacity="0.25" />
+        <rect x="8" y="11" width="14" height="1.2" rx="0.5" fill="currentColor" opacity="0.3" />
+        <rect x="8" y="14.5" width="10" height="1.2" rx="0.5" fill="currentColor" opacity="0.2" />
+        <rect x="14" y="16" width="22" height="14" rx="3" fill="currentColor" opacity="0.4" />
+        <path d="M30 30l2 4.5-4.5-2.5" fill="currentColor" opacity="0.4" />
+        <rect x="18" y="20.5" width="12" height="1.2" rx="0.5" fill="white" opacity="0.6" />
+        <rect x="18" y="24" width="8" height="1.2" rx="0.5" fill="white" opacity="0.4" />
       </svg>
     ),
   },
@@ -114,14 +164,21 @@ const testimonials = [
   },
 ]
 
-/* ─── 강점 데이터 ─── */
+/* ─── 강점 데이터 (내용에 맞는 상세 SVG) ─── */
 const strengths = [
   {
     title: '원본 대조 검증',
     desc: '인터넷 복사가 아닙니다. 실제 시험지 원본과 한 문제씩 대조하여 정답과 선택지를 검증합니다.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+      /* 두 장의 문서를 겹쳐놓고 체크마크 — 원본 대조 */
+      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
+        <rect x="4" y="2" width="16" height="20" rx="2" fill="currentColor" opacity="0.2" />
+        <rect x="8" y="6" width="16" height="20" rx="2" fill="currentColor" opacity="0.35" />
+        <rect x="11" y="10" width="4" height="1.5" rx="0.5" fill="currentColor" opacity="0.5" />
+        <rect x="11" y="14" width="8" height="1.5" rx="0.5" fill="currentColor" opacity="0.5" />
+        <rect x="11" y="18" width="6" height="1.5" rx="0.5" fill="currentColor" opacity="0.5" />
+        <circle cx="24" cy="24" r="7" fill="currentColor" opacity="0.9" />
+        <path d="M21 24l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -129,8 +186,19 @@ const strengths = [
     title: '실전 동일 환경',
     desc: '한국산업인력공단 CBT와 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+      /* 모니터 안에 시험 문제 보기가 보이는 CBT 화면 */
+      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
+        <rect x="3" y="4" width="26" height="18" rx="2.5" fill="currentColor" opacity="0.2" />
+        <rect x="5" y="6" width="22" height="14" rx="1" fill="currentColor" opacity="0.15" />
+        <rect x="8" y="9" width="9" height="1.2" rx="0.5" fill="currentColor" opacity="0.6" />
+        <circle cx="8.6" cy="13" r="1.2" fill="currentColor" opacity="0.4" />
+        <rect x="11" y="12.2" width="7" height="1.2" rx="0.5" fill="currentColor" opacity="0.4" />
+        <circle cx="8.6" cy="16.5" r="1.2" fill="currentColor" opacity="0.9" />
+        <rect x="11" y="15.7" width="7" height="1.2" rx="0.5" fill="currentColor" opacity="0.6" />
+        <rect x="20" y="9" width="5" height="9" rx="1" fill="currentColor" opacity="0.12" />
+        <rect x="21" y="15" width="3" height="2" rx="0.5" fill="currentColor" opacity="0.8" />
+        <rect x="11" y="24" width="10" height="2" rx="1" fill="currentColor" opacity="0.3" />
+        <rect x="13" y="22" width="6" height="2" fill="currentColor" opacity="0.2" />
       </svg>
     ),
   },
@@ -138,8 +206,15 @@ const strengths = [
     title: '자동 오답 분석',
     desc: '틀린 문제를 자동으로 분류하고 과목별 약점을 분석합니다. 같은 실수를 반복하지 않도록.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+      /* 막대 그래프 + 돋보기 — 분석 */
+      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
+        <rect x="4" y="18" width="4" height="8" rx="1" fill="currentColor" opacity="0.3" />
+        <rect x="10" y="12" width="4" height="14" rx="1" fill="currentColor" opacity="0.5" />
+        <rect x="16" y="8" width="4" height="18" rx="1" fill="currentColor" opacity="0.7" />
+        <rect x="22" y="14" width="4" height="12" rx="1" fill="currentColor" opacity="0.4" />
+        <rect x="3" y="26" width="24" height="1.5" rx="0.5" fill="currentColor" opacity="0.2" />
+        <circle cx="24" cy="10" r="5" stroke="currentColor" strokeWidth="2" opacity="0.8" fill="none" />
+        <line x1="27.5" y1="13.5" x2="30" y2="16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
       </svg>
     ),
   },
@@ -147,8 +222,15 @@ const strengths = [
     title: '24시간 오류 수정',
     desc: '오류가 발견되면 24시간 이내에 수정합니다. 규정 개정 사항도 실시간으로 반영합니다.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+      /* 시계 + 렌치(수리 도구) — 빠른 수정 */
+      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
+        <circle cx="14" cy="16" r="10" fill="currentColor" opacity="0.15" />
+        <circle cx="14" cy="16" r="8" stroke="currentColor" strokeWidth="1.8" opacity="0.6" fill="none" />
+        <line x1="14" y1="10" x2="14" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+        <line x1="14" y1="16" x2="18.5" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+        <path d="M26 11l-3.5 3.5M22.5 14.5l1.5 1.5 5-5-1.5-1.5M22.5 14.5l-1.5-1.5" fill="currentColor" opacity="0.7" />
+        <path d="M24 9.5l2.5-2.5c.5-.5 1.3-.5 1.8 0l.7.7c.5.5.5 1.3 0 1.8L26.5 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" fill="none" />
+        <rect x="21.5" y="13" width="2.5" height="5" rx="0.8" transform="rotate(-45 21.5 13)" fill="currentColor" opacity="0.6" />
       </svg>
     ),
   },
@@ -156,7 +238,7 @@ const strengths = [
 
 export default function LandingContent() {
   const [activeTab, setActiveTab] = useState(0)
-  const scrollRef = useRef<HTMLDivElement>(null)
+
 
   return (
     <>
@@ -213,8 +295,14 @@ export default function LandingContent() {
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
+                        {/* 자격증 문서 + 체크 */}
+                        <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+                          <rect x="3" y="1" width="11" height="15" rx="1.5" fill="white" opacity="0.3" />
+                          <rect x="5" y="4" width="6" height="1" rx="0.5" fill="white" opacity="0.5" />
+                          <rect x="5" y="7" width="4" height="1" rx="0.5" fill="white" opacity="0.4" />
+                          <rect x="5" y="10" width="5" height="1" rx="0.5" fill="white" opacity="0.35" />
+                          <circle cx="14" cy="14" r="5" fill="white" opacity="0.9" />
+                          <path d="M11.5 14l1.5 1.5 3-3" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
                       <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
@@ -238,8 +326,12 @@ export default function LandingContent() {
               ) : (
                 <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center">
                   <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-gray-800 text-gray-400 flex items-center justify-center mx-auto mb-3">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    {/* 공사중 표시 — 삼각형 + 느낌표 */}
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 3L2 21h20L12 3z" fill="currentColor" opacity="0.2" />
+                      <path d="M12 3L2 21h20L12 3z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" opacity="0.5" fill="none" />
+                      <line x1="12" y1="10" x2="12" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+                      <circle cx="12" cy="17.5" r="1" fill="currentColor" opacity="0.6" />
                     </svg>
                   </div>
                   <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">준비 중입니다. 곧 서비스가 시작됩니다.</p>
@@ -308,17 +400,18 @@ export default function LandingContent() {
             </div>
           </Reveal>
 
-          <Reveal delay={100}>
+          {/* 무한 마퀴 (왼→오 자동 흐름) */}
+          <div className="overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
             <div
-              ref={scrollRef}
-              className="flex gap-4 sm:gap-5 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0"
+              className="flex gap-5 w-max hover:[animation-play-state:paused]"
+              style={{ animation: 'marqueeScroll 40s linear infinite' }}
             >
-              {testimonials.map((t, i) => (
+              {/* 카드 2벌 (무한루프용) */}
+              {[...testimonials, ...testimonials].map((t, i) => (
                 <div
-                  key={t.name}
-                  className="flex-shrink-0 w-[300px] sm:w-[340px] bg-white dark:bg-gray-800 rounded-2xl p-6 border border-amber-100 dark:border-gray-700 shadow-sm snap-start"
+                  key={`${t.name}-${i}`}
+                  className="flex-shrink-0 w-[300px] sm:w-[340px] bg-white dark:bg-gray-800 rounded-2xl p-6 border border-amber-100 dark:border-gray-700 shadow-sm"
                 >
-                  {/* 별점 */}
                   <div className="flex gap-0.5 mb-3">
                     {[...Array(5)].map((_, s) => (
                       <svg key={s} className="w-4 h-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
@@ -326,19 +419,16 @@ export default function LandingContent() {
                       </svg>
                     ))}
                   </div>
-                  {/* 후기 본문 */}
                   <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4 line-clamp-4">
                     &ldquo;{t.quote}&rdquo;
                   </p>
-                  {/* 태그 */}
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {t.tags.map((tag) => (
-                      <span key={tag} className="text-xs font-medium text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full">
+                      <span key={`${tag}-${i}`} className="text-xs font-medium text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  {/* 이름 */}
                   <div className="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
                       {t.name.charAt(0)}
@@ -347,29 +437,7 @@ export default function LandingContent() {
                   </div>
                 </div>
               ))}
-
-              {/* 전체 후기 보기 카드 */}
-              <div className="flex-shrink-0 w-[300px] sm:w-[340px] bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-gray-800 rounded-2xl p-6 border border-amber-200 dark:border-amber-800/40 flex flex-col items-center justify-center text-center snap-start">
-                <div className="w-14 h-14 rounded-full bg-amber-200 dark:bg-amber-800/50 text-amber-700 dark:text-amber-400 flex items-center justify-center mb-4">
-                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </div>
-                <p className="text-base font-bold text-gray-900 dark:text-white mb-1">
-                  전체 후기 보기
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  더 많은 합격 수기를 확인하세요
-                </p>
-              </div>
             </div>
-          </Reveal>
-
-          {/* 스크롤 힌트 */}
-          <div className="flex justify-center mt-6 gap-1.5">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-amber-500' : 'bg-amber-300 dark:bg-amber-800'}`} />
-            ))}
           </div>
         </div>
       </section>

@@ -97,6 +97,12 @@ body {
   animation: heroProgress 5s linear forwards;
 }
 
+/* 후기 마퀴 (무한 좌→우 흐름) */
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* 히어로 장식 애니메이션 - 각각 다른 움직임 */
 
 /* float1: 위아래 부드럽게 떠다님 */
