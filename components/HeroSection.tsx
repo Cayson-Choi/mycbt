@@ -99,8 +99,8 @@ const slides: Slide[] = [
     personAlt: '기능사',
     // 레터블록 + 스월 + 스파클 + 도트
     floats: [
-      { type: 'block', letter: 'C', right: '20%', top: '8%', size: 48, rotate: -12, delay: 1000, anim: 'float1' },
-      { type: 'block', letter: 'S', right: '22%', top: '45%', size: 40, rotate: 10, delay: 1200, anim: 'float3' },
+      { type: 'block', letter: 'C', right: '20%', top: '8%', size: 58, rotate: -12, delay: 1000, anim: 'float1' },
+      { type: 'block', letter: 'S', right: '22%', top: '45%', size: 50, rotate: 10, delay: 1200, anim: 'float3' },
       { type: 'swirl', right: '18%', top: '58%', size: 55, color: '#34d399', delay: 1100, anim: 'float2' },
       { type: 'sparkle', right: '28%', top: '28%', size: 22, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'sparkle', right: '26%', top: '68%', size: 14, color: '#fbbf24', delay: 1500, anim: 'shimmer' },
@@ -140,9 +140,9 @@ const slides: Slide[] = [
     imageScale: 0.95,
     // 레터블록 + 필 뱃지 + 스파클
     floats: [
-      { type: 'block', letter: 'N', right: '20%', top: '5%', size: 46, rotate: -8, delay: 1000, anim: 'float2' },
-      { type: 'block', letter: 'o', right: '24%', top: '35%', size: 38, rotate: 14, delay: 1200, anim: 'float1' },
-      { type: 'block', letter: '1', right: '18%', top: '58%', size: 34, rotate: -5, delay: 1400, anim: 'float3' },
+      { type: 'block', letter: 'N', right: '20%', top: '5%', size: 56, rotate: -8, delay: 1000, anim: 'float2' },
+      { type: 'block', letter: 'o', right: '24%', top: '35%', size: 48, rotate: 14, delay: 1200, anim: 'float1' },
+      { type: 'block', letter: '1', right: '18%', top: '58%', size: 44, rotate: -5, delay: 1400, anim: 'float3' },
       { type: 'pill', text: '인기 1위', right: '22%', top: '75%', color: '#4f8cff', delay: 1300, anim: 'float1' },
       { type: 'sparkle', right: '28%', top: '20%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
       { type: 'dot', right: '30%', top: '45%', size: 8, delay: 1150, anim: 'pulse' },
@@ -180,8 +180,8 @@ const slides: Slide[] = [
     // 말풍선(머리 우측) + 레터블록/링/스파클
     floats: [
       { type: 'bubble', text: '공기업 전공시험\n완벽 대비!', right: '-8%', top: '2%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
-      { type: 'block', letter: 'K', right: '22%', top: '18%', size: 42, rotate: 8, delay: 1200, anim: 'float2' },
-      { type: 'block', letter: 'P', right: '24%', top: '55%', size: 36, rotate: -10, delay: 1400, anim: 'float1' },
+      { type: 'block', letter: 'K', right: '22%', top: '18%', size: 52, rotate: 8, delay: 1200, anim: 'float2' },
+      { type: 'block', letter: 'P', right: '24%', top: '55%', size: 46, rotate: -10, delay: 1400, anim: 'float1' },
       { type: 'ring', right: '20%', top: '38%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
       { type: 'sparkle', right: '28%', top: '68%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
       { type: 'dot', right: '26%', top: '28%', size: 9, delay: 1100, anim: 'pulse' },
@@ -344,7 +344,7 @@ export default function HeroSection() {
                       {/* 필 뱃지 */}
                       {f.type === 'pill' && (
                         <div
-                          className="relative px-4 py-1.5 rounded-full text-[10px] font-bold text-white shadow-lg whitespace-nowrap overflow-hidden"
+                          className="relative px-5 py-2 rounded-full text-[12px] font-bold text-white shadow-lg whitespace-nowrap overflow-hidden"
                           style={{ backgroundColor: f.color || slide.accentColor }}
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent rounded-full" />
