@@ -71,7 +71,7 @@ const slides: Slide[] = [
   },
 ]
 
-const DURATION = 3000
+const DURATION = 5000
 const FADE_MS = 400
 
 export default function HeroSection() {
@@ -228,7 +228,7 @@ export default function HeroSection() {
           </div>
 
           {/* ===== 사람 이미지 ===== */}
-          <div className="relative flex-shrink-0 w-[130px] sm:w-[220px] lg:w-[320px] xl:w-[360px] self-stretch">
+          <div className="relative flex-shrink-0 w-[100px] sm:w-[160px] lg:w-[220px] xl:w-[260px] self-stretch">
             {slides.map((s, i) => {
               const scale = s.imageScale || 1
               const isActive = i === current
@@ -237,11 +237,11 @@ export default function HeroSection() {
                   key={i}
                   className="absolute inset-0 transition-all ease-out"
                   style={{
-                    opacity: isActive ? 1 : 0,
-                    transform: isActive ? `scale(${scale})` : `translateY(12px) scale(${scale * 0.98})`,
+                    opacity: isActive && textVisible ? 1 : 0,
+                    transform: isActive && textVisible ? `scale(${scale})` : `translateY(16px) scale(${scale * 0.97})`,
                     transformOrigin: 'bottom center',
-                    transitionDuration: `${FADE_MS}ms`,
-                    transitionDelay: isActive ? '150ms' : '0ms',
+                    transitionDuration: '667ms',
+                    transitionDelay: isActive && textVisible ? '500ms' : '0ms',
                   }}
                 >
                   <Image
@@ -249,7 +249,7 @@ export default function HeroSection() {
                     alt={s.personAlt}
                     fill
                     className="object-contain object-bottom"
-                    sizes="(max-width: 640px) 130px, (max-width: 1024px) 220px, 360px"
+                    sizes="(max-width: 640px) 100px, (max-width: 1024px) 160px, 260px"
                     priority={i <= 1}
                   />
                 </div>
