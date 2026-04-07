@@ -297,7 +297,9 @@ function WhyCaysonSection() {
           <div className="text-center mb-10 sm:mb-14">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">Why CAYSON</p>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
-              왜 <span className="text-emerald-500">CAYSON</span>이어야 할까요?
+              왜 <span className="text-emerald-500">{'CAYSON'.split('').map((ch, i) => (
+                <span key={i} className="inline-block" style={{ animation: `caysonBounce 3s ease-in-out infinite`, animationDelay: `${i * 0.3}s` }}>{ch}</span>
+              ))}</span>이어야 할까요?
             </h2>
             <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full mx-auto" />
           </div>
