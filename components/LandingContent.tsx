@@ -17,28 +17,6 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   return <div ref={ref} className={`transition-all duration-700 ease-out ${v ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`}>{children}</div>
 }
 
-/* ─── 카운터 ─── */
-function Counter({ value, suffix = '' }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const [count, setCount] = useState(0)
-  const [started, setStarted] = useState(false)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const ob = new IntersectionObserver(([e]) => { if (e.isIntersecting && !started) { setStarted(true); ob.unobserve(el) } }, { threshold: 0.5 })
-    ob.observe(el)
-    return () => ob.disconnect()
-  }, [started])
-  useEffect(() => {
-    if (!started) return
-    let f = 0
-    const total = 50
-    const step = () => { f++; const p = Math.min(f / total, 1); setCount(Math.round((1 - Math.pow(1 - p, 3)) * value)); if (f < total) requestAnimationFrame(step) }
-    requestAnimationFrame(step)
-  }, [started, value])
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>
-}
-
 /* ─── 등급 데이터 ─── */
 const grades = [
   { id: 'technician', label: '기능사', count: 4 },
@@ -173,32 +151,7 @@ export default function LandingContent() {
       </section>
 
       {/* ════════════════════════════════════════
-          SECTION 2 — 수치 (다크)
-         ════════════════════════════════════════ */}
-      <section className="bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {[
-              { value: 2100, suffix: '+', label: '검증된 기출문제' },
-              { value: 58, suffix: '건', label: '발견된 오류 수정' },
-              { value: 15, suffix: '종', label: '지원 자격증' },
-              { value: 100, suffix: '%', label: '실전 동일 환경' },
-            ].map((item, i) => (
-              <Reveal key={item.label} delay={i * 100}>
-                <div className="text-center">
-                  <div className="text-3xl sm:text-5xl font-extrabold text-white mb-2 tabular-nums">
-                    <Counter value={item.value} suffix={item.suffix} />
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-500">{item.label}</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════
-          SECTION 3 — 핵심 강점
+          SECTION 2 — 핵심 강점
          ════════════════════════════════════════ */}
       <section className="bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
