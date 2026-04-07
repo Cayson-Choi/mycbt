@@ -97,16 +97,16 @@ const slides: Slide[] = [
     accentColor: '#34d399',
     personImage: '/hero/woman1.png',
     personAlt: '기능사',
-    // 레터블록 + 스월 + 스파클 + 도트 (사람 좌측에 배치)
+    // 레터블록 + 스월 + 스파클 + 도트
     floats: [
-      { type: 'block', letter: 'C', right: '28%', top: '8%', size: 48, rotate: -12, delay: 1000, anim: 'float1' },
-      { type: 'block', letter: 'S', right: '32%', top: '45%', size: 40, rotate: 10, delay: 1200, anim: 'float3' },
-      { type: 'swirl', right: '24%', top: '55%', size: 55, color: '#34d399', delay: 1100, anim: 'float2' },
-      { type: 'sparkle', right: '38%', top: '30%', size: 22, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'sparkle', right: '36%', top: '68%', size: 14, color: '#fbbf24', delay: 1500, anim: 'shimmer' },
-      { type: 'dot', right: '30%', top: '25%', size: 10, delay: 1050, anim: 'pulse' },
-      { type: 'dot', right: '40%', top: '50%', size: 7, delay: 1400, anim: 'float1' },
-      { type: 'dot', right: '26%', top: '75%', size: 5, delay: 1550, anim: 'pulse' },
+      { type: 'block', letter: 'C', right: '20%', top: '8%', size: 48, rotate: -12, delay: 1000, anim: 'float1' },
+      { type: 'block', letter: 'S', right: '22%', top: '45%', size: 40, rotate: 10, delay: 1200, anim: 'float3' },
+      { type: 'swirl', right: '18%', top: '58%', size: 55, color: '#34d399', delay: 1100, anim: 'float2' },
+      { type: 'sparkle', right: '28%', top: '28%', size: 22, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'sparkle', right: '26%', top: '68%', size: 14, color: '#fbbf24', delay: 1500, anim: 'shimmer' },
+      { type: 'dot', right: '24%', top: '20%', size: 10, delay: 1050, anim: 'pulse' },
+      { type: 'dot', right: '30%', top: '50%', size: 7, delay: 1400, anim: 'float1' },
+      { type: 'dot', right: '16%', top: '75%', size: 5, delay: 1550, anim: 'pulse' },
     ],
   },
   {
@@ -117,16 +117,16 @@ const slides: Slide[] = [
     accentColor: '#a78bfa',
     personImage: '/hero/man1.png',
     personAlt: '산업기사',
-    // 말풍선(얼굴 오른쪽) + 다이아몬드/링/스파클(사람 좌측)
+    // 말풍선(머리 우측) + 다이아몬드/링/스파클
     floats: [
-      { type: 'bubble', text: '6개 종목 준비!', right: '2%', top: '5%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
-      { type: 'diamond', right: '30%', top: '20%', size: 22, color: '#c084fc', delay: 1100, anim: 'float1' },
-      { type: 'diamond', right: '36%', top: '55%', size: 16, color: '#a78bfa', rotate: 15, delay: 1350, anim: 'float3' },
-      { type: 'ring', right: '28%', top: '38%', size: 44, color: '#a78bfa', delay: 1200, anim: 'float2' },
-      { type: 'sparkle', right: '34%', top: '50%', size: 20, color: '#fbbf24', delay: 1250, anim: 'shimmer' },
-      { type: 'sparkle', right: '38%', top: '12%', size: 14, color: '#c084fc', delay: 1450, anim: 'shimmer' },
-      { type: 'dot', right: '32%', top: '65%', size: 9, delay: 1150, anim: 'pulse' },
-      { type: 'dot', right: '40%', top: '75%', size: 6, delay: 1500, anim: 'pulse' },
+      { type: 'bubble', text: '6개 종목 준비!', right: '3%', top: '3%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
+      { type: 'diamond', right: '22%', top: '18%', size: 22, color: '#c084fc', delay: 1100, anim: 'float1' },
+      { type: 'diamond', right: '24%', top: '55%', size: 16, color: '#a78bfa', rotate: 15, delay: 1350, anim: 'float3' },
+      { type: 'ring', right: '20%', top: '35%', size: 44, color: '#a78bfa', delay: 1200, anim: 'float2' },
+      { type: 'sparkle', right: '26%', top: '48%', size: 20, color: '#fbbf24', delay: 1250, anim: 'shimmer' },
+      { type: 'sparkle', right: '28%', top: '10%', size: 14, color: '#c084fc', delay: 1450, anim: 'shimmer' },
+      { type: 'dot', right: '22%', top: '65%', size: 9, delay: 1150, anim: 'pulse' },
+      { type: 'dot', right: '30%', top: '75%', size: 6, delay: 1500, anim: 'pulse' },
     ],
   },
   {
@@ -138,15 +138,15 @@ const slides: Slide[] = [
     personImage: '/hero/man2.png',
     personAlt: '기사',
     imageScale: 0.95,
-    // 레터블록 + 필 뱃지 + 스파클 (사람 좌측)
+    // 레터블록 + 필 뱃지 + 스파클
     floats: [
-      { type: 'block', letter: 'N', right: '28%', top: '5%', size: 46, rotate: -8, delay: 1000, anim: 'float2' },
-      { type: 'block', letter: 'o', right: '34%', top: '35%', size: 38, rotate: 14, delay: 1200, anim: 'float1' },
-      { type: 'block', letter: '1', right: '26%', top: '58%', size: 34, rotate: -5, delay: 1400, anim: 'float3' },
-      { type: 'pill', text: '인기 1위', right: '30%', top: '75%', color: '#4f8cff', delay: 1300, anim: 'float1' },
-      { type: 'sparkle', right: '38%', top: '22%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'dot', right: '40%', top: '48%', size: 8, delay: 1150, anim: 'pulse' },
-      { type: 'dot', right: '36%', top: '68%', size: 6, delay: 1350, anim: 'float2' },
+      { type: 'block', letter: 'N', right: '20%', top: '5%', size: 46, rotate: -8, delay: 1000, anim: 'float2' },
+      { type: 'block', letter: 'o', right: '24%', top: '35%', size: 38, rotate: 14, delay: 1200, anim: 'float1' },
+      { type: 'block', letter: '1', right: '18%', top: '58%', size: 34, rotate: -5, delay: 1400, anim: 'float3' },
+      { type: 'pill', text: '인기 1위', right: '22%', top: '75%', color: '#4f8cff', delay: 1300, anim: 'float1' },
+      { type: 'sparkle', right: '28%', top: '20%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'dot', right: '30%', top: '45%', size: 8, delay: 1150, anim: 'pulse' },
+      { type: 'dot', right: '26%', top: '68%', size: 6, delay: 1350, anim: 'float2' },
     ],
   },
   {
@@ -157,16 +157,16 @@ const slides: Slide[] = [
     accentColor: '#fbbf24',
     personImage: '/hero/man3.png',
     personAlt: '기능장',
-    // 금색 스파클 + 스월 + 링 + 다이아몬드 (사람 좌측)
+    // 금색 스파클 + 스월 + 링 + 다이아몬드
     floats: [
-      { type: 'swirl', right: '26%', top: '5%', size: 65, color: '#fbbf24', delay: 1000, anim: 'float2' },
-      { type: 'sparkle', right: '34%', top: '25%', size: 28, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'sparkle', right: '28%', top: '48%', size: 18, color: '#f59e0b', delay: 1250, anim: 'shimmer' },
-      { type: 'sparkle', right: '38%', top: '65%', size: 14, color: '#fbbf24', delay: 1400, anim: 'float3' },
-      { type: 'diamond', right: '32%', top: '35%', size: 20, color: '#fbbf24', delay: 1150, anim: 'float1' },
-      { type: 'ring', right: '30%', top: '55%', size: 36, color: '#f59e0b', delay: 1300, anim: 'float1' },
-      { type: 'dot', right: '40%', top: '42%', size: 10, delay: 1200, anim: 'pulse' },
-      { type: 'dot', right: '36%', top: '75%', size: 7, delay: 1450, anim: 'pulse' },
+      { type: 'swirl', right: '18%', top: '5%', size: 65, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'sparkle', right: '24%', top: '25%', size: 28, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'sparkle', right: '20%', top: '48%', size: 18, color: '#f59e0b', delay: 1250, anim: 'shimmer' },
+      { type: 'sparkle', right: '28%', top: '65%', size: 14, color: '#fbbf24', delay: 1400, anim: 'float3' },
+      { type: 'diamond', right: '22%', top: '35%', size: 20, color: '#fbbf24', delay: 1150, anim: 'float1' },
+      { type: 'ring', right: '20%', top: '55%', size: 36, color: '#f59e0b', delay: 1300, anim: 'float1' },
+      { type: 'dot', right: '30%', top: '42%', size: 10, delay: 1200, anim: 'pulse' },
+      { type: 'dot', right: '26%', top: '75%', size: 7, delay: 1450, anim: 'pulse' },
     ],
   },
   {
@@ -177,15 +177,15 @@ const slides: Slide[] = [
     accentColor: '#22d3ee',
     personImage: '/hero/woman3.png',
     personAlt: '공기업',
-    // 말풍선(얼굴 오른쪽) + 레터블록/링/스파클(사람 좌측)
+    // 말풍선(머리 우측) + 레터블록/링/스파클
     floats: [
-      { type: 'bubble', text: '전공시험 특화', right: '2%', top: '5%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
-      { type: 'block', letter: 'K', right: '30%', top: '20%', size: 42, rotate: 8, delay: 1200, anim: 'float2' },
-      { type: 'block', letter: 'P', right: '34%', top: '55%', size: 36, rotate: -10, delay: 1400, anim: 'float1' },
-      { type: 'ring', right: '28%', top: '38%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
-      { type: 'sparkle', right: '38%', top: '68%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
-      { type: 'dot', right: '36%', top: '30%', size: 9, delay: 1100, anim: 'pulse' },
-      { type: 'dot', right: '40%', top: '48%', size: 6, delay: 1350, anim: 'float1' },
+      { type: 'bubble', text: '전공시험 특화', right: '3%', top: '3%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
+      { type: 'block', letter: 'K', right: '22%', top: '18%', size: 42, rotate: 8, delay: 1200, anim: 'float2' },
+      { type: 'block', letter: 'P', right: '24%', top: '55%', size: 36, rotate: -10, delay: 1400, anim: 'float1' },
+      { type: 'ring', right: '20%', top: '38%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
+      { type: 'sparkle', right: '28%', top: '68%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
+      { type: 'dot', right: '26%', top: '28%', size: 9, delay: 1100, anim: 'pulse' },
+      { type: 'dot', right: '30%', top: '48%', size: 6, delay: 1350, anim: 'float1' },
     ],
   },
   {
@@ -196,16 +196,16 @@ const slides: Slide[] = [
     accentColor: '#fb7185',
     personImage: '/hero/woman2.png',
     personAlt: '과정평가형',
-    // 필 뱃지 + 스월 + 다이아몬드 + 스파클 (사람 좌측)
+    // 필 뱃지 + 스월 + 다이아몬드 + 스파클
     floats: [
-      { type: 'pill', text: 'NCS', right: '28%', top: '8%', color: '#f43f5e', delay: 1000, anim: 'float1' },
-      { type: 'pill', text: '실무 역량', right: '32%', top: '55%', color: '#e11d48', delay: 1250, anim: 'float2' },
-      { type: 'swirl', right: '26%', top: '32%', size: 50, color: '#fb7185', delay: 1100, anim: 'float3' },
-      { type: 'diamond', right: '36%', top: '65%', size: 18, color: '#fb7185', delay: 1350, anim: 'float1' },
-      { type: 'sparkle', right: '38%', top: '20%', size: 22, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
-      { type: 'sparkle', right: '34%', top: '75%', size: 13, color: '#fb7185', delay: 1450, anim: 'shimmer' },
-      { type: 'dot', right: '40%', top: '42%', size: 10, delay: 1200, anim: 'pulse' },
-      { type: 'dot', right: '30%', top: '15%', size: 7, delay: 1050, anim: 'float3' },
+      { type: 'pill', text: 'NCS', right: '20%', top: '8%', color: '#f43f5e', delay: 1000, anim: 'float1' },
+      { type: 'pill', text: '실무 역량', right: '22%', top: '55%', color: '#e11d48', delay: 1250, anim: 'float2' },
+      { type: 'swirl', right: '18%', top: '32%', size: 50, color: '#fb7185', delay: 1100, anim: 'float3' },
+      { type: 'diamond', right: '26%', top: '65%', size: 18, color: '#fb7185', delay: 1350, anim: 'float1' },
+      { type: 'sparkle', right: '28%', top: '18%', size: 22, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
+      { type: 'sparkle', right: '24%', top: '75%', size: 13, color: '#fb7185', delay: 1450, anim: 'shimmer' },
+      { type: 'dot', right: '30%', top: '42%', size: 10, delay: 1200, anim: 'pulse' },
+      { type: 'dot', right: '22%', top: '15%', size: 7, delay: 1050, anim: 'float3' },
     ],
   },
 ]
@@ -320,18 +320,18 @@ export default function HeroSection() {
                       {f.type === 'bubble' && (
                         <div className="relative">
                           <div
-                            className="relative px-5 py-2.5 rounded-2xl shadow-xl text-[12px] lg:text-[13px] font-bold text-white whitespace-nowrap overflow-hidden"
+                            className="relative px-5 py-3 lg:px-6 lg:py-4 rounded-[16px] shadow-xl text-[13px] lg:text-[15px] font-extrabold text-white whitespace-nowrap overflow-hidden"
                             style={{ backgroundColor: f.color || slide.accentColor }}
                           >
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent rounded-[16px]" />
                             <span className="relative">{f.text}</span>
                           </div>
+                          {/* 꼬리: 좌하단 (사람 머리 방향) */}
                           <div
-                            className="absolute -bottom-[10px] left-6 w-0 h-0"
+                            className="absolute -bottom-[11px] left-4 w-0 h-0"
                             style={{
-                              borderLeft: '8px solid transparent',
-                              borderRight: '8px solid transparent',
-                              borderTop: `12px solid ${f.color || slide.accentColor}`,
+                              borderTop: `13px solid ${f.color || slide.accentColor}`,
+                              borderRight: '13px solid transparent',
                             }}
                           />
                         </div>
