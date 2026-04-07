@@ -17,55 +17,49 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   return <div ref={ref} className={`transition-all duration-700 ease-out ${v ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`}>{children}</div>
 }
 
-/* ─── 등급 데이터 (탭별 고유 색상 + SVG) ─── */
+/* ─── 등급 데이터 (engineerlab 이벤트 카드 스타일) ─── */
 const grades = [
   {
-    id: 'technician', label: '기능사', count: 4, color: 'emerald',
-    desc: '전기기능사, 승강기기능사, 위험물기능사, 가스기능사',
-    sub: '자격증 취득의 첫 걸음, 기초부터 탄탄하게',
-    gradient: 'from-emerald-500 to-teal-500',
-    iconBg: 'bg-emerald-500',
-    icon: <img src="/hero/deco/425117-achievement-reward-award.svg" alt="" className="w-8 h-8" />,
+    id: 'technician', label: '기능사', count: 4,
+    badge: '4개 자격증',
+    cta: '전기기능사 외 3개\n필기/실기 준비',
+    cardBg: 'bg-[#e8f5e9]', badgeBg: 'bg-emerald-500',
+    icon: <img src="/hero/deco/425117-achievement-reward-award.svg" alt="" className="w-full h-full" />,
   },
   {
-    id: 'industrial', label: '산업기사', count: 6, color: 'violet',
-    desc: '전기산업기사 외 5개 자격증',
-    sub: '실무 능력 검증, 현장 전문가로의 도약',
-    gradient: 'from-violet-500 to-purple-500',
-    iconBg: 'bg-violet-500',
-    icon: <img src="/hero/deco/429900-setting-configuration-gear.svg" alt="" className="w-8 h-8" />,
+    id: 'industrial', label: '산업기사', count: 6,
+    badge: '6개 자격증',
+    cta: '전기산업기사 외 5개\n현장 전문가 도약',
+    cardBg: 'bg-[#f3e5f5]', badgeBg: 'bg-violet-500',
+    icon: <img src="/hero/deco/429900-setting-configuration-gear.svg" alt="" className="w-full h-full" />,
   },
   {
-    id: 'engineer', label: '기사', count: 4, color: 'blue',
-    desc: '전기기사 외 3개 자격증',
-    sub: '엔지니어의 필수 자격, 체계적 합격 전략',
-    gradient: 'from-blue-500 to-indigo-500',
-    iconBg: 'bg-blue-500',
-    icon: <img src="/hero/deco/382151-education-graduation-learning-school-study.svg" alt="" className="w-8 h-8" />,
+    id: 'engineer', label: '기사', count: 4,
+    badge: '4개 자격증',
+    cta: '전기기사 외 3개\n체계적 합격 전략',
+    cardBg: 'bg-[#e3f2fd]', badgeBg: 'bg-blue-500',
+    icon: <img src="/hero/deco/382151-education-graduation-learning-school-study.svg" alt="" className="w-full h-full" />,
   },
   {
-    id: 'master', label: '기능장', count: 1, color: 'amber',
-    desc: '전기기능장',
-    sub: '최고 등급 자격증에 도전하세요',
-    gradient: 'from-amber-500 to-orange-500',
-    iconBg: 'bg-amber-500',
-    icon: <img src="/hero/deco/475312-trophy.svg" alt="" className="w-8 h-8" />,
+    id: 'master', label: '기능장', count: 1,
+    badge: '최고 등급',
+    cta: '전기기능장\n최고 등급에 도전',
+    cardBg: 'bg-[#fff3e0]', badgeBg: 'bg-amber-500',
+    icon: <img src="/hero/deco/475312-trophy.svg" alt="" className="w-full h-full" />,
   },
   {
-    id: 'public', label: '공기업', count: 0, color: 'cyan',
-    desc: '한국전력공사, 한국수력원자력 등',
-    sub: '공기업 채용 대비 전공시험',
-    gradient: 'from-cyan-500 to-blue-500',
-    iconBg: 'bg-cyan-500',
-    icon: <img src="/hero/deco/421954-apartment-block-building.svg" alt="" className="w-8 h-8" />,
+    id: 'public', label: '공기업', count: 0,
+    badge: '준비중',
+    cta: '한국전력공사 등\n공기업 채용 대비',
+    cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-gray-400',
+    icon: <img src="/hero/deco/421954-apartment-block-building.svg" alt="" className="w-full h-full" />,
   },
   {
-    id: 'ncs', label: '과정평가형', count: 0, color: 'rose',
-    desc: 'NCS 기반 과정평가형 자격',
-    sub: '교육훈련 과정을 통한 자격 취득',
-    gradient: 'from-rose-500 to-pink-500',
-    iconBg: 'bg-rose-500',
-    icon: <img src="/hero/deco/375339-certificate-authority-service.svg" alt="" className="w-8 h-8" />,
+    id: 'ncs', label: '과정평가형', count: 0,
+    badge: '준비중',
+    cta: 'NCS 과정평가형\n교육훈련 자격 취득',
+    cardBg: 'bg-[#fce4ec]', badgeBg: 'bg-gray-400',
+    icon: <img src="/hero/deco/375339-certificate-authority-service.svg" alt="" className="w-full h-full" />,
   },
 ]
 
@@ -366,7 +360,7 @@ export default function LandingContent() {
       {/* ════════════════════════════════════════
           SECTION 1 -- 과정별 CBT (등급 탭 + 카드)
          ════════════════════════════════════════ */}
-      <section id="exams" className="bg-white dark:bg-gray-950">
+      <section id="exams" className="bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <Reveal>
             <div className="mb-10 sm:mb-14">
@@ -380,59 +374,46 @@ export default function LandingContent() {
             </div>
           </Reveal>
 
-          {/* 등급 카드 그리드 */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          {/* engineerlab 이벤트 카드 스타일 그리드 */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {grades.map((g, i) => (
               <Reveal key={g.id} delay={i * 80}>
                 {g.count > 0 ? (
                   <Link
                     href={`/grade/${g.id}`}
-                    className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-transparent block h-full"
+                    className={`group block relative overflow-hidden rounded-2xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-6 h-full min-h-[160px] sm:min-h-[200px] transition-all duration-300 hover:shadow-lg hover:shadow-gray-300/50 dark:hover:shadow-black/30 hover:-translate-y-0.5 cursor-pointer`}
                   >
-                    {/* 호버 시 상단 그라데이션 바 */}
-                    <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${g.gradient} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500`} />
-
-                    {/* 아이콘 */}
-                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${g.iconBg} flex items-center justify-center mb-4 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                    {/* 좌상단: 제목 */}
+                    <h3 className="text-base sm:text-2xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                      {g.label}
+                    </h3>
+                    {/* 우상단: 뱃지 */}
+                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full`}>
+                      {g.badge}
+                    </div>
+                    {/* 좌하단: CTA 설명 */}
+                    <p className="absolute bottom-3 left-4 sm:bottom-5 sm:left-6 text-[10px] sm:text-xs text-gray-600 dark:text-gray-400 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                      {g.cta} <span className="inline-block ml-0.5 transition-transform group-hover:translate-x-0.5">&rarr;</span>
+                    </p>
+                    {/* 우하단: 일러스트 아이콘 */}
+                    <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-[52px] h-[52px] sm:w-[72px] sm:h-[72px] transition-transform duration-300 group-hover:scale-110 opacity-80 group-hover:opacity-100">
                       {g.icon}
-                    </div>
-
-                    {/* 라벨 + 카운트 */}
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <h3 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">{g.label}</h3>
-                      <span className={`text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r ${g.gradient} text-white`}>
-                        {g.count}개
-                      </span>
-                    </div>
-
-                    {/* 설명 */}
-                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-1">{g.desc}</p>
-                    <p className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500">{g.sub}</p>
-
-                    {/* CTA */}
-                    <div className="mt-4 flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                      자격증 선택
-                      <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
                     </div>
                   </Link>
                 ) : (
-                  <div className="group relative overflow-hidden rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 p-5 sm:p-6 h-full">
-                    {/* 아이콘 */}
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center mb-4 opacity-40">
+                  <div className={`relative overflow-hidden rounded-2xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-6 h-full min-h-[160px] sm:min-h-[200px] opacity-60`}>
+                    <h3 className="text-base sm:text-2xl font-extrabold text-gray-500 dark:text-gray-400 leading-tight">
+                      {g.label}
+                    </h3>
+                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full`}>
+                      {g.badge}
+                    </div>
+                    <p className="absolute bottom-3 left-4 sm:bottom-5 sm:left-6 text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                      {g.cta}
+                    </p>
+                    <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-[52px] h-[52px] sm:w-[72px] sm:h-[72px] opacity-30">
                       {g.icon}
                     </div>
-
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <h3 className="text-lg sm:text-xl font-black text-gray-400 dark:text-gray-600">{g.label}</h3>
-                      <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500">
-                        준비중
-                      </span>
-                    </div>
-
-                    <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-600 leading-relaxed mb-1">{g.desc}</p>
-                    <p className="text-[10px] sm:text-xs text-gray-300 dark:text-gray-700">{g.sub}</p>
                   </div>
                 )}
               </Reveal>
