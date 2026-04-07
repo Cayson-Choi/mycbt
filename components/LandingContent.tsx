@@ -226,71 +226,26 @@ const strengths = [
   {
     title: '원본 대조 검증',
     desc: '인터넷 복사가 아닙니다. 실제 시험지 원본과 한 문제씩 대조하여 정답과 선택지를 검증합니다.',
-    iconBg: 'bg-emerald-50 dark:bg-emerald-950/30',
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <rect x="4" y="2" width="16" height="20" rx="2" fill="#a7f3d0" />
-        <rect x="8" y="6" width="16" height="20" rx="2" fill="#6ee7b7" />
-        <rect x="11" y="10" width="4" height="1.5" rx="0.5" fill="#047857" opacity="0.5" />
-        <rect x="11" y="14" width="8" height="1.5" rx="0.5" fill="#047857" opacity="0.4" />
-        <rect x="11" y="18" width="6" height="1.5" rx="0.5" fill="#047857" opacity="0.35" />
-        <circle cx="24" cy="24" r="7" fill="#059669" />
-        <path d="M21 24l2 2 4-4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    iconBg: 'bg-red-50 dark:bg-red-950/30',
+    icon: <img src="/hero/deco/302553-shield.svg" alt="" className="w-9 h-9" />,
   },
   {
     title: '실전 동일 환경',
     desc: '한국산업인력공단 CBT와 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
-    iconBg: 'bg-indigo-50 dark:bg-indigo-950/30',
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <rect x="3" y="4" width="26" height="18" rx="2.5" fill="#c7d2fe" />
-        <rect x="5" y="6" width="22" height="14" rx="1" fill="#818cf8" opacity="0.3" />
-        <rect x="8" y="9" width="9" height="1.2" rx="0.5" fill="#4338ca" opacity="0.6" />
-        <circle cx="8.6" cy="13" r="1.2" fill="#a5b4fc" />
-        <rect x="11" y="12.2" width="7" height="1.2" rx="0.5" fill="#4338ca" opacity="0.4" />
-        <circle cx="8.6" cy="16.5" r="1.2" fill="#4f46e5" />
-        <rect x="11" y="15.7" width="7" height="1.2" rx="0.5" fill="#4338ca" opacity="0.5" />
-        <rect x="20" y="9" width="5" height="9" rx="1" fill="#e0e7ff" />
-        <rect x="21" y="15" width="3" height="2" rx="0.5" fill="#4f46e5" />
-        <rect x="11" y="24" width="10" height="2" rx="1" fill="#a5b4fc" />
-        <rect x="13" y="22" width="6" height="2" fill="#c7d2fe" />
-      </svg>
-    ),
+    iconBg: 'bg-blue-50 dark:bg-blue-950/30',
+    icon: <img src="/hero/deco/314978-laptop-open.svg" alt="" className="w-9 h-9" />,
   },
   {
     title: '자동 오답 분석',
     desc: '틀린 문제를 자동으로 분류하고 과목별 약점을 분석합니다. 같은 실수를 반복하지 않도록.',
-    iconBg: 'bg-amber-50 dark:bg-amber-950/30',
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <rect x="4" y="18" width="4" height="8" rx="1" fill="#fcd34d" />
-        <rect x="10" y="12" width="4" height="14" rx="1" fill="#f59e0b" />
-        <rect x="16" y="8" width="4" height="18" rx="1" fill="#d97706" />
-        <rect x="22" y="14" width="4" height="12" rx="1" fill="#fbbf24" />
-        <rect x="3" y="26" width="24" height="1.5" rx="0.5" fill="#92400e" opacity="0.2" />
-        <circle cx="24" cy="10" r="5" stroke="#ea580c" strokeWidth="2" fill="white" opacity="0.9" />
-        <line x1="27.5" y1="13.5" x2="30" y2="16" stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" />
-      </svg>
-    ),
+    iconBg: 'bg-pink-50 dark:bg-pink-950/30',
+    icon: <img src="/hero/deco/429901-profit-chart-bar-report.svg" alt="" className="w-9 h-9" />,
   },
   {
     title: '24시간 오류 수정',
     desc: '오류가 발견되면 24시간 이내에 수정합니다. 규정 개정 사항도 실시간으로 반영합니다.',
-    iconBg: 'bg-violet-50 dark:bg-violet-950/30',
-    icon: (
-      <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
-        <circle cx="14" cy="16" r="10" fill="#ede9fe" />
-        <circle cx="14" cy="16" r="8" stroke="#7c3aed" strokeWidth="1.8" fill="none" />
-        <line x1="14" y1="10" x2="14" y2="16" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" />
-        <line x1="14" y1="16" x2="18.5" y2="16" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="14" cy="16" r="1.5" fill="#7c3aed" />
-        <path d="M24 9.5l2.5-2.5c.5-.5 1.3-.5 1.8 0l.7.7c.5.5.5 1.3 0 1.8L26.5 12" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" fill="none" />
-        <rect x="22" y="13" width="2.5" height="5.5" rx="0.8" transform="rotate(-45 22 13)" fill="#fbbf24" />
-        <rect x="24.5" y="10.5" width="2" height="3" rx="0.5" transform="rotate(-45 24.5 10.5)" fill="#f59e0b" />
-      </svg>
-    ),
+    iconBg: 'bg-teal-50 dark:bg-teal-950/30',
+    icon: <img src="/hero/deco/341443-equipment-maintenance-screwdriver-tools-wrench.svg" alt="" className="w-9 h-9" />,
   },
 ]
 
