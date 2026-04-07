@@ -166,8 +166,8 @@ body {
 }
 
 @keyframes caysonBounce {
-  0%, 15%, 100% { transform: scale(1) translateY(0); }
-  7% { transform: scale(1.15) translateY(-2px); }
+  0%, 18%, 100% { transform: scale(1) translateY(0); }
+  9% { transform: scale(1.35) translateY(-4px); }
 }
 
 @keyframes ctaShimmer {

@@ -298,7 +298,7 @@ function WhyCaysonSection() {
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">Why CAYSON</p>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
               왜 {'CAYSON'.split('').map((ch, i) => (
-                <span key={i} className="inline-block bg-gradient-to-b from-violet-600 to-indigo-600 text-transparent bg-clip-text tracking-wide" style={{ animation: `caysonBounce 4s ease-in-out infinite`, animationDelay: `${i * 0.4}s`, marginRight: '0.04em' }}>{ch}</span>
+                <span key={i} className="inline-block bg-gradient-to-b from-orange-500 to-amber-500 text-transparent bg-clip-text tracking-wide" style={{ animation: `caysonBounce 4s ease-in-out infinite`, animationDelay: `${i * 0.4}s`, marginRight: '0.04em' }}>{ch}</span>
               ))}이어야 할까요?
             </h2>
             <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full mx-auto" />
