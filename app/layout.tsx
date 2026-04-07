@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "전기 박사와 기술사들이 검증한 CBT 문제",
   openGraph: {
     title: "CAYSON",
-    description: "전기 박사와 기술사들이 검증한 CBT 문제",
+    description: "기능사부터 기능장까지, 전문가가 검증한 자격증 CBT",
     siteName: "CAYSON",
     url: "https://www.mycbt.xyz",
     images: [
@@ -21,6 +21,9 @@ export const metadata: Metadata = {
         height: 630,
       },
     ],
+  },
+  other: {
+    'og:image:alt': 'CAYSON - 자격증 CBT 플랫폼',
   },
 };
 

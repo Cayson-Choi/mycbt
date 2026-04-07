@@ -4,12 +4,13 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 
 interface FloatingEl {
+  type: 'laurel' | 'bubble' | 'ribbon' | 'badge'
   text: string
   sub?: string
-  x: string   // CSS position
+  x: string
   y: string
-  delay: number // ms
-  size?: 'sm' | 'md' | 'lg'
+  delay: number
+  color?: string  // 배경색 override
 }
 
 interface Slide {
@@ -34,9 +35,9 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '기능사',
     floats: [
-      { text: '합격률', sub: '94%', x: '-40%', y: '10%', delay: 700, size: 'lg' },
-      { text: '필기+실기', x: '70%', y: '5%', delay: 900 },
-      { text: '4개 종목', x: '-30%', y: '55%', delay: 1100 },
+      { type: 'laurel', text: 'CAYSON', sub: '합격률 94%', x: '-55%', y: '5%', delay: 700 },
+      { type: 'bubble', text: '필기+실기 완벽 대비', x: '55%', y: '2%', delay: 900, color: '#34d399' },
+      { type: 'badge', text: '4개 종목', x: '-35%', y: '55%', delay: 1100, color: '#059669' },
     ],
   },
   {
@@ -48,9 +49,9 @@ const slides: Slide[] = [
     personImage: '/hero/man1.png',
     personAlt: '산업기사',
     floats: [
-      { text: '전문가', sub: '검증', x: '-35%', y: '8%', delay: 700, size: 'lg' },
-      { text: '6개 종목', x: '75%', y: '12%', delay: 900 },
-      { text: '실시간 업데이트', x: '-25%', y: '58%', delay: 1100 },
+      { type: 'laurel', text: '전문가', sub: '검증 완료', x: '-55%', y: '5%', delay: 700 },
+      { type: 'bubble', text: '6개 종목 한번에 준비', x: '55%', y: '2%', delay: 900, color: '#a78bfa' },
+      { type: 'badge', text: '실시간 업데이트', x: '-35%', y: '55%', delay: 1100, color: '#7c3aed' },
     ],
   },
   {
@@ -63,9 +64,9 @@ const slides: Slide[] = [
     personAlt: '기사',
     imageScale: 0.95,
     floats: [
-      { text: '합격', sub: '보장', x: '-40%', y: '6%', delay: 700, size: 'lg' },
-      { text: '인기 1위', x: '70%', y: '10%', delay: 900 },
-      { text: '해설 수록', x: '-20%', y: '52%', delay: 1100 },
+      { type: 'laurel', text: 'BEST', sub: '인기 1위', x: '-55%', y: '5%', delay: 700 },
+      { type: 'bubble', text: '전문가 검증 해설 수록', x: '55%', y: '2%', delay: 900, color: '#4f8cff' },
+      { type: 'badge', text: '합격 전략', x: '-35%', y: '55%', delay: 1100, color: '#2563eb' },
     ],
   },
   {
@@ -77,9 +78,9 @@ const slides: Slide[] = [
     personImage: '/hero/man3.png',
     personAlt: '기능장',
     floats: [
-      { text: '최고', sub: '등급', x: '-35%', y: '8%', delay: 700, size: 'lg' },
-      { text: '실기 대비', x: '72%', y: '6%', delay: 900 },
-      { text: '심화 학습', x: '-25%', y: '55%', delay: 1100 },
+      { type: 'laurel', text: '최고', sub: '등급', x: '-55%', y: '5%', delay: 700 },
+      { type: 'bubble', text: '실기까지 완벽 대비', x: '55%', y: '2%', delay: 900, color: '#fbbf24' },
+      { type: 'badge', text: '심화 학습', x: '-35%', y: '55%', delay: 1100, color: '#d97706' },
     ],
   },
   {
@@ -91,9 +92,9 @@ const slides: Slide[] = [
     personImage: '/hero/woman3.png',
     personAlt: '공기업',
     floats: [
-      { text: '한전', sub: 'KEPCO', x: '-40%', y: '10%', delay: 700, size: 'lg' },
-      { text: '한수원', x: '70%', y: '8%', delay: 900 },
-      { text: '전공시험', x: '-20%', y: '55%', delay: 1100 },
+      { type: 'laurel', text: 'KEPCO', sub: '한전 대비', x: '-55%', y: '5%', delay: 700 },
+      { type: 'bubble', text: '공기업 전공시험 특화', x: '55%', y: '2%', delay: 900, color: '#22d3ee' },
+      { type: 'badge', text: '채용 대비', x: '-35%', y: '55%', delay: 1100, color: '#0891b2' },
     ],
   },
   {
@@ -105,9 +106,9 @@ const slides: Slide[] = [
     personImage: '/hero/woman2.png',
     personAlt: '과정평가형',
     floats: [
-      { text: 'NCS', sub: '기반', x: '-35%', y: '8%', delay: 700, size: 'lg' },
-      { text: '현장 실무', x: '72%', y: '10%', delay: 900 },
-      { text: '역량 평가', x: '-25%', y: '55%', delay: 1100 },
+      { type: 'laurel', text: 'NCS', sub: '기반 평가', x: '-55%', y: '5%', delay: 700 },
+      { type: 'bubble', text: '현장 실무 역량 평가', x: '55%', y: '2%', delay: 900, color: '#fb7185' },
+      { type: 'badge', text: '과정평가', x: '-35%', y: '55%', delay: 1100, color: '#e11d48' },
     ],
   },
 ]
@@ -274,9 +275,6 @@ export default function HeroSection() {
             {/* 장식 요소 (이미지 뒤) */}
             {slide.floats.map((f, fi) => {
               const isActive = textVisible
-              const sizeClass = f.size === 'lg'
-                ? 'px-3 py-2 sm:px-4 sm:py-2.5'
-                : 'px-2.5 py-1.5 sm:px-3 sm:py-2'
               return (
                 <div
                   key={fi}
@@ -285,24 +283,71 @@ export default function HeroSection() {
                     left: f.x,
                     top: f.y,
                     opacity: isActive ? 1 : 0,
-                    transform: isActive ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.8)',
-                    transitionDuration: '500ms',
+                    transform: isActive ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.7)',
+                    transitionDuration: '600ms',
                     transitionDelay: isActive ? `${f.delay}ms` : '0ms',
                   }}
                 >
-                  <div
-                    className={`${sizeClass} rounded-xl backdrop-blur-md shadow-lg border border-white/10`}
-                    style={{ backgroundColor: `${slide.accentColor}18` }}
-                  >
-                    {f.sub ? (
-                      <div className="text-center">
-                        <div className="text-[10px] sm:text-xs font-bold text-white/90 leading-tight">{f.text}</div>
-                        <div className="text-xs sm:text-sm font-black text-white leading-tight">{f.sub}</div>
+                  {/* 월계관 뱃지 */}
+                  {f.type === 'laurel' && (
+                    <div className="relative">
+                      {/* 월계관 SVG */}
+                      <svg className="absolute -left-3 -top-2 w-[calc(100%+24px)] h-[calc(100%+16px)]" viewBox="0 0 120 80" fill="none">
+                        <path d="M20 65 C10 50 8 30 18 18 C22 14 26 16 24 22 C22 28 16 36 18 48 C20 55 22 60 20 65Z" fill={`${slide.accentColor}40`} />
+                        <path d="M15 58 C8 46 6 28 14 18 C17 15 20 17 18 22 C16 28 12 34 14 44 C15 50 16 54 15 58Z" fill={`${slide.accentColor}25`} />
+                        <path d="M100 65 C110 50 112 30 102 18 C98 14 94 16 96 22 C98 28 104 36 102 48 C100 55 98 60 100 65Z" fill={`${slide.accentColor}40`} />
+                        <path d="M105 58 C112 46 114 28 106 18 C103 15 100 17 102 22 C104 28 108 34 106 44 C105 50 104 54 105 58Z" fill={`${slide.accentColor}25`} />
+                      </svg>
+                      <div className="relative bg-white/95 dark:bg-white/90 rounded-xl px-4 py-2.5 shadow-xl text-center min-w-[80px]">
+                        <div className="text-[10px] font-black tracking-wider" style={{ color: slide.accentColor }}>{f.text}</div>
+                        {f.sub && <div className="text-[11px] font-extrabold text-gray-800 leading-tight mt-0.5">{f.sub}</div>}
                       </div>
-                    ) : (
-                      <div className="text-[10px] sm:text-xs font-bold text-white/90 whitespace-nowrap">{f.text}</div>
-                    )}
-                  </div>
+                    </div>
+                  )}
+
+                  {/* 말풍선 */}
+                  {f.type === 'bubble' && (
+                    <div className="relative">
+                      <div
+                        className="px-4 py-2.5 rounded-2xl shadow-xl text-[11px] font-bold text-white whitespace-nowrap"
+                        style={{ backgroundColor: f.color || slide.accentColor }}
+                      >
+                        {f.text}
+                        {/* 말풍선 꼬리 */}
+                        <div
+                          className="absolute -bottom-2 left-5 w-0 h-0"
+                          style={{
+                            borderLeft: '6px solid transparent',
+                            borderRight: '6px solid transparent',
+                            borderTop: `8px solid ${f.color || slide.accentColor}`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 리본 뱃지 */}
+                  {f.type === 'ribbon' && (
+                    <div
+                      className="px-4 py-1.5 text-[10px] font-bold text-white shadow-lg"
+                      style={{
+                        backgroundColor: f.color || slide.accentColor,
+                        clipPath: 'polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%)',
+                      }}
+                    >
+                      {f.text}
+                    </div>
+                  )}
+
+                  {/* 원형 뱃지 */}
+                  {f.type === 'badge' && (
+                    <div
+                      className="px-3.5 py-1.5 rounded-full text-[10px] font-bold text-white shadow-lg whitespace-nowrap"
+                      style={{ backgroundColor: f.color || slide.accentColor }}
+                    >
+                      {f.text}
+                    </div>
+                  )}
                 </div>
               )
             })}
