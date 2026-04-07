@@ -92,7 +92,7 @@ const slides: Slide[] = [
   {
     badge: '4개 자격증',
     title: '기능사',
-    description: '전기기능사, 승강기기능사\n위험물기능사, 가스기능사\n자격증 취득의 첫 걸음, 기초부터 탄탄하게',
+    description: '전기기능사, 승강기기능사, 위험물기능사, 가스기능사\n자격증 취득의 첫 걸음, 기초부터 탄탄하게',
     bgColor: '#071a12',
     accentColor: '#34d399',
     personImage: '/hero/woman1.png',
