@@ -285,7 +285,7 @@ export default function HeroSection() {
 
       {/* 메인 콘텐츠 */}
       <div className="relative z-[2] max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
-        <div className="relative flex items-end min-h-[280px] sm:min-h-[360px] lg:min-h-[420px]">
+        <div className="relative flex items-end min-h-[250px] sm:min-h-[360px] lg:min-h-[420px]">
 
           {/* ===== 장식 레이어 (말풍선 제외: 사람 뒤 z-0) ===== */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
