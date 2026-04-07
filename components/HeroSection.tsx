@@ -164,7 +164,7 @@ export default function HeroSection() {
         <div className="flex items-end min-h-[280px] sm:min-h-[340px] lg:min-h-[420px]">
 
           {/* 텍스트 */}
-          <div className="flex-1 z-10 pb-12 sm:pb-14 lg:pb-16 pt-8 sm:pt-10 lg:pt-14">
+          <div className="flex-1 z-10 pb-14 sm:pb-16 lg:pb-20 pt-10 sm:pt-14 lg:pt-16">
             {/* 배지 */}
             <div
               className="inline-block px-3 py-1 rounded text-[11px] font-bold text-white mb-4 transition-all ease-out"
@@ -183,6 +183,7 @@ export default function HeroSection() {
             <h2
               className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 leading-[1.1] tracking-tight transition-all ease-out"
               style={{
+                fontFamily: "'NanumSquareNeo', sans-serif",
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
                 transitionDuration: '667ms',

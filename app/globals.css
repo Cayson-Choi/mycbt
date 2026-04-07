@@ -44,6 +44,24 @@ body {
 /* Hero title fonts */
 @font-face {
   font-family: 'NanumSquareNeo';
+  src: url('/fonts/NanumSquareNeo-bRg.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'NanumSquareNeo';
+  src: url('/fonts/NanumSquareNeo-cBd.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'NanumSquareNeo';
+  src: url('/fonts/NanumSquareNeo-dEb.ttf') format('truetype');
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'NanumSquareNeo';
   src: url('/fonts/NanumSquareNeo-eHv.ttf') format('truetype');
   font-weight: 900;
   font-display: swap;
