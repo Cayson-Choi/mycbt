@@ -480,7 +480,7 @@ export default function HeroSection() {
           </div>
 
           {/* 사람 이미지 (말풍선 위) */}
-          <div className="relative flex-shrink-0 w-[120px] sm:w-[180px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
+          <div className="relative flex-shrink-0 w-[132px] sm:w-[180px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
             {slides.map((s, i) => {
               const scale = s.imageScale || 1
               const isActive = i === current
