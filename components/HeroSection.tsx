@@ -21,7 +21,7 @@ const slides: Slide[] = [
     description: '전기기능사 · 승강기기능사 · 위험물기능사 · 가스기능사\n자격증 취득의 첫 걸음, 기초부터 탄탄하게',
     bgColor: '#071a12',
     accentColor: '#34d399',
-    personImage: '/hero/woman.png',
+    personImage: '/hero/woman1.png',
     personAlt: '기능사',
   },
   {
@@ -30,7 +30,7 @@ const slides: Slide[] = [
     description: '전기산업기사 · 소방설비산업기사(전기/기계)\n에너지 · 공조냉동기계 · 산업안전산업기사',
     bgColor: '#150d24',
     accentColor: '#a78bfa',
-    personImage: '/hero/man.png',
+    personImage: '/hero/man1.png',
     personAlt: '산업기사',
   },
   {
@@ -41,7 +41,6 @@ const slides: Slide[] = [
     accentColor: '#4f8cff',
     personImage: '/hero/man2.png',
     personAlt: '기사',
-    imageScale: 1.35,
   },
   {
     badge: '최고 등급',
