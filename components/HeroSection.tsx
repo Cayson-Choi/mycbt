@@ -287,14 +287,14 @@ export default function HeroSection() {
       <div className="relative z-[2] max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
         <div className="relative flex items-end min-h-[280px] sm:min-h-[340px] lg:min-h-[420px]">
 
-          {/* ===== 장식 레이어 (사람 뒤, 섹션 안) ===== */}
+          {/* ===== 장식 레이어 (말풍선 제외: 사람 뒤 z-0) ===== */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
-            {slide.floats.map((f, fi) => {
+            {slide.floats.filter(f => f.type !== 'bubble').map((f, fi) => {
               const isActive = textVisible
               const ac = animConfig[f.anim]
               return (
                 <div
-                  key={`${current}-${fi}`}
+                  key={`deco-${current}-${fi}`}
                   className="absolute"
                   style={{ right: f.right, top: f.top }}
                 >
@@ -464,6 +464,46 @@ export default function HeroSection() {
                     sizes="(max-width: 640px) 100px, (max-width: 1024px) 160px, 260px"
                     priority={i <= 1}
                   />
+                </div>
+              )
+            })}
+          </div>
+
+          {/* ===== 말풍선 레이어 (사람 위, z-[8]) ===== */}
+          <div className="absolute inset-0 z-[8] pointer-events-none overflow-hidden hidden sm:block">
+            {slide.floats.filter(f => f.type === 'bubble').map((f, fi) => {
+              const isActive = textVisible
+              const ac = animConfig[f.anim]
+              return (
+                <div
+                  key={`bubble-${current}-${fi}`}
+                  className="absolute"
+                  style={{ right: f.right, top: f.top }}
+                >
+                  <div
+                    className="transition-all ease-out"
+                    style={{
+                      opacity: isActive ? 1 : 0,
+                      transform: isActive ? 'scale(1)' : 'scale(0.4)',
+                      transitionDuration: '500ms',
+                      transitionDelay: isActive ? `${f.delay}ms` : '0ms',
+                    }}
+                  >
+                    <div style={{ animation: ac ? `${ac.name} ${ac.dur} ease-in-out infinite` : 'none' }}>
+                      <div className="relative">
+                        <div
+                          className="relative px-6 py-4 lg:px-8 lg:py-5 rounded-[20px] shadow-2xl text-[15px] lg:text-[18px] font-extrabold text-white overflow-hidden"
+                          style={{ backgroundColor: f.color || slide.accentColor }}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent rounded-[20px]" />
+                          <span className="relative whitespace-pre-line leading-snug">{f.text}</span>
+                        </div>
+                        <svg className="absolute -bottom-[14px] left-3" width="22" height="16" viewBox="0 0 22 16" fill="none">
+                          <path d="M0 0C4 8 2 14 0 16L22 0H0Z" fill={f.color || slide.accentColor} />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )
             })}
