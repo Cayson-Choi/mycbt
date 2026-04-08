@@ -24,42 +24,121 @@ const grades = [
     badge: '4개 자격증',
     cta: '전기기능사 외 3개\n필기/실기 준비',
     cardBg: 'bg-[#e8f5e9]', badgeBg: 'bg-emerald-500',
-    icon: <img src="/hero/deco/425117-achievement-reward-award.svg" alt="" className="w-full h-full" />,
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <circle cx="40" cy="32" r="18" fill="#4dd0e1" />
+        <circle cx="40" cy="32" r="13" fill="#26c6da" />
+        <circle cx="40" cy="32" r="8" fill="#e0f7fa" />
+        <path d="M37 31l3 3 5-5" stroke="#00838f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M32 50l-4 14 8-4 4 6 4-14" fill="#4dd0e1" />
+        <path d="M48 50l4 14-8-4-4 6-4-14" fill="#26c6da" />
+        <ellipse cx="40" cy="50" rx="10" ry="3" fill="#80deea" />
+      </svg>
+    ),
   },
   {
     id: 'industrial', label: '산업기사', count: 6,
     badge: '6개 자격증',
     cta: '전기산업기사 외 5개\n현장 전문가 도약',
     cardBg: 'bg-[#f3e5f5]', badgeBg: 'bg-violet-500',
-    icon: <img src="/hero/deco/429900-setting-configuration-gear.svg" alt="" className="w-full h-full" />,
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <rect x="14" y="20" width="52" height="36" rx="4" fill="#7e57c2" />
+        <rect x="14" y="20" width="52" height="6" rx="4" fill="#5e35b1" />
+        <rect x="18" y="30" width="44" height="22" rx="2" fill="#ede7f6" />
+        <circle cx="40" cy="41" r="8" fill="none" stroke="#7e57c2" strokeWidth="2" />
+        <path d="M40 36v5l3 3" stroke="#7e57c2" strokeWidth="2" strokeLinecap="round" />
+        <path d="M37 41a3 3 0 016 0" stroke="#b39ddb" strokeWidth="1.5" />
+        <rect x="30" y="56" width="20" height="4" rx="2" fill="#9575cd" />
+        <rect x="36" y="52" width="8" height="4" fill="#b39ddb" />
+        <circle cx="20" cy="23" r="1.5" fill="#ef5350" />
+        <circle cx="25" cy="23" r="1.5" fill="#ffc107" />
+        <circle cx="30" cy="23" r="1.5" fill="#66bb6a" />
+      </svg>
+    ),
   },
   {
     id: 'engineer', label: '기사', count: 4,
     badge: '4개 자격증',
     cta: '전기기사 외 3개\n체계적 합격 전략',
     cardBg: 'bg-[#e3f2fd]', badgeBg: 'bg-blue-500',
-    icon: <img src="/hero/deco/382151-education-graduation-learning-school-study.svg" alt="" className="w-full h-full" />,
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <path d="M40 12L10 28v4l30 16 30-16v-4L40 12z" fill="#1565c0" />
+        <path d="M40 12L10 28l30 16 30-16L40 12z" fill="#42a5f5" />
+        <path d="M10 32v12l30 16 30-16V32L40 48 10 32z" fill="#1e88e5" />
+        <path d="M40 48L10 32v12l30 16V48z" fill="#1565c0" />
+        <rect x="62" y="28" width="4" height="28" rx="2" fill="#0d47a1" />
+        <ellipse cx="64" cy="56" rx="6" ry="4" fill="#1565c0" />
+        <ellipse cx="64" cy="54" rx="6" ry="4" fill="#42a5f5" />
+        <circle cx="40" cy="30" r="4" fill="#e3f2fd" />
+        <path d="M38 30l2 2 3-3" stroke="#1565c0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
   },
   {
     id: 'master', label: '기능장', count: 1,
     badge: '최고 등급',
     cta: '전기기능장\n최고 등급에 도전',
     cardBg: 'bg-[#fff3e0]', badgeBg: 'bg-amber-500',
-    icon: <img src="/hero/deco/475312-trophy.svg" alt="" className="w-full h-full" />,
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <path d="M24 58h32v6H24z" fill="#f9a825" />
+        <path d="M24 58h32v3H24z" fill="#fdd835" />
+        <path d="M20 24l8 20h24l8-20-10 10-10-14-10 14-10-10z" fill="#fdd835" />
+        <path d="M20 24l8 20h24l8-20" fill="none" stroke="#f9a825" strokeWidth="2" />
+        <path d="M28 44h24v14H28z" fill="#ffb300" />
+        <path d="M28 44h24v7H28z" fill="#fdd835" />
+        <circle cx="20" cy="24" r="4" fill="#ff8f00" />
+        <circle cx="20" cy="24" r="2.5" fill="#fdd835" />
+        <circle cx="60" cy="24" r="4" fill="#ff8f00" />
+        <circle cx="60" cy="24" r="2.5" fill="#fdd835" />
+        <circle cx="40" cy="20" r="4" fill="#ff8f00" />
+        <circle cx="40" cy="20" r="2.5" fill="#fdd835" />
+        <rect x="35" y="48" width="10" height="6" rx="1" fill="#fff8e1" opacity="0.6" />
+      </svg>
+    ),
   },
   {
     id: 'public', label: '공기업', count: 0,
     badge: '준비중',
     cta: '한국전력공사 등\n공기업 채용 대비',
     cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-gray-400',
-    icon: <img src="/hero/deco/421954-apartment-block-building.svg" alt="" className="w-full h-full" />,
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <rect x="22" y="28" width="36" height="36" rx="2" fill="#78909c" />
+        <rect x="22" y="28" width="36" height="36" rx="2" fill="#90a4ae" />
+        <rect x="16" y="24" width="48" height="8" rx="2" fill="#607d8b" />
+        <path d="M40 16l-26 8h52l-26-8z" fill="#546e7a" />
+        <path d="M40 16l-26 8h52" fill="none" stroke="#455a64" strokeWidth="1" />
+        <rect x="28" y="34" width="6" height="6" rx="1" fill="#e0f2f1" />
+        <rect x="37" y="34" width="6" height="6" rx="1" fill="#e0f2f1" />
+        <rect x="46" y="34" width="6" height="6" rx="1" fill="#e0f2f1" />
+        <rect x="28" y="44" width="6" height="6" rx="1" fill="#e0f2f1" />
+        <rect x="37" y="44" width="6" height="6" rx="1" fill="#e0f2f1" />
+        <rect x="46" y="44" width="6" height="6" rx="1" fill="#e0f2f1" />
+        <rect x="35" y="54" width="10" height="10" rx="1" fill="#b0bec5" />
+        <rect x="35" y="54" width="10" height="5" rx="1" fill="#cfd8dc" />
+      </svg>
+    ),
   },
   {
     id: 'ncs', label: '과정평가형', count: 0,
     badge: '준비중',
     cta: 'NCS 과정평가형\n교육훈련 자격 취득',
     cardBg: 'bg-[#fce4ec]', badgeBg: 'bg-gray-400',
-    icon: <img src="/hero/deco/375339-certificate-authority-service.svg" alt="" className="w-full h-full" />,
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <path d="M40 10C26 10 16 22 16 34c0 8 4 15 10 20v10h28V54c6-5 10-12 10-20 0-12-10-24-24-24z" fill="#ab47bc" opacity="0.15" />
+        <path d="M40 14C28 14 20 24 20 34c0 7 3 13 8 17l2 2v9h20v-9l2-2c5-4 8-10 8-17 0-10-8-20-20-20z" fill="#ce93d8" />
+        <path d="M40 14C28 14 20 24 20 34c0 7 3 13 8 17l2 2v9h10V14z" fill="#ab47bc" />
+        <rect x="30" y="62" width="20" height="6" rx="3" fill="#7b1fa2" />
+        <rect x="30" y="62" width="20" height="3" rx="3" fill="#9c27b0" />
+        <circle cx="40" cy="34" r="10" fill="#f3e5f5" />
+        <path d="M36 34l3 3 6-6" stroke="#7b1fa2" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M34 22c-2 2-3 4-3 7" stroke="#e1bee7" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    ),
   },
 ]
 
