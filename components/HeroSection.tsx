@@ -237,12 +237,16 @@ export default function HeroSection() {
   const goTo = useCallback((index: number) => {
     if (index === current) return
     clearTimer()
-    setTextVisible(false)
+    setTextVisible(false)          // 1) 현재 텍스트 fade-out
     setPrev(current)
-    setCurrent(index)
     setTimeout(() => {
-      setTextVisible(true)
-      setPrev(-1)
+      setCurrent(index)            // 2) fade-out 완료 후 텍스트 교체
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTextVisible(true)     // 3) 새 텍스트 fade-in
+          setPrev(-1)
+        })
+      })
     }, FADE_MS)
   }, [current, clearTimer])
 
