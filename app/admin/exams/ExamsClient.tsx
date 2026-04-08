@@ -23,6 +23,7 @@ interface ExamItem {
 interface Category {
   id: number
   name: string
+  grade: string
 }
 
 export default function ExamsClient({
@@ -135,6 +136,17 @@ export default function ExamsClient({
     }
   }
 
+  // 카테고리를 grade별로 그룹핑 (optgroup용)
+  const categoryGroups = categories.reduce<Map<string, Category[]>>(
+    (acc, cat) => {
+      const group = acc.get(cat.grade) || []
+      group.push(cat)
+      acc.set(cat.grade, group)
+      return acc
+    },
+    new Map()
+  )
+
   const filteredExams =
     categoryFilter === "all"
       ? exams
@@ -210,10 +222,14 @@ export default function ExamsClient({
                   onChange={(e) => setNewCategoryId(parseInt(e.target.value))}
                   className="w-full px-3 py-2 border dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
                 >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
+                  {Array.from(categoryGroups.entries()).map(([grade, cats]) => (
+                    <optgroup key={grade} label={grade}>
+                      {cats.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </div>
@@ -295,10 +311,14 @@ export default function ExamsClient({
             className="px-3 py-1.5 border dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
           >
             <option value="all">전체</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
+            {Array.from(categoryGroups.entries()).map(([grade, cats]) => (
+              <optgroup key={grade} label={grade}>
+                {cats.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
           <span className="text-sm text-gray-500 dark:text-gray-400">

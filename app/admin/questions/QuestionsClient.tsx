@@ -321,11 +321,26 @@ export default function QuestionsClient() {
               className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             >
               <option value="all">전체 카테고리</option>
-              {Array.from(new Set(exams.map((e: any) => e.category_name))).filter(Boolean).map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
+              {(() => {
+                // grade별로 카테고리를 그룹핑
+                const gradeMap = new Map<string, string[]>()
+                const seen = new Set<string>()
+                for (const e of exams) {
+                  const cat = e.category_name
+                  const grade = e.category_grade || '기타'
+                  if (!cat || seen.has(cat)) continue
+                  seen.add(cat)
+                  if (!gradeMap.has(grade)) gradeMap.set(grade, [])
+                  gradeMap.get(grade)!.push(cat)
+                }
+                return Array.from(gradeMap.entries()).map(([grade, cats]) => (
+                  <optgroup key={grade} label={grade}>
+                    {cats.map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </optgroup>
+                ))
+              })()}
             </select>
 
             {/* 2단계: 필기/실기 (카테고리 선택 시) */}

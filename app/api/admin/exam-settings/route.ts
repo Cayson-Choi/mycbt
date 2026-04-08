@@ -26,7 +26,7 @@ export async function GET() {
         examType: true,
         durationMinutes: true,
         sortOrder: true,
-        category: { select: { name: true } },
+        category: { select: { name: true, grade: true } },
       },
       orderBy: [{ categoryId: "asc" }, { year: "desc" }, { round: "asc" }, { sortOrder: "asc" }],
     })
@@ -61,6 +61,7 @@ export async function GET() {
           ? `${e.category?.name} ${e.examType === 'PRACTICAL' ? '실기 ' : ''}${e.year}년 ${e.round}회`
           : e.name,
         category_name: e.category?.name || "",
+        category_grade: e.category?.grade || "기타",
         exam_mode: e.examMode,
         exam_type: e.examType,
         duration_minutes: e.durationMinutes,

@@ -39,7 +39,7 @@ export default async function AdminPage() {
         examType: true,
         durationMinutes: true,
         sortOrder: true,
-        category: { select: { name: true } },
+        category: { select: { name: true, grade: true } },
       },
       orderBy: [{ categoryId: "asc" }, { examType: "asc" }, { year: "desc" }, { round: "asc" }, { sortOrder: "asc" }],
     }),
@@ -51,19 +51,25 @@ export default async function AdminPage() {
       ? `${e.category.name} ${e.examType === 'PRACTICAL' ? '실기 ' : ''}${e.year}년 ${e.round}회`
       : e.name,
     category_name: e.category.name,
+    category_grade: e.category.grade || "기타",
     exam_mode: e.examMode,
     exam_type: e.examType,
     duration_minutes: e.durationMinutes,
     sort_order: e.sortOrder,
   }))
 
-  // 카테고리별 그룹핑
-  const examsByCategory = new Map<string, typeof exams>()
+  // grade → 카테고리 2단계 그룹핑
+  const examsByGrade = new Map<string, Map<string, typeof exams>>()
   for (const exam of exams) {
+    const grade = exam.category.grade || "기타"
     const catName = exam.category.name
-    const group = examsByCategory.get(catName) || []
+    if (!examsByGrade.has(grade)) {
+      examsByGrade.set(grade, new Map())
+    }
+    const catMap = examsByGrade.get(grade)!
+    const group = catMap.get(catName) || []
     group.push(exam)
-    examsByCategory.set(catName, group)
+    catMap.set(catName, group)
   }
 
   return (
@@ -104,20 +110,30 @@ export default async function AdminPage() {
         {/* 시험별 문제 수 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
           <h2 className="text-xl font-bold mb-4 dark:text-white">📚 시험별 문제 현황</h2>
-          <div className="space-y-3">
-            {Array.from(examsByCategory.entries()).map(([catName, catExams]) => (
-              <CategoryAccordion key={catName} categoryName={catName}>
-                <div className="space-y-2 mt-2">
-                  {catExams.map((exam) => (
-                    <ExamQuestionCount
-                      key={exam.id}
-                      examId={exam.id}
-                      examName={exam.year ? `${exam.year}년 ${exam.round}회` : exam.name}
-                      examType={exam.examType}
-                    />
+          <div className="space-y-6">
+            {Array.from(examsByGrade.entries()).map(([grade, catMap]) => (
+              <div key={grade}>
+                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                  <span className="inline-block w-1.5 h-5 bg-blue-500 rounded-full" />
+                  {grade}
+                </h3>
+                <div className="space-y-3 ml-2">
+                  {Array.from(catMap.entries()).map(([catName, catExams]) => (
+                    <CategoryAccordion key={catName} categoryName={catName}>
+                      <div className="space-y-2 mt-2">
+                        {catExams.map((exam) => (
+                          <ExamQuestionCount
+                            key={exam.id}
+                            examId={exam.id}
+                            examName={exam.year ? `${exam.year}년 ${exam.round}회` : exam.name}
+                            examType={exam.examType}
+                          />
+                        ))}
+                      </div>
+                    </CategoryAccordion>
                   ))}
                 </div>
-              </CategoryAccordion>
+              </div>
             ))}
           </div>
         </div>

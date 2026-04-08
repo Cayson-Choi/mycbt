@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const exams = await prisma.exam.findMany({
       where,
       include: {
-        category: { select: { id: true, name: true } },
+        category: { select: { id: true, name: true, grade: true } },
         subjects: {
           select: {
             id: true,
@@ -51,6 +51,7 @@ export async function GET(request: NextRequest) {
         id: e.id,
         category_id: e.categoryId,
         category_name: e.category.name,
+        category_grade: e.category.grade || "기타",
         name: e.name,
         year: e.year,
         round: e.round,

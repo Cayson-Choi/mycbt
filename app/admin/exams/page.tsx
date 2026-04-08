@@ -60,7 +60,7 @@ export default async function AdminExamsPage() {
   const categories = await prisma.examCategory.findMany({
     where: { isActive: true },
     orderBy: { sortOrder: "asc" },
-    select: { id: true, name: true },
+    select: { id: true, name: true, grade: true },
   })
 
   return (
