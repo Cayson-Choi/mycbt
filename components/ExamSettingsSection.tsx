@@ -66,15 +66,17 @@ export default function ExamSettingsSection({ exams }: Props) {
   }
 
   const handleChange = (subjectId: number, value: string) => {
-    const num = value === '' ? 0 : parseInt(value, 10)
-    if (isNaN(num) || num < 0) return
+    const cleaned = value.replace(/[^0-9]/g, '')
+    const num = cleaned === '' ? 0 : parseInt(cleaned, 10)
+    if (num < 0) return
     setEditValues((prev) => ({ ...prev, [subjectId]: num }))
     setResult(null)
   }
 
   const handleDurationChange = (examId: number, value: string) => {
-    const num = value === '' ? 60 : parseInt(value, 10)
-    if (isNaN(num) || num < 1) return
+    const cleaned = value.replace(/[^0-9]/g, '')
+    const num = cleaned === '' ? 0 : parseInt(cleaned, 10)
+    if (num > 300) return
     setDurationValues((prev) => ({ ...prev, [examId]: num }))
     setResult(null)
   }
@@ -138,7 +140,7 @@ export default function ExamSettingsSection({ exams }: Props) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
         <h2 className="text-xl font-bold mb-4 dark:text-white">
-          설정 출제 문항 수 설정
+          시험 시간 및 출제 문항 수 설정
         </h2>
         <p className="text-gray-500 dark:text-gray-400 text-sm">불러오는 중...</p>
       </div>
@@ -157,7 +159,7 @@ export default function ExamSettingsSection({ exams }: Props) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
       <h2 className="text-xl font-bold mb-4 dark:text-white">
-        설정 출제 문항 수 설정
+        시험 시간 및 출제 문항 수 설정
       </h2>
 
       <div className="space-y-3">
@@ -201,9 +203,9 @@ export default function ExamSettingsSection({ exams }: Props) {
                         <div className="flex items-center gap-1.5 text-xs">
                           <span className="text-gray-700 dark:text-gray-300">시험 시간</span>
                           <input
-                            type="number"
-                            min={1}
-                            max={300}
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             value={durationValues[exam.id] ?? 60}
                             onChange={(e) => handleDurationChange(exam.id, e.target.value)}
                             className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
@@ -219,8 +221,9 @@ export default function ExamSettingsSection({ exams }: Props) {
                               <span className="text-gray-700 dark:text-gray-300">{subject.name}</span>
                               <span className="text-gray-400 dark:text-gray-500">({subject.total_questions})</span>
                               <input
-                                type="number"
-                                min={0}
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={editValues[subject.id] ?? subject.questions_per_attempt}
                                 onChange={(e) => handleChange(subject.id, e.target.value)}
                                 className="w-14 px-1.5 py-0.5 border rounded text-center dark:bg-gray-600 dark:border-gray-500 dark:text-white text-xs"
