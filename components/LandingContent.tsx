@@ -26,13 +26,16 @@ const grades = [
     cardBg: 'bg-[#e8f5e9]', badgeBg: 'bg-emerald-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <circle cx="40" cy="32" r="18" fill="#4dd0e1" />
-        <circle cx="40" cy="32" r="13" fill="#26c6da" />
-        <circle cx="40" cy="32" r="8" fill="#e0f7fa" />
-        <path d="M37 31l3 3 5-5" stroke="#00838f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M32 50l-4 14 8-4 4 6 4-14" fill="#4dd0e1" />
-        <path d="M48 50l4 14-8-4-4 6-4-14" fill="#26c6da" />
-        <ellipse cx="40" cy="50" rx="10" ry="3" fill="#80deea" />
+        <defs>
+          <linearGradient id="g1a" x1="30" y1="10" x2="50" y2="55"><stop offset="0%" stopColor="#5ef6d0" /><stop offset="100%" stopColor="#22b893" /></linearGradient>
+          <linearGradient id="g1b" x1="28" y1="50" x2="40" y2="72"><stop offset="0%" stopColor="#26c6da" /><stop offset="100%" stopColor="#00897b" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="14" ry="3" fill="#b2dfdb" opacity="0.5" />
+        <path d="M30 52l-5 16 10-5 5 7 5-7 10 5-5-16" fill="url(#g1b)" />
+        <circle cx="40" cy="34" r="20" fill="url(#g1a)" />
+        <circle cx="40" cy="34" r="15" fill="#e0f2f1" stroke="#80cbc4" strokeWidth="1.5" />
+        <path d="M33 34l4 4 8-8" stroke="#00897b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <ellipse cx="34" cy="22" rx="6" ry="2" fill="white" opacity="0.3" transform="rotate(-20 34 22)" />
       </svg>
     ),
   },
@@ -43,17 +46,17 @@ const grades = [
     cardBg: 'bg-[#f3e5f5]', badgeBg: 'bg-violet-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <rect x="14" y="20" width="52" height="36" rx="4" fill="#7e57c2" />
-        <rect x="14" y="20" width="52" height="6" rx="4" fill="#5e35b1" />
-        <rect x="18" y="30" width="44" height="22" rx="2" fill="#ede7f6" />
-        <circle cx="40" cy="41" r="8" fill="none" stroke="#7e57c2" strokeWidth="2" />
-        <path d="M40 36v5l3 3" stroke="#7e57c2" strokeWidth="2" strokeLinecap="round" />
-        <path d="M37 41a3 3 0 016 0" stroke="#b39ddb" strokeWidth="1.5" />
-        <rect x="30" y="56" width="20" height="4" rx="2" fill="#9575cd" />
-        <rect x="36" y="52" width="8" height="4" fill="#b39ddb" />
-        <circle cx="20" cy="23" r="1.5" fill="#ef5350" />
-        <circle cx="25" cy="23" r="1.5" fill="#ffc107" />
-        <circle cx="30" cy="23" r="1.5" fill="#66bb6a" />
+        <defs>
+          <linearGradient id="g2a" x1="20" y1="20" x2="60" y2="60"><stop offset="0%" stopColor="#b388ff" /><stop offset="100%" stopColor="#7c4dff" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="16" ry="3" fill="#d1c4e9" opacity="0.5" />
+        <circle cx="40" cy="38" r="22" fill="url(#g2a)" />
+        <circle cx="40" cy="38" r="16" fill="#ede7f6" stroke="#b39ddb" strokeWidth="1.5" />
+        <path d="M40 28v10" stroke="#5e35b1" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M40 38l6 4" stroke="#5e35b1" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="40" cy="38" r="2.5" fill="#5e35b1" />
+        {[0,1,2,3,4,5,6,7,8,9,10,11].map(n => <circle key={n} cx={40 + 14 * Math.cos(n * Math.PI / 6)} cy={38 + 14 * Math.sin(n * Math.PI / 6)} r="1" fill="#9575cd" />)}
+        <ellipse cx="34" cy="26" rx="5" ry="2" fill="white" opacity="0.25" transform="rotate(-25 34 26)" />
       </svg>
     ),
   },
@@ -64,15 +67,20 @@ const grades = [
     cardBg: 'bg-[#e3f2fd]', badgeBg: 'bg-blue-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <path d="M40 12L10 28v4l30 16 30-16v-4L40 12z" fill="#1565c0" />
-        <path d="M40 12L10 28l30 16 30-16L40 12z" fill="#42a5f5" />
-        <path d="M10 32v12l30 16 30-16V32L40 48 10 32z" fill="#1e88e5" />
-        <path d="M40 48L10 32v12l30 16V48z" fill="#1565c0" />
-        <rect x="62" y="28" width="4" height="28" rx="2" fill="#0d47a1" />
-        <ellipse cx="64" cy="56" rx="6" ry="4" fill="#1565c0" />
-        <ellipse cx="64" cy="54" rx="6" ry="4" fill="#42a5f5" />
-        <circle cx="40" cy="30" r="4" fill="#e3f2fd" />
-        <path d="M38 30l2 2 3-3" stroke="#1565c0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <defs>
+          <linearGradient id="g3a" x1="20" y1="14" x2="60" y2="50"><stop offset="0%" stopColor="#64b5f6" /><stop offset="100%" stopColor="#1565c0" /></linearGradient>
+          <linearGradient id="g3b" x1="20" y1="38" x2="60" y2="60"><stop offset="0%" stopColor="#1e88e5" /><stop offset="100%" stopColor="#0d47a1" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="18" ry="3" fill="#bbdefb" opacity="0.5" />
+        <path d="M40 14L12 30l28 14 28-14L40 14z" fill="url(#g3a)" />
+        <path d="M12 30v14l28 16 28-16V30L40 44 12 30z" fill="url(#g3b)" />
+        <path d="M40 44v16" stroke="#0d47a1" strokeWidth="2" />
+        <rect x="63" y="30" width="3" height="24" rx="1.5" fill="#0d47a1" />
+        <ellipse cx="64.5" cy="54" rx="5" ry="3.5" fill="#1565c0" />
+        <ellipse cx="64.5" cy="52.5" rx="5" ry="3.5" fill="#42a5f5" />
+        <circle cx="40" cy="60" r="4" fill="#ffd54f" stroke="#ffb300" strokeWidth="1" />
+        <path d="M38 60l1.5 1.5 3-3" stroke="#f57f17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M30 20c0-1 2-2 4-1" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
       </svg>
     ),
   },
@@ -83,19 +91,19 @@ const grades = [
     cardBg: 'bg-[#fff3e0]', badgeBg: 'bg-amber-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <path d="M24 58h32v6H24z" fill="#f9a825" />
-        <path d="M24 58h32v3H24z" fill="#fdd835" />
-        <path d="M20 24l8 20h24l8-20-10 10-10-14-10 14-10-10z" fill="#fdd835" />
-        <path d="M20 24l8 20h24l8-20" fill="none" stroke="#f9a825" strokeWidth="2" />
-        <path d="M28 44h24v14H28z" fill="#ffb300" />
-        <path d="M28 44h24v7H28z" fill="#fdd835" />
-        <circle cx="20" cy="24" r="4" fill="#ff8f00" />
-        <circle cx="20" cy="24" r="2.5" fill="#fdd835" />
-        <circle cx="60" cy="24" r="4" fill="#ff8f00" />
-        <circle cx="60" cy="24" r="2.5" fill="#fdd835" />
-        <circle cx="40" cy="20" r="4" fill="#ff8f00" />
-        <circle cx="40" cy="20" r="2.5" fill="#fdd835" />
-        <rect x="35" y="48" width="10" height="6" rx="1" fill="#fff8e1" opacity="0.6" />
+        <defs>
+          <linearGradient id="g4a" x1="22" y1="18" x2="58" y2="60"><stop offset="0%" stopColor="#ffe082" /><stop offset="100%" stopColor="#ffab00" /></linearGradient>
+          <linearGradient id="g4b" x1="26" y1="44" x2="54" y2="62"><stop offset="0%" stopColor="#ffca28" /><stop offset="100%" stopColor="#ff8f00" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="16" ry="3" fill="#ffe0b2" opacity="0.5" />
+        <path d="M26 46h28v16a4 4 0 01-4 4H30a4 4 0 01-4-4V46z" fill="url(#g4b)" />
+        <path d="M26 46h28v8H26z" fill="#fdd835" />
+        <path d="M18 20l10 12 12-14 12 14 10-12-6 26H24L18 20z" fill="url(#g4a)" />
+        <circle cx="18" cy="20" r="4" fill="#ff8f00" /><circle cx="18" cy="20" r="2" fill="#ffe082" />
+        <circle cx="62" cy="20" r="4" fill="#ff8f00" /><circle cx="62" cy="20" r="2" fill="#ffe082" />
+        <circle cx="40" cy="18" r="4" fill="#ff8f00" /><circle cx="40" cy="18" r="2" fill="#ffe082" />
+        <rect x="36" y="50" width="8" height="8" rx="2" fill="white" opacity="0.25" />
+        <path d="M24 26c0-1 2-3 4-2" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.35" />
       </svg>
     ),
   },
@@ -106,19 +114,18 @@ const grades = [
     cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-gray-400',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <rect x="22" y="28" width="36" height="36" rx="2" fill="#78909c" />
-        <rect x="22" y="28" width="36" height="36" rx="2" fill="#90a4ae" />
-        <rect x="16" y="24" width="48" height="8" rx="2" fill="#607d8b" />
-        <path d="M40 16l-26 8h52l-26-8z" fill="#546e7a" />
-        <path d="M40 16l-26 8h52" fill="none" stroke="#455a64" strokeWidth="1" />
-        <rect x="28" y="34" width="6" height="6" rx="1" fill="#e0f2f1" />
-        <rect x="37" y="34" width="6" height="6" rx="1" fill="#e0f2f1" />
-        <rect x="46" y="34" width="6" height="6" rx="1" fill="#e0f2f1" />
-        <rect x="28" y="44" width="6" height="6" rx="1" fill="#e0f2f1" />
-        <rect x="37" y="44" width="6" height="6" rx="1" fill="#e0f2f1" />
-        <rect x="46" y="44" width="6" height="6" rx="1" fill="#e0f2f1" />
-        <rect x="35" y="54" width="10" height="10" rx="1" fill="#b0bec5" />
-        <rect x="35" y="54" width="10" height="5" rx="1" fill="#cfd8dc" />
+        <defs>
+          <linearGradient id="g5a" x1="20" y1="18" x2="60" y2="68"><stop offset="0%" stopColor="#b0bec5" /><stop offset="100%" stopColor="#607d8b" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="18" ry="3" fill="#b0bec5" opacity="0.4" />
+        <rect x="22" y="30" width="36" height="34" rx="2" fill="url(#g5a)" />
+        <rect x="22" y="30" width="36" height="6" fill="#546e7a" rx="2" />
+        <path d="M40 16l-22 14h44L40 16z" fill="#78909c" />
+        <path d="M40 16l-22 14h44" fill="none" stroke="#546e7a" strokeWidth="1.5" />
+        <circle cx="40" cy="20" r="2" fill="#cfd8dc" />
+        {[[27,38],[35,38],[43,38],[51,38],[27,48],[35,48],[43,48],[51,48]].map(([x,y],i) => <rect key={i} x={x} y={y} width="5" height="5" rx="0.5" fill="#eceff1" />)}
+        <rect x="36" y="56" width="8" height="8" rx="1" fill="#90a4ae" />
+        <rect x="36" y="56" width="8" height="4" rx="1" fill="#b0bec5" />
       </svg>
     ),
   },
@@ -129,14 +136,18 @@ const grades = [
     cardBg: 'bg-[#fce4ec]', badgeBg: 'bg-gray-400',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <path d="M40 10C26 10 16 22 16 34c0 8 4 15 10 20v10h28V54c6-5 10-12 10-20 0-12-10-24-24-24z" fill="#ab47bc" opacity="0.15" />
-        <path d="M40 14C28 14 20 24 20 34c0 7 3 13 8 17l2 2v9h20v-9l2-2c5-4 8-10 8-17 0-10-8-20-20-20z" fill="#ce93d8" />
-        <path d="M40 14C28 14 20 24 20 34c0 7 3 13 8 17l2 2v9h10V14z" fill="#ab47bc" />
-        <rect x="30" y="62" width="20" height="6" rx="3" fill="#7b1fa2" />
-        <rect x="30" y="62" width="20" height="3" rx="3" fill="#9c27b0" />
-        <circle cx="40" cy="34" r="10" fill="#f3e5f5" />
-        <path d="M36 34l3 3 6-6" stroke="#7b1fa2" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M34 22c-2 2-3 4-3 7" stroke="#e1bee7" strokeWidth="2" strokeLinecap="round" />
+        <defs>
+          <linearGradient id="g6a" x1="24" y1="10" x2="56" y2="56"><stop offset="0%" stopColor="#f48fb1" /><stop offset="100%" stopColor="#ad1457" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="14" ry="3" fill="#f8bbd0" opacity="0.5" />
+        <path d="M40 8C28 8 20 18 20 30c0 8 4 15 9 19v7h22v-7c5-4 9-11 9-19 0-12-8-22-20-22z" fill="url(#g6a)" />
+        <path d="M40 8C32 8 26 14 24 22c2-4 8-8 16-8s14 4 16 8c-2-8-8-14-16-14z" fill="white" opacity="0.2" />
+        <circle cx="40" cy="30" r="11" fill="#fce4ec" stroke="#f48fb1" strokeWidth="1" />
+        <path d="M35 30l3 3 7-7" stroke="#ad1457" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="29" y="56" width="22" height="5" rx="2.5" fill="#880e4f" />
+        <rect x="29" y="56" width="22" height="2.5" rx="2.5" fill="#ad1457" />
+        <rect x="33" y="61" width="14" height="3" rx="1.5" fill="#880e4f" />
+        <path d="M33 18c-2 3-3 6-3 10" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
       </svg>
     ),
   },
