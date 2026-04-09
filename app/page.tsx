@@ -12,6 +12,7 @@ export default function Home() {
       <section>
         <HeroSection />
       </section>
+      <div className="h-12 md:h-16 bg-white dark:bg-gray-900" />
       <PremiumSection />
       <LandingContent />
     </div>
