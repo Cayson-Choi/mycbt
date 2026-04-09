@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 
-const TEXT = '한국기술사회 기술사들이 인증한 공식사이트입니다.'
+const TEXT = '한국건축전기설비기술사회와 한국기계설비기술사회가 인증한 공식사이트입니다.'
 const CHARS = TEXT.split('')
 const CHAR_DELAY = 80        // 글자 간 딜레이 (ms)
 const CHAR_DURATION = 400    // 글자 애니메이션 지속 시간
