@@ -182,7 +182,7 @@ export default function PremiumSection() {
                   <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">모두 책임져</span> 드립니다
                 </h2>
                 <p className="text-gray-400 leading-relaxed mb-8">
-                  CAYSON은 전국 350개+ 전기 관련 기업과 파트너십을 맺고 있습니다.
+                  <span className="text-amber-400 font-bold">CAYSON</span>은 전국 350개+ 전기 관련 기업과 파트너십을 맺고 있습니다.
                   자격증을 취득하는 순간, 여러분의 이력서가 파트너 기업 인사담당자에게
                   직접 전달됩니다. 더 이상 혼자 취업 준비하지 마세요.
                 </p>
