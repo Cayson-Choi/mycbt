@@ -4,6 +4,9 @@ import { useState, useEffect, useMemo } from 'react'
 
 const TEXT = '한국건축전기설비기술사회와 한국기계설비기술사회가 인증한 공식사이트입니다.'
 const CHARS = TEXT.split('')
+// 강조할 글자 인덱스 (단체명)
+const HIGHLIGHT_RANGES: [number, number][] = [[0, 11], [14, 23]]
+function isHighlighted(i: number) { return HIGHLIGHT_RANGES.some(([s, e]) => i >= s && i <= e) }
 const CHAR_DELAY = 80        // 글자 간 딜레이 (ms)
 const CHAR_DURATION = 400    // 글자 애니메이션 지속 시간
 const STAMP_DELAY = CHARS.length * CHAR_DELAY  // 도장 시작 시점
@@ -62,7 +65,7 @@ export default function CertifiedBanner() {
         {/* 텍스트 — 글자별 웨이브 */}
         <p className={`text-white/90 text-sm md:text-base font-medium tracking-wide transition-opacity duration-500 ${stamped ? 'opacity-100' : 'opacity-0'}`}>
           {CHARS.map((char, i) => (
-            <WaveChar key={i} char={char} index={i} loopTime={loopTime} active={loopTick > 0} />
+            <WaveChar key={i} char={char} index={i} loopTime={loopTime} active={loopTick > 0} highlight={isHighlighted(i)} />
           ))}
         </p>
 
@@ -134,37 +137,51 @@ export default function CertifiedBanner() {
 }
 
 /* 개별 글자 웨이브 컴포넌트 */
-function WaveChar({ char, index, loopTime, active }: {
+function WaveChar({ char, index, loopTime, active, highlight }: {
   char: string
   index: number
   loopTime: number
   active: boolean
+  highlight: boolean
 }) {
+  const baseStyle: React.CSSProperties = highlight
+    ? { display: 'inline-block', fontSize: '1.05em', fontWeight: 700, color: '#fb923c' }
+    : { display: 'inline-block', color: 'rgba(255,255,255,0.9)' }
+
   const style = useMemo(() => {
-    if (!active) return {}
+    if (!active) return baseStyle
 
     const charStart = index * CHAR_DELAY
     const elapsed = loopTime - charStart
 
     if (elapsed < 0 || elapsed > CHAR_DURATION) {
-      return { display: 'inline-block', transform: 'scale(1) translateY(0)', color: 'rgba(255,255,255,0.9)' }
+      return { ...baseStyle, transform: 'scale(1) translateY(0)' }
     }
 
-    // 0 → 0.5: 커지면서 올라감 + 색 밝아짐
-    // 0.5 → 1: 원래대로
     const progress = elapsed / CHAR_DURATION
-    const ease = Math.sin(progress * Math.PI)  // 0→1→0 부드러운 곡선
+    const ease = Math.sin(progress * Math.PI)
     const scale = 1 + ease * 0.35
     const translateY = -ease * 3
-    const brightness = 0.9 + ease * 0.1
 
+    if (highlight) {
+      // 오렌지 → 밝은 오렌지 + 글로우
+      const r = 251, g = 146 + ease * 60, b = 60 + ease * 40
+      return {
+        ...baseStyle,
+        transform: `scale(${scale}) translateY(${translateY}px)`,
+        color: `rgb(${r},${Math.min(g, 220)},${Math.min(b, 120)})`,
+        textShadow: ease > 0.2 ? `0 0 ${ease * 10}px rgba(251,146,60,${ease * 0.5})` : 'none',
+      }
+    }
+
+    const brightness = 0.9 + ease * 0.1
     return {
-      display: 'inline-block',
+      ...baseStyle,
       transform: `scale(${scale}) translateY(${translateY}px)`,
       color: `rgba(255,255,255,${brightness})`,
       textShadow: ease > 0.2 ? `0 0 ${ease * 8}px rgba(255,255,255,${ease * 0.4})` : 'none',
     }
-  }, [active, index, loopTime])
+  }, [active, index, loopTime, highlight])
 
   if (char === ' ') return <span>&nbsp;</span>
 
