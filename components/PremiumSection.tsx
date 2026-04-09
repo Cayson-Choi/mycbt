@@ -178,7 +178,7 @@ export default function PremiumSection() {
                   <span className="text-emerald-400 text-sm font-semibold">취업 연계 프로그램</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
-                  자격증 취득부터 <span className="inline-flex"><span className="inline-flex flex-col items-center"><span className="text-amber-400 text-[8px] md:text-[10px] leading-none">●</span><span className="text-amber-400">취</span></span><span className="inline-flex flex-col items-center"><span className="text-amber-400 text-[8px] md:text-[10px] leading-none">●</span><span className="text-amber-400">업</span></span></span>까지<br />
+                  자격증 취득부터 <span className="relative inline-block text-amber-400">취업<span className="absolute -top-3 md:-top-4 left-0 w-full flex justify-around pointer-events-none"><span className="text-[8px] md:text-[10px]">●</span><span className="text-[8px] md:text-[10px]">●</span></span></span>까지<br />
                   <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">모두 책임져</span> 드립니다
                 </h2>
                 <p className="text-gray-400 leading-relaxed mb-8">
