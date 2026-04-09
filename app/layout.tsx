@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Noto_Serif_KR } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -14,6 +15,14 @@ const nanumSquareNeo = localFont({
   variable: "--font-square-neo",
   display: "swap",
   preload: true,
+});
+
+/* ── next/font/google: Noto Serif KR (제목용 프리미엄 세리프) ── */
+const notoSerifKR = Noto_Serif_KR({
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+  variable: "--font-serif-kr",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -43,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning className={nanumSquareNeo.variable}>
+    <html lang="ko" suppressHydrationWarning className={`${nanumSquareNeo.variable} ${notoSerifKR.variable}`}>
       <head>
         {/* Pretendard: 동적 서브셋 (body 기본 폰트) */}
         <link

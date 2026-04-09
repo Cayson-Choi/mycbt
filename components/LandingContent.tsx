@@ -37,11 +37,11 @@ function SectionHeading({ label, title, subtitle, center = false }: { label: str
       <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">
         {label}
       </p>
-      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B2A4A] dark:text-white tracking-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B2A4A] dark:text-white tracking-tight" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
         {title}
       </h2>
       {subtitle && (
-        <p className="text-base sm:text-lg text-[#1B2A4A]/60 dark:text-gray-400 mt-3 max-w-2xl leading-relaxed" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+        <p className="text-base sm:text-lg text-[#1B2A4A]/60 dark:text-gray-400 mt-3 max-w-2xl leading-relaxed" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
           {subtitle}
         </p>
       )}
@@ -397,9 +397,9 @@ function WhyCaysonSection() {
         <Reveal>
           <div className="text-center mb-12 sm:mb-16">
             <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">Why CAYSON</p>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B2A4A] dark:text-white tracking-tight leading-snug" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B2A4A] dark:text-white tracking-tight leading-snug" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
               왜 {'CAYSON'.split('').map((ch, i) => (
-                <span key={i} className="inline-block text-[#C9A84C] tracking-wide" style={{ animation: `caysonBounce 4s ease-in-out infinite`, animationDelay: `${i * 0.4}s`, marginRight: '0.04em', fontFamily: "'Georgia', 'Times New Roman', serif" }}>{ch}</span>
+                <span key={i} className="inline-block text-[#C9A84C] tracking-wide" style={{ animation: `caysonBounce 4s ease-in-out infinite`, animationDelay: `${i * 0.4}s`, marginRight: '0.04em', fontFamily: "var(--font-serif-kr), Georgia, serif" }}>{ch}</span>
               ))}이어야 할까요?
             </h2>
             <OrnamentalDivider className="mt-5" />
@@ -418,7 +418,7 @@ function WhyCaysonSection() {
                     ? `${accentMap[ft.accent].tab} shadow-lg scale-105 border-[#1B2A4A]`
                     : 'bg-white dark:bg-gray-800 text-[#1B2A4A]/60 dark:text-gray-400 border-[#C9A84C]/20 hover:border-[#C9A84C]/50 hover:text-[#1B2A4A] dark:hover:text-gray-200'
                 }`}
-                style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+                style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}
               >
                 {ft.tab}
               </button>
@@ -438,7 +438,7 @@ function WhyCaysonSection() {
             {/* 우: 설명 */}
             <div className="p-5 sm:p-8 flex flex-col justify-center">
               <div key={activeFeature} className="transition-all duration-500">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1B2A4A] dark:text-white leading-tight mb-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>{f.title}</h3>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1B2A4A] dark:text-white leading-tight mb-4" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>{f.title}</h3>
                 <p className="text-sm sm:text-base text-[#1B2A4A]/60 dark:text-gray-400 leading-relaxed mb-6">{f.desc}</p>
                 {/* 프로그레스 인디케이터 */}
                 <div className="flex gap-1.5">
@@ -459,11 +459,11 @@ function WhyCaysonSection() {
         {/* CTA */}
         <Reveal delay={300}>
           <div className="mt-12 sm:mt-16 text-center">
-            <p className="text-[#1B2A4A]/50 dark:text-gray-400 text-sm mb-5" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>검증된 문제로 공부하면 합격이 가까워집니다</p>
+            <p className="text-[#1B2A4A]/50 dark:text-gray-400 text-sm mb-5" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>검증된 문제로 공부하면 합격이 가까워집니다</p>
             <Link
               href="/login"
               className="group/btn relative inline-flex items-center gap-2 bg-gradient-to-r from-[#1B2A4A] via-[#2A3F6A] to-[#1B2A4A] text-white font-semibold px-10 py-4 rounded-xl text-sm sm:text-base transition-all hover:shadow-xl hover:shadow-[#1B2A4A]/20 hover:scale-[1.03] active:scale-[0.97] overflow-hidden border border-[#C9A84C]/30"
-              style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+              style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[#1B2A4A] via-[#344d7a] to-[#1B2A4A] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C9A84C]/20 to-transparent" style={{ animation: 'ctaShimmer 2.5s ease-in-out infinite' }} />
@@ -501,7 +501,7 @@ export default function LandingContent() {
                     className={`group block relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-5 sm:p-7 h-full min-h-[170px] sm:min-h-[210px] transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A84C]/15 hover:-translate-y-1 cursor-pointer border border-[#C9A84C]/15 dark:border-gray-700`}
                   >
                     {/* 좌상단: 제목 */}
-                    <h3 className="text-base sm:text-2xl font-bold text-[#1B2A4A] dark:text-white leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                    <h3 className="text-base sm:text-2xl font-bold text-[#1B2A4A] dark:text-white leading-tight" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                       {g.label}
                     </h3>
                     {/* 우상단: 뱃지 */}
@@ -519,7 +519,7 @@ export default function LandingContent() {
                   </Link>
                 ) : (
                   <div className={`relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-5 sm:p-7 h-full min-h-[170px] sm:min-h-[210px] opacity-50 border border-[#C9A84C]/10 dark:border-gray-700`}>
-                    <h3 className="text-base sm:text-2xl font-bold text-gray-500 dark:text-gray-400 leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                    <h3 className="text-base sm:text-2xl font-bold text-gray-500 dark:text-gray-400 leading-tight" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                       {g.label}
                     </h3>
                     <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
@@ -553,12 +553,12 @@ export default function LandingContent() {
             <Reveal>
               <div className="rounded-xl overflow-hidden h-full bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A] p-5 sm:p-6 flex flex-col justify-between min-h-[220px] sm:min-h-[280px] relative cursor-pointer group border border-[#C9A84C]/20">
                 {/* 배경 큰 Y 글자 */}
-                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] sm:text-[220px] font-black text-[#C9A84C]/10 select-none leading-none transition-transform duration-500 group-hover:scale-110" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] sm:text-[220px] font-black text-[#C9A84C]/10 select-none leading-none transition-transform duration-500 group-hover:scale-110" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                   Y
                 </span>
                 <div className="relative z-10">
                   <p className="text-[10px] sm:text-xs font-semibold text-[#C9A84C]/70 tracking-[0.25em] uppercase mb-1">Engineer</p>
-                  <h3 className="text-base sm:text-xl font-bold text-white leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                  <h3 className="text-base sm:text-xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                     전기기사<br />동영상 강의
                   </h3>
                 </div>
@@ -584,7 +584,7 @@ export default function LandingContent() {
                     <span className="text-[10px] sm:text-xs text-[#C9A84C]/50 dark:text-gray-500 font-medium tracking-wider">준비중</span>
                   </div>
                   <div className="p-3 sm:p-4">
-                    <h4 className="text-xs sm:text-sm font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>{lec.title}</h4>
+                    <h4 className="text-xs sm:text-sm font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>{lec.title}</h4>
                     <p className="text-[10px] sm:text-xs text-[#C9A84C]/60 mb-2 tracking-wider">CAYSON</p>
                     <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#1B2A4A]/50 dark:text-gray-500">
                       <span className="text-[#C9A84C]">&#9733;</span>
@@ -592,7 +592,7 @@ export default function LandingContent() {
                       <span className="text-[#C9A84C]/30">|</span>
                       <span>{lec.hours}</span>
                     </div>
-                    <p className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white mt-2 text-right" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>무료</p>
+                    <p className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white mt-2 text-right" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>무료</p>
                   </div>
                 </div>
               </Reveal>
@@ -611,7 +611,7 @@ export default function LandingContent() {
               <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">
                 Testimonials
               </p>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1B2A4A] dark:text-white tracking-tight max-w-2xl mx-auto leading-snug" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1B2A4A] dark:text-white tracking-tight max-w-2xl mx-auto leading-snug" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                 광고가 아닌, 수험생들의 진심
                 <br className="hidden sm:block" />
                 그리고 합격만으로 증명하겠습니다
@@ -633,8 +633,8 @@ export default function LandingContent() {
                   className="flex-shrink-0 w-[240px] sm:w-[320px] lg:w-[340px] bg-white dark:bg-gray-800 rounded-xl p-5 sm:p-7 border border-[#C9A84C]/20 dark:border-gray-700 shadow-sm hover:shadow-md hover:shadow-[#C9A84C]/10 transition-shadow"
                 >
                   {/* Decorative quote mark */}
-                  <div className="text-4xl text-[#C9A84C]/20 leading-none mb-2" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>&ldquo;</div>
-                  <p className="text-sm text-[#1B2A4A]/70 dark:text-gray-300 leading-relaxed mb-4 line-clamp-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                  <div className="text-4xl text-[#C9A84C]/20 leading-none mb-2" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>&ldquo;</div>
+                  <p className="text-sm text-[#1B2A4A]/70 dark:text-gray-300 leading-relaxed mb-4 line-clamp-4" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                     {t.quote}
                   </p>
                   <div className="flex flex-wrap gap-1.5 mb-3">
@@ -645,7 +645,7 @@ export default function LandingContent() {
                     ))}
                   </div>
                   <div className="flex items-center gap-2.5 pt-3 border-t border-[#C9A84C]/15 dark:border-gray-700">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A] flex items-center justify-center text-[#C9A84C] text-xs font-bold" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A] flex items-center justify-center text-[#C9A84C] text-xs font-bold" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                       {t.name.charAt(0)}
                     </div>
                     <span className="text-sm font-semibold text-[#1B2A4A] dark:text-white">{t.name}</span>
@@ -684,10 +684,10 @@ export default function LandingContent() {
             <Reveal>
               <div className="lg:flex-shrink-0 lg:w-[380px]">
                 <OrnamentalDivider className="justify-start mb-6" />
-                <p className="text-white/50 text-base sm:text-xl mb-3 sm:mb-4 leading-relaxed" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                <p className="text-white/50 text-base sm:text-xl mb-3 sm:mb-4 leading-relaxed" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                   <span className="text-[#C9A84C] font-semibold">CAYSON</span>은<br />언제나 열려있습니다
                 </p>
-                <h3 className="text-xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                <h3 className="text-xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                   여러분의 <span className="text-[#C9A84C]">합격</span>만을 위해<br />노력하겠습니다
                 </h3>
               </div>
@@ -697,8 +697,8 @@ export default function LandingContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 w-full">
               <Reveal delay={100}>
                 <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/15 hover:border-[#C9A84C]/30 transition-colors">
-                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>CAYSON</h4>
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>고객센터</h4>
+                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>CAYSON</h4>
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-4" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>고객센터</h4>
                   <div className="text-sm text-white/60 space-y-1.5 mb-auto">
                     <p>평일: 10:00~18:00</p>
                     <p>점심시간: 12:30~13:30</p>
@@ -712,8 +712,8 @@ export default function LandingContent() {
 
               <Reveal delay={200}>
                 <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/15 hover:border-[#C9A84C]/30 transition-colors">
-                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>오류 신고</h4>
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>센터</h4>
+                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>오류 신고</h4>
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-4" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>센터</h4>
                   <div className="text-sm text-white/60 space-y-1.5 mb-auto">
                     <p>24시간 접수 가능</p>
                     <p>확인 후 즉시 수정</p>
@@ -728,7 +728,7 @@ export default function LandingContent() {
             </div>
           </div>
 
-          <p className="text-white/30 text-xs mt-10 text-center lg:text-right" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+          <p className="text-white/30 text-xs mt-10 text-center lg:text-right" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
             * 문의는 이메일로 접수되며, 영업일 기준 24시간 이내 답변드립니다.
           </p>
         </div>
