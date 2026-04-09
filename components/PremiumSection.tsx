@@ -261,8 +261,7 @@ export default function PremiumSection() {
           {/* CTA */}
           <Reveal delay={300}>
             <div className="mt-16 md:mt-20 text-center">
-              <div className="inline-flex flex-col sm:flex-row gap-4">
-                <button className="group relative px-8 py-4 rounded-xl font-bold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20">
+              <button className="group relative px-8 py-4 rounded-xl font-bold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20">
                   <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 background-animate" />
                   <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <span className="relative text-gray-900 flex items-center gap-2">
@@ -272,11 +271,6 @@ export default function PremiumSection() {
                     </svg>
                   </span>
                 </button>
-                <button className="px-8 py-4 rounded-xl font-bold text-lg border border-white/10 text-white hover:bg-white/5 transition-all duration-300">
-                  혜택 자세히 보기
-                </button>
-              </div>
-              <p className="text-gray-600 text-sm mt-4">첫 7일 무료 체험 / 언제든 해지 가능</p>
             </div>
           </Reveal>
         </div>
