@@ -19,7 +19,7 @@ export async function GET(
     const [attempt, attemptQuestions, savedAnswers] = await Promise.all([
       prisma.attempt.findUnique({
         where: { id: aid },
-        include: { exam: { select: { name: true, examMode: true, durationMinutes: true, category: { select: { grade: true } } } } },
+        include: { exam: { select: { name: true, examMode: true, durationMinutes: true, categoryId: true } } },
       }),
       prisma.attemptQuestion.findMany({
         where: { attemptId: aid },
@@ -88,7 +88,7 @@ export async function GET(
       exam_id: attempt.examId,
       exam_name: attempt.exam.name,
       exam_mode: attempt.exam.examMode,
-      exam_grade: attempt.exam.category?.grade ?? null,
+      category_id: attempt.exam.categoryId ?? null,
       duration_minutes: attempt.exam.durationMinutes,
       status: attempt.status,
       started_at: attempt.startedAt.toISOString(),

@@ -157,16 +157,8 @@ const QuestionCard = memo(function QuestionCard({
   )
 })
 
-// --- grade → URL slug 매핑 ---
-const gradeSlugMap: Record<string, string> = {
-  '기능사': 'technician',
-  '산업기사': 'industrial',
-  '기사': 'engineer',
-  '기능장': 'master',
-}
-
 // --- QuitButton: isolated so opening the quit dialog doesn't re-render the question list ---
-function QuitButton({ attemptId, examGrade }: { attemptId: string; examGrade: string | null }) {
+function QuitButton({ attemptId, categoryId }: { attemptId: string; categoryId: number | null }) {
   const router = useRouter()
   const [showQuit, setShowQuit] = useState(false)
 
@@ -174,8 +166,7 @@ function QuitButton({ attemptId, examGrade }: { attemptId: string; examGrade: st
     setShowQuit(false)
     // 시험 기록 완전 삭제 (fire-and-forget)
     fetch(`/api/attempts/${attemptId}/abandon`, { method: 'POST' }).catch(() => {})
-    const slug = examGrade ? gradeSlugMap[examGrade] : null
-    router.push(slug ? `/grade/${slug}` : '/')
+    router.push(categoryId ? `/category/${categoryId}` : '/')
   }
 
   return (
@@ -320,7 +311,7 @@ export interface PaperData {
   attempt_id: number
   exam_name: string
   exam_mode: string
-  exam_grade: string | null
+  category_id: number | null
   exam_type: string
   expires_at: string
   total_questions: number
@@ -466,7 +457,7 @@ export default function ExamAttemptClient({
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <ExamTimer expiresAt={paper.expires_at} onExpire={handleExpire} />
-                <QuitButton attemptId={attemptId} examGrade={paper.exam_grade} />
+                <QuitButton attemptId={attemptId} categoryId={paper.category_id} />
               </div>
             </div>
           </div>
