@@ -148,7 +148,7 @@ export default function PremiumSection() {
           <Reveal delay={200}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
-                { value: 12000, suffix: '+', label: '검증된 문제' },
+                { value: 15, suffix: '개+', label: '자격증 종목' },
                 { value: 92, suffix: '%', label: '취업 연계율' },
                 { value: 350, suffix: '+', label: '파트너 기업' },
                 { value: 98, suffix: '%', label: '수강생 만족도' },
