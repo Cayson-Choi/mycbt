@@ -213,11 +213,7 @@ export default function PremiumSection() {
 
             {/* 오른쪽: 취업 연계 분야 카드 */}
             <Reveal delay={200}>
-              <div className="relative">
-                {/* 글로우 배경 */}
-                <div className="absolute -inset-4 bg-gradient-to-br from-emerald-500/10 via-transparent to-indigo-500/10 rounded-3xl blur-2xl" />
-
-                <div className="relative bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-2xl p-6 md:p-8">
+              <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-white font-bold text-lg">취업 연계 분야</h3>
                     <span className="text-emerald-400 text-sm font-semibold">350+ 기업</span>
@@ -226,20 +222,20 @@ export default function PremiumSection() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {fields.map((f, i) => {
                       const colors: Record<string, string> = {
-                        blue: 'from-blue-500/20 to-blue-600/10 border-blue-500/20 text-blue-400',
-                        purple: 'from-purple-500/20 to-purple-600/10 border-purple-500/20 text-purple-400',
-                        emerald: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/20 text-emerald-400',
-                        amber: 'from-amber-500/20 to-amber-600/10 border-amber-500/20 text-amber-400',
-                        pink: 'from-pink-500/20 to-pink-600/10 border-pink-500/20 text-pink-400',
-                        red: 'from-red-500/20 to-red-600/10 border-red-500/20 text-red-400',
+                        blue: 'bg-blue-950 border-blue-800 text-blue-400',
+                        purple: 'bg-purple-950 border-purple-800 text-purple-400',
+                        emerald: 'bg-emerald-950 border-emerald-800 text-emerald-400',
+                        amber: 'bg-amber-950 border-amber-800 text-amber-400',
+                        pink: 'bg-pink-950 border-pink-800 text-pink-400',
+                        red: 'bg-red-950 border-red-800 text-red-400',
                       }
                       const c = colors[f.color] || colors.blue
                       return (
                         <div key={i}
-                          className={`px-4 py-4 rounded-xl bg-gradient-to-br ${c} border hover:scale-[1.02] transition-all duration-300`}
+                          className={`px-4 py-4 rounded-xl ${c} border hover:scale-[1.02] transition-all duration-300`}
                         >
                           <div className="text-white text-sm font-bold mb-1">{f.name}</div>
-                          <div className={`text-xs font-semibold ${c.split(' ').pop()}`}>{f.count} 기업</div>
+                          <div className={`text-xs font-semibold`}>{f.count} 기업</div>
                         </div>
                       )
                     })}
@@ -248,7 +244,6 @@ export default function PremiumSection() {
                   <div className="mt-5 text-center">
                     <span className="text-gray-500 text-xs">전국 다양한 분야의 전기 관련 기업과 제휴</span>
                   </div>
-                </div>
               </div>
             </Reveal>
           </div>
