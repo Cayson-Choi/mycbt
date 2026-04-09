@@ -12,7 +12,7 @@ export default function Home() {
       <section>
         <HeroSection />
       </section>
-      <div className="h-12 md:h-16 bg-white dark:bg-gray-900" />
+      <div className="h-px bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
       <PremiumSection />
       <LandingContent />
     </div>
