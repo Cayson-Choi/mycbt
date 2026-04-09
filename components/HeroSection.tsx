@@ -554,12 +554,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* 물결 디바이더 — 프리미엄 섹션으로 자연스러운 전환 */}
-      <div className="absolute bottom-0 left-0 w-full z-[5] pointer-events-none">
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="block w-full h-12 md:h-16 lg:h-20" fill="#030712">
-          <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" />
-        </svg>
-      </div>
+
     </div>
   )
 }
