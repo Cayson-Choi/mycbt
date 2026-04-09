@@ -144,25 +144,6 @@ export default function PremiumSection() {
             </div>
           </Reveal>
 
-          {/* 혜택 카드 그리드 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
-            {benefits.map((b, i) => (
-              <Reveal key={i} delay={i * 100}>
-                <div className="group relative bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-2xl p-6 md:p-8 hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-500 hover:-translate-y-1">
-                  {/* 호버 시 글로우 */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-500/0 to-indigo-500/0 group-hover:from-amber-500/5 group-hover:to-indigo-500/5 transition-all duration-500" />
-                  <div className="relative flex gap-5">
-                    <div className="flex-shrink-0 mt-1">{b.icon}</div>
-                    <div>
-                      <h3 className="text-white text-lg font-bold mb-2">{b.title}</h3>
-                      <p className="text-gray-400 text-sm leading-relaxed">{b.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
           {/* 숫자 통계 */}
           <Reveal delay={200}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
