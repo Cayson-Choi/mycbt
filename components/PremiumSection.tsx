@@ -211,38 +211,32 @@ export default function PremiumSection() {
               </div>
             </Reveal>
 
-            {/* 오른쪽: 취업 연계 분야 카드 */}
+            {/* 오른쪽: 취업 연계 분야 */}
             <Reveal delay={200}>
-              <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-white font-bold text-lg">취업 연계 분야</h3>
-                    <span className="text-emerald-400 text-sm font-semibold">350+ 기업</span>
+              <div>
+                  <div className="flex items-center justify-between mb-5">
+                    <h3 className="text-white/80 font-semibold text-sm tracking-widest uppercase">취업 연계 분야</h3>
+                    <span className="text-amber-400/80 text-sm font-semibold">350+ 기업</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {fields.map((f, i) => {
-                      const colors: Record<string, string> = {
-                        blue: 'bg-blue-950 border-blue-800 text-blue-400',
-                        purple: 'bg-purple-950 border-purple-800 text-purple-400',
-                        emerald: 'bg-emerald-950 border-emerald-800 text-emerald-400',
-                        amber: 'bg-amber-950 border-amber-800 text-amber-400',
-                        pink: 'bg-pink-950 border-pink-800 text-pink-400',
-                        red: 'bg-red-950 border-red-800 text-red-400',
-                      }
-                      const c = colors[f.color] || colors.blue
-                      return (
-                        <div key={i}
-                          className={`px-4 py-4 rounded-xl ${c} border hover:scale-[1.02] transition-all duration-300`}
-                        >
-                          <div className="text-white text-sm font-bold mb-1">{f.name}</div>
-                          <div className={`text-xs font-semibold`}>{f.count} 기업</div>
+                    {fields.map((f, i) => (
+                      <div key={i}
+                        className="px-5 py-4 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-1.5 h-8 rounded-full bg-amber-400/60 group-hover:bg-amber-400 transition-colors" />
+                          <div>
+                            <div className="text-white text-sm font-bold">{f.name}</div>
+                            <div className="text-white/40 text-xs">{f.count} 기업</div>
+                          </div>
                         </div>
-                      )
-                    })}
+                      </div>
+                    ))}
                   </div>
 
                   <div className="mt-5 text-center">
-                    <span className="text-gray-500 text-xs">전국 다양한 분야의 전기 관련 기업과 제휴</span>
+                    <span className="text-white/30 text-xs">전국 다양한 분야의 전기 관련 기업과 제휴</span>
                   </div>
               </div>
             </Reveal>
