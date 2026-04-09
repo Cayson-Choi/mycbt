@@ -139,7 +139,7 @@ export default function PremiumSection() {
                 <span className="block mt-3 md:mt-4 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
               </h2>
               <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                단순한 문제풀이를 넘어, 합격부터 취업까지 원스톱으로 지원합니다
+                합격부터 취업까지 원스톱으로 지원합니다
               </p>
             </div>
           </Reveal>
