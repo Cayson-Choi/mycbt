@@ -17,6 +17,39 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   return <div ref={ref} className={`transition-all duration-700 ease-out ${v ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`}>{children}</div>
 }
 
+/* ─── Ornamental Divider ─── */
+function OrnamentalDivider({ className = '' }: { className?: string }) {
+  return (
+    <div className={`flex items-center justify-center gap-3 ${className}`}>
+      <div className="h-px w-12 sm:w-20 bg-gradient-to-r from-transparent to-[#C9A84C]/60" />
+      <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#C9A84C]" fill="currentColor">
+        <path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z" />
+      </svg>
+      <div className="h-px w-12 sm:w-20 bg-gradient-to-l from-transparent to-[#C9A84C]/60" />
+    </div>
+  )
+}
+
+/* ─── Section Heading ─── */
+function SectionHeading({ label, title, subtitle, center = false }: { label: string; title: string; subtitle?: React.ReactNode; center?: boolean }) {
+  return (
+    <div className={`mb-12 sm:mb-16 ${center ? 'text-center' : ''}`}>
+      <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">
+        {label}
+      </p>
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B2A4A] dark:text-white tracking-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="text-base sm:text-lg text-[#1B2A4A]/60 dark:text-gray-400 mt-3 max-w-2xl leading-relaxed" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+          {subtitle}
+        </p>
+      )}
+      <OrnamentalDivider className={`mt-5 ${center ? '' : 'justify-start'}`} />
+    </div>
+  )
+}
+
 /* ─── 등급 데이터 (engineerlab 이벤트 카드 스타일) ─── */
 const grades = [
   {
@@ -347,44 +380,45 @@ function WhyCaysonSection() {
   ]
 
   const accentMap: Record<string, { tab: string; border: string; ring: string }> = {
-    blue: { tab: 'bg-blue-600 text-white shadow-blue-600/25', border: 'border-blue-200 dark:border-blue-800', ring: 'ring-blue-500/20' },
-    emerald: { tab: 'bg-emerald-600 text-white shadow-emerald-600/25', border: 'border-emerald-200 dark:border-emerald-800', ring: 'ring-emerald-500/20' },
-    amber: { tab: 'bg-amber-500 text-white shadow-amber-500/25', border: 'border-amber-200 dark:border-amber-800', ring: 'ring-amber-500/20' },
-    violet: { tab: 'bg-violet-600 text-white shadow-violet-600/25', border: 'border-violet-200 dark:border-violet-800', ring: 'ring-violet-500/20' },
-    pink: { tab: 'bg-pink-500 text-white shadow-pink-500/25', border: 'border-pink-200 dark:border-pink-800', ring: 'ring-pink-500/20' },
-    teal: { tab: 'bg-teal-600 text-white shadow-teal-600/25', border: 'border-teal-200 dark:border-teal-800', ring: 'ring-teal-500/20' },
+    blue: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
+    emerald: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
+    amber: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
+    violet: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
+    pink: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
+    teal: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
   }
 
   const f = features[activeFeature]
   const a = accentMap[f.accent]
 
   return (
-    <section className="bg-white dark:bg-gray-950 overflow-hidden">
-      <div ref={triggerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <section className="bg-[#FEFDF5] dark:bg-gray-950 overflow-hidden">
+      <div ref={triggerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
         <Reveal>
-          <div className="text-center mb-10 sm:mb-14">
-            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">Why CAYSON</p>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
+          <div className="text-center mb-12 sm:mb-16">
+            <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">Why CAYSON</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B2A4A] dark:text-white tracking-tight leading-snug" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
               왜 {'CAYSON'.split('').map((ch, i) => (
-                <span key={i} className="inline-block bg-gradient-to-b from-orange-500 to-amber-500 text-transparent bg-clip-text tracking-wide" style={{ animation: `caysonBounce 4s ease-in-out infinite`, animationDelay: `${i * 0.4}s`, marginRight: '0.04em' }}>{ch}</span>
+                <span key={i} className="inline-block text-[#C9A84C] tracking-wide" style={{ animation: `caysonBounce 4s ease-in-out infinite`, animationDelay: `${i * 0.4}s`, marginRight: '0.04em', fontFamily: "'Georgia', 'Times New Roman', serif" }}>{ch}</span>
               ))}이어야 할까요?
             </h2>
-            <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full mx-auto" />
+            <OrnamentalDivider className="mt-5" />
           </div>
         </Reveal>
 
         {/* 탭 네비 */}
         <Reveal delay={100}>
-          <div className="flex gap-1.5 sm:gap-2 justify-center flex-wrap mb-8 sm:mb-10">
+          <div className="flex gap-1.5 sm:gap-2 justify-center flex-wrap mb-10 sm:mb-12">
             {features.map((ft, i) => (
               <button
                 key={ft.tab}
                 onClick={() => setActiveFeature(i)}
-                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
+                className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 border ${
                   i === activeFeature
-                    ? `${accentMap[ft.accent].tab} shadow-lg scale-105`
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    ? `${accentMap[ft.accent].tab} shadow-lg scale-105 border-[#1B2A4A]`
+                    : 'bg-white dark:bg-gray-800 text-[#1B2A4A]/60 dark:text-gray-400 border-[#C9A84C]/20 hover:border-[#C9A84C]/50 hover:text-[#1B2A4A] dark:hover:text-gray-200'
                 }`}
+                style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
               >
                 {ft.tab}
               </button>
@@ -393,7 +427,7 @@ function WhyCaysonSection() {
         </Reveal>
 
         {/* 콘텐츠 카드 */}
-        <div className={`bg-white dark:bg-gray-900 rounded-2xl border-2 ${a.border} ring-4 ${a.ring} shadow-xl transition-all duration-500 overflow-hidden`}>
+        <div className={`bg-white dark:bg-gray-900 rounded-2xl border ${a.border} ring-2 ${a.ring} shadow-lg shadow-[#C9A84C]/5 transition-all duration-500 overflow-hidden`}>
           <div className="grid lg:grid-cols-2 gap-0">
             {/* 좌: 비주얼 */}
             <div className="p-5 sm:p-8">
@@ -404,14 +438,14 @@ function WhyCaysonSection() {
             {/* 우: 설명 */}
             <div className="p-5 sm:p-8 flex flex-col justify-center">
               <div key={activeFeature} className="transition-all duration-500">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 dark:text-white leading-tight mb-4">{f.title}</h3>
-                <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed mb-6">{f.desc}</p>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1B2A4A] dark:text-white leading-tight mb-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>{f.title}</h3>
+                <p className="text-sm sm:text-base text-[#1B2A4A]/60 dark:text-gray-400 leading-relaxed mb-6">{f.desc}</p>
                 {/* 프로그레스 인디케이터 */}
                 <div className="flex gap-1.5">
                   {features.map((_, i) => (
-                    <div key={i} className="h-1 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div key={i} className="h-1 flex-1 bg-[#1B2A4A]/10 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div
-                        className={`h-full rounded-full transition-all ${i === activeFeature ? `bg-${f.accent}-500` : i < activeFeature ? `bg-${f.accent}-300` : ''}`}
+                        className={`h-full rounded-full transition-all ${i === activeFeature ? 'bg-[#C9A84C]' : i < activeFeature ? 'bg-[#C9A84C]/40' : ''}`}
                         style={{ width: i === activeFeature ? '100%' : i < activeFeature ? '100%' : '0%', transition: i === activeFeature ? 'width 4s linear' : 'width 0.3s' }}
                       />
                     </div>
@@ -424,14 +458,15 @@ function WhyCaysonSection() {
 
         {/* CTA */}
         <Reveal delay={300}>
-          <div className="mt-10 sm:mt-14 text-center">
-            <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">검증된 문제로 공부하면 합격이 가까워집니다</p>
+          <div className="mt-12 sm:mt-16 text-center">
+            <p className="text-[#1B2A4A]/50 dark:text-gray-400 text-sm mb-5" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>검증된 문제로 공부하면 합격이 가까워집니다</p>
             <Link
               href="/login"
-              className="group/btn relative inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-500 text-white font-bold px-8 py-3.5 rounded-xl text-sm sm:text-base transition-all hover:shadow-xl hover:shadow-violet-500/30 hover:scale-[1.03] active:scale-[0.97] overflow-hidden"
+              className="group/btn relative inline-flex items-center gap-2 bg-gradient-to-r from-[#1B2A4A] via-[#2A3F6A] to-[#1B2A4A] text-white font-semibold px-10 py-4 rounded-xl text-sm sm:text-base transition-all hover:shadow-xl hover:shadow-[#1B2A4A]/20 hover:scale-[1.03] active:scale-[0.97] overflow-hidden border border-[#C9A84C]/30"
+              style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-400 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{ animation: 'ctaShimmer 2.5s ease-in-out infinite' }} />
+              <span className="absolute inset-0 bg-gradient-to-r from-[#1B2A4A] via-[#344d7a] to-[#1B2A4A] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C9A84C]/20 to-transparent" style={{ animation: 'ctaShimmer 2.5s ease-in-out infinite' }} />
               <span className="relative">지금 무료로 시작하기</span>
               <svg className="relative w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
             </Link>
@@ -450,40 +485,32 @@ export default function LandingContent() {
       {/* ════════════════════════════════════════
           SECTION 1 -- 과정별 CBT (등급 탭 + 카드)
          ════════════════════════════════════════ */}
-      <section id="exams" className="bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+      <section id="exams" className="bg-[#FEFDF5] dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <Reveal>
-            <div className="mb-10 sm:mb-14">
-              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">
-                CBT Practice
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                과정별 CBT
-              </h2>
-              <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full" />
-            </div>
+            <SectionHeading label="CBT Practice" title="과정별 CBT" />
           </Reveal>
 
-          {/* engineerlab 이벤트 카드 스타일 그리드 */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          {/* Royal-styled card grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {grades.map((g, i) => (
               <Reveal key={g.id} delay={i * 80}>
                 {g.count > 0 ? (
                   <Link
                     href={`/grade/${g.id}`}
-                    className={`group block relative overflow-hidden rounded-2xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-6 h-full min-h-[160px] sm:min-h-[200px] transition-all duration-300 hover:shadow-lg hover:shadow-gray-300/50 dark:hover:shadow-black/30 hover:-translate-y-0.5 cursor-pointer`}
+                    className={`group block relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-5 sm:p-7 h-full min-h-[170px] sm:min-h-[210px] transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A84C]/15 hover:-translate-y-1 cursor-pointer border border-[#C9A84C]/15 dark:border-gray-700`}
                   >
                     {/* 좌상단: 제목 */}
-                    <h3 className="text-base sm:text-2xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                    <h3 className="text-base sm:text-2xl font-bold text-[#1B2A4A] dark:text-white leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
                       {g.label}
                     </h3>
                     {/* 우상단: 뱃지 */}
-                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full`}>
+                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
                       {g.badge}
                     </div>
                     {/* 좌하단: CTA 설명 */}
-                    <p className="absolute bottom-3 left-4 sm:bottom-5 sm:left-6 text-[10px] sm:text-xs text-gray-600 dark:text-gray-400 font-medium leading-snug whitespace-pre-line max-w-[60%]">
-                      {g.cta} <span className="inline-block ml-0.5 transition-transform group-hover:translate-x-0.5">&rarr;</span>
+                    <p className="absolute bottom-3 left-5 sm:bottom-5 sm:left-7 text-[10px] sm:text-xs text-[#1B2A4A]/60 dark:text-gray-400 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                      {g.cta} <span className="inline-block ml-0.5 transition-transform group-hover:translate-x-0.5 text-[#C9A84C]">&rarr;</span>
                     </p>
                     {/* 우하단: 일러스트 아이콘 */}
                     <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-[52px] h-[52px] sm:w-[72px] sm:h-[72px] transition-transform duration-300 group-hover:scale-110 opacity-80 group-hover:opacity-100">
@@ -491,14 +518,14 @@ export default function LandingContent() {
                     </div>
                   </Link>
                 ) : (
-                  <div className={`relative overflow-hidden rounded-2xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-6 h-full min-h-[160px] sm:min-h-[200px] opacity-60`}>
-                    <h3 className="text-base sm:text-2xl font-extrabold text-gray-500 dark:text-gray-400 leading-tight">
+                  <div className={`relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-5 sm:p-7 h-full min-h-[170px] sm:min-h-[210px] opacity-50 border border-[#C9A84C]/10 dark:border-gray-700`}>
+                    <h3 className="text-base sm:text-2xl font-bold text-gray-500 dark:text-gray-400 leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
                       {g.label}
                     </h3>
-                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full`}>
+                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
                       {g.badge}
                     </div>
-                    <p className="absolute bottom-3 left-4 sm:bottom-5 sm:left-6 text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                    <p className="absolute bottom-3 left-5 sm:bottom-5 sm:left-7 text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium leading-snug whitespace-pre-line max-w-[60%]">
                       {g.cta}
                     </p>
                     <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-[52px] h-[52px] sm:w-[72px] sm:h-[72px] opacity-30">
@@ -515,35 +542,27 @@ export default function LandingContent() {
       {/* ════════════════════════════════════════
           SECTION 2 -- 동영상 강의 (airklass 스타일)
          ════════════════════════════════════════ */}
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+      <section className="bg-white dark:bg-gray-900 border-t border-[#C9A84C]/10 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <Reveal>
-            <div className="mb-10 sm:mb-14">
-              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-2">
-                Video Lectures
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                동영상 강의
-              </h2>
-              <div className="w-12 h-1 bg-blue-600 mt-4 rounded-full" />
-            </div>
+            <SectionHeading label="Video Lectures" title="동영상 강의" />
           </Reveal>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {/* Y 프로모 배너 카드 — 전기기사 */}
             <Reveal>
-              <div className="rounded-xl overflow-hidden h-full bg-gradient-to-br from-orange-400 to-amber-500 p-5 sm:p-6 flex flex-col justify-between min-h-[220px] sm:min-h-[280px] relative cursor-pointer group">
+              <div className="rounded-xl overflow-hidden h-full bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A] p-5 sm:p-6 flex flex-col justify-between min-h-[220px] sm:min-h-[280px] relative cursor-pointer group border border-[#C9A84C]/20">
                 {/* 배경 큰 Y 글자 */}
-                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] sm:text-[220px] font-black text-orange-300/40 select-none leading-none transition-transform duration-500 group-hover:scale-110">
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] sm:text-[220px] font-black text-[#C9A84C]/10 select-none leading-none transition-transform duration-500 group-hover:scale-110" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
                   Y
                 </span>
                 <div className="relative z-10">
-                  <p className="text-[10px] sm:text-xs font-bold text-white/70 tracking-wider uppercase mb-1">Engineer</p>
-                  <h3 className="text-base sm:text-xl font-extrabold text-white leading-tight">
+                  <p className="text-[10px] sm:text-xs font-semibold text-[#C9A84C]/70 tracking-[0.25em] uppercase mb-1">Engineer</p>
+                  <h3 className="text-base sm:text-xl font-bold text-white leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
                     전기기사<br />동영상 강의
                   </h3>
                 </div>
-                <p className="relative z-10 text-xs sm:text-sm text-white/80 font-medium mt-4">
+                <p className="relative z-10 text-xs sm:text-sm text-[#C9A84C]/80 font-medium mt-4">
                   더 보러 가기 <span className="ml-0.5 inline-block transition-transform group-hover:translate-x-1">&rsaquo;</span>
                 </p>
               </div>
@@ -559,21 +578,21 @@ export default function LandingContent() {
               { title: '전기기사 과목별 오답 분석 특강', stars: '4.9(45)', hours: '16시간' },
             ].map((lec, i) => (
               <Reveal key={lec.title} delay={(i + 1) * 80}>
-                <div className="group rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden h-full bg-white dark:bg-gray-900 hover:shadow-lg transition-all hover:-translate-y-0.5">
-                  <div className="aspect-[4/3] bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
-                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                    <span className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium">준비중</span>
+                <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1">
+                  <div className="aspect-[4/3] bg-[#F5F0E6] dark:bg-gray-800 flex flex-col items-center justify-center">
+                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-[#C9A84C]/40 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    <span className="text-[10px] sm:text-xs text-[#C9A84C]/50 dark:text-gray-500 font-medium tracking-wider">준비중</span>
                   </div>
                   <div className="p-3 sm:p-4">
-                    <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 mb-1">{lec.title}</h4>
-                    <p className="text-[10px] sm:text-xs text-gray-400 mb-2">CAYSON</p>
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500">
-                      <span className="text-amber-500">&#9733;</span>
+                    <h4 className="text-xs sm:text-sm font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>{lec.title}</h4>
+                    <p className="text-[10px] sm:text-xs text-[#C9A84C]/60 mb-2 tracking-wider">CAYSON</p>
+                    <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#1B2A4A]/50 dark:text-gray-500">
+                      <span className="text-[#C9A84C]">&#9733;</span>
                       <span>{lec.stars}</span>
-                      <span className="text-gray-300">|</span>
+                      <span className="text-[#C9A84C]/30">|</span>
                       <span>{lec.hours}</span>
                     </div>
-                    <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mt-2 text-right">무료</p>
+                    <p className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white mt-2 text-right" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>무료</p>
                   </div>
                 </div>
               </Reveal>
@@ -585,19 +604,19 @@ export default function LandingContent() {
       {/* ════════════════════════════════════════
           SECTION 3 -- 합격 수기
          ════════════════════════════════════════ */}
-      <section className="bg-amber-50 dark:bg-amber-950/20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+      <section className="bg-[#FEFDF5] dark:bg-gray-950/50 overflow-hidden border-t border-[#C9A84C]/10 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <Reveal>
-            <div className="mb-10 sm:mb-14 text-center">
-              <p className="text-sm font-semibold text-amber-600 dark:text-amber-400 tracking-wide uppercase mb-2">
-                Real Reviews
+            <div className="mb-12 sm:mb-16 text-center">
+              <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">
+                Testimonials
               </p>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight max-w-2xl mx-auto leading-snug">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1B2A4A] dark:text-white tracking-tight max-w-2xl mx-auto leading-snug" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
                 광고가 아닌, 수험생들의 진심
                 <br className="hidden sm:block" />
                 그리고 합격만으로 증명하겠습니다
               </h2>
-              <div className="w-12 h-1 bg-amber-500 mt-4 rounded-full mx-auto" />
+              <OrnamentalDivider className="mt-5" />
             </div>
           </Reveal>
 
@@ -611,30 +630,32 @@ export default function LandingContent() {
               {[...testimonials, ...testimonials].map((t, i) => (
                 <div
                   key={`${t.name}-${i}`}
-                  className="flex-shrink-0 w-[240px] sm:w-[320px] lg:w-[340px] bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-amber-100 dark:border-gray-700 shadow-sm"
+                  className="flex-shrink-0 w-[240px] sm:w-[320px] lg:w-[340px] bg-white dark:bg-gray-800 rounded-xl p-5 sm:p-7 border border-[#C9A84C]/20 dark:border-gray-700 shadow-sm hover:shadow-md hover:shadow-[#C9A84C]/10 transition-shadow"
                 >
-                  <div className="flex gap-0.5 mb-3">
-                    {[...Array(5)].map((_, s) => (
-                      <svg key={s} className="w-4 h-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4 line-clamp-4">
-                    &ldquo;{t.quote}&rdquo;
+                  {/* Decorative quote mark */}
+                  <div className="text-4xl text-[#C9A84C]/20 leading-none mb-2" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>&ldquo;</div>
+                  <p className="text-sm text-[#1B2A4A]/70 dark:text-gray-300 leading-relaxed mb-4 line-clamp-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                    {t.quote}
                   </p>
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {t.tags.map((tag) => (
-                      <span key={`${tag}-${i}`} className="text-xs font-medium text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full">
+                      <span key={`${tag}-${i}`} className="text-xs font-medium text-[#1B2A4A]/60 dark:text-[#C9A84C] bg-[#C9A84C]/10 dark:bg-[#C9A84C]/10 px-2.5 py-0.5 rounded-full">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="flex items-center gap-2.5 pt-3 border-t border-[#C9A84C]/15 dark:border-gray-700">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A] flex items-center justify-center text-[#C9A84C] text-xs font-bold" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
                       {t.name.charAt(0)}
                     </div>
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">{t.name}</span>
+                    <span className="text-sm font-semibold text-[#1B2A4A] dark:text-white">{t.name}</span>
+                    <div className="flex gap-0.5 ml-auto">
+                      {[...Array(5)].map((_, s) => (
+                        <svg key={s} className="w-3.5 h-3.5 text-[#C9A84C]" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -649,54 +670,56 @@ export default function LandingContent() {
       <WhyCaysonSection />
 
       {/* ════════════════════════════════════════
-          SECTION 5 -- 고객센터 + CTA (engineerlab 스타일)
+          SECTION 5 -- 고객센터 + CTA (British Royal dark)
          ════════════════════════════════════════ */}
-      <section className="relative bg-gray-900 overflow-hidden">
-        {/* 어두운 오버레이 배경 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/80 to-gray-900/60" />
-        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+      <section className="relative bg-[#1B2A4A] overflow-hidden">
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23C9A84C\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+        {/* Gold line at top */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/50 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-24">
-          <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28">
+          <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
             {/* 좌측: 텍스트 */}
             <Reveal>
-              <div className="lg:flex-shrink-0 lg:w-[340px]">
-                <p className="text-white/60 text-base sm:text-xl mb-3 sm:mb-4 leading-relaxed">
-                  <span className="text-emerald-400 font-bold">CAYSON</span>은<br />언제나 열려있습니다
+              <div className="lg:flex-shrink-0 lg:w-[380px]">
+                <OrnamentalDivider className="justify-start mb-6" />
+                <p className="text-white/50 text-base sm:text-xl mb-3 sm:mb-4 leading-relaxed" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                  <span className="text-[#C9A84C] font-semibold">CAYSON</span>은<br />언제나 열려있습니다
                 </p>
-                <h3 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                  여러분의 <span className="text-amber-400">합격</span>만을 위해<br />노력하겠습니다
+                <h3 className="text-xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+                  여러분의 <span className="text-[#C9A84C]">합격</span>만을 위해<br />노력하겠습니다
                 </h3>
               </div>
             </Reveal>
 
-            {/* 우측: 3개 카드 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 flex-1 w-full">
+            {/* 우측: 2개 카드 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 w-full">
               <Reveal delay={100}>
-                <div className="bg-slate-700/80 backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-1">CAYSON</h4>
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">고객센터</h4>
-                  <div className="text-sm text-gray-300 space-y-1 mb-auto">
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/15 hover:border-[#C9A84C]/30 transition-colors">
+                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>CAYSON</h4>
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>고객센터</h4>
+                  <div className="text-sm text-white/60 space-y-1.5 mb-auto">
                     <p>평일: 10:00~18:00</p>
                     <p>점심시간: 12:30~13:30</p>
-                    <p className="text-yellow-400">주말, 공휴일 휴무</p>
+                    <p className="text-[#C9A84C]/80">주말, 공휴일 휴무</p>
                   </div>
-                  <a href="https://open.kakao.com/o/smarimpi" target="_blank" rel="noopener noreferrer" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                  <a href="https://open.kakao.com/o/smarimpi" target="_blank" rel="noopener noreferrer" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider">
                     카카오톡 문의하기
                   </a>
                 </div>
               </Reveal>
 
               <Reveal delay={200}>
-                <div className="bg-[#3d5a96] backdrop-blur rounded-xl p-5 sm:p-6 h-full flex flex-col">
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-1">오류 신고</h4>
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-3 sm:mb-4">센터</h4>
-                  <div className="text-sm text-gray-300 space-y-1 mb-auto">
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/15 hover:border-[#C9A84C]/30 transition-colors">
+                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>오류 신고</h4>
+                  <h4 className="text-white font-bold text-base sm:text-lg mb-4" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>센터</h4>
+                  <div className="text-sm text-white/60 space-y-1.5 mb-auto">
                     <p>24시간 접수 가능</p>
                     <p>확인 후 즉시 수정</p>
-                    <p className="text-yellow-400">규정 개정 실시간 반영</p>
+                    <p className="text-[#C9A84C]/80">규정 개정 실시간 반영</p>
                   </div>
-                  <a href="mailto:cayson0127@gmail.com?subject=[오류신고]%20문제%20오류%20신고합니다" className="mt-5 block text-center border border-white/30 text-white font-semibold py-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                  <a href="mailto:cayson0127@gmail.com?subject=[오류신고]%20문제%20오류%20신고합니다" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider">
                     오류 신고하기
                   </a>
                 </div>
@@ -705,7 +728,7 @@ export default function LandingContent() {
             </div>
           </div>
 
-          <p className="text-gray-500 text-xs mt-8 text-center lg:text-right">
+          <p className="text-white/30 text-xs mt-10 text-center lg:text-right" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
             * 문의는 이메일로 접수되며, 영업일 기준 24시간 이내 답변드립니다.
           </p>
         </div>
