@@ -99,16 +99,14 @@ const benefits = [
   },
 ]
 
-/* ── 파트너 기업 (취업처 연계) ── */
-const partners = [
-  { name: '한국전력공사', type: '공기업' },
-  { name: '한전KDN', type: '공기업' },
-  { name: '한국전기안전공사', type: '공기업' },
-  { name: '현대건설', type: '대기업' },
-  { name: '삼성물산', type: '대기업' },
-  { name: 'LS일렉트릭', type: '대기업' },
-  { name: '두산에너빌리티', type: '대기업' },
-  { name: '포스코건설', type: '대기업' },
+/* ── 취업 연계 분야 ── */
+const fields = [
+  { name: '공기업 · 공공기관', count: '50+', color: 'blue' },
+  { name: '건설 · 플랜트', count: '80+', color: 'purple' },
+  { name: '전기설비 · 시공', count: '90+', color: 'emerald' },
+  { name: '에너지 · 발전', count: '40+', color: 'amber' },
+  { name: '제조 · 반도체', count: '50+', color: 'pink' },
+  { name: '소방 · 안전관리', count: '40+', color: 'red' },
 ]
 
 export default function PremiumSection() {
@@ -237,7 +235,7 @@ export default function PremiumSection() {
               </div>
             </Reveal>
 
-            {/* 오른쪽: 파트너 기업 카드 */}
+            {/* 오른쪽: 취업 연계 분야 카드 */}
             <Reveal delay={200}>
               <div className="relative">
                 {/* 글로우 배경 */}
@@ -245,34 +243,34 @@ export default function PremiumSection() {
 
                 <div className="relative bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-2xl p-6 md:p-8">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-white font-bold text-lg">파트너 기업</h3>
+                    <h3 className="text-white font-bold text-lg">취업 연계 분야</h3>
                     <span className="text-emerald-400 text-sm font-semibold">350+ 기업</span>
                   </div>
 
-                  <div className="space-y-3">
-                    {partners.map((p, i) => (
-                      <div key={i}
-                        className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.07] hover:border-white/[0.12] transition-all duration-300 group"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-xs font-black">
-                            {p.name[0]}
-                          </div>
-                          <span className="text-white text-sm font-medium">{p.name}</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {fields.map((f, i) => {
+                      const colors: Record<string, string> = {
+                        blue: 'from-blue-500/20 to-blue-600/10 border-blue-500/20 text-blue-400',
+                        purple: 'from-purple-500/20 to-purple-600/10 border-purple-500/20 text-purple-400',
+                        emerald: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/20 text-emerald-400',
+                        amber: 'from-amber-500/20 to-amber-600/10 border-amber-500/20 text-amber-400',
+                        pink: 'from-pink-500/20 to-pink-600/10 border-pink-500/20 text-pink-400',
+                        red: 'from-red-500/20 to-red-600/10 border-red-500/20 text-red-400',
+                      }
+                      const c = colors[f.color] || colors.blue
+                      return (
+                        <div key={i}
+                          className={`px-4 py-4 rounded-xl bg-gradient-to-br ${c} border hover:scale-[1.02] transition-all duration-300`}
+                        >
+                          <div className="text-white text-sm font-bold mb-1">{f.name}</div>
+                          <div className={`text-xs font-semibold ${c.split(' ').pop()}`}>{f.count} 기업</div>
                         </div>
-                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                          p.type === '공기업'
-                            ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                            : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-                        }`}>
-                          {p.type}
-                        </span>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
 
-                  <div className="mt-4 text-center">
-                    <span className="text-gray-600 text-xs">외 342개 기업 파트너십 운영 중</span>
+                  <div className="mt-5 text-center">
+                    <span className="text-gray-500 text-xs">전국 다양한 분야의 전기 관련 기업과 제휴</span>
                   </div>
                 </div>
               </div>
