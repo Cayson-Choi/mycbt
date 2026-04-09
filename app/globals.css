@@ -49,51 +49,7 @@ body {
 .float-animation { animation: float 3s ease-in-out infinite; }
 .float-animation-delay { animation: float 3s ease-in-out 0.5s infinite; }
 .float-animation-delay2 { animation: float 3s ease-in-out 1s infinite; }
-/* Hero title fonts */
-@font-face {
-  font-family: 'NanumSquareNeo';
-  src: url('/fonts/NanumSquareNeo-bRg.ttf') format('truetype');
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'NanumSquareNeo';
-  src: url('/fonts/NanumSquareNeo-cBd.ttf') format('truetype');
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'NanumSquareNeo';
-  src: url('/fonts/NanumSquareNeo-dEb.ttf') format('truetype');
-  font-weight: 800;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'NanumSquareNeo';
-  src: url('/fonts/NanumSquareNeo-eHv.ttf') format('truetype');
-  font-weight: 900;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'GeumEnBohwa';
-  src: url('/fonts/geumenbohwa.ttf') format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DdakDanDan';
-  src: url('/fonts/ddakdandan.ttf') format('truetype');
-  font-display: block;
-}
-@font-face {
-  font-family: 'Bisang';
-  src: url('/fonts/bisang.ttf') format('truetype');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'NanumBrush';
-  src: url('/fonts/NanumBrush.ttf') format('truetype');
-  font-display: swap;
-}
+/* NanumSquareNeo Heavy (weight 900) — managed by next/font/local via CSS variable --font-square-neo */
 
 /* Hero carousel */
 @keyframes heroProgress {

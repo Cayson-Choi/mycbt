@@ -24,8 +24,8 @@ export default async function AdminPage() {
     redirect("/")
   }
 
-  // 통계 데이터 조회
-  const [totalUsers, totalQuestions, totalAttempts, exams] = await Promise.all([
+  // 통계 데이터 조회 (단일 groupBy로 N+1 제거)
+  const [totalUsers, totalQuestions, totalAttempts, exams, questionCounts, subjects] = await Promise.all([
     prisma.user.count(),
     prisma.question.count(),
     prisma.attempt.count({ where: { status: "SUBMITTED" } }),
@@ -43,7 +43,36 @@ export default async function AdminPage() {
       },
       orderBy: [{ categoryId: "asc" }, { examType: "asc" }, { year: "desc" }, { round: "asc" }, { sortOrder: "asc" }],
     }),
+    prisma.question.groupBy({
+      by: ['examId', 'subjectId'],
+      where: { isActive: true },
+      _count: { id: true },
+    }),
+    prisma.subject.findMany({
+      select: { id: true, name: true, examId: true },
+      orderBy: { orderNo: "asc" },
+    }),
   ])
+
+  // 시험별 총 문제 수 & 과목별 문제 수 맵 구성
+  const examTotalMap = new Map<number, number>()
+  const examSubjectCountMap = new Map<number, Map<number, number>>()
+  for (const row of questionCounts) {
+    examTotalMap.set(row.examId, (examTotalMap.get(row.examId) || 0) + row._count.id)
+    if (!examSubjectCountMap.has(row.examId)) {
+      examSubjectCountMap.set(row.examId, new Map())
+    }
+    examSubjectCountMap.get(row.examId)!.set(row.subjectId, row._count.id)
+  }
+
+  // 시험별 과목 목록 맵
+  const examSubjectsMap = new Map<number, { id: number; name: string }[]>()
+  for (const s of subjects) {
+    if (!examSubjectsMap.has(s.examId)) {
+      examSubjectsMap.set(s.examId, [])
+    }
+    examSubjectsMap.get(s.examId)!.push({ id: s.id, name: s.name })
+  }
 
   const examsForProps = exams.map((e) => ({
     id: e.id,
@@ -121,14 +150,40 @@ export default async function AdminPage() {
                   {Array.from(catMap.entries()).map(([catName, catExams]) => (
                     <CategoryAccordion key={catName} categoryName={catName}>
                       <div className="space-y-2 mt-2">
-                        {catExams.map((exam) => (
-                          <ExamQuestionCount
-                            key={exam.id}
-                            examId={exam.id}
-                            examName={exam.year ? `${exam.year}년 ${exam.round}회` : exam.name}
-                            examType={exam.examType}
-                          />
-                        ))}
+                        {catExams.map((exam) => {
+                          const count = examTotalMap.get(exam.id) || 0
+                          const examName = exam.year ? `${exam.year}년 ${exam.round}회` : exam.name
+                          const subjectsList = examSubjectsMap.get(exam.id) || []
+                          const subjectCountsMap = examSubjectCountMap.get(exam.id)
+                          return (
+                            <div key={exam.id} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                              <div className="flex items-center justify-between mb-1">
+                                <div className="flex items-center gap-2">
+                                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                                    exam.examType === 'PRACTICAL'
+                                      ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                                      : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+                                  }`}>
+                                    {exam.examType === 'PRACTICAL' ? '실기' : '필기'}
+                                  </span>
+                                  <span className="font-medium dark:text-gray-200">{examName}</span>
+                                </div>
+                                <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
+                                  {count}개
+                                </span>
+                              </div>
+                              {subjectsList.length > 0 && (
+                                <div className="flex flex-wrap gap-x-4 gap-y-0.5 ml-1 text-xs text-gray-500 dark:text-gray-400">
+                                  {subjectsList.map((s) => (
+                                    <span key={s.id}>
+                                      {s.name} <span className="font-medium">{subjectCountsMap?.get(s.id) || 0}</span>
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })}
                       </div>
                     </CategoryAccordion>
                   ))}
@@ -232,59 +287,3 @@ export default async function AdminPage() {
   )
 }
 
-async function ExamQuestionCount({
-  examId,
-  examName,
-  examType,
-}: {
-  examId: number
-  examName: string
-  examType: string
-}) {
-  const [count, subjects] = await Promise.all([
-    prisma.question.count({ where: { examId } }),
-    prisma.subject.findMany({
-      where: { examId },
-      select: { id: true, name: true },
-      orderBy: { orderNo: "asc" },
-    }),
-  ])
-
-  const subjectCounts = await Promise.all(
-    subjects.map(async (s) => {
-      const cnt = await prisma.question.count({
-        where: { examId, subjectId: s.id },
-      })
-      return { name: s.name, count: cnt }
-    })
-  )
-
-  return (
-    <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-      <div className="flex items-center justify-between mb-1">
-        <div className="flex items-center gap-2">
-          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-            examType === 'PRACTICAL'
-              ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
-              : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
-          }`}>
-            {examType === 'PRACTICAL' ? '실기' : '필기'}
-          </span>
-          <span className="font-medium dark:text-gray-200">{examName}</span>
-        </div>
-        <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
-          {count}개
-        </span>
-      </div>
-      {subjectCounts.length > 0 && (
-        <div className="flex flex-wrap gap-x-4 gap-y-0.5 ml-1 text-xs text-gray-500 dark:text-gray-400">
-          {subjectCounts.map((sc) => (
-            <span key={sc.name}>
-              {sc.name} <span className="font-medium">{sc.count}</span>
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}

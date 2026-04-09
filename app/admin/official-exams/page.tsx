@@ -17,42 +17,44 @@ export default async function OfficialExamsPage() {
     redirect("/")
   }
 
-  // 공식 시험 목록 조회 (API route의 GET 로직과 동일)
-  const exams = await prisma.exam.findMany({
-    where: { examMode: "OFFICIAL" },
-    include: {
-      subjects: {
-        select: { id: true, name: true, orderNo: true },
-        orderBy: { orderNo: "asc" },
+  // 공식 시험 목록 + 통계를 단일 배치로 조회 (N+1 제거)
+  const [exams, questionCounts, attemptCounts] = await Promise.all([
+    prisma.exam.findMany({
+      where: { examMode: "OFFICIAL" },
+      include: {
+        subjects: {
+          select: { id: true, name: true, orderNo: true },
+          orderBy: { orderNo: "asc" },
+        },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  })
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.question.groupBy({
+      by: ['examId'],
+      where: { isActive: true },
+      _count: { id: true },
+    }),
+    prisma.attempt.groupBy({
+      by: ['examId'],
+      where: { status: "SUBMITTED" },
+      _count: { id: true },
+    }),
+  ])
 
-  const examsWithStats = await Promise.all(
-    exams.map(async (exam) => {
-      const [questionCount, attemptCount] = await Promise.all([
-        prisma.question.count({
-          where: { examId: exam.id, isActive: true },
-        }),
-        prisma.attempt.count({
-          where: { examId: exam.id, status: "SUBMITTED" },
-        }),
-      ])
+  const questionCountMap = new Map(questionCounts.map((r) => [r.examId, r._count.id]))
+  const attemptCountMap = new Map(attemptCounts.map((r) => [r.examId, r._count.id]))
 
-      return {
-        id: exam.id,
-        name: exam.name,
-        exam_mode: exam.examMode,
-        password: exam.password || "",
-        duration_minutes: exam.durationMinutes,
-        created_at: exam.createdAt.toISOString(),
-        is_published: exam.isPublished,
-        question_count: questionCount,
-        attempt_count: attemptCount,
-      }
-    })
-  )
+  const examsWithStats = exams.map((exam) => ({
+    id: exam.id,
+    name: exam.name,
+    exam_mode: exam.examMode,
+    password: exam.password || "",
+    duration_minutes: exam.durationMinutes,
+    created_at: exam.createdAt.toISOString(),
+    is_published: exam.isPublished,
+    question_count: questionCountMap.get(exam.id) || 0,
+    attempt_count: attemptCountMap.get(exam.id) || 0,
+  }))
 
   return <OfficialExamsClient initialExams={examsWithStats} />
 }

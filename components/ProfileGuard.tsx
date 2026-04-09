@@ -14,13 +14,23 @@ export default function ProfileGuard() {
     }
   }, [session, router])
 
-  // 홈 진입 시 주요 페이지를 미리 prefetch
+  // 홈 진입 시 주요 페이지를 미리 prefetch (idle 시점까지 지연)
   useEffect(() => {
-    router.prefetch('/my')
-    router.prefetch('/category/1')
-    router.prefetch('/category/2')
-    router.prefetch('/category/3')
-    router.prefetch('/category/4')
+    const idle = window.requestIdleCallback || ((cb: () => void) => setTimeout(cb, 3000))
+    const id = idle(() => {
+      router.prefetch('/my')
+      router.prefetch('/category/1')
+      router.prefetch('/category/2')
+      router.prefetch('/category/3')
+      router.prefetch('/category/4')
+    })
+    return () => {
+      if (window.cancelIdleCallback) {
+        window.cancelIdleCallback(id as number)
+      } else {
+        clearTimeout(id as number)
+      }
+    }
   }, [router])
 
   return null

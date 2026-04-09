@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 
 const TEXT = '한국건축전기설비기술사회와 한국기계설비기술사회가 인증한 공식사이트입니다.'
 const CHARS = TEXT.split('')
@@ -17,6 +17,20 @@ export default function CertifiedBanner() {
   const [stamped, setStamped] = useState(false)
   const [loopTick, setLoopTick] = useState(0)
   const [loopTime, setLoopTime] = useState(0)
+  const [isVisible, setIsVisible] = useState(true)
+  const bannerRef = useRef<HTMLDivElement>(null)
+
+  // IntersectionObserver: 화면에 보일 때만 rAF 루프 실행
+  useEffect(() => {
+    const el = bannerRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   // 1) 초기 도장 쿵 효과
   useEffect(() => {
@@ -33,9 +47,9 @@ export default function CertifiedBanner() {
     return () => clearTimeout(startDelay)
   }, [stamped])
 
-  // 3) 루프 타이머
+  // 3) 루프 타이머 — 화면에 보일 때만 실행
   useEffect(() => {
-    if (loopTick === 0) return
+    if (loopTick === 0 || !isVisible) return
     const start = Date.now()
     let raf: number
 
@@ -46,13 +60,13 @@ export default function CertifiedBanner() {
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [loopTick])
+  }, [loopTick, isVisible])
 
   // 도장 떨림 활성화 여부
   const isStampShaking = loopTick > 0 && loopTime >= STAMP_DELAY && loopTime < STAMP_DELAY + STAMP_DURATION
 
   return (
-    <div className="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 py-3 overflow-hidden">
+    <div ref={bannerRef} className="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 py-3 overflow-hidden">
       {/* 배경 미세 패턴 */}
       <div className="absolute inset-0 opacity-5"
         style={{

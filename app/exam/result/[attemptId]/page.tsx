@@ -56,47 +56,45 @@ export default async function ExamResultPage({
     )
   }
 
-  // 과목별 점수
-  const subjectScores = await prisma.subjectScore.findMany({
-    where: { attemptId: aid },
-    include: { subject: { select: { name: true, orderNo: true } } },
-    orderBy: { subject: { orderNo: "asc" } },
-  })
-
-  // 문제별 정답/오답 (정답 포함 - 제출 후이므로)
-  const attemptQuestions = await prisma.attemptQuestion.findMany({
-    where: { attemptId: aid },
-    orderBy: { seq: "asc" },
-    include: {
-      question: {
-        select: {
-          id: true,
-          questionCode: true,
-          questionText: true,
-          questionType: true,
-          choice1: true,
-          choice2: true,
-          choice3: true,
-          choice4: true,
-          choice1Image: true,
-          choice2Image: true,
-          choice3Image: true,
-          choice4Image: true,
-          answer: true,
-          explanation: true,
-          imageUrl: true,
-          subjectId: true,
-          points: true,
-          subject: { select: { name: true } },
+  // 과목별 점수, 문제별 정답/오답, 학생 답안을 병렬 조회
+  const [subjectScores, attemptQuestions, studentAnswers] = await Promise.all([
+    prisma.subjectScore.findMany({
+      where: { attemptId: aid },
+      include: { subject: { select: { name: true, orderNo: true } } },
+      orderBy: { subject: { orderNo: "asc" } },
+    }),
+    prisma.attemptQuestion.findMany({
+      where: { attemptId: aid },
+      orderBy: { seq: "asc" },
+      include: {
+        question: {
+          select: {
+            id: true,
+            questionCode: true,
+            questionText: true,
+            questionType: true,
+            choice1: true,
+            choice2: true,
+            choice3: true,
+            choice4: true,
+            choice1Image: true,
+            choice2Image: true,
+            choice3Image: true,
+            choice4Image: true,
+            answer: true,
+            explanation: true,
+            imageUrl: true,
+            subjectId: true,
+            points: true,
+            subject: { select: { name: true } },
+          },
         },
       },
-    },
-  })
-
-  // 학생 답안
-  const studentAnswers = await prisma.attemptItem.findMany({
-    where: { attemptId: aid },
-  })
+    }),
+    prisma.attemptItem.findMany({
+      where: { attemptId: aid },
+    }),
+  ])
   const answersMap = new Map(studentAnswers.map((a) => [a.questionId, a]))
 
   const questionsWithAnswers = attemptQuestions.map((aq) => {

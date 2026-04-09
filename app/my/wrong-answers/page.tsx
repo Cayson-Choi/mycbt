@@ -36,22 +36,22 @@ export default async function WrongAnswersPage() {
 
   const attemptIds = attempts.map((a) => a.id)
 
-  // 2. 모든 attempt_questions 한번에 조회
-  const allAttemptQuestions = await prisma.attemptQuestion.findMany({
-    where: { attemptId: { in: attemptIds } },
-    select: { attemptId: true, questionId: true },
-  })
-
-  // 3. 모든 answers 한번에 조회 (attempt_items)
-  const allAnswers = await prisma.attemptItem.findMany({
-    where: { attemptId: { in: attemptIds } },
-    select: {
-      attemptId: true,
-      questionId: true,
-      selected: true,
-      isCorrect: true,
-    },
-  })
+  // 2+3. attempt_questions와 answers를 병렬 조회
+  const [allAttemptQuestions, allAnswers] = await Promise.all([
+    prisma.attemptQuestion.findMany({
+      where: { attemptId: { in: attemptIds } },
+      select: { attemptId: true, questionId: true },
+    }),
+    prisma.attemptItem.findMany({
+      where: { attemptId: { in: attemptIds } },
+      select: {
+        attemptId: true,
+        questionId: true,
+        selected: true,
+        isCorrect: true,
+      },
+    }),
+  ])
 
   // attempt별로 그룹화
   const questionsByAttempt = new Map<number, number[]>()
@@ -113,18 +113,18 @@ export default async function WrongAnswersPage() {
   const subjectIds = Array.from(new Set(questions.map((q) => q.subjectId)))
   const examIds = Array.from(new Set(questions.map((q) => q.examId)))
 
-  // 5. 모든 subjects 한번에 조회
-  const subjects = await prisma.subject.findMany({
-    where: { id: { in: subjectIds } },
-    select: { id: true, name: true },
-  })
+  // 5+6. subjects와 exams를 병렬 조회
+  const [subjects, exams] = await Promise.all([
+    prisma.subject.findMany({
+      where: { id: { in: subjectIds } },
+      select: { id: true, name: true },
+    }),
+    prisma.exam.findMany({
+      where: { id: { in: examIds } },
+      select: { id: true, name: true, examType: true },
+    }),
+  ])
   const subjectsMap = new Map(subjects.map((s) => [s.id, s.name]))
-
-  // 6. 모든 exams 한번에 조회
-  const exams = await prisma.exam.findMany({
-    where: { id: { in: examIds } },
-    select: { id: true, name: true, examType: true },
-  })
   const examsMap = new Map(exams.map((e) => [e.id, e.name]))
   const examTypeMap = new Map(exams.map((e) => [e.id, e.examType]))
 

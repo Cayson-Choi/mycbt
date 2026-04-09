@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,12 +10,18 @@ import ConfirmDialog from '@/components/ConfirmDialog'
 const QuestionSplitEditor = lazy(() => import('@/components/QuestionSplitEditor'))
 const BulkUploadSplitEditor = lazy(() => import('@/components/BulkUploadSplitEditor'))
 
-export default function QuestionsClient() {
+export default function QuestionsClient({
+  initialExams,
+  initialQuestions,
+}: {
+  initialExams?: any[]
+  initialQuestions?: any[]
+}) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [questions, setQuestions] = useState<any[]>([])
-  const [filteredQuestions, setFilteredQuestions] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
+  const [questions, setQuestions] = useState<any[]>(initialQuestions || [])
+  const [filteredQuestions, setFilteredQuestions] = useState<any[]>(initialQuestions || [])
+  const [loading, setLoading] = useState(!initialQuestions)
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [examTypeFilter, setExamTypeFilter] = useState<string>('all')
   const [examFilter, setExamFilter] = useState<string>(searchParams.get('exam') || 'all')
@@ -27,10 +33,21 @@ export default function QuestionsClient() {
   const [selectedQuestions, setSelectedQuestions] = useState<Set<number>>(new Set())
   const [showBulkUpload, setShowBulkUpload] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [exams, setExams] = useState<any[]>([])
+  const [exams, setExams] = useState<any[]>(initialExams || [])
   const itemsPerPage = 20
 
   useEffect(() => {
+    if (initialExams && initialExams.length > 0) {
+      // 서버에서 프리페치된 데이터 사용 — URL 파라미터 처리만 수행
+      const examParam = searchParams.get('exam')
+      if (examParam && examParam !== 'all') {
+        const matched = initialExams.find((e: any) => e.id.toString() === examParam)
+        if (matched?.category_name) {
+          setCategoryFilter(matched.category_name)
+        }
+      }
+      return
+    }
     fetch('/api/admin/exam-settings')
       .then(res => res.ok ? res.json() : { exams: [] })
       .then(data => {
@@ -48,7 +65,12 @@ export default function QuestionsClient() {
       .catch(() => {})
   }, [])
 
+  const skipInitialLoad = useRef(!!initialQuestions)
   useEffect(() => {
+    if (skipInitialLoad.current) {
+      skipInitialLoad.current = false
+      return
+    }
     loadQuestions()
   }, [examFilter, categoryFilter, examTypeFilter])
 

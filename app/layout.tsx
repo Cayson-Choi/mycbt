@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AuthProvider from "@/components/AuthProvider";
+
+/* ── next/font/local: NanumSquareNeo Heavy (weight 900 only) ── */
+const nanumSquareNeo = localFont({
+  src: "../public/fonts/NanumSquareNeo-eHv.woff2",
+  weight: "900",
+  variable: "--font-square-neo",
+  display: "swap",
+  preload: true,
+});
 
 export const metadata: Metadata = {
   title: "CAYSON",
@@ -33,17 +43,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning className={nanumSquareNeo.variable}>
       <head>
-        {/* DdakDanDan 히어로 폰트: preload로 최우선 다운로드 */}
-        <link
-          rel="preload"
-          href="/fonts/ddakdandan.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
-        {/* Pretendard: preload + stylesheet */}
+        {/* Pretendard: 동적 서브셋 (body 기본 폰트) */}
         <link
           rel="preload"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
@@ -72,13 +74,6 @@ export default function RootLayout({
               document.head.appendChild(l);
             `,
           }}
-        />
-        {/* Google Fonts: preconnect + display=swap */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&family=Nanum+Pen+Script&display=swap"
         />
       </head>
       <body className="antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
