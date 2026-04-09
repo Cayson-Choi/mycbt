@@ -63,7 +63,7 @@ export default function CertifiedBanner() {
 
       <div className="relative flex items-center justify-center gap-3">
         {/* 텍스트 — 글자별 웨이브 */}
-        <p className={`text-white/90 text-sm md:text-base font-medium tracking-wide transition-opacity duration-500 ${stamped ? 'opacity-100' : 'opacity-0'}`}>
+        <p className={`text-white/90 text-sm md:text-base font-medium tracking-[0.15em] transition-opacity duration-500 ${stamped ? 'opacity-100' : 'opacity-0'}`}>
           {CHARS.map((char, i) => (
             <WaveChar key={i} char={char} index={i} loopTime={loopTime} active={loopTick > 0} highlight={isHighlighted(i)} />
           ))}
