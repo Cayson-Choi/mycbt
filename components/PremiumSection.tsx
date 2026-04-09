@@ -166,7 +166,7 @@ export default function PremiumSection() {
       </div>
 
       {/* ───── 하단: 취업 연계 ───── */}
-      <div className="relative bg-gradient-to-b from-gray-950 via-indigo-950/20 to-gray-950 pt-10 pb-20 md:pt-14 md:pb-28">
+      <div className="relative bg-gradient-to-b from-gray-950 via-indigo-950/70 to-gray-950 pt-10 pb-20 md:pt-14 md:pb-28">
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
