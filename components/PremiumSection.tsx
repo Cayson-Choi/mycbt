@@ -246,8 +246,9 @@ export default function PremiumSection() {
           <Reveal delay={300}>
             <div className="mt-16 md:mt-20 text-center">
               <button className="group relative px-8 py-4 rounded-xl font-bold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20">
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 background-animate" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-600 via-yellow-300 to-amber-600 background-animate" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent shimmer-animate" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <span className="relative text-gray-900 flex items-center gap-2">
                     프리미엄 시작하기
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
@@ -268,7 +269,14 @@ export default function PremiumSection() {
         }
         .background-animate {
           background-size: 200% auto;
-          animation: background-animate 3s ease infinite;
+          animation: background-animate 2.5s ease infinite;
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .shimmer-animate {
+          animation: shimmer 2s ease-in-out infinite;
         }
       `}</style>
     </section>
