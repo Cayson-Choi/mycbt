@@ -183,8 +183,8 @@ export default function PremiumSection() {
                   <span className="text-emerald-400 text-sm font-semibold">취업 연계 프로그램</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
-                  자격증 취득하면<br />
-                  <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">취업처를 연결</span>해 드립니다
+                  자격증 취득부터 취업까지<br />
+                  <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">모두 책임져</span> 드립니다
                 </h2>
                 <p className="text-gray-400 leading-relaxed mb-8">
                   CAYSON은 전국 350개+ 전기 관련 기업과 파트너십을 맺고 있습니다.
