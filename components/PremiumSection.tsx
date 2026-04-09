@@ -236,7 +236,7 @@ export default function PremiumSection() {
                   </div>
 
                   <div className="mt-5 text-center">
-                    <span className="text-white/30 text-xs">전국 다양한 분야의 전기 관련 기업과 제휴</span>
+                    <span className="text-white/30 text-xs">전국 다양한 분야의 기업과 파트너쉽 체결</span>
                   </div>
               </div>
             </Reveal>
