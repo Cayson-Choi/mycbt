@@ -195,7 +195,7 @@ export default function WrongAnswersContent({ data }: { data: WrongAnswersData }
                                   <img
                                     src={item[`choice_${choice}_image` as keyof WrongAnswer] as string}
                                     alt={`선택지 ${choice}`}
-                                    className="inline-block max-h-16 align-middle"
+                                    className="inline-block max-h-32 align-middle"
                                   />
                                 ) : (
                                   <MathText text={item[`choice_${choice}` as keyof WrongAnswer] as string} />
