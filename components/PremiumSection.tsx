@@ -178,7 +178,7 @@ export default function PremiumSection() {
                   <span className="text-emerald-400 text-sm font-semibold">취업 연계 프로그램</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
-                  자격증 취득부터 취업까지<br />
+                  자격증 취득부터 <ruby className="inline-flex flex-col items-center"><rt className="text-amber-400 text-[10px] md:text-xs font-bold tracking-[0.3em] mb-0.5">··</rt><span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent italic" style={{ fontFamily: 'Georgia, serif' }}>취업</span></ruby>까지<br />
                   <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">모두 책임져</span> 드립니다
                 </h2>
                 <p className="text-gray-400 leading-relaxed mb-8">
