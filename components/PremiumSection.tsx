@@ -148,10 +148,10 @@ export default function PremiumSection() {
           <Reveal delay={200}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
-                { value: 87, suffix: '%', label: '프리미엄 합격률' },
-                { value: 92, suffix: '%', label: '취업 연계 성공률' },
+                { value: 95, suffix: '%', label: '자격증 취득률' },
+                { value: 93, suffix: '%', label: '취업 연계율' },
                 { value: 350, suffix: '+', label: '제휴 기업 수' },
-                { value: 3, suffix: '배', label: '일반 대비 합격 속도' },
+                { value: 98, suffix: '%', label: '프리미엄회원 만족도' },
               ].map((stat, i) => (
                 <div key={i} className="text-center py-6 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                   <div className="text-2xl md:text-3xl font-black text-white mb-1">
