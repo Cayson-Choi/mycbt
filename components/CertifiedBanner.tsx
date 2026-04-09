@@ -145,7 +145,7 @@ function WaveChar({ char, index, loopTime, active, highlight }: {
   highlight: boolean
 }) {
   const baseStyle: React.CSSProperties = highlight
-    ? { display: 'inline-block', fontSize: '1.05em', fontWeight: 700, color: '#fb923c' }
+    ? { display: 'inline-block', fontSize: '1.05em', fontWeight: 700, color: '#fdba74' }
     : { display: 'inline-block', color: 'rgba(255,255,255,0.9)' }
 
   const style = useMemo(() => {
