@@ -399,7 +399,7 @@ export default function HeroSection() {
             <h2
               className="text-2xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-2 sm:mb-4 leading-[1.1] tracking-tight transition-all ease-out"
               style={{
-                fontFamily: "var(--font-square-neo), sans-serif",
+                fontFamily: "var(--font-serif-kr), Georgia, serif",
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
                 transitionDuration: '667ms',
