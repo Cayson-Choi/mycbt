@@ -134,7 +134,7 @@ export default function PremiumSection() {
                 </svg>
                 <span className="text-amber-400 text-sm font-semibold tracking-wide">PREMIUM MEMBERSHIP</span>
               </div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-relaxed" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-[1.8]" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
                 프리미엄 회원만의<br />
                 <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
               </h2>
