@@ -134,9 +134,9 @@ export default function PremiumSection() {
                 </svg>
                 <span className="text-amber-400 text-sm font-semibold tracking-wide">PREMIUM MEMBERSHIP</span>
               </div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-[1.8]" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
-                프리미엄 회원만의<br />
-                <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4" style={{ fontFamily: "var(--font-serif-kr), Georgia, serif" }}>
+                <span className="block">프리미엄 회원만의</span>
+                <span className="block mt-3 md:mt-4 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
               </h2>
               <p className="text-gray-400 text-lg max-w-2xl mx-auto">
                 단순한 문제풀이를 넘어, 합격부터 취업까지 원스톱으로 지원합니다
