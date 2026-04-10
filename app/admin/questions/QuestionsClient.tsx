@@ -290,16 +290,20 @@ export default function QuestionsClient({
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-lg dark:text-white">로딩 중...</div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+      {/* 로딩 오버레이 */}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl px-8 py-6 flex flex-col items-center gap-4 border dark:border-gray-700">
+            <div className="relative w-10 h-10">
+              <div className="absolute inset-0 rounded-full border-[3px] border-gray-200 dark:border-gray-600" />
+              <div className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-blue-500 animate-spin" />
+            </div>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">불러오는 중...</span>
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4">
         {/* 헤더 */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
