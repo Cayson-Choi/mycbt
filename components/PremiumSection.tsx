@@ -113,7 +113,7 @@ export default function PremiumSection() {
   return (
     <section className="relative overflow-hidden">
       {/* ───── 상단: 프리미엄 혜택 ───── */}
-      <div className="relative bg-black pt-20 pb-10 md:pt-28 md:pb-14">
+      <div className="relative bg-[#0d1a2e] pt-20 pb-10 md:pt-28 md:pb-14">
         {/* 배경 장식 */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
@@ -166,7 +166,7 @@ export default function PremiumSection() {
       </div>
 
       {/* ───── 하단: 취업 연계 ───── */}
-      <div className="relative bg-gradient-to-b from-black via-gray-800/85 to-black pt-10 pb-20 md:pt-14 md:pb-28">
+      <div className="relative bg-gradient-to-b from-[#0d1a2e] via-[#1B2A4A] to-[#0d1a2e] pt-10 pb-20 md:pt-14 md:pb-28">
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
