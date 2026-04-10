@@ -52,7 +52,17 @@ export async function GET(request: Request) {
         exam: { select: { name: true, category: { select: { name: true } } } },
         subject: { select: { name: true } },
       },
-      orderBy: [{ examId: "asc" }, { subjectId: "asc" }, { questionCode: "asc" }],
+      orderBy: [{ examId: "asc" }, { id: "asc" }],
+    })
+
+    // 문항번호(questionCode 끝 숫자) 기준으로 추가 정렬
+    const extractNum = (code: string) => {
+      const m = code.match(/-(\d+)$/)
+      return m ? parseInt(m[1]) : Number.MAX_SAFE_INTEGER
+    }
+    questions.sort((a, b) => {
+      if (a.examId !== b.examId) return a.examId - b.examId
+      return extractNum(a.questionCode) - extractNum(b.questionCode)
     })
 
     // snake_case 형태로 변환 (프론트 호환)
