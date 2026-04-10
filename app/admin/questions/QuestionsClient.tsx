@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import MathText from '@/components/MathText'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import AdminLoadingPopup from '@/components/AdminLoadingPopup'
 
 const QuestionSplitEditor = lazy(() => import('@/components/QuestionSplitEditor'))
 const BulkUploadSplitEditor = lazy(() => import('@/components/BulkUploadSplitEditor'))
@@ -290,16 +291,11 @@ export default function QuestionsClient({
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-lg dark:text-white">로딩 중...</div>
-      </div>
-    )
-  }
+  // 초기 로딩은 팝업으로 표시 (전체화면 차단 X)
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+      <AdminLoadingPopup show={loading} />
       <div className="max-w-7xl mx-auto px-4">
         {/* 헤더 */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
