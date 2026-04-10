@@ -145,7 +145,10 @@ export default function QuestionsClient({
     }
   }
 
+  const loadRequestId = useRef(0)
   const loadQuestions = async () => {
+    const requestId = ++loadRequestId.current
+    setLoading(true)
     try {
       let url = '/api/admin/questions'
       if (examFilter !== 'all') {
@@ -166,6 +169,8 @@ export default function QuestionsClient({
       }
 
       const res = await fetch(url)
+      if (requestId !== loadRequestId.current) return // 레이스 컨디션 방지
+
       if (res.status === 401) {
         router.push('/login?redirect=/admin/questions')
         return
@@ -177,12 +182,13 @@ export default function QuestionsClient({
 
       if (res.ok) {
         const data = await res.json()
+        if (requestId !== loadRequestId.current) return // 레이스 컨디션 방지
         setQuestions(data.questions || [])
       }
     } catch (err) {
       console.error('Failed to load questions:', err)
     } finally {
-      setLoading(false)
+      if (requestId === loadRequestId.current) setLoading(false)
     }
   }
 
