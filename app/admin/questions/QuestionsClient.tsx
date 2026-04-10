@@ -80,7 +80,7 @@ export default function QuestionsClient({
     loadSubjects()
   }, [examFilter])
 
-  // 필터링 및 검색
+  // 필터링 및 검색 (페이지는 유지)
   useEffect(() => {
     let filtered = [...questions]
 
@@ -111,8 +111,12 @@ export default function QuestionsClient({
     }
 
     setFilteredQuestions(filtered)
-    setCurrentPage(1)
   }, [questions, subjectFilter, imageFilter, searchQuery])
+
+  // 필터/검색/시험 변경 시에만 1페이지로 리셋 (questions 변경은 제외 → 수정 후 페이지 유지)
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [subjectFilter, imageFilter, searchQuery, examFilter, categoryFilter, examTypeFilter])
 
   const loadSubjects = async () => {
     try {
