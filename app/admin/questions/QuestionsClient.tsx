@@ -26,6 +26,7 @@ export default function QuestionsClient({
   const [examTypeFilter, setExamTypeFilter] = useState<string>('all')
   const [examFilter, setExamFilter] = useState<string>(searchParams.get('exam') || 'all')
   const [subjectFilter, setSubjectFilter] = useState<string>('all')
+  const [imageFilter, setImageFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [subjects, setSubjects] = useState<any[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
@@ -88,6 +89,13 @@ export default function QuestionsClient({
       filtered = filtered.filter((q) => q.subject_id === parseInt(subjectFilter))
     }
 
+    // 이미지 필터
+    if (imageFilter === 'with') {
+      filtered = filtered.filter((q) => q.image_url || q.choice_1_image || q.choice_2_image || q.choice_3_image || q.choice_4_image)
+    } else if (imageFilter === 'without') {
+      filtered = filtered.filter((q) => !q.image_url && !q.choice_1_image && !q.choice_2_image && !q.choice_3_image && !q.choice_4_image)
+    }
+
     // 검색
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
@@ -104,7 +112,7 @@ export default function QuestionsClient({
 
     setFilteredQuestions(filtered)
     setCurrentPage(1)
-  }, [questions, subjectFilter, searchQuery])
+  }, [questions, subjectFilter, imageFilter, searchQuery])
 
   const loadSubjects = async () => {
     try {
@@ -419,6 +427,17 @@ export default function QuestionsClient({
                 ))}
               </select>
             )}
+
+            {/* 이미지 필터 */}
+            <select
+              value={imageFilter}
+              onChange={(e) => setImageFilter(e.target.value)}
+              className="px-3 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="all">전체 문제</option>
+              <option value="with">🖼️ 이미지 있음</option>
+              <option value="without">이미지 없음</option>
+            </select>
 
             <div className="flex-1 min-w-[200px] max-w-md relative">
               <input
