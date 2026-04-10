@@ -154,7 +154,7 @@ export default function PremiumSection() {
                 { value: 98, suffix: '%', label: '프리미엄회원 만족도' },
               ].map((stat, i) => (
                 <div key={i} className="text-center py-6 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                  <div className="text-2xl md:text-3xl font-black text-white mb-1">
+                  <div className="text-2xl md:text-3xl font-black text-amber-400 mb-1">
                     <CountUp target={stat.value} suffix={stat.suffix} />
                   </div>
                   <div className="text-gray-500 text-sm">{stat.label}</div>
