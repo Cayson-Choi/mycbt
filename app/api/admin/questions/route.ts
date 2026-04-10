@@ -21,6 +21,7 @@ export async function GET(request: Request) {
     const examId = searchParams.get("exam_id")
     const examIds = searchParams.get("exam_ids")
     const subjectId = searchParams.get("subject_id")
+    const hasImage = searchParams.get("has_image")
 
     const where: any = {}
     if (examId) {
@@ -29,6 +30,21 @@ export async function GET(request: Request) {
       where.examId = { in: examIds.split(",").map(Number).filter((n) => !isNaN(n)) }
     }
     if (subjectId) where.subjectId = parseInt(subjectId)
+    if (hasImage === 'with') {
+      where.OR = [
+        { imageUrl: { not: null } },
+        { choice1Image: { not: null } },
+        { choice2Image: { not: null } },
+        { choice3Image: { not: null } },
+        { choice4Image: { not: null } },
+      ]
+    } else if (hasImage === 'without') {
+      where.imageUrl = null
+      where.choice1Image = null
+      where.choice2Image = null
+      where.choice3Image = null
+      where.choice4Image = null
+    }
 
     const questions = await prisma.question.findMany({
       where,

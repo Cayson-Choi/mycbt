@@ -66,14 +66,14 @@ export default function QuestionsClient({
       .catch(() => {})
   }, [])
 
-  const skipInitialLoad = useRef(!!initialQuestions)
+  const skipInitialLoad = useRef(!!initialQuestions && imageFilter === 'all')
   useEffect(() => {
     if (skipInitialLoad.current) {
       skipInitialLoad.current = false
       return
     }
     loadQuestions()
-  }, [examFilter, categoryFilter, examTypeFilter])
+  }, [examFilter, categoryFilter, examTypeFilter, imageFilter])
 
   // 과목 목록 로드
   useEffect(() => {
@@ -159,6 +159,10 @@ export default function QuestionsClient({
         if (catExamIds.length > 0) {
           url = `/api/admin/questions?exam_ids=${catExamIds.join(',')}`
         }
+      }
+
+      if (imageFilter !== 'all') {
+        url += (url.includes('?') ? '&' : '?') + `has_image=${imageFilter}`
       }
 
       const res = await fetch(url)
