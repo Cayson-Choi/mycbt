@@ -235,9 +235,9 @@ function SubmitSection({
         return
       }
 
-      // Router Cache 무효화 후 이동 (이전 IN_PROGRESS 상태 캐시 우회)
-      router.refresh()
-      router.replace(`/exam/result/${attemptId}`)
+      // 하드 네비게이션으로 Next.js Router Cache 완전 우회
+      // (router.push/replace는 클라이언트 캐시된 이전 RSC 페이로드를 재사용할 수 있음)
+      window.location.href = `/exam/result/${attemptId}`
     } catch {
       onError('오류가 발생했습니다')
       setSubmitting(false)
