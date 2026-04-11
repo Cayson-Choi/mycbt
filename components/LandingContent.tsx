@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import PremiumSection from './PremiumSection'
 
 /* ─── 스크롤 등장 ─── */
 function Reveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -600,6 +601,11 @@ export default function LandingContent() {
           </div>
         </div>
       </section>
+
+      {/* ════════════════════════════════════════
+          PREMIUM SECTION -- 동영상 강의 아래 배치
+         ════════════════════════════════════════ */}
+      <PremiumSection />
 
       {/* ════════════════════════════════════════
           SECTION 3 -- 합격 수기
