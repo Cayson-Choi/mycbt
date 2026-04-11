@@ -1,19 +1,10 @@
 import type { Metadata } from "next";
-import { Noto_Serif_KR } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AuthProvider from "@/components/AuthProvider";
-
-/* ── next/font/google: Noto Serif KR (제목용 프리미엄 세리프) ── */
-const notoSerifKR = Noto_Serif_KR({
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  variable: "--font-serif-kr",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "CAYSON",
@@ -42,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning className={notoSerifKR.variable}>
+    <html lang="ko" suppressHydrationWarning>
       <head>
         {/* Pretendard: 동적 서브셋 (body 기본 폰트) */}
         <link

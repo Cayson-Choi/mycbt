@@ -311,8 +311,7 @@ export default function HeroSection() {
                         ? `rotate(${f.rotate || 0}deg) scale(1)`
                         : `rotate(${f.rotate || 0}deg) scale(0.4)`,
                       transitionDuration: '500ms',
-                      transitionDelay: isActive ? `${f.delay}ms` : '0ms',
-                    }}
+                      transitionDelay: isActive ? `${f.delay}ms` : '0ms' }}
                   >
                     {/* 떠다니는 애니메이션 (내부) */}
                     <div style={{ animation: ac ? `${ac.name} ${ac.dur} ease-in-out infinite` : 'none' }}>
@@ -364,8 +363,7 @@ export default function HeroSection() {
                             width: f.size || 40,
                             height: f.size || 40,
                             border: `2.5px solid ${f.color || slide.accentColor}`,
-                            opacity: 0.35,
-                          }}
+                            opacity: 0.35 }}
                         />
                       )}
 
@@ -390,8 +388,7 @@ export default function HeroSection() {
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(16px)',
                 transitionDuration: '667ms',
-                transitionDelay: textVisible ? '0ms' : '0ms',
-              }}
+                transitionDelay: textVisible ? '0ms' : '0ms' }}
             >
               {slide.badge}
             </div>
@@ -399,12 +396,10 @@ export default function HeroSection() {
             <h2
               className="text-2xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-2 sm:mb-4 leading-[1.1] tracking-tight transition-all ease-out"
               style={{
-                fontFamily: "var(--font-serif-kr), Georgia, serif",
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
                 transitionDuration: '667ms',
-                transitionDelay: textVisible ? '100ms' : '0ms',
-              }}
+                transitionDelay: textVisible ? '100ms' : '0ms' }}
             >
               {slide.title}
             </h2>
@@ -415,8 +410,7 @@ export default function HeroSection() {
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
                 transitionDuration: '667ms',
-                transitionDelay: textVisible ? '334ms' : '0ms',
-              }}
+                transitionDelay: textVisible ? '334ms' : '0ms' }}
             >
               {slide.description}
             </p>
@@ -427,8 +421,7 @@ export default function HeroSection() {
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
                 transitionDuration: '667ms',
-                transitionDelay: textVisible ? '500ms' : '0ms',
-              }}
+                transitionDelay: textVisible ? '500ms' : '0ms' }}
             >
               <a
                 href="#exams"
@@ -460,8 +453,7 @@ export default function HeroSection() {
                       opacity: isActive ? 1 : 0,
                       transform: isActive ? 'scale(1)' : 'scale(0.4)',
                       transitionDuration: '500ms',
-                      transitionDelay: isActive ? `${f.delay}ms` : '0ms',
-                    }}
+                      transitionDelay: isActive ? `${f.delay}ms` : '0ms' }}
                   >
                     <div style={{ animation: ac ? `${ac.name} ${ac.dur} ease-in-out infinite` : 'none' }}>
                       <div className="relative">
@@ -497,8 +489,7 @@ export default function HeroSection() {
                     transform: isActive && textVisible ? `scale(${scale})` : `translateY(16px) scale(${scale * 0.97})`,
                     transformOrigin: 'bottom center',
                     transitionDuration: '667ms',
-                    transitionDelay: isActive && textVisible ? '500ms' : '0ms',
-                  }}
+                    transitionDelay: isActive && textVisible ? '500ms' : '0ms' }}
                 >
                   <Image
                     src={s.personImage}
@@ -538,8 +529,7 @@ export default function HeroSection() {
                         style={{
                           backgroundColor: slide.accentColor,
                           animation: paused ? 'none' : `heroProgress ${DURATION}ms linear forwards`,
-                          animationPlayState: paused ? 'paused' : 'running',
-                        }}
+                          animationPlayState: paused ? 'paused' : 'running' }}
                       />
                     )}
                     {i < current && <div className="h-full w-full rounded-full bg-white/40" />}
