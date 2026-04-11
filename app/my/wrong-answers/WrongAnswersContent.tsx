@@ -92,31 +92,51 @@ export default function WrongAnswersContent({ data }: { data: WrongAnswersData }
           </div>
         </div>
 
-        {/* 과목 필터 */}
+        {/* 과목별 보기 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
+          <div className="flex items-center gap-2 mb-3">
+            <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            <span className="font-semibold dark:text-white">과목별 보기</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">— 버튼을 누르면 해당 과목의 오답만 표시됩니다</span>
+          </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold dark:text-white">과목 필터:</span>
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded ${
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all ${
                 filter === 'all'
-                  ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  ? 'bg-blue-600 dark:bg-blue-500 border-blue-600 dark:border-blue-500 text-white shadow-md'
+                  : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:border-blue-400 dark:hover:border-blue-500'
               }`}
             >
-              전체 ({data.total_count || 0})
+              <span className="font-medium">전체</span>
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                filter === 'all'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'
+              }`}>
+                {data.total_count || 0}
+              </span>
             </button>
             {(data.subject_stats || []).map((stat) => (
               <button
                 key={stat.subject_id}
                 onClick={() => setFilter(stat.subject_id)}
-                className={`px-4 py-2 rounded ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all ${
                   filter === stat.subject_id
-                    ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    ? 'bg-blue-600 dark:bg-blue-500 border-blue-600 dark:border-blue-500 text-white shadow-md'
+                    : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:border-blue-400 dark:hover:border-blue-500'
                 }`}
               >
-                {stat.subject_name} ({stat.count})
+                <span className="font-medium">{stat.subject_name}</span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                  filter === stat.subject_id
+                    ? 'bg-white/20 text-white'
+                    : 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-300'
+                }`}>
+                  {stat.count}
+                </span>
               </button>
             ))}
           </div>
