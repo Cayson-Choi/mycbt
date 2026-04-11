@@ -4,6 +4,9 @@ import { redirect, notFound } from "next/navigation"
 import Link from "next/link"
 import ExamResultContent from "./ExamResultContent"
 
+// 시험 제출 직후 최신 상태를 가져오도록 캐시 비활성화
+export const dynamic = 'force-dynamic'
+
 export default async function ExamResultPage({
   params,
 }: {

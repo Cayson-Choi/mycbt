@@ -235,7 +235,9 @@ function SubmitSection({
         return
       }
 
-      router.push(`/exam/result/${attemptId}`)
+      // Router Cache 무효화 후 이동 (이전 IN_PROGRESS 상태 캐시 우회)
+      router.refresh()
+      router.replace(`/exam/result/${attemptId}`)
     } catch {
       onError('오류가 발생했습니다')
       setSubmitting(false)
