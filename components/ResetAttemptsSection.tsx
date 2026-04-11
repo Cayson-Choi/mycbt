@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import ConfirmDialog from './ConfirmDialog'
 
 interface Exam {
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export default function ResetAttemptsSection({ exams }: Props) {
+  const router = useRouter()
   const [scope, setScope] = useState<'all' | 'exam' | 'user'>('all')
   const [examId, setExamId] = useState<number | ''>('')
   const [userExamId, setUserExamId] = useState<number | ''>('')
@@ -119,6 +121,8 @@ export default function ResetAttemptsSection({ exams }: Props) {
         setResult({ type: 'error', message: data.error || '초기화 실패' })
       } else {
         setResult({ type: 'success', message: data.message })
+        // 서버 컴포넌트의 통계 숫자 갱신
+        router.refresh()
       }
     } catch {
       setResult({ type: 'error', message: '네트워크 오류가 발생했습니다' })
