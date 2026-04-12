@@ -118,6 +118,13 @@ body {
   50% { opacity: 1; transform: scale(1.06); }
 }
 
+/* wreath: 순차 등장 */
+@keyframes wreathAppear {
+  0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+  60% { opacity: 1; transform: scale(1.08) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 /* wobble: 좌우 미세 흔들림 (말풍선용) */
 @keyframes heroDecWobble {
   0%, 100% { transform: rotate(0deg); }

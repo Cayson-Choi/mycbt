@@ -5,9 +5,8 @@ import Image from 'next/image'
 
 /* ── 타입 ── */
 interface FloatingEl {
-  type: 'block' | 'bubble' | 'sparkle' | 'dot' | 'pill' | 'ring' | 'swirl' | 'diamond' | 'wreath'
+  type: 'block' | 'bubble' | 'sparkle' | 'dot' | 'pill' | 'ring' | 'swirl' | 'diamond' | 'wreath' | 'dualWreath'
   text?: string
-  texts?: string[]
   letter?: string
   right: string
   top: string
@@ -90,28 +89,11 @@ function Diamond({ color, size = 20 }: { color: string; size?: number }) {
   )
 }
 
-/* ── 월계관 (PNG 이미지 + 텍스트 순차 교체 애니메이션) ── */
-function LaurelWreath({ size = 80, texts }: { color?: string; size?: number; text?: string; texts?: string[] }) {
-  const [textIdx, setTextIdx] = useState(0)
-  const [visible, setVisible] = useState(true)
-  const items = texts || []
-
-  useEffect(() => {
-    if (items.length <= 1) return
-    const interval = setInterval(() => {
-      setVisible(false)
-      setTimeout(() => {
-        setTextIdx((prev) => (prev + 1) % items.length)
-        setVisible(true)
-      }, 400)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [items.length])
-
+/* ── 월계관 단일 (PNG 이미지 + 내부 텍스트) ── */
+function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text?: string }) {
   const innerSize = size * 0.48
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      {/* 글로우 효과 */}
       <div
         className="absolute inset-0 rounded-full"
         style={{
@@ -119,30 +101,48 @@ function LaurelWreath({ size = 80, texts }: { color?: string; size?: number; tex
           animation: 'wreathGlow 3s ease-in-out infinite',
         }}
       />
-      {/* 월계관 이미지 */}
       <img
         src="/hero/mooncrown/image.png"
         alt=""
         className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_16px_rgba(251,191,36,0.5)]"
         style={{ animation: 'wreathBreath 4s ease-in-out infinite' }}
       />
-      {/* 내부 텍스트 — 순차 교체 */}
-      {items.length > 0 && (
+      {text && (
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="text-center font-black leading-tight text-white whitespace-pre-line transition-all duration-400"
+            className="text-center font-black leading-tight text-white whitespace-pre-line"
             style={{
               width: innerSize,
               fontSize: size * 0.14,
               textShadow: '0 2px 12px rgba(0,0,0,0.8)',
-              opacity: visible ? 1 : 0,
-              transform: visible ? 'scale(1)' : 'scale(0.8)',
             }}
           >
-            {items[textIdx]}
+            {text}
           </span>
         </div>
       )}
+    </div>
+  )
+}
+
+/* ── 월계관 2개 순차 등장 (프리미엄 슬라이드용) ── */
+function DualWreath({ size = 160 }: { size?: number }) {
+  return (
+    <div className="flex items-center gap-3">
+      {/* 첫 번째: 자격증 취득 */}
+      <div
+        className="opacity-0"
+        style={{ animation: 'wreathAppear 0.8s ease-out 0.5s forwards' }}
+      >
+        <LaurelWreath size={size} text={'자격증\n취득'} />
+      </div>
+      {/* 두 번째: 취업 연계 */}
+      <div
+        className="opacity-0"
+        style={{ animation: 'wreathAppear 0.8s ease-out 1.8s forwards' }}
+      >
+        <LaurelWreath size={size} text={'취업\n연계'} />
+      </div>
     </div>
   )
 }
@@ -159,7 +159,7 @@ const slides: Slide[] = [
     personAlt: 'CAYSON',
     floats: [
       { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'wreath', text: '합격의\n시작', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
@@ -175,7 +175,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
     floats: [
-      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '14%', top: '6%', size: 170, color: '#fbbf24', delay: 1000, anim: 'float1' },
+      { type: 'wreath', text: '3,600+\n문제', right: '14%', top: '6%', size: 170, color: '#fbbf24', delay: 1000, anim: 'float1' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '62%', size: 16, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
       { type: 'swirl', right: '16%', top: '48%', size: 50, color: '#818cf8', delay: 1150, anim: 'float3' },
@@ -192,7 +192,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman3.png',
     personAlt: '전기기사 강사',
     floats: [
-      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'wreath', text: '역대기출\n총망라', right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
       { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
       { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
@@ -228,7 +228,7 @@ const slides: Slide[] = [
     ctaText: '프리미엄 알아보기',
     ctaHref: '#premium',
     floats: [
-      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '2%', top: '5%', size: 200, color: '#fbbf24', delay: 800, anim: 'float1' },
+      { type: 'dualWreath', right: '2%', top: '10%', size: 150, delay: 0, anim: 'float1' },
       { type: 'sparkle', right: '18%', top: '5%', size: 28, color: '#fbbf24', delay: 1000, anim: 'shimmer' },
       { type: 'sparkle', right: '12%', top: '52%', size: 20, color: '#f59e0b', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '24%', top: '72%', size: 14, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
@@ -404,7 +404,10 @@ export default function HeroSection() {
                       {f.type === 'diamond' && <Diamond color={f.color || slide.accentColor} size={f.size || 20} />}
 
                       {/* 월계관 */}
-                      {f.type === 'wreath' && <LaurelWreath color={f.color || '#fbbf24'} size={f.size || 80} texts={f.texts || (f.text ? [f.text] : [])} />}
+                      {f.type === 'wreath' && <LaurelWreath color={f.color || '#fbbf24'} size={f.size || 80} text={f.text} />}
+
+                      {/* 월계관 2개 순차 등장 (프리미엄) */}
+                      {f.type === 'dualWreath' && <DualWreath size={f.size || 150} />}
                     </div>
                   </div>
                 </div>
