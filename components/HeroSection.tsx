@@ -121,7 +121,7 @@ function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text
 /* ── 월계관 2개 순차 등장 (프리미엄 슬라이드용) ── */
 function DualWreath({ size = 160 }: { size?: number }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-1">
       {/* 첫 번째: 자격증 취득 */}
       <div
         className="opacity-0"
@@ -129,10 +129,17 @@ function DualWreath({ size = 160 }: { size?: number }) {
       >
         <LaurelWreath size={size} text={'자격증\n취득'} />
       </div>
-      {/* 두 번째: 취업 연계 */}
+      {/* 두 번째: 면접 준비 */}
       <div
         className="opacity-0"
-        style={{ animation: 'wreathAppear 0.8s ease-out 1.8s forwards' }}
+        style={{ animation: 'wreathAppear 0.8s ease-out 1.5s forwards' }}
+      >
+        <LaurelWreath size={size} text={'면접\n준비'} />
+      </div>
+      {/* 세 번째: 취업 연계 */}
+      <div
+        className="opacity-0"
+        style={{ animation: 'wreathAppear 0.8s ease-out 2.5s forwards' }}
       >
         <LaurelWreath size={size} text={'취업\n연계'} />
       </div>
@@ -143,20 +150,20 @@ function DualWreath({ size = 160 }: { size?: number }) {
 /* ── 슬라이드별 고유 장식 데이터 ── */
 const slides: Slide[] = [
   {
-    badge: 'CAYSON',
-    title: '전기·소방 자격증\n한 곳에서',
-    description: '기능사부터 기사까지\n케이슨에서 한 번에 준비하세요',
-    bgColor: '#2f2a29',
-    accentColor: '#fbbf24',
-    personImage: '/hero/man2.png',
-    personAlt: 'CAYSON',
+    badge: '인기',
+    title: '전문가 검증 기출문제\n전기기사 합격의 지름길',
+    description: '역대 기출 총망라 · 실시간 랭킹\n오답노트로 약점까지 완벽 보완',
+    bgColor: '#e14c32',
+    accentColor: '#fb923c',
+    personImage: '/hero/woman3.png',
+    personAlt: '전기기사 강사',
     floats: [
-      { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', text: '합격의\n시작', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
-      { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
-      { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
-      { type: 'dot', right: '18%', top: '70%', size: 6, delay: 1300, anim: 'float1' },
+      { type: 'wreath', text: '98%\n합격', right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
+      { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
+      { type: 'dot', right: '22%', top: '42%', size: 9, delay: 1200, anim: 'pulse' },
+      { type: 'dot', right: '30%', top: '68%', size: 6, delay: 1450, anim: 'float1' },
     ],
   },
   {
@@ -168,7 +175,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
     floats: [
-      { type: 'wreath', text: '3,600+\n문제', right: '14%', top: '6%', size: 170, color: '#fbbf24', delay: 1000, anim: 'float1' },
+      { type: 'wreath', text: '족보문제\n공개', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float1' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '62%', size: 16, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
       { type: 'swirl', right: '16%', top: '48%', size: 50, color: '#818cf8', delay: 1150, anim: 'float3' },
@@ -177,25 +184,25 @@ const slides: Slide[] = [
     ],
   },
   {
-    badge: '인기',
-    title: '전문가 검증 기출문제\n전기기사 합격의 지름길',
-    description: '역대 기출 총망라 · 실시간 랭킹\n오답노트로 약점까지 완벽 보완',
-    bgColor: '#e14c32',
-    accentColor: '#fb923c',
-    personImage: '/hero/woman3.png',
-    personAlt: '전기기사 강사',
+    badge: 'CAYSON',
+    title: '전기·소방 자격증\n한 곳에서',
+    description: '기능사부터 기사까지\n케이슨에서 한 번에 준비하세요',
+    bgColor: '#2f2a29',
+    accentColor: '#fbbf24',
+    personImage: '/hero/man2.png',
+    personAlt: 'CAYSON',
     floats: [
-      { type: 'wreath', text: '역대기출\n총망라', right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
-      { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
-      { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
-      { type: 'dot', right: '22%', top: '42%', size: 9, delay: 1200, anim: 'pulse' },
-      { type: 'dot', right: '30%', top: '68%', size: 6, delay: 1450, anim: 'float1' },
+      { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
+      { type: 'wreath', text: '98%\n합격', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
+      { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
+      { type: 'dot', right: '18%', top: '70%', size: 6, delay: 1300, anim: 'float1' },
     ],
   },
   {
     badge: '과정평가형',
-    title: 'NCS 기반 실무 역량 평가\n소방설비산업기사(전기)',
+    title: 'NCS 기반 과정평가형\n소방설비산업기사(전기)',
     description: '과정평가형 완벽 대비\n현장 중심 실무 문제로 합격까지',
     bgColor: '#fe87ca',
     accentColor: '#f43f5e',
@@ -424,9 +431,9 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 tracking-normal whitespace-pre-line transition-all ease-out"
+              className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 tracking-wider whitespace-pre-line transition-all ease-out"
               style={{
-                lineHeight: 1.8,
+                lineHeight: 1.1,
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
                 transitionDuration: '667ms',
