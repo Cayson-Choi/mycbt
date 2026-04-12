@@ -305,8 +305,8 @@ const slides: Slide[] = [
     description: '프리미엄 등급만의 특별한 혜택\n자격증 취득 후 바로 취업까지 원스톱',
     bgColor: '#1b1514',
     accentColor: '#fbbf24',
-    personImage: '',
-    personAlt: '',
+    personImage: '/hero/woman4.png',
+    personAlt: '프리미엄 강사',
     ctaText: '프리미엄 가입하기',
     ctaHref: '#premium',
     floats: [
