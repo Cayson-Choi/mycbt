@@ -421,7 +421,7 @@ export default function HeroSection() {
         <div className="relative flex items-start sm:items-end h-[250px] sm:h-[360px] lg:h-[420px]">
 
           {/* ===== 장식 레이어 (말풍선 제외: 사람 뒤 z-0) ===== */}
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
             {slide.floats.filter(f => f.type !== 'bubble').map((f, fi) => {
               const isActive = textVisible
               const ac = animConfig[f.anim]
@@ -575,7 +575,7 @@ export default function HeroSection() {
           </div>
 
           {/* ===== 말풍선 레이어 (사람 뒤 — DOM 순서로 사람보다 먼저 렌더) ===== */}
-          <div className="absolute inset-0 z-[3] pointer-events-none">
+          <div className="absolute inset-0 z-[3] pointer-events-none hidden sm:block">
             {slide.floats.filter(f => f.type === 'bubble').map((f, fi) => {
               const isActive = textVisible
               const ac = animConfig[f.anim]
