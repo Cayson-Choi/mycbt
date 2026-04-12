@@ -89,59 +89,119 @@ function Diamond({ color, size = 20 }: { color: string; size?: number }) {
   )
 }
 
-/* ── 월계관 단일 (PNG 이미지 + 내부 텍스트) ── */
-function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text?: string }) {
+/* ── 색상→CSS filter 매핑 ── */
+/* ── 월계관 단일 (PNG 이미지 + 색상 오버레이 + 내부 텍스트) ── */
+function LaurelWreath({ color, size = 80, text }: { color?: string; size?: number; text?: string }) {
   const innerSize = size * 0.55
+  const isGold = !color || color === '#fbbf24'
   return (
-    <div className="relative" style={{ width: size, height: size }}>
+    <div className="relative" style={{ width: size, height: size, animation: 'wreathBreath 4s ease-in-out infinite' }}>
+      {/* 원본 월계관 */}
       <img
         src="/hero/mooncrown/image.png"
         alt=""
         className="absolute inset-0 w-full h-full object-contain"
-        style={{ animation: 'wreathBreath 4s ease-in-out infinite' }}
+        style={isGold ? {} : { filter: 'grayscale(1) brightness(1.5)' }}
       />
+      {/* 색상 오버레이 */}
+      {!isGold && (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: color,
+            mixBlendMode: 'multiply',
+            WebkitMaskImage: 'url(/hero/mooncrown/image.png)',
+            WebkitMaskSize: 'contain',
+            WebkitMaskRepeat: 'no-repeat',
+            WebkitMaskPosition: 'center',
+            maskImage: 'url(/hero/mooncrown/image.png)',
+            maskSize: 'contain',
+            maskRepeat: 'no-repeat',
+            maskPosition: 'center',
+          }}
+        />
+      )}
       {text && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className="text-center font-black leading-tight text-white whitespace-pre-line"
+          <div
+            className="flex items-center justify-center rounded-full"
             style={{
               width: innerSize,
-              fontSize: size * 0.11,
-              textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+              height: innerSize,
+              backgroundColor: 'rgba(0,0,0,0.45)',
             }}
           >
-            {text}
-          </span>
+            <span
+              className="text-center font-black leading-tight text-white whitespace-pre-line"
+              style={{
+                fontSize: size * 0.12,
+              }}
+            >
+              {text}
+            </span>
+          </div>
         </div>
       )}
     </div>
   )
 }
 
-/* ── 월계관 2개 순차 등장 (프리미엄 슬라이드용) ── */
-function DualWreath({ size = 160 }: { size?: number }) {
+/* ── 금색 별 SVG ── */
+function GoldStar({ size = 24 }: { size?: number }) {
   return (
-    <div className="flex items-center gap-1">
-      {/* 첫 번째: 자격증 취득 */}
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }}>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+    </svg>
+  )
+}
+
+/* ── 월계관 + 별 (프리미엄용) ── */
+function WreathWithStar({ size, text, delay }: { size: number; text: string; delay: number }) {
+  return (
+    <div
+      className="relative opacity-0"
+      style={{ width: size, height: size, animation: `wreathAppear 0.7s ease-out ${delay}s forwards` }}
+    >
+      {/* 별: 월계관 열린 위쪽 정중앙 */}
       <div
-        className="opacity-0"
-        style={{ animation: 'wreathAppear 0.8s ease-out 0.5s forwards' }}
+        className="absolute z-10"
+        style={{
+          top: size * 0.06,
+          left: '41%',
+          transform: 'translateX(-50%)',
+          animation: 'wreathBreath 3s ease-in-out infinite',
+        }}
       >
-        <LaurelWreath size={size} text={'자격증\n취득'} />
+        <GoldStar size={size * 0.18} />
       </div>
-      {/* 두 번째: 면접 준비 */}
-      <div
-        className="opacity-0"
-        style={{ animation: 'wreathAppear 0.8s ease-out 1.5s forwards' }}
-      >
-        <LaurelWreath size={size} text={'면접\n준비'} />
+      <LaurelWreath size={size} text={text} />
+    </div>
+  )
+}
+
+/* ── 월계관 5개 순차 등장 (프리미엄 슬라이드용, 3+2 배치) ── */
+function DualWreath({ size = 160 }: { size?: number }) {
+  const s = size
+  const items = [
+    { text: '자격증\n취득', delay: 0.4 },
+    { text: 'AI\n오답분석', delay: 0.8 },
+    { text: '무제한\n모의고사', delay: 1.2 },
+    { text: '면접\n준비', delay: 1.6 },
+    { text: '취업\n연계', delay: 2.0 },
+  ]
+  return (
+    <div className="flex flex-col items-center gap-0">
+      {/* 윗줄 3개 */}
+      <div className="flex items-center gap-0">
+        {items.slice(0, 3).map((item, i) => (
+          <WreathWithStar key={i} size={s} text={item.text} delay={item.delay} />
+        ))}
       </div>
-      {/* 세 번째: 취업 연계 */}
-      <div
-        className="opacity-0"
-        style={{ animation: 'wreathAppear 0.8s ease-out 2.5s forwards' }}
-      >
-        <LaurelWreath size={size} text={'취업\n연계'} />
+      {/* 아랫줄 2개 */}
+      <div className="flex items-center gap-0 -mt-2">
+        {items.slice(3).map((item, i) => (
+          <WreathWithStar key={i} size={s} text={item.text} delay={item.delay} />
+        ))}
       </div>
     </div>
   )
@@ -152,18 +212,23 @@ const slides: Slide[] = [
   {
     badge: '인기',
     title: '전문가 검증 기출문제\n전기기사 합격의 지름길',
-    description: '역대 기출 총망라 · 실시간 랭킹\n오답노트로 약점까지 완벽 보완',
+    description: '역대 기출 총망라 · AI 오답분석\n약점 보완부터 합격까지 한 번에',
     bgColor: '#e14c32',
     accentColor: '#fb923c',
     personImage: '/hero/woman3.png',
     personAlt: '전기기사 강사',
     floats: [
-      { type: 'wreath', text: '98%\n합격', right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
-      { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
-      { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
-      { type: 'dot', right: '22%', top: '42%', size: 9, delay: 1200, anim: 'pulse' },
-      { type: 'dot', right: '30%', top: '68%', size: 6, delay: 1450, anim: 'float1' },
+      { type: 'wreath', text: '98%\n합격', right: '16%', top: '8%', size: 160, color: '#fb923c', delay: 1000, anim: 'float2' },
+      // 월계관 위/옆 (right 22~30%)
+      { type: 'sparkle', right: '28%', top: '3%', size: 22, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'dot', right: '24%', top: '15%', size: 9, delay: 1150, anim: 'pulse' },
+      // 사람-월계관 사이 중간 (right 18~28%)
+      { type: 'ring', right: '20%', top: '35%', size: 30, color: '#fb923c', delay: 1200, anim: 'float1' },
+      { type: 'diamond', right: '26%', top: '50%', size: 16, color: '#fbbf24', delay: 1300, anim: 'float3' },
+      { type: 'sparkle', right: '22%', top: '65%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      // 하단 (right 18~28%)
+      { type: 'swirl', right: '18%', top: '80%', size: 32, color: '#fb923c', delay: 1400, anim: 'float2' },
+      { type: 'dot', right: '25%', top: '88%', size: 7, delay: 1450, anim: 'float1' },
     ],
   },
   {
@@ -175,17 +240,22 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
     floats: [
-      { type: 'wreath', text: '족보문제\n공개', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float1' },
-      { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
-      { type: 'sparkle', right: '22%', top: '62%', size: 16, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
-      { type: 'swirl', right: '16%', top: '48%', size: 50, color: '#818cf8', delay: 1150, anim: 'float3' },
-      { type: 'dot', right: '28%', top: '35%', size: 8, delay: 1100, anim: 'pulse' },
-      { type: 'dot', right: '20%', top: '72%', size: 6, delay: 1350, anim: 'float2' },
+      { type: 'wreath', text: '족보문제\n공개', right: '16%', top: '8%', size: 160, color: '#818cf8', delay: 1000, anim: 'float1' },
+      // 월계관 위/옆
+      { type: 'diamond', right: '26%', top: '5%', size: 18, color: '#818cf8', delay: 1100, anim: 'float2' },
+      { type: 'dot', right: '22%', top: '18%', size: 8, delay: 1150, anim: 'pulse' },
+      // 사람-월계관 사이 중간
+      { type: 'swirl', right: '24%', top: '38%', size: 34, color: '#818cf8', delay: 1250, anim: 'float3' },
+      { type: 'sparkle', right: '19%', top: '55%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
+      { type: 'ring', right: '27%', top: '68%', size: 24, color: '#818cf8', delay: 1350, anim: 'float1' },
+      // 하단
+      { type: 'sparkle', right: '21%', top: '82%', size: 14, color: '#a5b4fc', delay: 1400, anim: 'shimmer' },
+      { type: 'diamond', right: '28%', top: '90%', size: 10, color: '#818cf8', delay: 1450, anim: 'float2' },
     ],
   },
   {
     badge: 'CAYSON',
-    title: '전기·소방 자격증\n한 곳에서',
+    title: '전기·소방·기계\n자격증이 쉬워지는 곳',
     description: '기능사부터 기사까지\n케이슨에서 한 번에 준비하세요',
     bgColor: '#2f2a29',
     accentColor: '#fbbf24',
@@ -193,11 +263,17 @@ const slides: Slide[] = [
     personAlt: 'CAYSON',
     floats: [
       { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', text: '98%\n합격', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
-      { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
-      { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
-      { type: 'dot', right: '18%', top: '70%', size: 6, delay: 1300, anim: 'float1' },
+      { type: 'wreath', text: '한 번에\n합격', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      // 월계관 위/옆
+      { type: 'ring', right: '27%', top: '4%', size: 26, color: '#fbbf24', delay: 1200, anim: 'float1' },
+      { type: 'sparkle', right: '22%', top: '16%', size: 16, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
+      // 사람-월계관 사이 중간
+      { type: 'diamond', right: '20%', top: '40%', size: 16, color: '#f59e0b', delay: 1300, anim: 'float3' },
+      { type: 'sparkle', right: '26%', top: '55%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'swirl', right: '19%', top: '70%', size: 28, color: '#f59e0b', delay: 1400, anim: 'float2' },
+      // 하단
+      { type: 'dot', right: '24%', top: '85%', size: 8, delay: 1420, anim: 'pulse' },
+      { type: 'ring', right: '28%', top: '92%', size: 20, color: '#f59e0b', delay: 1450, anim: 'float3' },
     ],
   },
   {
@@ -209,33 +285,31 @@ const slides: Slide[] = [
     personImage: '/hero/woman2.png',
     personAlt: '소방설비산업기사 강사',
     floats: [
-      { type: 'pill', text: 'NCS', right: '20%', top: '8%', color: '#f43f5e', delay: 1000, anim: 'float1' },
-      { type: 'pill', text: '과정평가형', right: '22%', top: '58%', color: '#e11d48', delay: 1250, anim: 'float2' },
-      { type: 'sparkle', right: '26%', top: '25%', size: 20, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'sparkle', right: '28%', top: '72%', size: 14, color: '#fb7185', delay: 1400, anim: 'shimmer' },
-      { type: 'dot', right: '24%', top: '42%', size: 8, delay: 1150, anim: 'pulse' },
-      { type: 'diamond', right: '18%', top: '65%', size: 16, color: '#fb7185', delay: 1300, anim: 'float3' },
+      { type: 'pill', text: 'NCS', right: '20%', top: '35%', color: '#f43f5e', delay: 1000, anim: 'float1' },
+      // 월계관 아래/옆
+      { type: 'sparkle', right: '25%', top: '8%', size: 18, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'dot', right: '28%', top: '20%', size: 8, delay: 1150, anim: 'pulse' },
+      // 사람-월계관 사이 중간
+      { type: 'ring', right: '22%', top: '50%', size: 26, color: '#fb7185', delay: 1250, anim: 'float3' },
+      { type: 'diamond', right: '27%', top: '62%', size: 14, color: '#fb7185', delay: 1300, anim: 'float1' },
+      { type: 'sparkle', right: '19%', top: '75%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      // 하단
+      { type: 'swirl', right: '24%', top: '85%', size: 28, color: '#fb7185', delay: 1400, anim: 'float2' },
+      { type: 'dot', right: '20%', top: '92%', size: 6, delay: 1450, anim: 'float1' },
     ],
   },
   {
     badge: 'PREMIUM',
     title: '자격증 취득부터 취업까지\nCAYSON 프리미엄',
-    description: '프리미엄 등급만의 특별한 혜택\n합격률을 높이는 최고의 학습 경험',
+    description: '프리미엄 등급만의 특별한 혜택\n자격증 취득 후 바로 취업까지 원스톱',
     bgColor: '#1b1514',
     accentColor: '#fbbf24',
     personImage: '',
     personAlt: '',
-    ctaText: '프리미엄 알아보기',
+    ctaText: '프리미엄 가입하기',
     ctaHref: '#premium',
     floats: [
       { type: 'dualWreath', right: '2%', top: '10%', size: 150, delay: 0, anim: 'float1' },
-      { type: 'sparkle', right: '18%', top: '5%', size: 28, color: '#fbbf24', delay: 1000, anim: 'shimmer' },
-      { type: 'sparkle', right: '12%', top: '52%', size: 20, color: '#f59e0b', delay: 1200, anim: 'shimmer' },
-      { type: 'sparkle', right: '24%', top: '72%', size: 14, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
-      { type: 'diamond', right: '8%', top: '38%', size: 22, color: '#fbbf24', delay: 1100, anim: 'float2' },
-      { type: 'ring', right: '20%', top: '48%', size: 40, color: '#f59e0b', delay: 1250, anim: 'float3' },
-      { type: 'dot', right: '26%', top: '22%', size: 10, delay: 1050, anim: 'pulse' },
-      { type: 'dot', right: '16%', top: '78%', size: 7, delay: 1350, anim: 'pulse' },
     ],
   },
 ]
@@ -312,6 +386,20 @@ export default function HeroSection() {
       )}
       <div className="absolute inset-0 z-0 transition-opacity" style={{ backgroundColor: slide.bgColor, opacity: 1, transitionDuration: `${FADE_MS}ms` }} />
 
+      {/* CAYSON 워터마크 (45도 사선, 배경보다 엷은 색) */}
+      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden flex items-center justify-end">
+        <span
+          className="font-black text-[180px] sm:text-[280px] lg:text-[360px] select-none whitespace-nowrap mr-[-5%]"
+          style={{
+            color: `${slide.accentColor}12`,
+            transform: 'rotate(-45deg)',
+            letterSpacing: '0.05em',
+          }}
+        >
+          CAYSON
+        </span>
+      </div>
+
       {/* 배경 글로우 */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         <div className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000" style={{ background: `radial-gradient(circle, ${slide.accentColor}15, transparent 70%)` }} />
@@ -378,7 +466,7 @@ export default function HeroSection() {
                       {/* 필 뱃지 */}
                       {f.type === 'pill' && (
                         <div
-                          className="relative px-5 py-2 rounded-full text-[12px] font-bold text-white shadow-lg whitespace-nowrap overflow-hidden"
+                          className="relative px-7 py-3 rounded-full text-base font-bold text-white shadow-lg whitespace-nowrap overflow-hidden"
                           style={{ backgroundColor: f.color || slide.accentColor }}
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent rounded-full" />
