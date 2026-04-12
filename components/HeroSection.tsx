@@ -94,17 +94,10 @@ function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text
   const innerSize = size * 0.48
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(251,191,36,0.3) 0%, transparent 65%)',
-          animation: 'wreathGlow 3s ease-in-out infinite',
-        }}
-      />
       <img
         src="/hero/mooncrown/image.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_16px_rgba(251,191,36,0.5)]"
+        className="absolute inset-0 w-full h-full object-contain"
         style={{ animation: 'wreathBreath 4s ease-in-out infinite' }}
       />
       {text && (
@@ -114,7 +107,7 @@ function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text
             style={{
               width: innerSize,
               fontSize: size * 0.14,
-              textShadow: '0 2px 12px rgba(0,0,0,0.8)',
+              textShadow: '0 1px 4px rgba(0,0,0,0.5)',
             }}
           >
             {text}
