@@ -424,8 +424,9 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 leading-[1.8] tracking-normal whitespace-pre-line transition-all ease-out"
+              className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 tracking-normal whitespace-pre-line transition-all ease-out"
               style={{
+                lineHeight: 1.8,
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
                 transitionDuration: '667ms',
