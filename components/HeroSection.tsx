@@ -115,6 +115,23 @@ function LaurelWreath({ color = '#fbbf24', size = 80 }: { color?: string; size?:
 /* ── 슬라이드별 고유 장식 데이터 ── */
 const slides: Slide[] = [
   {
+    badge: 'CAYSON',
+    title: '전기·소방 자격증\n한 곳에서',
+    description: '기능사부터 기사까지\n케이슨에서 한 번에 준비하세요',
+    bgColor: '#2f2a29',
+    accentColor: '#fbbf24',
+    personImage: '/hero/man2.png',
+    personAlt: 'CAYSON',
+    floats: [
+      { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
+      { type: 'wreath', right: '20%', top: '15%', size: 70, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
+      { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
+      { type: 'dot', right: '18%', top: '70%', size: 6, delay: 1300, anim: 'float1' },
+    ],
+  },
+  {
     badge: '인기',
     title: '전기기능사',
     description: '자격증 취득의 첫 걸음\n기초부터 탄탄하게 합격까지',
@@ -267,7 +284,7 @@ export default function HeroSection() {
 
       {/* 메인 콘텐츠 */}
       <div className="relative z-[2] max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
-        <div className="relative flex items-start sm:items-end min-h-[250px] sm:min-h-[360px] lg:min-h-[420px]">
+        <div className="relative flex items-start sm:items-end h-[250px] sm:h-[360px] lg:h-[420px]">
 
           {/* ===== 장식 레이어 (말풍선 제외: 사람 뒤 z-0) ===== */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
