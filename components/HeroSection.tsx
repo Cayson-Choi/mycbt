@@ -310,7 +310,7 @@ const slides: Slide[] = [
     ctaText: '프리미엄 가입하기',
     ctaHref: '#premium',
     floats: [
-      { type: 'dualWreath', right: '2%', top: '10%', size: 150, delay: 0, anim: 'float1' },
+      { type: 'wreath', text: '93%\n취업성공', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
     ],
   },
 ]
