@@ -191,11 +191,20 @@ function DualWreath({ size = 160 }: { size?: number }) {
   ]
   return (
     <>
-      {/* 모바일: 취업 연계 월계관 1개만 */}
-      <div className="sm:hidden">
-        <WreathWithStar size={s} text={'취업\n연계'} delay={0.4} />
+      {/* 모바일: 5개 작게 (3+2) */}
+      <div className="flex flex-col items-center gap-0 sm:hidden">
+        <div className="flex items-center gap-0">
+          {items.slice(0, 3).map((item, i) => (
+            <WreathWithStar key={i} size={55} text={item.text} delay={item.delay} />
+          ))}
+        </div>
+        <div className="flex items-center gap-0 -mt-1">
+          {items.slice(3).map((item, i) => (
+            <WreathWithStar key={i} size={55} text={item.text} delay={item.delay} />
+          ))}
+        </div>
       </div>
-      {/* PC: 5개 (3+2) */}
+      {/* PC: 5개 크게 (3+2) */}
       <div className="hidden sm:flex flex-col items-center gap-0">
         <div className="flex items-center gap-0">
           {items.slice(0, 3).map((item, i) => (
@@ -265,8 +274,7 @@ const slides: Slide[] = [
     personImage: '/hero/man2.png',
     personAlt: 'CAYSON',
     floats: [
-      { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', text: '한 번에\n합격', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'wreath', text: '한 번에\n합격', right: '17%', top: '-3%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
       // 월계관 왼쪽 (right 32%+)
       { type: 'ring', right: '34%', top: '6%', size: 26, color: '#fbbf24', delay: 1200, anim: 'float1' },
       { type: 'sparkle', right: '33%', top: '22%', size: 16, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
@@ -310,7 +318,8 @@ const slides: Slide[] = [
     ctaText: '프리미엄 가입하기',
     ctaHref: '#premium',
     floats: [
-      { type: 'dualWreath', right: '2%', top: '10%', size: 150, delay: 0, anim: 'float1' },
+      { type: 'wreath', text: '자격증\n취득', right: '18%', top: '2%', size: 180, color: '#fbbf24', delay: 400, anim: 'float1' },
+      { type: 'wreath', text: '취업\n연계', right: '-1%', top: '2%', size: 180, color: '#fbbf24', delay: 1200, anim: 'float2' },
     ],
   },
 ]
@@ -412,14 +421,14 @@ export default function HeroSection() {
         <div className="relative flex items-start sm:items-end h-[250px] sm:h-[360px] lg:h-[420px]">
 
           {/* ===== 장식 레이어 (말풍선 제외: 사람 뒤 z-0) ===== */}
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden hidden sm:block">
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
             {slide.floats.filter(f => f.type !== 'bubble').map((f, fi) => {
               const isActive = textVisible
               const ac = animConfig[f.anim]
               return (
                 <div
                   key={`deco-${current}-${fi}`}
-                  className="absolute"
+                  className={`absolute ${f.type === 'wreath' ? 'scale-[0.5] sm:scale-100 translate-x-[3px] translate-y-[13px] sm:translate-x-0 sm:translate-y-0' : f.type === 'dualWreath' ? '' : 'scale-[0.6] sm:scale-100 origin-center hidden sm:block'}`}
                   style={{ right: f.right, top: f.top }}
                 >
                   {/* 등장 애니메이션 (외부) */}
@@ -562,16 +571,11 @@ export default function HeroSection() {
               </a>
             </div>
 
-            {/* 모바일 전용: 프리미엄 슬라이드 월계관 */}
-            {slide.floats.some(f => f.type === 'dualWreath') && (
-              <div className="sm:hidden mt-4">
-                <WreathWithStar size={100} text={'취업\n연계'} delay={0.4} />
-              </div>
-            )}
+            {/* 모바일 전용: 프리미엄 슬라이드 — 제거 (사람 이미지 영역에서 표시) */}
           </div>
 
           {/* ===== 말풍선 레이어 (사람 뒤 — DOM 순서로 사람보다 먼저 렌더) ===== */}
-          <div className="absolute inset-0 z-[3] pointer-events-none hidden sm:block">
+          <div className="absolute inset-0 z-[3] pointer-events-none">
             {slide.floats.filter(f => f.type === 'bubble').map((f, fi) => {
               const isActive = textVisible
               const ac = animConfig[f.anim]
@@ -609,7 +613,7 @@ export default function HeroSection() {
             })}
           </div>
 
-          {/* 사람 이미지 (말풍선 위) */}
+          {/* 사람 이미지 또는 프리미엄 비주얼 */}
           <div className="relative flex-shrink-0 w-[145px] sm:w-[180px] lg:w-[220px] xl:w-[260px] self-stretch z-[5]">
             {slides.map((s, i) => {
               const scale = s.imageScale || 1
@@ -625,7 +629,7 @@ export default function HeroSection() {
                     transitionDuration: '667ms',
                     transitionDelay: isActive && textVisible ? '500ms' : '0ms' }}
                 >
-                  {s.personImage && (
+                  {s.personImage ? (
                     <Image
                       src={s.personImage}
                       alt={s.personAlt}
@@ -634,11 +638,12 @@ export default function HeroSection() {
                       sizes="(max-width: 640px) 120px, (max-width: 1024px) 180px, 260px"
                       priority={i <= 1}
                     />
-                  )}
+                  ) : null}
                 </div>
               )
             })}
           </div>
+
         </div>
       </div>
 
