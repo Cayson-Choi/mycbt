@@ -419,7 +419,7 @@ export default function HeroSection() {
           {/* 텍스트 */}
           <div className="flex-1 z-10 pb-12 sm:pb-24 lg:pb-28 pt-7 sm:pt-6 lg:pt-8">
             <div
-              className="inline-block px-3 py-1 rounded text-[11px] font-bold text-white mb-4 transition-all ease-out"
+              className="inline-block px-4 py-1.5 rounded text-xs font-bold text-white mb-4 transition-all ease-out"
               style={{
                 backgroundColor: slide.accentColor,
                 opacity: textVisible ? 1 : 0,
@@ -431,7 +431,7 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-xl sm:text-2xl lg:text-[32px] font-extrabold text-white mb-2 sm:mb-3 leading-[1.25] tracking-normal whitespace-pre-line transition-all ease-out"
+              className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 leading-[1.5] tracking-normal whitespace-pre-line transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
@@ -442,7 +442,7 @@ export default function HeroSection() {
             </h2>
 
             <p
-              className="text-[11px] sm:text-[13px] lg:text-sm text-white/45 leading-relaxed whitespace-pre-line max-w-md transition-all ease-out"
+              className="text-[11px] sm:text-[13px] lg:text-sm text-white leading-relaxed whitespace-pre-line max-w-md transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
