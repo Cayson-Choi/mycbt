@@ -91,7 +91,7 @@ function Diamond({ color, size = 20 }: { color: string; size?: number }) {
 
 /* ── 월계관 단일 (PNG 이미지 + 내부 텍스트) ── */
 function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text?: string }) {
-  const innerSize = size * 0.48
+  const innerSize = size * 0.55
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <img
@@ -106,7 +106,7 @@ function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text
             className="text-center font-black leading-tight text-white whitespace-pre-line"
             style={{
               width: innerSize,
-              fontSize: size * 0.14,
+              fontSize: size * 0.11,
               textShadow: '0 1px 4px rgba(0,0,0,0.5)',
             }}
           >
