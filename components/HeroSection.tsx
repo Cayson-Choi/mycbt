@@ -562,12 +562,6 @@ export default function HeroSection() {
               </a>
             </div>
 
-            {/* 모바일 전용: 프리미엄 슬라이드 월계관 */}
-            {slide.floats.some(f => f.type === 'dualWreath') && (
-              <div className="sm:hidden mt-4">
-                <WreathWithStar size={100} text={'취업\n연계'} delay={0.4} />
-              </div>
-            )}
           </div>
 
           {/* ===== 말풍선 레이어 (사람 뒤 — DOM 순서로 사람보다 먼저 렌더) ===== */}
