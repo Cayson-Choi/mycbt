@@ -7,6 +7,7 @@ import Image from 'next/image'
 interface FloatingEl {
   type: 'block' | 'bubble' | 'sparkle' | 'dot' | 'pill' | 'ring' | 'swirl' | 'diamond' | 'wreath'
   text?: string
+  texts?: string[]
   letter?: string
   right: string
   top: string
@@ -89,9 +90,24 @@ function Diamond({ color, size = 20 }: { color: string; size?: number }) {
   )
 }
 
-/* ── 월계관 (PNG 이미지 + 내부 텍스트 + 글로우 애니메이션) ── */
-function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text?: string }) {
-  // 텍스트가 월계관 안쪽에 들어오도록 내부 영역은 전체의 50% 정도로 제한
+/* ── 월계관 (PNG 이미지 + 텍스트 순차 교체 애니메이션) ── */
+function LaurelWreath({ size = 80, texts }: { color?: string; size?: number; text?: string; texts?: string[] }) {
+  const [textIdx, setTextIdx] = useState(0)
+  const [visible, setVisible] = useState(true)
+  const items = texts || []
+
+  useEffect(() => {
+    if (items.length <= 1) return
+    const interval = setInterval(() => {
+      setVisible(false)
+      setTimeout(() => {
+        setTextIdx((prev) => (prev + 1) % items.length)
+        setVisible(true)
+      }, 400)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [items.length])
+
   const innerSize = size * 0.48
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -103,26 +119,27 @@ function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text
           animation: 'wreathGlow 3s ease-in-out infinite',
         }}
       />
-      {/* 월계관 이미지 (숨쉬기 스케일 애니메이션) */}
+      {/* 월계관 이미지 */}
       <img
         src="/hero/mooncrown/image.png"
         alt=""
         className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_16px_rgba(251,191,36,0.5)]"
         style={{ animation: 'wreathBreath 4s ease-in-out infinite' }}
       />
-      {/* 내부 텍스트 — 월계관 안쪽 영역에만 배치 */}
-      {text && (
+      {/* 내부 텍스트 — 순차 교체 */}
+      {items.length > 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="text-center font-black leading-tight text-white whitespace-pre-line"
+            className="text-center font-black leading-tight text-white whitespace-pre-line transition-all duration-400"
             style={{
               width: innerSize,
-              fontSize: size * 0.13,
-              textShadow: '0 2px 10px rgba(0,0,0,0.7)',
-              animation: 'wreathTextPulse 3s ease-in-out infinite',
+              fontSize: size * 0.14,
+              textShadow: '0 2px 12px rgba(0,0,0,0.8)',
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'scale(1)' : 'scale(0.8)',
             }}
           >
-            {text}
+            {items[textIdx]}
           </span>
         </div>
       )}
@@ -142,7 +159,7 @@ const slides: Slide[] = [
     personAlt: 'CAYSON',
     floats: [
       { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', text: '합격의\n시작', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
@@ -158,7 +175,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
     floats: [
-      { type: 'wreath', text: '3,600+\n문제', right: '14%', top: '6%', size: 170, color: '#fbbf24', delay: 1000, anim: 'float1' },
+      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '14%', top: '6%', size: 170, color: '#fbbf24', delay: 1000, anim: 'float1' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '62%', size: 16, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
       { type: 'swirl', right: '16%', top: '48%', size: 50, color: '#818cf8', delay: 1150, anim: 'float3' },
@@ -175,7 +192,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman3.png',
     personAlt: '전기기사 강사',
     floats: [
-      { type: 'wreath', text: '역대기출\n총망라', right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
       { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
       { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
@@ -211,7 +228,7 @@ const slides: Slide[] = [
     ctaText: '프리미엄 알아보기',
     ctaHref: '#premium',
     floats: [
-      { type: 'wreath', text: 'PREMIUM\n합격 보장', right: '2%', top: '5%', size: 200, color: '#fbbf24', delay: 800, anim: 'float1' },
+      { type: 'wreath', texts: ['자격증\n취득', '취업\n연계'], right: '2%', top: '5%', size: 200, color: '#fbbf24', delay: 800, anim: 'float1' },
       { type: 'sparkle', right: '18%', top: '5%', size: 28, color: '#fbbf24', delay: 1000, anim: 'shimmer' },
       { type: 'sparkle', right: '12%', top: '52%', size: 20, color: '#f59e0b', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '24%', top: '72%', size: 14, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
@@ -387,7 +404,7 @@ export default function HeroSection() {
                       {f.type === 'diamond' && <Diamond color={f.color || slide.accentColor} size={f.size || 20} />}
 
                       {/* 월계관 */}
-                      {f.type === 'wreath' && <LaurelWreath color={f.color || '#fbbf24'} size={f.size || 80} text={f.text} />}
+                      {f.type === 'wreath' && <LaurelWreath color={f.color || '#fbbf24'} size={f.size || 80} texts={f.texts || (f.text ? [f.text] : [])} />}
                     </div>
                   </div>
                 </div>
