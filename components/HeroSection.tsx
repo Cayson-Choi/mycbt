@@ -91,31 +91,34 @@ function Diamond({ color, size = 20 }: { color: string; size?: number }) {
 
 /* ── 월계관 (PNG 이미지 + 내부 텍스트 + 글로우 애니메이션) ── */
 function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text?: string }) {
+  // 텍스트가 월계관 안쪽에 들어오도록 내부 영역은 전체의 50% 정도로 제한
+  const innerSize = size * 0.48
   return (
     <div className="relative" style={{ width: size, height: size }}>
       {/* 글로우 효과 */}
       <div
         className="absolute inset-0 rounded-full"
         style={{
-          background: 'radial-gradient(circle, rgba(251,191,36,0.35) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(251,191,36,0.3) 0%, transparent 65%)',
           animation: 'wreathGlow 3s ease-in-out infinite',
         }}
       />
-      {/* 월계관 이미지 (회전 애니메이션) */}
+      {/* 월계관 이미지 (숨쉬기 스케일 애니메이션) */}
       <img
         src="/hero/mooncrown/image.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_12px_rgba(251,191,36,0.5)]"
-        style={{ animation: 'wreathSpin 20s linear infinite' }}
+        className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_16px_rgba(251,191,36,0.5)]"
+        style={{ animation: 'wreathBreath 4s ease-in-out infinite' }}
       />
-      {/* 내부 텍스트 */}
+      {/* 내부 텍스트 — 월계관 안쪽 영역에만 배치 */}
       {text && (
         <div className="absolute inset-0 flex items-center justify-center">
           <span
             className="text-center font-black leading-tight text-white whitespace-pre-line"
             style={{
-              fontSize: size * 0.17,
-              textShadow: '0 1px 8px rgba(0,0,0,0.6)',
+              width: innerSize,
+              fontSize: size * 0.13,
+              textShadow: '0 2px 10px rgba(0,0,0,0.7)',
               animation: 'wreathTextPulse 3s ease-in-out infinite',
             }}
           >
@@ -139,7 +142,7 @@ const slides: Slide[] = [
     personAlt: 'CAYSON',
     floats: [
       { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', text: '합격의\n시작', right: '20%', top: '15%', size: 120, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'wreath', text: '합격의\n시작', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
@@ -155,7 +158,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
     floats: [
-      { type: 'wreath', text: '3,600+\n문제', right: '18%', top: '12%', size: 130, color: '#fbbf24', delay: 1000, anim: 'float1' },
+      { type: 'wreath', text: '3,600+\n문제', right: '14%', top: '6%', size: 170, color: '#fbbf24', delay: 1000, anim: 'float1' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '62%', size: 16, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
       { type: 'swirl', right: '16%', top: '48%', size: 50, color: '#818cf8', delay: 1150, anim: 'float3' },
@@ -172,7 +175,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman3.png',
     personAlt: '전기기사 강사',
     floats: [
-      { type: 'wreath', text: '역대기출\n총망라', right: '20%', top: '18%', size: 120, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'wreath', text: '역대기출\n총망라', right: '16%', top: '10%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
       { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
       { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
