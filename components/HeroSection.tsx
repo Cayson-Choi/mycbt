@@ -211,7 +211,7 @@ function DualWreath({ size = 160 }: { size?: number }) {
 const slides: Slide[] = [
   {
     badge: '인기',
-    title: '전문가 검증 기출문제\n전기기사 합격의 지름길',
+    title: '전문가 검증 기출문제\n전기기사 합격 지름길',
     description: '역대 기출 총망라 · AI 오답분석\n약점 보완부터 합격까지 한 번에',
     bgColor: '#e14c32',
     accentColor: '#fb923c',
@@ -278,7 +278,7 @@ const slides: Slide[] = [
   },
   {
     badge: '과정평가형',
-    title: 'NCS 기반 과정평가형\n소방설비산업기사(전기)',
+    title: 'NCS 과정평가형\n소방설비산업기사',
     description: '과정평가형 완벽 대비\n현장 중심 실무 문제로 합격까지',
     bgColor: '#fe87ca',
     accentColor: '#f43f5e',
@@ -519,7 +519,7 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-lg sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 tracking-wider whitespace-pre-line transition-all ease-out"
+              className="text-base sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 tracking-normal sm:tracking-wider whitespace-pre-line transition-all ease-out"
               style={{
                 lineHeight: 1.1,
                 opacity: textVisible ? 1 : 0,
