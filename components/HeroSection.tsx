@@ -312,9 +312,22 @@ export default function HeroSection() {
       )}
       <div className="absolute inset-0 z-0 transition-opacity" style={{ backgroundColor: slide.bgColor, opacity: 1, transitionDuration: `${FADE_MS}ms` }} />
 
+      {/* 기하학 배경 패턴 (큰 원/호) */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
+        {/* 기존 글로우 */}
         <div className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000" style={{ background: `radial-gradient(circle, ${slide.accentColor}15, transparent 70%)` }} />
         <div className="absolute left-1/4 bottom-0 w-[400px] h-[400px] rounded-full transition-all duration-1000" style={{ background: `radial-gradient(circle, ${slide.accentColor}08, transparent 70%)` }} />
+        {/* 큰 원/호 문양 — accentColor의 10~15% 투명도 */}
+        <div className="absolute rounded-full border-[3px] transition-all duration-1000"
+          style={{ width: 600, height: 600, right: -120, top: -180, borderColor: `${slide.accentColor}18` }} />
+        <div className="absolute rounded-full border-[2px] transition-all duration-1000"
+          style={{ width: 400, height: 400, left: -80, bottom: -120, borderColor: `${slide.accentColor}15` }} />
+        <div className="absolute rounded-full transition-all duration-1000"
+          style={{ width: 500, height: 500, right: '15%', bottom: -280, background: `${slide.accentColor}08` }} />
+        <div className="absolute rounded-full border-[2px] transition-all duration-1000"
+          style={{ width: 300, height: 300, left: '20%', top: -100, borderColor: `${slide.accentColor}12` }} />
+        <div className="absolute rounded-full transition-all duration-1000"
+          style={{ width: 200, height: 200, right: '35%', top: '10%', background: `${slide.accentColor}06` }} />
       </div>
 
       {/* 메인 콘텐츠 */}
