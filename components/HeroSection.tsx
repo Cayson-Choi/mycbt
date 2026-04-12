@@ -28,6 +28,7 @@ interface Slide {
   imageScale?: number
   ctaText?: string
   ctaHref?: string
+  bgPattern?: 'circles' | 'diamonds' | 'waves' | 'diagonal' | 'hexagons'
   floats: FloatingEl[]
 }
 
@@ -155,6 +156,7 @@ const slides: Slide[] = [
     description: '기능사부터 기사까지\n케이슨에서 한 번에 준비하세요',
     bgColor: '#2f2a29',
     accentColor: '#fbbf24',
+    bgPattern: 'circles',
     personImage: '/hero/man2.png',
     personAlt: 'CAYSON',
     floats: [
@@ -168,10 +170,11 @@ const slides: Slide[] = [
   },
   {
     badge: '인기',
-    title: '전기기능사',
-    description: '자격증 취득의 첫 걸음\n기초부터 탄탄하게 합격까지',
+    title: '합격으로 증명하는\n전기기능사 기출 CBT',
+    description: '역대 기출문제 3,600+ 수록\n기초부터 탄탄하게 합격까지',
     bgColor: '#1d2088',
     accentColor: '#818cf8',
+    bgPattern: 'diamonds',
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
     floats: [
@@ -185,10 +188,11 @@ const slides: Slide[] = [
   },
   {
     badge: '인기',
-    title: '전기기사',
-    description: '전문가 검증 역대 기출문제 총망라\n합격까지 한 번에',
+    title: '전문가 검증 기출문제\n전기기사 합격의 지름길',
+    description: '역대 기출 총망라 · 실시간 랭킹\n오답노트로 약점까지 완벽 보완',
     bgColor: '#e14c32',
     accentColor: '#fb923c',
+    bgPattern: 'waves',
     personImage: '/hero/woman3.png',
     personAlt: '전기기사 강사',
     floats: [
@@ -202,10 +206,11 @@ const slides: Slide[] = [
   },
   {
     badge: '과정평가형',
-    title: '소방설비산업기사',
-    description: '과정평가형(전기) 완벽 대비\nNCS 기반 현장 중심 실무 역량 평가',
+    title: 'NCS 기반 실무 역량 평가\n소방설비산업기사(전기)',
+    description: '과정평가형 완벽 대비\n현장 중심 실무 문제로 합격까지',
     bgColor: '#fe87ca',
     accentColor: '#f43f5e',
+    bgPattern: 'diagonal',
     personImage: '/hero/woman2.png',
     personAlt: '소방설비산업기사 강사',
     floats: [
@@ -219,10 +224,11 @@ const slides: Slide[] = [
   },
   {
     badge: 'PREMIUM',
-    title: 'CAYSON\n프리미엄',
+    title: '자격증 취득부터 취업까지\nCAYSON 프리미엄',
     description: '프리미엄 등급만의 특별한 혜택\n합격률을 높이는 최고의 학습 경험',
     bgColor: '#1b1514',
     accentColor: '#fbbf24',
+    bgPattern: 'hexagons',
     personImage: '',
     personAlt: '',
     ctaText: '프리미엄 알아보기',
@@ -312,22 +318,64 @@ export default function HeroSection() {
       )}
       <div className="absolute inset-0 z-0 transition-opacity" style={{ backgroundColor: slide.bgColor, opacity: 1, transitionDuration: `${FADE_MS}ms` }} />
 
-      {/* 기하학 배경 패턴 (큰 원/호) */}
+      {/* 슬라이드별 고유 배경 문양 */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-        {/* 기존 글로우 */}
+        {/* 글로우 */}
         <div className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full transition-all duration-1000" style={{ background: `radial-gradient(circle, ${slide.accentColor}15, transparent 70%)` }} />
         <div className="absolute left-1/4 bottom-0 w-[400px] h-[400px] rounded-full transition-all duration-1000" style={{ background: `radial-gradient(circle, ${slide.accentColor}08, transparent 70%)` }} />
-        {/* 큰 원/호 문양 — accentColor의 10~15% 투명도 */}
-        <div className="absolute rounded-full border-[3px] transition-all duration-1000"
-          style={{ width: 600, height: 600, right: -120, top: -180, borderColor: `${slide.accentColor}18` }} />
-        <div className="absolute rounded-full border-[2px] transition-all duration-1000"
-          style={{ width: 400, height: 400, left: -80, bottom: -120, borderColor: `${slide.accentColor}15` }} />
-        <div className="absolute rounded-full transition-all duration-1000"
-          style={{ width: 500, height: 500, right: '15%', bottom: -280, background: `${slide.accentColor}08` }} />
-        <div className="absolute rounded-full border-[2px] transition-all duration-1000"
-          style={{ width: 300, height: 300, left: '20%', top: -100, borderColor: `${slide.accentColor}12` }} />
-        <div className="absolute rounded-full transition-all duration-1000"
-          style={{ width: 200, height: 200, right: '35%', top: '10%', background: `${slide.accentColor}06` }} />
+
+        {/* 패턴: circles — 큰 원호 */}
+        {slide.bgPattern === 'circles' && <>
+          <div className="absolute rounded-full border-[3px]" style={{ width: 550, height: 550, right: -100, top: -200, borderColor: `${slide.accentColor}15` }} />
+          <div className="absolute rounded-full border-[2px]" style={{ width: 350, height: 350, left: -60, bottom: -100, borderColor: `${slide.accentColor}12` }} />
+          <div className="absolute rounded-full" style={{ width: 450, height: 450, right: '20%', bottom: -250, background: `${slide.accentColor}06` }} />
+          <div className="absolute rounded-full border-[2px]" style={{ width: 250, height: 250, left: '30%', top: -80, borderColor: `${slide.accentColor}10` }} />
+        </>}
+
+        {/* 패턴: diamonds — 마름모 격자 */}
+        {slide.bgPattern === 'diamonds' && <>
+          <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.06 }}>
+            <pattern id="diamondPat" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+              <rect x="30" y="0" width="21" height="21" transform="rotate(45 30 10)" fill={slide.accentColor} />
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#diamondPat)" />
+          </svg>
+          <div className="absolute rounded-full border-[2px]" style={{ width: 400, height: 400, right: -80, top: -120, borderColor: `${slide.accentColor}10` }} />
+        </>}
+
+        {/* 패턴: waves — 물결 곡선 */}
+        {slide.bgPattern === 'waves' && <>
+          <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.07 }}>
+            <pattern id="wavePat" x="0" y="0" width="200" height="40" patternUnits="userSpaceOnUse">
+              <path d="M0 20 Q50 0 100 20 Q150 40 200 20" fill="none" stroke={slide.accentColor} strokeWidth="2" />
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#wavePat)" />
+          </svg>
+          <div className="absolute rounded-full" style={{ width: 500, height: 500, left: -150, top: -200, background: `${slide.accentColor}06` }} />
+        </>}
+
+        {/* 패턴: diagonal — 대각선 줄무늬 */}
+        {slide.bgPattern === 'diagonal' && <>
+          <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.06 }}>
+            <pattern id="diagPat" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+              <path d="M0 30 L30 0" fill="none" stroke={slide.accentColor} strokeWidth="1.5" />
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#diagPat)" />
+          </svg>
+          <div className="absolute rounded-full border-[3px]" style={{ width: 500, height: 500, right: -100, bottom: -200, borderColor: `${slide.accentColor}12` }} />
+        </>}
+
+        {/* 패턴: hexagons — 육각형 */}
+        {slide.bgPattern === 'hexagons' && <>
+          <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.05 }}>
+            <pattern id="hexPat" x="0" y="0" width="56" height="100" patternUnits="userSpaceOnUse">
+              <polygon points="28,2 52,18 52,50 28,66 4,50 4,18" fill="none" stroke={slide.accentColor} strokeWidth="1.5" />
+              <polygon points="28,34 52,50 52,82 28,98 4,82 4,50" fill="none" stroke={slide.accentColor} strokeWidth="1" />
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#hexPat)" />
+          </svg>
+          <div className="absolute rounded-full" style={{ width: 600, height: 600, right: -150, top: -250, background: `${slide.accentColor}06` }} />
+        </>}
       </div>
 
       {/* 메인 콘텐츠 */}
@@ -443,7 +491,7 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-2xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-2 sm:mb-4 leading-[1.1] tracking-tight whitespace-pre-line transition-all ease-out"
+              className="text-xl sm:text-2xl lg:text-[32px] font-extrabold text-white mb-2 sm:mb-3 leading-[1.25] tracking-normal whitespace-pre-line transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
@@ -454,7 +502,7 @@ export default function HeroSection() {
             </h2>
 
             <p
-              className="text-[10.5px] sm:text-base lg:text-lg text-white/50 leading-relaxed whitespace-pre-line max-w-xl transition-all ease-out"
+              className="text-[11px] sm:text-[13px] lg:text-sm text-white/45 leading-relaxed whitespace-pre-line max-w-md transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
