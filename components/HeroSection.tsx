@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 /* ── 타입 ── */
 interface FloatingEl {
-  type: 'block' | 'bubble' | 'sparkle' | 'dot' | 'pill' | 'ring' | 'swirl' | 'diamond'
+  type: 'block' | 'bubble' | 'sparkle' | 'dot' | 'pill' | 'ring' | 'swirl' | 'diamond' | 'wreath'
   text?: string
   letter?: string
   right: string
@@ -26,6 +26,8 @@ interface Slide {
   personImage: string
   personAlt: string
   imageScale?: number
+  ctaText?: string
+  ctaHref?: string
   floats: FloatingEl[]
 }
 
@@ -87,125 +89,101 @@ function Diamond({ color, size = 20 }: { color: string; size?: number }) {
   )
 }
 
+/* ── 월계관 SVG ── */
+function LaurelWreath({ color = '#fbbf24', size = 80 }: { color?: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
+      {/* Left branch */}
+      <ellipse cx="40" cy="80" rx="8" ry="15" transform="rotate(25 40 80)" fill={color} opacity="0.9" />
+      <ellipse cx="33" cy="64" rx="7" ry="13" transform="rotate(15 33 64)" fill={color} opacity="0.8" />
+      <ellipse cx="30" cy="47" rx="7" ry="12" transform="rotate(5 30 47)" fill={color} opacity="0.7" />
+      <ellipse cx="33" cy="31" rx="6" ry="11" transform="rotate(-10 33 31)" fill={color} opacity="0.6" />
+      <ellipse cx="40" cy="18" rx="6" ry="10" transform="rotate(-25 40 18)" fill={color} opacity="0.5" />
+      {/* Right branch */}
+      <ellipse cx="80" cy="80" rx="8" ry="15" transform="rotate(-25 80 80)" fill={color} opacity="0.9" />
+      <ellipse cx="87" cy="64" rx="7" ry="13" transform="rotate(-15 87 64)" fill={color} opacity="0.8" />
+      <ellipse cx="90" cy="47" rx="7" ry="12" transform="rotate(-5 90 47)" fill={color} opacity="0.7" />
+      <ellipse cx="87" cy="31" rx="6" ry="11" transform="rotate(10 87 31)" fill={color} opacity="0.6" />
+      <ellipse cx="80" cy="18" rx="6" ry="10" transform="rotate(25 80 18)" fill={color} opacity="0.5" />
+      {/* Stems */}
+      <path d="M60 102 Q42 77 38 15" stroke={color} strokeWidth="2" opacity="0.35" fill="none" />
+      <path d="M60 102 Q78 77 82 15" stroke={color} strokeWidth="2" opacity="0.35" fill="none" />
+    </svg>
+  )
+}
+
 /* ── 슬라이드별 고유 장식 데이터 ── */
 const slides: Slide[] = [
   {
-    badge: '4개 자격증',
-    title: '기능사',
-    description: '전기기능사, 승강기기능사, 위험물기능사, 가스기능사\n자격증 취득의 첫 걸음, 기초부터 탄탄하게',
-    bgColor: '#071a12',
-    accentColor: '#34d399',
+    badge: '인기',
+    title: '전기기능사',
+    description: '자격증 취득의 첫 걸음\n기초부터 탄탄하게 합격까지',
+    bgColor: '#1d2088',
+    accentColor: '#818cf8',
     personImage: '/hero/woman1.png',
-    personAlt: '기능사',
-    // 레터블록 + 스월 + 스파클 + 도트
+    personAlt: '전기기능사 강사',
     floats: [
-      { type: 'block', letter: 'C', right: '20%', top: '8%', size: 58, rotate: -12, delay: 1000, anim: 'float1' },
-      { type: 'block', letter: 'S', right: '22%', top: '45%', size: 50, rotate: 10, delay: 1200, anim: 'float3' },
-      { type: 'swirl', right: '18%', top: '58%', size: 55, color: '#34d399', delay: 1100, anim: 'float2' },
-      { type: 'sparkle', right: '28%', top: '28%', size: 22, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'sparkle', right: '26%', top: '68%', size: 14, color: '#fbbf24', delay: 1500, anim: 'shimmer' },
-      { type: 'dot', right: '24%', top: '20%', size: 10, delay: 1050, anim: 'pulse' },
-      { type: 'dot', right: '30%', top: '50%', size: 7, delay: 1400, anim: 'float1' },
-      { type: 'dot', right: '16%', top: '75%', size: 5, delay: 1550, anim: 'pulse' },
-    ],
-  },
-  {
-    badge: '6개 자격증',
-    title: '산업기사',
-    description: '전기산업기사 · 소방설비산업기사(전기/기계)\n에너지 · 공조냉동기계 · 산업안전산업기사',
-    bgColor: '#150d24',
-    accentColor: '#a78bfa',
-    personImage: '/hero/man1.png',
-    personAlt: '산업기사',
-    // 말풍선(머리 우측) + 다이아몬드/링/스파클
-    floats: [
-      { type: 'bubble', text: '6개 종목\n한번에 준비!', right: '-4%', top: '2%', color: '#a78bfa', delay: 1000, anim: 'wobble' },
-      { type: 'diamond', right: '22%', top: '18%', size: 22, color: '#c084fc', delay: 1100, anim: 'float1' },
-      { type: 'diamond', right: '24%', top: '55%', size: 16, color: '#a78bfa', rotate: 15, delay: 1350, anim: 'float3' },
-      { type: 'ring', right: '20%', top: '35%', size: 44, color: '#a78bfa', delay: 1200, anim: 'float2' },
-      { type: 'sparkle', right: '26%', top: '48%', size: 20, color: '#fbbf24', delay: 1250, anim: 'shimmer' },
-      { type: 'sparkle', right: '28%', top: '10%', size: 14, color: '#c084fc', delay: 1450, anim: 'shimmer' },
-      { type: 'dot', right: '22%', top: '65%', size: 9, delay: 1150, anim: 'pulse' },
-      { type: 'dot', right: '30%', top: '75%', size: 6, delay: 1500, anim: 'pulse' },
+      { type: 'wreath', right: '18%', top: '12%', size: 90, color: '#fbbf24', delay: 1000, anim: 'float1' },
+      { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
+      { type: 'sparkle', right: '22%', top: '62%', size: 16, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
+      { type: 'swirl', right: '16%', top: '48%', size: 50, color: '#818cf8', delay: 1150, anim: 'float3' },
+      { type: 'dot', right: '28%', top: '35%', size: 8, delay: 1100, anim: 'pulse' },
+      { type: 'dot', right: '20%', top: '72%', size: 6, delay: 1350, anim: 'float2' },
     ],
   },
   {
     badge: '인기',
-    title: '기사',
-    description: '전기기사 · 소방설비기사(전기/기계) · 가스기사\n전문가 검증 기출, 합격까지 한 번에',
-    bgColor: '#0f1729',
-    accentColor: '#4f8cff',
-    personImage: '/hero/man2.png',
-    personAlt: '기사',
-    imageScale: 0.95,
-    // 레터블록 + 필 뱃지 + 스파클
-    floats: [
-      { type: 'block', letter: 'N', right: '20%', top: '5%', size: 56, rotate: -8, delay: 1000, anim: 'float2' },
-      { type: 'block', letter: 'o', right: '24%', top: '35%', size: 48, rotate: 14, delay: 1200, anim: 'float1' },
-      { type: 'block', letter: '1', right: '18%', top: '58%', size: 44, rotate: -5, delay: 1400, anim: 'float3' },
-      { type: 'pill', text: '인기 1위', right: '22%', top: '75%', color: '#4f8cff', delay: 1300, anim: 'float1' },
-      { type: 'sparkle', right: '28%', top: '20%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'dot', right: '30%', top: '45%', size: 8, delay: 1150, anim: 'pulse' },
-      { type: 'dot', right: '26%', top: '68%', size: 6, delay: 1350, anim: 'float2' },
-    ],
-  },
-  {
-    badge: '최고 등급',
-    title: '기능장',
-    description: '전기기능장\n최고 등급 자격증에 도전하세요',
-    bgColor: '#1a1200',
-    accentColor: '#fbbf24',
-    personImage: '/hero/man3.png',
-    personAlt: '기능장',
-    // 금색 스파클 + 스월 + 링 + 다이아몬드
-    floats: [
-      { type: 'swirl', right: '18%', top: '5%', size: 65, color: '#fbbf24', delay: 1000, anim: 'float2' },
-      { type: 'sparkle', right: '24%', top: '25%', size: 28, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'sparkle', right: '20%', top: '48%', size: 18, color: '#f59e0b', delay: 1250, anim: 'shimmer' },
-      { type: 'sparkle', right: '28%', top: '65%', size: 14, color: '#fbbf24', delay: 1400, anim: 'float3' },
-      { type: 'diamond', right: '22%', top: '35%', size: 20, color: '#fbbf24', delay: 1150, anim: 'float1' },
-      { type: 'ring', right: '20%', top: '55%', size: 36, color: '#f59e0b', delay: 1300, anim: 'float1' },
-      { type: 'dot', right: '30%', top: '42%', size: 10, delay: 1200, anim: 'pulse' },
-      { type: 'dot', right: '26%', top: '75%', size: 7, delay: 1450, anim: 'pulse' },
-    ],
-  },
-  {
-    badge: '준비중',
-    title: '공기업',
-    description: '공기업 채용 대비 전공시험\n한국전력공사 · 한국수력원자력 등',
-    bgColor: '#0a1a20',
-    accentColor: '#22d3ee',
+    title: '전기기사',
+    description: '전문가 검증 역대 기출문제 총망라\n합격까지 한 번에',
+    bgColor: '#e14c32',
+    accentColor: '#fb923c',
     personImage: '/hero/woman3.png',
-    personAlt: '공기업',
-    // 말풍선(머리 우측) + 레터블록/링/스파클
+    personAlt: '전기기사 강사',
     floats: [
-      { type: 'bubble', text: '공기업 전공시험\n완벽 대비!', right: '-8%', top: '2%', color: '#06b6d4', delay: 1000, anim: 'wobble' },
-      { type: 'block', letter: 'K', right: '22%', top: '18%', size: 52, rotate: 8, delay: 1200, anim: 'float2' },
-      { type: 'block', letter: 'P', right: '24%', top: '55%', size: 46, rotate: -10, delay: 1400, anim: 'float1' },
-      { type: 'ring', right: '20%', top: '38%', size: 32, color: '#22d3ee', delay: 1150, anim: 'float3' },
-      { type: 'sparkle', right: '28%', top: '68%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
-      { type: 'dot', right: '26%', top: '28%', size: 9, delay: 1100, anim: 'pulse' },
-      { type: 'dot', right: '30%', top: '48%', size: 6, delay: 1350, anim: 'float1' },
+      { type: 'wreath', right: '20%', top: '18%', size: 80, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
+      { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
+      { type: 'dot', right: '22%', top: '42%', size: 9, delay: 1200, anim: 'pulse' },
+      { type: 'dot', right: '30%', top: '68%', size: 6, delay: 1450, anim: 'float1' },
     ],
   },
   {
-    badge: '준비중',
-    title: '과정평가형',
-    description: 'NCS 기반 과정평가형 자격\n현장 중심 실무 역량을 평가합니다',
-    bgColor: '#1a0d14',
-    accentColor: '#fb7185',
+    badge: '과정평가형',
+    title: '소방설비산업기사',
+    description: '과정평가형(전기) 완벽 대비\nNCS 기반 현장 중심 실무 역량 평가',
+    bgColor: '#fe87ca',
+    accentColor: '#f43f5e',
     personImage: '/hero/woman2.png',
-    personAlt: '과정평가형',
-    // 필 뱃지 + 스월 + 다이아몬드 + 스파클
+    personAlt: '소방설비산업기사 강사',
     floats: [
       { type: 'pill', text: 'NCS', right: '20%', top: '8%', color: '#f43f5e', delay: 1000, anim: 'float1' },
-      { type: 'pill', text: '실무 역량', right: '22%', top: '55%', color: '#e11d48', delay: 1250, anim: 'float2' },
-      { type: 'swirl', right: '18%', top: '32%', size: 50, color: '#fb7185', delay: 1100, anim: 'float3' },
-      { type: 'diamond', right: '26%', top: '65%', size: 18, color: '#fb7185', delay: 1350, anim: 'float1' },
-      { type: 'sparkle', right: '28%', top: '18%', size: 22, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
-      { type: 'sparkle', right: '24%', top: '75%', size: 13, color: '#fb7185', delay: 1450, anim: 'shimmer' },
-      { type: 'dot', right: '30%', top: '42%', size: 10, delay: 1200, anim: 'pulse' },
-      { type: 'dot', right: '22%', top: '15%', size: 7, delay: 1050, anim: 'float3' },
+      { type: 'pill', text: '과정평가형', right: '22%', top: '58%', color: '#e11d48', delay: 1250, anim: 'float2' },
+      { type: 'sparkle', right: '26%', top: '25%', size: 20, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'sparkle', right: '28%', top: '72%', size: 14, color: '#fb7185', delay: 1400, anim: 'shimmer' },
+      { type: 'dot', right: '24%', top: '42%', size: 8, delay: 1150, anim: 'pulse' },
+      { type: 'diamond', right: '18%', top: '65%', size: 16, color: '#fb7185', delay: 1300, anim: 'float3' },
+    ],
+  },
+  {
+    badge: 'PREMIUM',
+    title: 'CAYSON\n프리미엄',
+    description: '프리미엄 등급만의 특별한 혜택\n합격률을 높이는 최고의 학습 경험',
+    bgColor: '#1b1514',
+    accentColor: '#fbbf24',
+    personImage: '',
+    personAlt: '',
+    ctaText: '프리미엄 알아보기',
+    ctaHref: '#premium',
+    floats: [
+      { type: 'wreath', right: '2%', top: '5%', size: 180, color: '#fbbf24', delay: 800, anim: 'float1' },
+      { type: 'sparkle', right: '18%', top: '5%', size: 28, color: '#fbbf24', delay: 1000, anim: 'shimmer' },
+      { type: 'sparkle', right: '12%', top: '52%', size: 20, color: '#f59e0b', delay: 1200, anim: 'shimmer' },
+      { type: 'sparkle', right: '24%', top: '72%', size: 14, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
+      { type: 'diamond', right: '8%', top: '38%', size: 22, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'ring', right: '20%', top: '48%', size: 40, color: '#f59e0b', delay: 1250, anim: 'float3' },
+      { type: 'dot', right: '26%', top: '22%', size: 10, delay: 1050, anim: 'pulse' },
+      { type: 'dot', right: '16%', top: '78%', size: 7, delay: 1350, anim: 'pulse' },
     ],
   },
 ]
@@ -372,6 +350,9 @@ export default function HeroSection() {
 
                       {/* 다이아몬드 */}
                       {f.type === 'diamond' && <Diamond color={f.color || slide.accentColor} size={f.size || 20} />}
+
+                      {/* 월계관 */}
+                      {f.type === 'wreath' && <LaurelWreath color={f.color || '#fbbf24'} size={f.size || 80} />}
                     </div>
                   </div>
                 </div>
@@ -394,7 +375,7 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-2xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-2 sm:mb-4 leading-[1.1] tracking-tight transition-all ease-out"
+              className="text-2xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-2 sm:mb-4 leading-[1.1] tracking-tight whitespace-pre-line transition-all ease-out"
               style={{
                 opacity: textVisible ? 1 : 0,
                 transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
@@ -424,11 +405,11 @@ export default function HeroSection() {
                 transitionDelay: textVisible ? '500ms' : '0ms' }}
             >
               <a
-                href="#exams"
+                href={slide.ctaHref || '#exams'}
                 className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white rounded-lg transition-all duration-200 hover:brightness-110"
                 style={{ backgroundColor: slide.accentColor }}
               >
-                자격증 선택
+                {slide.ctaText || '시험 보러 가기'}
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -491,14 +472,16 @@ export default function HeroSection() {
                     transitionDuration: '667ms',
                     transitionDelay: isActive && textVisible ? '500ms' : '0ms' }}
                 >
-                  <Image
-                    src={s.personImage}
-                    alt={s.personAlt}
-                    fill
-                    className="object-contain object-bottom"
-                    sizes="(max-width: 640px) 120px, (max-width: 1024px) 180px, 260px"
-                    priority={i <= 1}
-                  />
+                  {s.personImage && (
+                    <Image
+                      src={s.personImage}
+                      alt={s.personAlt}
+                      fill
+                      className="object-contain object-bottom"
+                      sizes="(max-width: 640px) 120px, (max-width: 1024px) 180px, 260px"
+                      priority={i <= 1}
+                    />
+                  )}
                 </div>
               )
             })}
