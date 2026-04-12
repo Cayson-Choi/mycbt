@@ -117,7 +117,7 @@ export default function AttemptHistoryClient({ attempts, examStats }: Props) {
                   </div>
                   <div className="text-right">
                     <div
-                      className={`text-3xl font-bold ${
+                      className={`text-2xl sm:text-3xl font-bold ${
                         attempt.grading_status === 'PENDING_MANUAL'
                           ? 'text-yellow-600 dark:text-yellow-400'
                           : (attempt.total_score ?? 0) >= 60
@@ -142,7 +142,7 @@ export default function AttemptHistoryClient({ attempts, examStats }: Props) {
                 </div>
 
                 {/* 과목별 점수 */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-3">
                   {attempt.subject_scores.map((subject) => (
                     <div
                       key={subject.subject_id}

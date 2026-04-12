@@ -88,7 +88,7 @@ const QuestionCard = memo(function QuestionCard({
                 alt="문제 이미지"
                 width={400}
                 height={280}
-                className="max-w-sm max-h-[280px] w-auto h-auto rounded border border-gray-200"
+                className="max-w-[280px] sm:max-w-sm max-h-[200px] sm:max-h-[280px] w-auto h-auto rounded border border-gray-200"
                 loading="lazy"
               />
             </div>

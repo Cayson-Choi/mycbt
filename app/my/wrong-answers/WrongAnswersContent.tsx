@@ -139,9 +139,9 @@ export default function WrongAnswersContent({ data }: { data: WrongAnswersData }
         </div>
 
         {answers.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-16 text-center border dark:border-gray-700">
-            <div className="text-6xl mb-4">🎉</div>
-            <div className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8 sm:p-16 text-center border dark:border-gray-700">
+            <div className="text-4xl sm:text-6xl mb-4">🎉</div>
+            <div className="text-lg sm:text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">
               오답이 없습니다!
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -505,7 +505,7 @@ export default function WrongAnswersContent({ data }: { data: WrongAnswersData }
               </div>
             ) : (
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-12 text-center border dark:border-gray-700">
-                <div className="text-4xl mb-3">🔍</div>
+                <div className="text-2xl sm:text-4xl mb-3">🔍</div>
                 <div className="text-gray-500 dark:text-gray-400 text-lg mb-2">
                   조건에 맞는 오답이 없습니다
                 </div>

@@ -73,7 +73,7 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-5xl mx-auto px-4">
         {/* 총점 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 mb-8 text-center border dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-8 mb-6 sm:mb-8 text-center border dark:border-gray-700">
           <h1 className="text-2xl font-bold mb-4 dark:text-white flex items-center justify-center gap-2">
             <span className={`text-xs font-bold px-2 py-0.5 rounded ${
               result.exam_type === 'PRACTICAL'
@@ -87,7 +87,7 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
 
           <div className="mb-6">
             <div
-              className={`text-6xl font-bold mb-2 ${
+              className={`text-4xl sm:text-6xl font-bold mb-2 ${
                 passed ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
               }`}
             >
@@ -107,12 +107,12 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
           </div>
 
           {result.grading_status === 'PENDING_MANUAL' ? (
-            <div className="inline-block px-6 py-3 rounded-full text-xl font-bold bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">
+            <div className="inline-block px-4 py-2 sm:px-6 sm:py-3 rounded-full text-base sm:text-xl font-bold bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">
               채점 대기
             </div>
           ) : (
             <div
-              className={`inline-block px-6 py-3 rounded-full text-xl font-bold ${
+              className={`inline-block px-4 py-2 sm:px-6 sm:py-3 rounded-full text-base sm:text-xl font-bold ${
                 passed
                   ? 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300'
                   : 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
@@ -129,8 +129,8 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
         </div>
 
         {/* 과목별 점수 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 mb-8 border dark:border-gray-700">
-          <h2 className="text-xl font-bold mb-6 dark:text-white">과목별 성적</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-8 mb-6 sm:mb-8 border dark:border-gray-700">
+          <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 dark:text-white">과목별 성적</h2>
           <div className="space-y-4">
             {result.subject_scores.map((subject) => (
               <div key={subject.subject_id} className="border dark:border-gray-600 rounded-lg p-4">
@@ -336,20 +336,20 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
         <div className="mt-8 flex flex-col sm:flex-row gap-3">
           <Link
             href="/"
-            className="flex-1 px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+            className="flex-1 px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-base bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
           >
             홈으로
           </Link>
           <Link
             href="/my"
-            className="flex-1 px-6 py-3 bg-purple-600 dark:bg-purple-500 text-white text-center rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600"
+            className="flex-1 px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-base bg-purple-600 dark:bg-purple-500 text-white text-center rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600"
           >
             마이페이지
           </Link>
           {!isOfficial && (
             <Link
               href={`/exam/${result.exam_id}`}
-              className="flex-1 px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+              className="flex-1 px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-base bg-blue-600 dark:bg-blue-500 text-white text-center rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
             >
               다시 응시
             </Link>

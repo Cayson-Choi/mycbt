@@ -133,11 +133,11 @@ export default async function MyPage() {
   }))
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">마이페이지</h1>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">마이페이지</h1>
           <p className="text-gray-600 dark:text-gray-400">내 응시 기록과 통계를 확인하세요</p>
         </div>
 
@@ -168,9 +168,9 @@ export default async function MyPage() {
         </div>
 
         {/* 시험별 통계 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border dark:border-gray-700">
-          <h2 className="text-xl font-bold mb-4 dark:text-white">시험별 성적</h2>
-          <div className="grid md:grid-cols-3 gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8 border dark:border-gray-700">
+          <h2 className="text-lg sm:text-xl font-bold mb-4 dark:text-white">시험별 성적</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {examStats.map((exam) => (
               <div key={exam.exam_id} className="border dark:border-gray-600 rounded-lg p-4">
                 <div className="font-semibold text-lg mb-2 dark:text-white">{exam.exam_name}</div>
@@ -204,7 +204,7 @@ export default async function MyPage() {
         />
 
         {/* 하단 버튼 */}
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <Link
             href="/"
             className="flex-1 px-3 py-2.5 bg-gray-600 dark:bg-gray-700 text-white text-center rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 text-sm"
