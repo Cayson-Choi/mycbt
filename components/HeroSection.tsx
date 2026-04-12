@@ -224,16 +224,15 @@ const slides: Slide[] = [
     personAlt: '전기기사 강사',
     floats: [
       { type: 'wreath', text: '98%\n합격', right: '16%', top: '8%', size: 160, color: '#fb923c', delay: 1000, anim: 'float2' },
-      // 월계관 위/옆 (right 22~30%)
-      { type: 'sparkle', right: '28%', top: '3%', size: 22, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'dot', right: '24%', top: '15%', size: 9, delay: 1150, anim: 'pulse' },
-      // 사람-월계관 사이 중간 (right 18~28%)
-      { type: 'ring', right: '20%', top: '35%', size: 30, color: '#fb923c', delay: 1200, anim: 'float1' },
-      { type: 'diamond', right: '26%', top: '50%', size: 16, color: '#fbbf24', delay: 1300, anim: 'float3' },
-      { type: 'sparkle', right: '22%', top: '65%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      // 하단 (right 18~28%)
-      { type: 'swirl', right: '18%', top: '80%', size: 32, color: '#fb923c', delay: 1400, anim: 'float2' },
-      { type: 'dot', right: '25%', top: '88%', size: 7, delay: 1450, anim: 'float1' },
+      // 월계관 왼쪽 (right 32%+)
+      { type: 'sparkle', right: '33%', top: '5%', size: 22, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'ring', right: '35%', top: '25%', size: 28, color: '#fb923c', delay: 1200, anim: 'float1' },
+      { type: 'dot', right: '34%', top: '42%', size: 9, delay: 1250, anim: 'pulse' },
+      // 월계관 아래 (top 50%+)
+      { type: 'diamond', right: '22%', top: '55%', size: 16, color: '#fbbf24', delay: 1300, anim: 'float3' },
+      { type: 'sparkle', right: '28%', top: '68%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'swirl', right: '20%', top: '80%', size: 32, color: '#fb923c', delay: 1400, anim: 'float2' },
+      { type: 'dot', right: '32%', top: '88%', size: 7, delay: 1450, anim: 'float1' },
     ],
   },
   {
@@ -246,16 +245,15 @@ const slides: Slide[] = [
     personAlt: '전기기능사 강사',
     floats: [
       { type: 'wreath', text: '족보문제\n공개', right: '16%', top: '8%', size: 160, color: '#818cf8', delay: 1000, anim: 'float1' },
-      // 월계관 위/옆
-      { type: 'diamond', right: '26%', top: '5%', size: 18, color: '#818cf8', delay: 1100, anim: 'float2' },
-      { type: 'dot', right: '22%', top: '18%', size: 8, delay: 1150, anim: 'pulse' },
-      // 사람-월계관 사이 중간
-      { type: 'swirl', right: '24%', top: '38%', size: 34, color: '#818cf8', delay: 1250, anim: 'float3' },
-      { type: 'sparkle', right: '19%', top: '55%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
-      { type: 'ring', right: '27%', top: '68%', size: 24, color: '#818cf8', delay: 1350, anim: 'float1' },
-      // 하단
-      { type: 'sparkle', right: '21%', top: '82%', size: 14, color: '#a5b4fc', delay: 1400, anim: 'shimmer' },
-      { type: 'diamond', right: '28%', top: '90%', size: 10, color: '#818cf8', delay: 1450, anim: 'float2' },
+      // 월계관 왼쪽 (right 32%+)
+      { type: 'diamond', right: '34%', top: '8%', size: 18, color: '#818cf8', delay: 1100, anim: 'float2' },
+      { type: 'dot', right: '33%', top: '30%', size: 8, delay: 1150, anim: 'pulse' },
+      { type: 'swirl', right: '35%', top: '45%', size: 30, color: '#818cf8', delay: 1250, anim: 'float3' },
+      // 월계관 아래 (top 50%+)
+      { type: 'sparkle', right: '24%', top: '55%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
+      { type: 'ring', right: '30%', top: '68%', size: 24, color: '#818cf8', delay: 1350, anim: 'float1' },
+      { type: 'sparkle', right: '22%', top: '82%', size: 14, color: '#a5b4fc', delay: 1400, anim: 'shimmer' },
+      { type: 'diamond', right: '33%', top: '90%', size: 10, color: '#818cf8', delay: 1450, anim: 'float2' },
     ],
   },
   {
@@ -269,16 +267,15 @@ const slides: Slide[] = [
     floats: [
       { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
       { type: 'wreath', text: '한 번에\n합격', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
-      // 월계관 위/옆
-      { type: 'ring', right: '27%', top: '4%', size: 26, color: '#fbbf24', delay: 1200, anim: 'float1' },
-      { type: 'sparkle', right: '22%', top: '16%', size: 16, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
-      // 사람-월계관 사이 중간
-      { type: 'diamond', right: '20%', top: '40%', size: 16, color: '#f59e0b', delay: 1300, anim: 'float3' },
-      { type: 'sparkle', right: '26%', top: '55%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'swirl', right: '19%', top: '70%', size: 28, color: '#f59e0b', delay: 1400, anim: 'float2' },
-      // 하단
-      { type: 'dot', right: '24%', top: '85%', size: 8, delay: 1420, anim: 'pulse' },
-      { type: 'ring', right: '28%', top: '92%', size: 20, color: '#f59e0b', delay: 1450, anim: 'float3' },
+      // 월계관 왼쪽 (right 32%+)
+      { type: 'ring', right: '34%', top: '6%', size: 26, color: '#fbbf24', delay: 1200, anim: 'float1' },
+      { type: 'sparkle', right: '33%', top: '22%', size: 16, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
+      { type: 'diamond', right: '35%', top: '40%', size: 14, color: '#f59e0b', delay: 1300, anim: 'float3' },
+      // 월계관 아래 (top 50%+)
+      { type: 'sparkle', right: '24%', top: '56%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'swirl', right: '20%', top: '70%', size: 28, color: '#f59e0b', delay: 1400, anim: 'float2' },
+      { type: 'dot', right: '32%', top: '82%', size: 8, delay: 1420, anim: 'pulse' },
+      { type: 'ring', right: '34%', top: '92%', size: 20, color: '#f59e0b', delay: 1450, anim: 'float3' },
     ],
   },
   {
@@ -291,16 +288,15 @@ const slides: Slide[] = [
     personAlt: '소방설비산업기사 강사',
     floats: [
       { type: 'pill', text: 'NCS', right: '20%', top: '35%', color: '#f43f5e', delay: 1000, anim: 'float1' },
-      // 월계관 아래/옆
-      { type: 'sparkle', right: '25%', top: '8%', size: 18, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'dot', right: '28%', top: '20%', size: 8, delay: 1150, anim: 'pulse' },
-      // 사람-월계관 사이 중간
-      { type: 'ring', right: '22%', top: '50%', size: 26, color: '#fb7185', delay: 1250, anim: 'float3' },
-      { type: 'diamond', right: '27%', top: '62%', size: 14, color: '#fb7185', delay: 1300, anim: 'float1' },
-      { type: 'sparkle', right: '19%', top: '75%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      // 하단
-      { type: 'swirl', right: '24%', top: '85%', size: 28, color: '#fb7185', delay: 1400, anim: 'float2' },
-      { type: 'dot', right: '20%', top: '92%', size: 6, delay: 1450, anim: 'float1' },
+      // 월계관 왼쪽 (right 32%+)
+      { type: 'sparkle', right: '35%', top: '8%', size: 18, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'dot', right: '34%', top: '22%', size: 8, delay: 1150, anim: 'pulse' },
+      // 월계관 아래 (top 50%+)
+      { type: 'ring', right: '24%', top: '55%', size: 26, color: '#fb7185', delay: 1250, anim: 'float3' },
+      { type: 'diamond', right: '32%', top: '65%', size: 14, color: '#fb7185', delay: 1300, anim: 'float1' },
+      { type: 'sparkle', right: '22%', top: '78%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'swirl', right: '30%', top: '85%', size: 28, color: '#fb7185', delay: 1400, anim: 'float2' },
+      { type: 'dot', right: '34%', top: '92%', size: 6, delay: 1450, anim: 'float1' },
     ],
   },
   {
@@ -396,7 +392,7 @@ export default function HeroSection() {
         <span
           className="font-black text-[180px] sm:text-[280px] lg:text-[360px] select-none whitespace-nowrap mr-[-5%]"
           style={{
-            color: `${slide.accentColor}12`,
+            color: `${slide.accentColor}40`,
             transform: 'rotate(-45deg)',
             letterSpacing: '0.05em',
           }}
@@ -565,6 +561,13 @@ export default function HeroSection() {
                 </svg>
               </a>
             </div>
+
+            {/* 모바일 전용: 프리미엄 슬라이드 월계관 */}
+            {slide.floats.some(f => f.type === 'dualWreath') && (
+              <div className="sm:hidden mt-4">
+                <WreathWithStar size={100} text={'취업\n연계'} delay={0.4} />
+              </div>
+            )}
           </div>
 
           {/* ===== 말풍선 레이어 (사람 뒤 — DOM 순서로 사람보다 먼저 렌더) ===== */}
