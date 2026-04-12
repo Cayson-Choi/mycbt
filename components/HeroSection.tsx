@@ -101,26 +101,26 @@ function LaurelWreath({ color, size = 80, text }: { color?: string; size?: numbe
         src="/hero/mooncrown/image.png"
         alt=""
         className="absolute inset-0 w-full h-full object-contain"
-        style={isGold ? {} : { filter: 'grayscale(1) brightness(1.5)' }}
+        style={isGold ? { filter: 'grayscale(1) brightness(1.2)' } : { filter: 'grayscale(1) brightness(1.5)' }}
       />
-      {/* 색상 오버레이 */}
-      {!isGold && (
-        <div
-          className="absolute inset-0"
-          style={{
-            background: color,
-            mixBlendMode: 'multiply',
-            WebkitMaskImage: 'url(/hero/mooncrown/image.png)',
-            WebkitMaskSize: 'contain',
-            WebkitMaskRepeat: 'no-repeat',
-            WebkitMaskPosition: 'center',
-            maskImage: 'url(/hero/mooncrown/image.png)',
-            maskSize: 'contain',
-            maskRepeat: 'no-repeat',
-            maskPosition: 'center',
-          }}
-        />
-      )}
+      {/* 그라데이션 오버레이 (금색: 위 밝은금→아래 어두운갈색, 기타: 단색) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: isGold
+            ? 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 15%, rgba(212,168,75,0.4) 33%, #c9952a 60%, #8b6914 100%)'
+            : color,
+          mixBlendMode: 'multiply',
+          WebkitMaskImage: 'url(/hero/mooncrown/image.png)',
+          WebkitMaskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'center',
+          maskImage: 'url(/hero/mooncrown/image.png)',
+          maskSize: 'contain',
+          maskRepeat: 'no-repeat',
+          maskPosition: 'center',
+        }}
+      />
       {text && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div
@@ -190,20 +190,25 @@ function DualWreath({ size = 160 }: { size?: number }) {
     { text: '취업\n연계', delay: 2.0 },
   ]
   return (
-    <div className="flex flex-col items-center gap-0">
-      {/* 윗줄 3개 */}
-      <div className="flex items-center gap-0">
-        {items.slice(0, 3).map((item, i) => (
-          <WreathWithStar key={i} size={s} text={item.text} delay={item.delay} />
-        ))}
+    <>
+      {/* 모바일: 취업 연계 월계관 1개만 */}
+      <div className="sm:hidden">
+        <WreathWithStar size={s} text={'취업\n연계'} delay={0.4} />
       </div>
-      {/* 아랫줄 2개 */}
-      <div className="flex items-center gap-0 -mt-2">
-        {items.slice(3).map((item, i) => (
-          <WreathWithStar key={i} size={s} text={item.text} delay={item.delay} />
-        ))}
+      {/* PC: 5개 (3+2) */}
+      <div className="hidden sm:flex flex-col items-center gap-0">
+        <div className="flex items-center gap-0">
+          {items.slice(0, 3).map((item, i) => (
+            <WreathWithStar key={i} size={s} text={item.text} delay={item.delay} />
+          ))}
+        </div>
+        <div className="flex items-center gap-0 -mt-2">
+          {items.slice(3).map((item, i) => (
+            <WreathWithStar key={i} size={s} text={item.text} delay={item.delay} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
