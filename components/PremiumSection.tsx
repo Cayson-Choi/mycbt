@@ -134,7 +134,7 @@ export default function PremiumSection() {
                 </svg>
                 <span className="text-amber-400 text-sm font-semibold tracking-wide">PREMIUM MEMBERSHIP</span>
               </div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 tracking-wider" style={{ lineHeight: 1.1 }}>
                 <span className="block">프리미엄 회원만의</span>
                 <span className="block mt-3 md:mt-4 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
               </h2>
@@ -177,7 +177,7 @@ export default function PremiumSection() {
                   <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-emerald-400 text-sm font-semibold">취업 연계 프로그램</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
+                <h2 className="text-3xl md:text-4xl font-black text-white mb-6 tracking-wider" style={{ lineHeight: 1.1 }}>
                   자격증 취득부터 <span className="relative inline-block text-amber-400">취업<span className="absolute -top-5 md:-top-7 left-0 w-full flex justify-around pointer-events-none"><span className="text-[8px] md:text-[10px]">●</span><span className="text-[8px] md:text-[10px]">●</span></span></span>까지<br />
                   <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">모두 책임져</span> 드립니다
                 </h2>

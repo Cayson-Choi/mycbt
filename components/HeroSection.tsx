@@ -519,7 +519,7 @@ export default function HeroSection() {
             </div>
 
             <h2
-              className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 tracking-wider whitespace-pre-line transition-all ease-out"
+              className="text-lg sm:text-4xl lg:text-[42px] font-extrabold text-white mb-2 sm:mb-3 tracking-wider whitespace-pre-line transition-all ease-out"
               style={{
                 lineHeight: 1.1,
                 opacity: textVisible ? 1 : 0,
