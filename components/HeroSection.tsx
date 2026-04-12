@@ -103,7 +103,7 @@ function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text
       />
       {/* 월계관 이미지 (회전 애니메이션) */}
       <img
-        src="/hero/mooncrown/freepik__talk__75737.png"
+        src="/hero/mooncrown/image.png"
         alt=""
         className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_12px_rgba(251,191,36,0.5)]"
         style={{ animation: 'wreathSpin 20s linear infinite' }}
