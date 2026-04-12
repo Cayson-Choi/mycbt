@@ -311,6 +311,15 @@ const slides: Slide[] = [
     ctaHref: '#premium',
     floats: [
       { type: 'wreath', text: '93%\n취업성공', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      // 월계관 왼쪽 (right 32%+)
+      { type: 'sparkle', right: '34%', top: '5%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'diamond', right: '33%', top: '28%', size: 16, color: '#f59e0b', delay: 1200, anim: 'float3' },
+      { type: 'ring', right: '35%', top: '48%', size: 30, color: '#fbbf24', delay: 1300, anim: 'float1' },
+      // 월계관 아래 (top 50%+)
+      { type: 'swirl', right: '22%', top: '58%', size: 32, color: '#f59e0b', delay: 1250, anim: 'float2' },
+      { type: 'sparkle', right: '28%', top: '72%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'dot', right: '34%', top: '82%', size: 8, delay: 1400, anim: 'pulse' },
+      { type: 'dot', right: '24%', top: '90%', size: 6, delay: 1450, anim: 'float1' },
     ],
   },
 ]
