@@ -89,26 +89,41 @@ function Diamond({ color, size = 20 }: { color: string; size?: number }) {
   )
 }
 
-/* ── 월계관 SVG ── */
-function LaurelWreath({ color = '#fbbf24', size = 80 }: { color?: string; size?: number }) {
+/* ── 월계관 (PNG 이미지 + 내부 텍스트 + 글로우 애니메이션) ── */
+function LaurelWreath({ size = 80, text }: { color?: string; size?: number; text?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
-      {/* Left branch */}
-      <ellipse cx="40" cy="80" rx="8" ry="15" transform="rotate(25 40 80)" fill={color} opacity="0.9" />
-      <ellipse cx="33" cy="64" rx="7" ry="13" transform="rotate(15 33 64)" fill={color} opacity="0.8" />
-      <ellipse cx="30" cy="47" rx="7" ry="12" transform="rotate(5 30 47)" fill={color} opacity="0.7" />
-      <ellipse cx="33" cy="31" rx="6" ry="11" transform="rotate(-10 33 31)" fill={color} opacity="0.6" />
-      <ellipse cx="40" cy="18" rx="6" ry="10" transform="rotate(-25 40 18)" fill={color} opacity="0.5" />
-      {/* Right branch */}
-      <ellipse cx="80" cy="80" rx="8" ry="15" transform="rotate(-25 80 80)" fill={color} opacity="0.9" />
-      <ellipse cx="87" cy="64" rx="7" ry="13" transform="rotate(-15 87 64)" fill={color} opacity="0.8" />
-      <ellipse cx="90" cy="47" rx="7" ry="12" transform="rotate(-5 90 47)" fill={color} opacity="0.7" />
-      <ellipse cx="87" cy="31" rx="6" ry="11" transform="rotate(10 87 31)" fill={color} opacity="0.6" />
-      <ellipse cx="80" cy="18" rx="6" ry="10" transform="rotate(25 80 18)" fill={color} opacity="0.5" />
-      {/* Stems */}
-      <path d="M60 102 Q42 77 38 15" stroke={color} strokeWidth="2" opacity="0.35" fill="none" />
-      <path d="M60 102 Q78 77 82 15" stroke={color} strokeWidth="2" opacity="0.35" fill="none" />
-    </svg>
+    <div className="relative" style={{ width: size, height: size }}>
+      {/* 글로우 효과 */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(251,191,36,0.35) 0%, transparent 70%)',
+          animation: 'wreathGlow 3s ease-in-out infinite',
+        }}
+      />
+      {/* 월계관 이미지 (회전 애니메이션) */}
+      <img
+        src="/hero/mooncrown/freepik__talk__75737.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_12px_rgba(251,191,36,0.5)]"
+        style={{ animation: 'wreathSpin 20s linear infinite' }}
+      />
+      {/* 내부 텍스트 */}
+      {text && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span
+            className="text-center font-black leading-tight text-white whitespace-pre-line"
+            style={{
+              fontSize: size * 0.17,
+              textShadow: '0 1px 8px rgba(0,0,0,0.6)',
+              animation: 'wreathTextPulse 3s ease-in-out infinite',
+            }}
+          >
+            {text}
+          </span>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -124,7 +139,7 @@ const slides: Slide[] = [
     personAlt: 'CAYSON',
     floats: [
       { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', right: '20%', top: '15%', size: 70, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      { type: 'wreath', text: '합격의\n시작', right: '20%', top: '15%', size: 120, color: '#fbbf24', delay: 1100, anim: 'float2' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '60%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'dot', right: '28%', top: '40%', size: 8, delay: 1150, anim: 'pulse' },
@@ -140,7 +155,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
     floats: [
-      { type: 'wreath', right: '18%', top: '12%', size: 90, color: '#fbbf24', delay: 1000, anim: 'float1' },
+      { type: 'wreath', text: '3,600+\n문제', right: '18%', top: '12%', size: 130, color: '#fbbf24', delay: 1000, anim: 'float1' },
       { type: 'sparkle', right: '26%', top: '10%', size: 22, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '22%', top: '62%', size: 16, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
       { type: 'swirl', right: '16%', top: '48%', size: 50, color: '#818cf8', delay: 1150, anim: 'float3' },
@@ -157,7 +172,7 @@ const slides: Slide[] = [
     personImage: '/hero/woman3.png',
     personAlt: '전기기사 강사',
     floats: [
-      { type: 'wreath', right: '20%', top: '18%', size: 80, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      { type: 'wreath', text: '역대기출\n총망라', right: '20%', top: '18%', size: 120, color: '#fbbf24', delay: 1000, anim: 'float2' },
       { type: 'sparkle', right: '24%', top: '8%', size: 24, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
       { type: 'sparkle', right: '28%', top: '58%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
       { type: 'diamond', right: '18%', top: '32%', size: 18, color: '#fb923c', delay: 1250, anim: 'float3' },
@@ -193,7 +208,7 @@ const slides: Slide[] = [
     ctaText: '프리미엄 알아보기',
     ctaHref: '#premium',
     floats: [
-      { type: 'wreath', right: '2%', top: '5%', size: 180, color: '#fbbf24', delay: 800, anim: 'float1' },
+      { type: 'wreath', text: 'PREMIUM\n합격 보장', right: '2%', top: '5%', size: 200, color: '#fbbf24', delay: 800, anim: 'float1' },
       { type: 'sparkle', right: '18%', top: '5%', size: 28, color: '#fbbf24', delay: 1000, anim: 'shimmer' },
       { type: 'sparkle', right: '12%', top: '52%', size: 20, color: '#f59e0b', delay: 1200, anim: 'shimmer' },
       { type: 'sparkle', right: '24%', top: '72%', size: 14, color: '#fbbf24', delay: 1400, anim: 'shimmer' },
@@ -369,7 +384,7 @@ export default function HeroSection() {
                       {f.type === 'diamond' && <Diamond color={f.color || slide.accentColor} size={f.size || 20} />}
 
                       {/* 월계관 */}
-                      {f.type === 'wreath' && <LaurelWreath color={f.color || '#fbbf24'} size={f.size || 80} />}
+                      {f.type === 'wreath' && <LaurelWreath color={f.color || '#fbbf24'} size={f.size || 80} text={f.text} />}
                     </div>
                   </div>
                 </div>

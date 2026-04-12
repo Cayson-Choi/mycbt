@@ -100,6 +100,24 @@ body {
   50% { transform: scale(1.4); opacity: 1; }
 }
 
+/* wreath: 월계관 글로우 맥박 */
+@keyframes wreathGlow {
+  0%, 100% { opacity: 0.6; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* wreath: 느린 회전 */
+@keyframes wreathSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* wreath: 내부 텍스트 펄스 */
+@keyframes wreathTextPulse {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
 /* wobble: 좌우 미세 흔들림 (말풍선용) */
 @keyframes heroDecWobble {
   0%, 100% { transform: rotate(0deg); }
