@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
 const SETTING_KEY = "landing_hidden_cards"
@@ -81,6 +82,9 @@ export async function POST(request: NextRequest) {
       update: { value: JSON.stringify(updated) },
       create: { key: SETTING_KEY, value: JSON.stringify(updated) },
     })
+
+    // 홈페이지 캐시 즉시 무효화
+    revalidatePath('/')
 
     return NextResponse.json({ message: "저장 완료", hiddenCards: updated })
   } catch (error) {

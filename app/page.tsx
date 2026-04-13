@@ -4,6 +4,8 @@ import ProfileGuard from "@/components/ProfileGuard"
 import CertifiedBanner from "@/components/CertifiedBanner"
 import { prisma } from "@/lib/prisma"
 
+export const revalidate = 60
+
 export default async function Home() {
   // 등급별 시험 수 + 숨김 카드 설정을 병렬 조회
   const [gradeCounts, hiddenSetting] = await Promise.all([
