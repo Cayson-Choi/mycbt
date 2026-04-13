@@ -49,6 +49,8 @@ export default function QuestionSplitEditor({
   const [savedQuestionId, setSavedQuestionId] = useState<number | null>(question?.id || null)
   const [hasSavedOnce, setHasSavedOnce] = useState(false)
   const [saveFlash, setSaveFlash] = useState(false)
+  const [formError, setFormError] = useState('')
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false)
 
   // Track initial form data for dirty check
   const initialFormRef = useRef(JSON.stringify({
@@ -138,17 +140,24 @@ export default function QuestionSplitEditor({
   // Keyboard shortcuts
   const handleClose = useCallback(() => {
     if (isDirty) {
-      if (!confirm('저장하지 않은 변경사항이 있습니다. 저장하지 않고 나가시겠습니까?')) {
-        return
-      }
+      setShowCloseConfirm(true)
+      return
     }
-    // 한 번이라도 저장했으면 목록 새로고침
     if (hasSavedOnce) {
       onSuccess()
     } else {
       onClose()
     }
   }, [isDirty, hasSavedOnce, onClose, onSuccess])
+
+  const handleCloseConfirm = useCallback(() => {
+    setShowCloseConfirm(false)
+    if (hasSavedOnce) {
+      onSuccess()
+    } else {
+      onClose()
+    }
+  }, [hasSavedOnce, onClose, onSuccess])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -341,21 +350,22 @@ export default function QuestionSplitEditor({
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
+    setFormError('')
 
     if (!formData.question_text) {
-      alert('문제 내용을 입력해주세요')
+      setFormError('문제 내용을 입력해주세요')
       return
     }
 
     if (formData.question_type === 'CHOICE') {
       if (!formData.choice_1 || !formData.choice_2 || !formData.choice_3 || !formData.choice_4) {
-        alert('모든 선택지를 입력해주세요')
+        setFormError('모든 선택지를 입력해주세요')
         return
       }
     }
 
     if (!savedQuestionId && !formData.question_code) {
-      alert('문제 코드를 입력해주세요')
+      setFormError('문제 코드를 입력해주세요')
       return
     }
 
@@ -386,10 +396,10 @@ export default function QuestionSplitEditor({
         setTimeout(() => setSaveFlash(false), 2000)
       } else {
         const errData = await res.json()
-        alert(errData.error || '오류가 발생했습니다')
+        setFormError(errData.error || '오류가 발생했습니다')
       }
     } catch {
-      alert('오류가 발생했습니다')
+      setFormError('오류가 발생했습니다')
     } finally {
       setSaving(false)
     }
@@ -465,6 +475,12 @@ export default function QuestionSplitEditor({
             </span>
           )}
         </div>
+
+        {formError && (
+          <span style={{ fontSize: '13px', color: '#ef4444', fontWeight: 500 }}>
+            {formError}
+          </span>
+        )}
 
         <button
           onClick={() => handleSubmit()}
@@ -615,6 +631,32 @@ export default function QuestionSplitEditor({
           }}
         >
           저장하지 않은 변경사항이 있습니다
+        </div>
+      )}
+
+      {/* 닫기 확인 모달 */}
+      {showCloseConfirm && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 60 }}>
+          <div style={{ backgroundColor: isDark ? '#1f2937' : '#ffffff', borderRadius: '12px', padding: '24px', maxWidth: '360px', width: '100%', margin: '0 16px', border: `1px solid ${isDark ? '#374151' : '#e5e7eb'}` }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px', color: isDark ? '#ffffff' : '#111827' }}>변경사항 저장 안 함</h3>
+            <p style={{ fontSize: '14px', color: isDark ? '#9ca3af' : '#6b7280', marginBottom: '20px' }}>
+              저장하지 않은 변경사항이 있습니다. 저장하지 않고 나가시겠습니까?
+            </p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={() => setShowCloseConfirm(false)}
+                style={{ flex: 1, padding: '8px 16px', borderRadius: '8px', border: `1px solid ${isDark ? '#4b5563' : '#d1d5db'}`, backgroundColor: 'transparent', color: isDark ? '#d1d5db' : '#374151', fontSize: '14px', cursor: 'pointer' }}
+              >
+                취소
+              </button>
+              <button
+                onClick={handleCloseConfirm}
+                style={{ flex: 1, padding: '8px 16px', borderRadius: '8px', border: 'none', backgroundColor: '#ef4444', color: '#ffffff', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
+              >
+                나가기
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
