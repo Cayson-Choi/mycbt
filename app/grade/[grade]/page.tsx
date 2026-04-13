@@ -84,10 +84,15 @@ export default async function GradePage({
             const practicalCount = cat.exams.filter((e) => e.examType === "PRACTICAL").length
             const hasExams = cat.exams.length > 0
 
+            // 진단평가: 필기/실기 선택 건너뛰고 바로 시험 목록으로
+            const directType = info.dbGrade === '진단평가'
+              ? (writtenCount > 0 ? '/written' : practicalCount > 0 ? '/practical' : '')
+              : ''
+
             return (
               <Link
                 key={cat.id}
-                href={`/category/${cat.id}`}
+                href={`/category/${cat.id}${directType}`}
                 className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-xl p-5 sm:p-6 transition-all hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md group"
               >
                 {/* 배지 */}

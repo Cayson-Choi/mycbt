@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { unstable_cache } from "next/cache"
 
@@ -29,7 +29,7 @@ export default async function CategoryPage({
     async (catId: number) => {
       const cat = await prisma.examCategory.findUnique({
         where: { id: catId, isActive: true },
-        select: { id: true, name: true, description: true, grade: true },
+        select: { id: true, name: true, description: true },
       })
       if (!cat) return null
 
@@ -52,15 +52,6 @@ export default async function CategoryPage({
   if (!data) notFound()
 
   const { category, writtenCount, practicalCount } = data
-
-  // 진단평가 카테고리는 필기/실기 선택 없이 바로 시험 목록으로 이동
-  if (category.grade === '진단평가') {
-    if (writtenCount > 0) {
-      redirect(`/category/${id}/written`)
-    } else if (practicalCount > 0) {
-      redirect(`/category/${id}/practical`)
-    }
-  }
 
   const examTypes = [
     {
