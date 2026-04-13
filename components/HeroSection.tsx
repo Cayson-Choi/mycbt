@@ -223,16 +223,17 @@ const slides: Slide[] = [
     personImage: '/hero/woman3.png',
     personAlt: '전기기사 강사',
     floats: [
-      { type: 'wreath', text: '98%\n합격', right: '16%', top: '8%', size: 160, color: '#fb923c', delay: 1000, anim: 'float2' },
-      // 월계관 왼쪽 (right 32%+)
-      { type: 'sparkle', right: '33%', top: '5%', size: 22, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'ring', right: '35%', top: '25%', size: 28, color: '#fb923c', delay: 1200, anim: 'float1' },
-      { type: 'dot', right: '34%', top: '42%', size: 9, delay: 1250, anim: 'pulse' },
-      // 월계관 아래 (top 50%+)
-      { type: 'diamond', right: '22%', top: '55%', size: 16, color: '#fbbf24', delay: 1300, anim: 'float3' },
-      { type: 'sparkle', right: '28%', top: '68%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'swirl', right: '20%', top: '80%', size: 32, color: '#fb923c', delay: 1400, anim: 'float2' },
-      { type: 'dot', right: '32%', top: '88%', size: 7, delay: 1450, anim: 'float1' },
+      { type: 'wreath', text: '98%\n합격', right: '20%', top: '30%', size: 160, color: '#fb923c', delay: 1000, anim: 'float2' },
+      // 위쪽 (top 0~20%)
+      { type: 'sparkle', right: '30%', top: '3%', size: 22, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'ring', right: '22%', top: '10%', size: 26, color: '#fb923c', delay: 1200, anim: 'float1' },
+      { type: 'dot', right: '35%', top: '18%', size: 8, delay: 1150, anim: 'pulse' },
+      // 왼쪽 (right 30%+)
+      { type: 'diamond', right: '32%', top: '42%', size: 16, color: '#fbbf24', delay: 1300, anim: 'float3' },
+      { type: 'swirl', right: '34%', top: '60%', size: 28, color: '#fb923c', delay: 1250, anim: 'float2' },
+      // 아래쪽 (top 75%+)
+      { type: 'sparkle', right: '28%', top: '78%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'dot', right: '22%', top: '88%', size: 7, delay: 1450, anim: 'float1' },
     ],
   },
   {
@@ -243,17 +244,19 @@ const slides: Slide[] = [
     accentColor: '#818cf8',
     personImage: '/hero/woman1.png',
     personAlt: '전기기능사 강사',
+    imageScale: 1.03,
     floats: [
-      { type: 'wreath', text: '족보문제\n공개', right: '16%', top: '8%', size: 160, color: '#818cf8', delay: 1000, anim: 'float1' },
-      // 월계관 왼쪽 (right 32%+)
-      { type: 'diamond', right: '34%', top: '8%', size: 18, color: '#818cf8', delay: 1100, anim: 'float2' },
-      { type: 'dot', right: '33%', top: '30%', size: 8, delay: 1150, anim: 'pulse' },
-      { type: 'swirl', right: '35%', top: '45%', size: 30, color: '#818cf8', delay: 1250, anim: 'float3' },
-      // 월계관 아래 (top 50%+)
-      { type: 'sparkle', right: '24%', top: '55%', size: 18, color: '#fbbf24', delay: 1300, anim: 'shimmer' },
-      { type: 'ring', right: '30%', top: '68%', size: 24, color: '#818cf8', delay: 1350, anim: 'float1' },
-      { type: 'sparkle', right: '22%', top: '82%', size: 14, color: '#a5b4fc', delay: 1400, anim: 'shimmer' },
-      { type: 'diamond', right: '33%', top: '90%', size: 10, color: '#818cf8', delay: 1450, anim: 'float2' },
+      { type: 'wreath', text: '족보문제\n공개', right: '20%', top: '30%', size: 160, color: '#818cf8', delay: 1000, anim: 'float1' },
+      // 위쪽 (top 0~20%)
+      { type: 'diamond', right: '28%', top: '5%', size: 18, color: '#818cf8', delay: 1100, anim: 'float2' },
+      { type: 'sparkle', right: '34%', top: '15%', size: 16, color: '#fbbf24', delay: 1200, anim: 'shimmer' },
+      { type: 'dot', right: '22%', top: '12%', size: 7, delay: 1150, anim: 'pulse' },
+      // 왼쪽 (right 30%+)
+      { type: 'swirl', right: '33%', top: '38%', size: 30, color: '#818cf8', delay: 1250, anim: 'float3' },
+      { type: 'ring', right: '32%', top: '58%', size: 24, color: '#818cf8', delay: 1300, anim: 'float1' },
+      // 아래쪽 (top 75%+)
+      { type: 'sparkle', right: '24%', top: '80%', size: 14, color: '#a5b4fc', delay: 1350, anim: 'shimmer' },
+      { type: 'diamond', right: '34%', top: '88%', size: 10, color: '#818cf8', delay: 1450, anim: 'float2' },
     ],
   },
   {
@@ -264,18 +267,20 @@ const slides: Slide[] = [
     accentColor: '#fbbf24',
     personImage: '/hero/man2.png',
     personAlt: 'CAYSON',
+    imageScale: 1.10,
     floats: [
       { type: 'bubble', text: '기능사부터\n기사까지!', right: '-4%', top: '2%', color: '#b45309', delay: 1000, anim: 'wobble' },
-      { type: 'wreath', text: '한 번에\n합격', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
-      // 월계관 왼쪽 (right 32%+)
-      { type: 'ring', right: '34%', top: '6%', size: 26, color: '#fbbf24', delay: 1200, anim: 'float1' },
-      { type: 'sparkle', right: '33%', top: '22%', size: 16, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
-      { type: 'diamond', right: '35%', top: '40%', size: 14, color: '#f59e0b', delay: 1300, anim: 'float3' },
-      // 월계관 아래 (top 50%+)
-      { type: 'sparkle', right: '24%', top: '56%', size: 14, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'swirl', right: '20%', top: '70%', size: 28, color: '#f59e0b', delay: 1400, anim: 'float2' },
-      { type: 'dot', right: '32%', top: '82%', size: 8, delay: 1420, anim: 'pulse' },
-      { type: 'ring', right: '34%', top: '92%', size: 20, color: '#f59e0b', delay: 1450, anim: 'float3' },
+      { type: 'wreath', text: '한 번에\n합격', right: '20%', top: '30%', size: 160, color: '#fbbf24', delay: 1100, anim: 'float2' },
+      // 위쪽 (top 0~20%)
+      { type: 'ring', right: '32%', top: '4%', size: 26, color: '#fbbf24', delay: 1200, anim: 'float1' },
+      { type: 'sparkle', right: '24%', top: '14%', size: 18, color: '#fbbf24', delay: 1150, anim: 'shimmer' },
+      { type: 'dot', right: '36%', top: '20%', size: 7, delay: 1050, anim: 'pulse' },
+      // 왼쪽 (right 30%+)
+      { type: 'diamond', right: '34%', top: '45%', size: 14, color: '#f59e0b', delay: 1300, anim: 'float3' },
+      { type: 'sparkle', right: '32%', top: '62%', size: 12, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      // 아래쪽 (top 75%+)
+      { type: 'swirl', right: '22%', top: '78%', size: 28, color: '#f59e0b', delay: 1400, anim: 'float2' },
+      { type: 'ring', right: '34%', top: '86%', size: 20, color: '#f59e0b', delay: 1450, anim: 'float3' },
     ],
   },
   {
@@ -288,15 +293,16 @@ const slides: Slide[] = [
     personAlt: '소방설비산업기사 강사',
     floats: [
       { type: 'pill', text: 'NCS', right: '20%', top: '35%', color: '#f43f5e', delay: 1000, anim: 'float1' },
-      // 월계관 왼쪽 (right 32%+)
-      { type: 'sparkle', right: '35%', top: '8%', size: 18, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'dot', right: '34%', top: '22%', size: 8, delay: 1150, anim: 'pulse' },
-      // 월계관 아래 (top 50%+)
-      { type: 'ring', right: '24%', top: '55%', size: 26, color: '#fb7185', delay: 1250, anim: 'float3' },
-      { type: 'diamond', right: '32%', top: '65%', size: 14, color: '#fb7185', delay: 1300, anim: 'float1' },
-      { type: 'sparkle', right: '22%', top: '78%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'swirl', right: '30%', top: '85%', size: 28, color: '#fb7185', delay: 1400, anim: 'float2' },
-      { type: 'dot', right: '34%', top: '92%', size: 6, delay: 1450, anim: 'float1' },
+      // 위쪽 (top 0~20%)
+      { type: 'sparkle', right: '22%', top: '5%', size: 18, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'dot', right: '36%', top: '22%', size: 8, delay: 1150, anim: 'pulse' },
+      // 왼쪽 (right 30%+)
+      { type: 'ring', right: '34%', top: '40%', size: 24, color: '#fb7185', delay: 1250, anim: 'float3' },
+      { type: 'diamond', right: '32%', top: '58%', size: 14, color: '#fb7185', delay: 1300, anim: 'float1' },
+      // 아래쪽 (top 75%+)
+      { type: 'sparkle', right: '24%', top: '78%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
+      { type: 'swirl', right: '32%', top: '85%', size: 28, color: '#fb7185', delay: 1400, anim: 'float2' },
+      { type: 'dot', right: '22%', top: '92%', size: 6, delay: 1450, anim: 'float1' },
     ],
   },
   {
@@ -310,16 +316,17 @@ const slides: Slide[] = [
     ctaText: '프리미엄 가입하기',
     ctaHref: '#premium',
     floats: [
-      { type: 'wreath', text: '93%\n취업성공', right: '16%', top: '8%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
-      // 월계관 왼쪽 (right 32%+)
-      { type: 'sparkle', right: '34%', top: '5%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
-      { type: 'diamond', right: '33%', top: '28%', size: 16, color: '#f59e0b', delay: 1200, anim: 'float3' },
-      { type: 'ring', right: '35%', top: '48%', size: 30, color: '#fbbf24', delay: 1300, anim: 'float1' },
-      // 월계관 아래 (top 50%+)
-      { type: 'swirl', right: '22%', top: '58%', size: 32, color: '#f59e0b', delay: 1250, anim: 'float2' },
-      { type: 'sparkle', right: '28%', top: '72%', size: 16, color: '#fbbf24', delay: 1350, anim: 'shimmer' },
-      { type: 'dot', right: '34%', top: '82%', size: 8, delay: 1400, anim: 'pulse' },
-      { type: 'dot', right: '24%', top: '90%', size: 6, delay: 1450, anim: 'float1' },
+      { type: 'wreath', text: '93%\n취업성공', right: '20%', top: '30%', size: 160, color: '#fbbf24', delay: 1000, anim: 'float2' },
+      // 위쪽 (top 0~20%)
+      { type: 'sparkle', right: '32%', top: '3%', size: 24, color: '#fbbf24', delay: 1100, anim: 'shimmer' },
+      { type: 'dot', right: '24%', top: '15%', size: 9, delay: 1150, anim: 'pulse' },
+      { type: 'diamond', right: '36%', top: '20%', size: 14, color: '#f59e0b', delay: 1200, anim: 'float3' },
+      // 왼쪽 (right 30%+)
+      { type: 'ring', right: '34%', top: '45%', size: 28, color: '#fbbf24', delay: 1300, anim: 'float1' },
+      { type: 'sparkle', right: '33%', top: '62%', size: 16, color: '#f59e0b', delay: 1250, anim: 'shimmer' },
+      // 아래쪽 (top 75%+)
+      { type: 'swirl', right: '22%', top: '78%', size: 30, color: '#f59e0b', delay: 1350, anim: 'float2' },
+      { type: 'dot', right: '34%', top: '88%', size: 7, delay: 1450, anim: 'float1' },
     ],
   },
 ]
