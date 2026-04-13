@@ -7,6 +7,7 @@ import CategoryAccordion from "@/components/CategoryAccordion"
 import DuplicateQuestionsSection from "@/components/DuplicateQuestionsSection"
 import ExamSettingsSection from "@/components/ExamSettingsSection"
 import LandingCardSettings from "@/components/LandingCardSettings"
+import AdminNavCard from "@/components/AdminNavCard"
 
 export const dynamic = 'force-dynamic'
 
@@ -210,73 +211,34 @@ export default async function AdminPage() {
 
         {/* 관리 메뉴 */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <Link
+          <AdminNavCard
             href="/admin/exams"
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">📅</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg dark:text-white">시험 관리</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  년도/회차 시험 생성 및 관리
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link
+            icon="📅"
+            title="시험 관리"
+            description="년도/회차 시험 생성 및 관리"
+            iconBg="bg-amber-100 dark:bg-amber-900/50"
+          />
+          <AdminNavCard
             href="/admin/questions"
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">📝</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg dark:text-white">문제 관리</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  문제 추가, 수정, 삭제
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link
+            icon="📝"
+            title="문제 관리"
+            description="문제 추가, 수정, 삭제"
+            iconBg="bg-blue-100 dark:bg-blue-900/50"
+          />
+          <AdminNavCard
             href="/admin/users"
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">👥</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg dark:text-white">회원 관리</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  회원 목록, 권한 관리
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link
+            icon="👥"
+            title="회원 관리"
+            description="회원 목록, 권한 관리"
+            iconBg="bg-green-100 dark:bg-green-900/50"
+          />
+          <AdminNavCard
             href="/admin/official-exams"
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border dark:border-gray-700"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-red-100 dark:bg-red-900/50 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">🎓</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg dark:text-white">공식 시험 관리</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  중간고사/기말고사 출제, 결과 조회
-                </p>
-              </div>
-            </div>
-          </Link>
+            icon="🎓"
+            title="공식 시험 관리"
+            description="중간고사/기말고사 출제, 결과 조회"
+            iconBg="bg-red-100 dark:bg-red-900/50"
+          />
         </div>
 
         {/* 하단 버튼 */}
