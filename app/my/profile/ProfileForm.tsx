@@ -34,8 +34,7 @@ export default function ProfileForm({ nickname, email, phone: initialPhone }: Pr
 
       setSaveSuccess(true)
       setTimeout(() => setSaveSuccess(false), 2000)
-    } catch (err) {
-      console.error('Save error:', err)
+    } catch {
       alert('오류가 발생했습니다')
     } finally {
       setSaving(false)

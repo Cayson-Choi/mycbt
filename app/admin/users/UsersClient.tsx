@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ConfirmDialog from '@/components/ConfirmDialog'
 
@@ -17,7 +16,6 @@ interface UserData {
 }
 
 export default function UsersClient({ initialUsers }: { initialUsers: UserData[] }) {
-  const router = useRouter()
   const [users, setUsers] = useState<UserData[]>(initialUsers)
   const [filteredUsers, setFilteredUsers] = useState<UserData[]>([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -69,8 +67,8 @@ export default function UsersClient({ initialUsers }: { initialUsers: UserData[]
         const data = await res.json()
         setUsers(data.users || [])
       }
-    } catch (err) {
-      console.error('Failed to reload users:', err)
+    } catch {
+      /* ignored */
     }
   }
 
@@ -96,11 +94,9 @@ export default function UsersClient({ initialUsers }: { initialUsers: UserData[]
       if (res.ok) {
         reloadUsers()
       } else {
-        const data = await res.json()
-        console.error('Toggle admin failed:', data.error || '권한 변경 실패')
       }
-    } catch (err) {
-      console.error('Toggle admin error:', err)
+    } catch {
+      /* ignored */
     }
   }
 
@@ -121,11 +117,9 @@ export default function UsersClient({ initialUsers }: { initialUsers: UserData[]
       if (res.ok) {
         reloadUsers()
       } else {
-        const data = await res.json()
-        console.error('Delete user failed:', data.error || '회원 삭제 실패')
       }
-    } catch (err) {
-      console.error('Delete user error:', err)
+    } catch {
+      /* ignored */
     }
   }
 
@@ -157,8 +151,8 @@ export default function UsersClient({ initialUsers }: { initialUsers: UserData[]
     for (const id of ids) {
       try {
         await fetch(`/api/admin/users/${id}`, { method: 'DELETE' })
-      } catch (err) {
-        console.error('Bulk delete error:', err)
+      } catch {
+        /* ignored */
       }
     }
     setSelectedIds(new Set())

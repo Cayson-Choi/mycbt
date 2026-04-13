@@ -137,5 +137,5 @@ export default async function RetryPage({
     }
   })
 
-  return <RetryClient questions={retryQuestions} filter={filter} />
+  return <RetryClient questions={retryQuestions} />
 }

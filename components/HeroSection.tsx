@@ -97,11 +97,14 @@ function LaurelWreath({ color, size = 80, text }: { color?: string; size?: numbe
   return (
     <div className="relative" style={{ width: size, height: size, animation: 'wreathBreath 4s ease-in-out infinite' }}>
       {/* 원본 월계관 */}
-      <img
+      <Image
         src="/hero/mooncrown/image.png"
         alt=""
+        width={size}
+        height={size}
         className="absolute inset-0 w-full h-full object-contain"
         style={isGold ? { filter: 'grayscale(1) brightness(1.2)' } : { filter: 'grayscale(1) brightness(1.5)' }}
+        loading="lazy"
       />
       {/* 그라데이션 오버레이 (금색: 위 밝은금→아래 어두운갈색, 기타: 단색) */}
       <div

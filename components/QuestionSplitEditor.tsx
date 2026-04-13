@@ -2,29 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import MathText from '@/components/MathText'
-
-// Base64 data URL → Blob 변환
-function dataUrlToBlob(dataUrl: string): Blob {
-  const [header, base64] = dataUrl.split(',')
-  const mime = header.match(/:(.*?);/)?.[1] || 'image/png'
-  const binary = atob(base64)
-  const array = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i++) {
-    array[i] = binary.charCodeAt(i)
-  }
-  return new Blob([array], { type: mime })
-}
-
-// PDF에서 추출한 텍스트의 불필요한 줄바꿈을 정리
-function normalizeLineBreaks(text: string): string {
-  if (!text) return text
-  return text
-    .replace(/\r\n/g, '\n')
-    .replace(/\n{2,}/g, '___PARA___')
-    .replace(/\n/g, ' ')
-    .replace(/___PARA___/g, '\n\n')
-    .replace(/ {2,}/g, ' ')
-}
+import { dataUrlToBlob, normalizeLineBreaks } from '@/lib/utils'
 
 interface QuestionSplitEditorProps {
   question?: any
@@ -149,8 +127,7 @@ export default function QuestionSplitEditor({
           const data = await res.json()
           setCodeCheckStatus(data.available ? 'available' : 'duplicate')
         }
-      } catch (err) {
-        console.error('Code check error:', err)
+      } catch {
         setCodeCheckStatus('idle')
       }
     }, 500)
@@ -198,8 +175,8 @@ export default function QuestionSplitEditor({
           setFormData((prev) => ({ ...prev, subject_id: data[0].id }))
         }
       }
-    } catch (err) {
-      console.error('Failed to load subjects:', err)
+    } catch {
+      /* ignored */
     }
   }
 
@@ -218,8 +195,7 @@ export default function QuestionSplitEditor({
         const data = await res.json()
         alert(data.error || '자동 생성 실패')
       }
-    } catch (err) {
-      console.error('Auto generate code error:', err)
+    } catch {
       alert('자동 생성 중 오류가 발생했습니다')
     }
   }
@@ -257,8 +233,7 @@ export default function QuestionSplitEditor({
         const data = await res.json()
         alert(data.error || '이미지 업로드 실패')
       }
-    } catch (err) {
-      console.error('Image upload error:', err)
+    } catch {
       alert('이미지 업로드 중 오류가 발생했습니다')
     } finally {
       setUploadingImage(false)
@@ -290,8 +265,7 @@ export default function QuestionSplitEditor({
         const data = await res.json()
         alert(data.error || '이미지 업로드 실패')
       }
-    } catch (err) {
-      console.error('Image upload error:', err)
+    } catch {
       alert('이미지 업로드 중 오류가 발생했습니다')
     } finally {
       setUploadingImage(false)
@@ -357,8 +331,7 @@ export default function QuestionSplitEditor({
         const data = await res.json()
         alert(data.error || '이미지 업로드 실패')
       }
-    } catch (err) {
-      console.error('Image upload error:', err)
+    } catch {
       alert('이미지 업로드 중 오류가 발생했습니다')
     } finally {
       setUploadingImage(false)
@@ -415,8 +388,7 @@ export default function QuestionSplitEditor({
         const errData = await res.json()
         alert(errData.error || '오류가 발생했습니다')
       }
-    } catch (err) {
-      console.error('Submit error:', err)
+    } catch {
       alert('오류가 발생했습니다')
     } finally {
       setSaving(false)
@@ -608,7 +580,6 @@ export default function QuestionSplitEditor({
         >
           <PreviewPanel
             formData={formData}
-            subjects={subjects}
             isDark={isDark}
             examName={examName}
             subjectName={subjectName}
@@ -1149,13 +1120,11 @@ function EditPanel({
 /* ─── Preview Panel ─── */
 function PreviewPanel({
   formData,
-  subjects,
   isDark,
   examName,
   subjectName,
 }: {
   formData: any
-  subjects: any[]
   isDark: boolean
   examName: string
   subjectName: string

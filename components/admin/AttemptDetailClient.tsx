@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import MathText from '@/components/MathText'
@@ -67,7 +66,6 @@ export default function AttemptDetailClient({
   attemptId: string
   initialResult: AttemptResult
 }) {
-  const router = useRouter()
   const [result, setResult] = useState<AttemptResult>(initialResult)
   const [printing, setPrinting] = useState(false)
   const [gradeInputs, setGradeInputs] = useState<Record<number, string>>({})
@@ -135,8 +133,8 @@ export default function AttemptDetailClient({
     setPrinting(true)
     try {
       printExamPaperFromResult(result)
-    } catch (err) {
-      console.error('출력 실패:', err)
+    } catch {
+      /* ignored */
     } finally {
       setPrinting(false)
     }

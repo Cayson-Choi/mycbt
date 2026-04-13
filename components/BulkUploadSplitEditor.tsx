@@ -2,30 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import MathText from '@/components/MathText'
-
-// Base64 data URL → Blob 변환
-function dataUrlToBlob(dataUrl: string): Blob {
-  const [header, base64] = dataUrl.split(',')
-  const mime = header.match(/:(.*?);/)?.[1] || 'image/png'
-  const binary = atob(base64)
-  const array = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i++) {
-    array[i] = binary.charCodeAt(i)
-  }
-  return new Blob([array], { type: mime })
-}
-
-// PDF에서 추출한 텍스트의 불필요한 줄바꿈을 정리
-// 단독 \n → 공백, \n\n (빈 줄) → 유지
-function normalizeLineBreaks(text: string): string {
-  if (!text) return text
-  return text
-    .replace(/\r\n/g, '\n')
-    .replace(/\n{2,}/g, '___PARA___')   // 빈 줄(문단 구분)은 보존
-    .replace(/\n/g, ' ')                 // 단독 줄바꿈 → 공백
-    .replace(/___PARA___/g, '\n\n')      // 문단 구분 복원
-    .replace(/ {2,}/g, ' ')              // 연속 공백 정리
-}
+import { dataUrlToBlob, normalizeLineBreaks } from '@/lib/utils'
 
 interface BulkUploadSplitEditorProps {
   onClose: () => void
@@ -123,8 +100,7 @@ export default function BulkUploadSplitEditor({
       else if (isCsv) setUploadType('csv')
 
       e.target.value = ''
-    } catch (err) {
-      console.error('File read error:', err)
+    } catch {
       alert('파일을 읽는 중 오류가 발생했습니다')
     }
   }
@@ -300,8 +276,8 @@ export default function BulkUploadSplitEditor({
               processedQuestions[i].image_url = imgData.url
               uploaded++
             }
-          } catch (err) {
-            console.error(`Image upload failed for question ${i + 1}:`, err)
+          } catch {
+            /* ignored */
           }
           delete processedQuestions[i].img_data
         }
@@ -337,8 +313,7 @@ export default function BulkUploadSplitEditor({
         const error = await res.json()
         alert(`업로드 실패: ${error.error || '알 수 없는 오류'}`)
       }
-    } catch (err) {
-      console.error('Bulk upload error:', err)
+    } catch {
       alert('업로드 중 오류가 발생했습니다')
     } finally {
       setUploading(false)

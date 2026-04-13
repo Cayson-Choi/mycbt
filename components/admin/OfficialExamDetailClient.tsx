@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import QuestionSplitEditor from '@/components/QuestionSplitEditor'
 
@@ -221,8 +220,6 @@ export default function OfficialExamDetailClient({
   initialQuestions: QuestionData[]
   initialSubjects: SubjectData[]
 }) {
-  const router = useRouter()
-
   const [activeTab, setActiveTab] = useState<'questions' | 'results'>('questions')
 
   // 공통 상태
@@ -270,7 +267,7 @@ export default function OfficialExamDetailClient({
         setResults(data.results || [])
       }
     } catch {
-      console.error('결과 로드 실패')
+      /* ignored */
     }
   }
 
@@ -282,7 +279,7 @@ export default function OfficialExamDetailClient({
         setQuestions(data.questions || [])
       }
     } catch {
-      console.error('문제 로드 실패')
+      /* ignored */
     }
   }, [examId])
 
@@ -385,11 +382,9 @@ export default function OfficialExamDetailClient({
           studentsGraded += data.studentsGraded
         } else {
           totalFailed++
-          console.error(`AI grade failed for attempt ${r.attempt_id}:`, data.error)
         }
       } catch {
         totalFailed++
-        console.error(`AI grade error for attempt ${r.attempt_id}`)
       }
     }
 

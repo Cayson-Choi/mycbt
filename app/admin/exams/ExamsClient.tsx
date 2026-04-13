@@ -61,7 +61,7 @@ export default function ExamsClient({
         setExams(data)
       }
     } catch {
-      console.error("Failed to reload exams")
+      /* ignored */
     }
   }
 

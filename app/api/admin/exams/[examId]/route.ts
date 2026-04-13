@@ -49,7 +49,7 @@ export async function PUT(
       )
     }
 
-    const exam = await prisma.exam.update({
+    await prisma.exam.update({
       where: { id },
       data,
     })

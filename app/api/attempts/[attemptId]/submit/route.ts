@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 
 export async function POST(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ attemptId: string }> }
 ) {
   try {

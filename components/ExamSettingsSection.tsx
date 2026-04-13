@@ -164,8 +164,6 @@ export default function ExamSettingsSection({ exams }: Props) {
 
       <div className="space-y-3">
         {Array.from(groupedExams.entries()).map(([catName, catExams]) => {
-          const writtenExams = catExams.filter(e => e.exam_type !== 'PRACTICAL')
-          const practicalExams = catExams.filter(e => e.exam_type === 'PRACTICAL')
           return (
           <CategoryAccordionClient key={catName} categoryName={catName}>
             <div className="space-y-2">

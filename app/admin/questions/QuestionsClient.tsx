@@ -144,8 +144,8 @@ export default function QuestionsClient({
           setSubjects(data || [])
         }
       }
-    } catch (err) {
-      console.error('Failed to load subjects:', err)
+    } catch {
+      /* ignored */
     }
   }
 
@@ -189,8 +189,8 @@ export default function QuestionsClient({
         if (requestId !== loadRequestId.current) return // 레이스 컨디션 방지
         setQuestions(data.questions || [])
       }
-    } catch (err) {
-      console.error('Failed to load questions:', err)
+    } catch {
+      /* ignored */
     } finally {
       if (requestId === loadRequestId.current) setLoading(false)
     }
@@ -222,8 +222,7 @@ export default function QuestionsClient({
         const data = await res.json()
         setDeleteError(data.error || '삭제에 실패했습니다')
       }
-    } catch (err) {
-      console.error('Delete error:', err)
+    } catch {
       setDeleteError('삭제 중 오류가 발생했습니다')
     } finally {
       setPendingDeleteId(null)
@@ -288,8 +287,7 @@ export default function QuestionsClient({
       const failedIds = new Set(failed.map((r) => r.id))
       setSelectedQuestions(failedIds.size > 0 ? failedIds : new Set())
       loadQuestions()
-    } catch (err) {
-      console.error('Bulk delete error:', err)
+    } catch {
       setDeleteError('삭제 중 오류가 발생했습니다')
     }
   }

@@ -122,7 +122,7 @@ export async function PUT(
 
 // 문제 삭제
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

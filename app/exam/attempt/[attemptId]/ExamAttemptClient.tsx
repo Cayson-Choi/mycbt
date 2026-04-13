@@ -202,7 +202,6 @@ function SubmitSection({
   attemptId: string
   onError: (msg: string) => void
 }) {
-  const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [confirmType, setConfirmType] = useState<
     null | 'submit-unanswered' | 'submit'
@@ -366,7 +365,7 @@ export default function ExamAttemptClient({
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question_id: questionId, selected: choice }),
-    }).catch(err => console.error('답안 저장 실패:', err))
+    }).catch(() => {})
   }, [attemptId])
 
   // 주관식 답안 저장 (debounced)
@@ -389,7 +388,7 @@ export default function ExamAttemptClient({
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question_id: questionId, answer_text: text }),
-      }).catch(err => console.error('답안 저장 실패:', err))
+      }).catch(() => {})
       textSaveTimers.current.delete(questionId)
     }, 500)
     textSaveTimers.current.set(questionId, timer)

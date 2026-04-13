@@ -27,7 +27,6 @@ interface ExamStartClientProps {
   exam: ExamData
   subjects: SubjectData[]
   officialQuestionCount: number
-  officialBySubject: Record<number, number>
 }
 
 export default function ExamStartClient({
@@ -35,7 +34,6 @@ export default function ExamStartClient({
   exam,
   subjects,
   officialQuestionCount,
-  officialBySubject,
 }: ExamStartClientProps) {
   const router = useRouter()
   const [starting, setStarting] = useState(false)

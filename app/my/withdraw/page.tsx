@@ -1,13 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import ConfirmDialog from '@/components/ConfirmDialog'
 
 export default function WithdrawPage() {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -31,8 +29,7 @@ export default function WithdrawPage() {
         const data = await res.json()
         setError(data.error || '탈퇴 처리 실패')
       }
-    } catch (err) {
-      console.error('Withdraw error:', err)
+    } catch {
       setError('오류가 발생했습니다')
     } finally {
       setLoading(false)

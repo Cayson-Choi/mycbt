@@ -24,10 +24,8 @@ interface RetryQuestion {
 
 export default function RetryClient({
   questions,
-  filter,
 }: {
   questions: RetryQuestion[]
-  filter: string
 }) {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [answers, setAnswers] = useState<Map<number, number>>(new Map())

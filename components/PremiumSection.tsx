@@ -46,59 +46,6 @@ function CountUp({ target, suffix = '', duration = 2000 }: { target: number; suf
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>
 }
 
-/* ── 혜택 데이터 ── */
-const benefits = [
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <defs><linearGradient id="pb1" x1="8" y1="8" x2="40" y2="40"><stop offset="0%" stopColor="#fbbf24" /><stop offset="100%" stopColor="#f59e0b" /></linearGradient></defs>
-        <circle cx="24" cy="24" r="20" fill="url(#pb1)" opacity="0.15" />
-        <path d="M24 10l3.5 7 7.5 1-5.5 5.3 1.3 7.7L24 27.5 17.2 31l1.3-7.7L13 18l7.5-1L24 10z" fill="url(#pb1)" />
-      </svg>
-    ),
-    title: '전문가 검증 문제은행',
-    desc: '기술사들이 한 문제씩 직접 검증한 12,000+ 문제. 오류 없는 정확한 문제로 실력을 쌓으세요.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <defs><linearGradient id="pb2" x1="8" y1="8" x2="40" y2="40"><stop offset="0%" stopColor="#818cf8" /><stop offset="100%" stopColor="#6366f1" /></linearGradient></defs>
-        <circle cx="24" cy="24" r="20" fill="url(#pb2)" opacity="0.15" />
-        <rect x="14" y="14" width="20" height="20" rx="4" stroke="url(#pb2)" strokeWidth="2.5" fill="none" />
-        <path d="M19 24l3 3 7-7" stroke="url(#pb2)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    title: 'AI 실시간 약점 분석',
-    desc: '과목별 정답률을 분석하고, 취약 파트를 집중 추천. 합격까지 최단 경로를 안내합니다.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <defs><linearGradient id="pb3" x1="8" y1="8" x2="40" y2="40"><stop offset="0%" stopColor="#34d399" /><stop offset="100%" stopColor="#10b981" /></linearGradient></defs>
-        <circle cx="24" cy="24" r="20" fill="url(#pb3)" opacity="0.15" />
-        <path d="M16 28c0-6 3.6-10 8-10s8 4 8 10" stroke="url(#pb3)" strokeWidth="2.5" strokeLinecap="round" />
-        <circle cx="24" cy="15" r="4" stroke="url(#pb3)" strokeWidth="2.5" fill="none" />
-        <path d="M32 32c0-2 1.5-4 4-4" stroke="url(#pb3)" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="36" cy="25" r="3" stroke="url(#pb3)" strokeWidth="2" fill="none" />
-      </svg>
-    ),
-    title: '1:1 멘토링 매칭',
-    desc: '현직 기술사 멘토와 1:1 질의응답. 막히는 문제도 전문가에게 직접 물어보세요.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <defs><linearGradient id="pb4" x1="8" y1="8" x2="40" y2="40"><stop offset="0%" stopColor="#f472b6" /><stop offset="100%" stopColor="#ec4899" /></linearGradient></defs>
-        <circle cx="24" cy="24" r="20" fill="url(#pb4)" opacity="0.15" />
-        <rect x="13" y="18" width="22" height="16" rx="2" stroke="url(#pb4)" strokeWidth="2.5" fill="none" />
-        <path d="M13 22l11 7 11-7" stroke="url(#pb4)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    title: '합격 후 취업처 연계',
-    desc: '자격증 취득 즉시 파트너 기업에 이력서 추천. 전기 분야 채용 연계율 92%를 자랑합니다.',
-  },
-]
-
 /* ── 취업 연계 분야 ── */
 const fields = [
   { name: '공기업 · 공공기관', count: '50+', color: 'blue' },

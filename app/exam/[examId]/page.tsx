@@ -33,9 +33,8 @@ export default async function ExamStartPage({
 
   if (!ex) notFound()
 
-  const bySubject: Record<number, number> = {}
   let total = 0
-  for (const g of qCounts) { bySubject[g.subjectId] = g._count.id; total += g._count.id }
+  for (const g of qCounts) { total += g._count.id }
 
   const examData = {
     id: ex.id,
@@ -63,7 +62,6 @@ export default async function ExamStartPage({
       exam={examData}
       subjects={subjectsData}
       officialQuestionCount={total}
-      officialBySubject={bySubject}
     />
   )
 }
