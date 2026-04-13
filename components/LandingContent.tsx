@@ -56,7 +56,7 @@ const grades = [
   {
     id: 'basic', label: '진단평가', count: 1,
     badge: '입문 과정',
-    cta: '전기 입문자를 위한\n기초 진단평가',
+    cta: '자격증 입문자를 위한\n기초 진단평가',
     cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-teal-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">

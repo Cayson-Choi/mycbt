@@ -6,7 +6,7 @@ import { unstable_cache } from "next/cache"
 export const revalidate = 60
 
 const gradeMap: Record<string, { dbGrade: string; title: string; description: string }> = {
-  basic: { dbGrade: '진단평가', title: '진단평가', description: '전기 입문자를 위한 기초 진단평가' },
+  basic: { dbGrade: '진단평가', title: '진단평가', description: '자격증 입문자를 위한 기초 진단평가' },
   technician: { dbGrade: '기능사', title: '기능사', description: '자격증 취득의 첫 걸음, 기초부터 탄탄하게' },
   industrial: { dbGrade: '산업기사', title: '산업기사', description: '전문 기술인의 시작, 산업 현장의 핵심 인력' },
   engineer: { dbGrade: '기사', title: '기사', description: '엔지니어의 필수 자격, 전문성을 증명하세요' },
