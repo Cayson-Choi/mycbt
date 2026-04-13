@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
 
 export async function POST(
@@ -226,6 +227,9 @@ export async function POST(
         })
       }
     }
+
+    // 결과 페이지 캐시 무효화
+    revalidatePath(`/exam/result/${aid}`)
 
     return NextResponse.json({
       success: true,

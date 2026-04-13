@@ -4,8 +4,8 @@ import { redirect, notFound } from "next/navigation"
 import Link from "next/link"
 import ExamResultContent from "./ExamResultContent"
 
-// 시험 제출 직후 최신 상태를 가져오도록 캐시 비활성화
-export const dynamic = 'force-dynamic'
+// 결과는 제출 후 변경되지 않으므로 ISR 사용 (제출 API에서 revalidate 호출)
+export const revalidate = 0
 
 export default async function ExamResultPage({
   params,
