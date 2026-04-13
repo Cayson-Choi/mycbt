@@ -499,7 +499,18 @@ function WhyCaysonSection() {
   )
 }
 
-export default function LandingContent() {
+// gradeMap: grades 배열의 id → DB grade name 매핑
+const gradeDbMap: Record<string, string> = {
+  technician: '기능사',
+  industrial: '산업기사',
+  engineer: '기사',
+  master: '기능장',
+  public: '공기업',
+  ncs: '과정평가형',
+  etc: '기타',
+}
+
+export default function LandingContent({ gradeCounts }: { gradeCounts?: Record<string, number> }) {
 
 
   return (
@@ -515,9 +526,15 @@ export default function LandingContent() {
 
           {/* Royal-styled card grid */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {grades.map((g, i) => (
+            {grades.map((g, i) => {
+              // DB에서 가져온 실제 시험 수로 덮어씌우기
+              const dbGrade = gradeDbMap[g.id]
+              const realCount = gradeCounts && dbGrade ? (gradeCounts[dbGrade] ?? g.count) : g.count
+              // 시험이 0개이고 "준비중"이 아닌 카드는 숨김
+              if (realCount === 0 && g.badge !== '준비중') return null
+              return (
               <Reveal key={g.id} delay={i * 80}>
-                {g.count > 0 ? (
+                {realCount > 0 ? (
                   <Link
                     href={`/grade/${g.id}`}
                     className={`group block relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-5 sm:p-7 h-full min-h-[170px] sm:min-h-[210px] transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A84C]/15 hover:-translate-y-1 cursor-pointer border border-[#C9A84C]/15 dark:border-gray-700`}
@@ -556,7 +573,8 @@ export default function LandingContent() {
                   </div>
                 )}
               </Reveal>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
