@@ -497,7 +497,7 @@ export default function OfficialExamDetailClient({
                 <label className="block text-sm font-medium mb-1 dark:text-gray-200">시험 시간(분)</label>
                 <input
                   type="number"
-                  value={settingsForm.duration_minutes}
+                  value={settingsForm.duration_minutes || ''}
                   onChange={(e) => setSettingsForm({ ...settingsForm, duration_minutes: e.target.value === '' ? 0 : parseInt(e.target.value) || 0 })}
                   min={1}
                   max={300}

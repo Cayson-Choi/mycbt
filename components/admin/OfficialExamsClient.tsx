@@ -206,7 +206,7 @@ export default function OfficialExamsClient({
                   </label>
                   <input
                     type="number"
-                    value={formData.duration_minutes}
+                    value={formData.duration_minutes || ''}
                     onChange={(e) =>
                       setFormData({ ...formData, duration_minutes: e.target.value === '' ? 0 : parseInt(e.target.value) || 0 })
                     }
