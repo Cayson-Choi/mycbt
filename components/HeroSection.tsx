@@ -404,9 +404,9 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0 transition-opacity" style={{ backgroundColor: slide.bgColor, opacity: 1, transitionDuration: `${FADE_MS}ms` }} />
 
       {/* CAYSON 워터마크 (45도 사선, 배경보다 엷은 색) */}
-      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden flex items-center justify-end">
+      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden flex items-center justify-center sm:justify-end">
         <span
-          className="font-black text-[180px] sm:text-[280px] lg:text-[360px] select-none whitespace-nowrap mr-[-5%]"
+          className="font-black text-[120px] sm:text-[280px] lg:text-[360px] select-none whitespace-nowrap sm:mr-[-5%]"
           style={{
             color: `${slide.accentColor}40`,
             transform: 'rotate(-45deg)',
