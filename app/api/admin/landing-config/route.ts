@@ -84,8 +84,8 @@ export async function POST(request: NextRequest) {
       create: { key: SETTING_KEY, value: JSON.stringify(updated) },
     })
 
-    // 홈페이지 캐시 즉시 무효화
-    revalidatePath('/')
+    // 모든 페이지 캐시 즉시 무효화
+    revalidatePath('/', 'layout')
 
     return NextResponse.json({ message: "저장 완료", hiddenCards: updated })
   } catch (error) {

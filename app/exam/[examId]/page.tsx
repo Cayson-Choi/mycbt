@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
+import { unstable_cache } from "next/cache"
 import ExamStartClient from "./ExamStartClient"
 
 // 30초마다 갱신 — 관리자 수정 시 최대 30초 후 반영, 사용자에게는 캐시로 빠르게 표시
@@ -13,6 +14,20 @@ export async function generateStaticParams() {
   return exams.map((e) => ({ examId: String(e.id) }))
 }
 
+const getExamData = (eid: number) =>
+  unstable_cache(
+    async () => {
+      const [ex, subs, total] = await Promise.all([
+        prisma.exam.findUnique({ where: { id: eid }, include: { category: true } }),
+        prisma.subject.findMany({ where: { examId: eid }, orderBy: { orderNo: "asc" } }),
+        prisma.question.count({ where: { examId: eid, isActive: true } }),
+      ])
+      return { ex, subs, total }
+    },
+    [`exam-start-${eid}`],
+    { revalidate: 60 }
+  )()
+
 export default async function ExamStartPage({
   params,
 }: {
@@ -21,20 +36,9 @@ export default async function ExamStartPage({
   const { examId } = await params
   const eid = Number(examId)
 
-  const [ex, subs, qCounts] = await Promise.all([
-    prisma.exam.findUnique({ where: { id: eid }, include: { category: true } }),
-    prisma.subject.findMany({ where: { examId: eid }, orderBy: { orderNo: "asc" } }),
-    prisma.question.groupBy({
-      by: ["subjectId"],
-      where: { examId: eid, isActive: true },
-      _count: { id: true },
-    }),
-  ])
+  const { ex, subs, total } = await getExamData(eid)
 
   if (!ex) notFound()
-
-  let total = 0
-  for (const g of qCounts) { total += g._count.id }
 
   const examData = {
     id: ex.id,

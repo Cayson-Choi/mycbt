@@ -243,6 +243,9 @@ export default function OfficialExamDetailClient({
   const [aiGrading, setAiGrading] = useState(false)
   const [aiProgress, setAiProgress] = useState<{ current: number; total: number; currentName: string } | null>(null)
   const [aiResult, setAiResult] = useState<{ totalGraded: number; studentsGraded: number; totalFailed: number } | null>(null)
+  const [showAiConfirm, setShowAiConfirm] = useState(false)
+  const [aiPendingCount, setAiPendingCount] = useState(0)
+  const [deleteQuestionId, setDeleteQuestionId] = useState<number | null>(null)
 
   // 시험 설정 수정 상태
   const [editingSettings, setEditingSettings] = useState(false)
@@ -283,20 +286,23 @@ export default function OfficialExamDetailClient({
     }
   }, [examId])
 
-  const handleDeleteQuestion = async (questionId: number) => {
-    if (!confirm('이 문제를 삭제하시겠습니까?')) return
+  const handleDeleteQuestion = (questionId: number) => {
+    setDeleteQuestionId(questionId)
+  }
+
+  const handleDeleteQuestionConfirm = async () => {
+    if (!deleteQuestionId) return
+    const questionId = deleteQuestionId
+    setDeleteQuestionId(null)
 
     setDeletingId(questionId)
     try {
       const res = await fetch(`/api/admin/questions/${questionId}`, { method: 'DELETE' })
       if (res.ok) {
         setQuestions((prev) => prev.filter((q) => q.id !== questionId))
-      } else {
-        const data = await res.json()
-        alert(data.error || '삭제 실패')
       }
     } catch {
-      alert('삭제 중 오류가 발생했습니다')
+      /* ignored */
     } finally {
       setDeletingId(null)
     }
@@ -349,19 +355,23 @@ export default function OfficialExamDetailClient({
     }
   }
 
-  const handleAiGrade = async () => {
+  const handleAiGradeClick = () => {
+    const count = results.filter((r) => r.grading_status === 'PENDING_MANUAL').length
+    if (count === 0) return
+    setAiPendingCount(count)
+    setShowAiConfirm(true)
+  }
+
+  const handleAiGradeConfirm = async () => {
+    setShowAiConfirm(false)
     const pendingResults = results.filter((r) => r.grading_status === 'PENDING_MANUAL')
-    if (pendingResults.length === 0) {
-      alert('채점 대기 중인 시험이 없습니다')
-      return
-    }
-    if (!confirm(`AI 자동 채점을 시작하시겠습니까?\n대상: ${pendingResults.length}명\n\n* AI 채점은 참고용이며, 이후 수동으로 수정할 수 있습니다.`)) {
-      return
-    }
 
     setAiGrading(true)
     setAiResult(null)
     setAiProgress(null)
+
+    // 브라우저에 paint 기회 부여
+    await new Promise(resolve => setTimeout(resolve, 0))
 
     let totalGraded = 0
     let totalFailed = 0
@@ -709,7 +719,7 @@ export default function OfficialExamDetailClient({
                     const pendingCount = results.filter((r) => r.grading_status === 'PENDING_MANUAL').length
                     return (
                       <button
-                        onClick={handleAiGrade}
+                        onClick={handleAiGradeClick}
                         disabled={aiGrading || pendingCount === 0}
                         className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 disabled:opacity-50 text-sm font-medium"
                       >
@@ -889,6 +899,64 @@ export default function OfficialExamDetailClient({
           onSuccess={handleEditorSuccess}
           lockedExam={{ id: parseInt(examId), name: exam.name }}
         />
+      )}
+
+      {/* AI 채점 확인 모달 */}
+      {showAiConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-sm w-full p-6 border dark:border-gray-700">
+            <h3 className="text-lg font-bold mb-3 dark:text-white">AI 자동 채점</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              AI 자동 채점을 시작하시겠습니까?
+            </p>
+            <p className="text-sm font-semibold text-violet-600 dark:text-violet-400 mb-3">
+              대상: {aiPendingCount}명
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-500 mb-6">
+              * AI 채점은 참고용이며, 이후 수동으로 수정할 수 있습니다.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowAiConfirm(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleAiGradeConfirm}
+                className="flex-1 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 text-sm font-medium"
+              >
+                채점 시작
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 문제 삭제 확인 모달 */}
+      {deleteQuestionId && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-sm w-full p-6 border dark:border-gray-700">
+            <h3 className="text-lg font-bold mb-3 dark:text-white">문제 삭제</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              이 문제를 삭제하시겠습니까?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteQuestionId(null)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleDeleteQuestionConfirm}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"
+              >
+                삭제
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

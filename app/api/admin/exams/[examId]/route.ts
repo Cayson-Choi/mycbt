@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
 async function checkAdmin() {
@@ -53,6 +54,11 @@ export async function PUT(
       where: { id },
       data,
     })
+
+    // is_published 변경 시 캐시 무효화
+    if (typeof is_published === "boolean") {
+      revalidatePath("/", "layout")
+    }
 
     await prisma.auditLog.create({
       data: {
@@ -115,6 +121,9 @@ export async function DELETE(
 
     // 삭제 (cascade로 subjects, questions도 삭제)
     await prisma.exam.delete({ where: { id } })
+
+    // 캐시 즉시 무효화
+    revalidatePath("/", "layout")
 
     await prisma.auditLog.create({
       data: {

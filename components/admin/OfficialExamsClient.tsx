@@ -28,6 +28,12 @@ export default function OfficialExamsClient({
   const [error, setError] = useState('')
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [togglingId, setTogglingId] = useState<number | null>(null)
+  const [confirmModal, setConfirmModal] = useState<{
+    type: 'delete' | 'toggle'
+    examId: number
+    examName: string
+    currentPublished?: boolean
+  } | null>(null)
 
   // 생성 폼 상태
   const [formData, setFormData] = useState({
@@ -65,12 +71,16 @@ export default function OfficialExamsClient({
     }
   }
 
-  const handleTogglePublish = async (e: React.MouseEvent, examId: number, currentPublished: boolean) => {
+  const handleTogglePublish = (e: React.MouseEvent, examId: number, examName: string, currentPublished: boolean) => {
     e.preventDefault()
     e.stopPropagation()
+    setConfirmModal({ type: 'toggle', examId, examName, currentPublished })
+  }
 
-    const action = currentPublished ? '게시 종료' : '게시'
-    if (!confirm(`이 시험을 ${action}하시겠습니까?`)) return
+  const handleToggleConfirm = async () => {
+    if (!confirmModal || confirmModal.type !== 'toggle') return
+    const { examId, currentPublished } = confirmModal
+    setConfirmModal(null)
 
     setTogglingId(examId)
     try {
@@ -80,28 +90,28 @@ export default function OfficialExamsClient({
         body: JSON.stringify({ exam_id: examId, is_published: !currentPublished }),
       })
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        alert(data.error || `${action} 실패`)
-        return
+      if (res.ok) {
+        setExams((prev) =>
+          prev.map((ex) => (ex.id === examId ? { ...ex, is_published: !currentPublished } : ex))
+        )
       }
-
-      setExams((prev) =>
-        prev.map((ex) => (ex.id === examId ? { ...ex, is_published: !currentPublished } : ex))
-      )
     } catch {
-      alert('오류가 발생했습니다')
+      /* ignored */
     } finally {
       setTogglingId(null)
     }
   }
 
-  const handleDelete = async (e: React.MouseEvent, examId: number, examName: string) => {
-    e.preventDefault() // Link 클릭 방지
+  const handleDelete = (e: React.MouseEvent, examId: number, examName: string) => {
+    e.preventDefault()
     e.stopPropagation()
+    setConfirmModal({ type: 'delete', examId, examName })
+  }
 
-    if (!confirm(`"${examName}" 시험을 삭제하시겠습니까?\n등록된 문제도 함께 삭제됩니다.`)) return
+  const handleDeleteConfirm = async () => {
+    if (!confirmModal || confirmModal.type !== 'delete') return
+    const { examId } = confirmModal
+    setConfirmModal(null)
 
     setDeletingId(examId)
     try {
@@ -111,16 +121,11 @@ export default function OfficialExamsClient({
         body: JSON.stringify({ exam_id: examId }),
       })
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        alert(data.error || '삭제 실패')
-        return
+      if (res.ok) {
+        setExams((prev) => prev.filter((ex) => ex.id !== examId))
       }
-
-      setExams((prev) => prev.filter((ex) => ex.id !== examId))
     } catch {
-      alert('삭제 중 오류가 발생했습니다')
+      /* ignored */
     } finally {
       setDeletingId(null)
     }
@@ -271,7 +276,7 @@ export default function OfficialExamsClient({
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
-                    onClick={(e) => handleTogglePublish(e, exam.id, exam.is_published)}
+                    onClick={(e) => handleTogglePublish(e, exam.id, exam.name, exam.is_published)}
                     disabled={togglingId === exam.id}
                     className={`px-3 py-1.5 text-xs rounded font-medium disabled:opacity-50 ${
                       exam.is_published
@@ -307,6 +312,40 @@ export default function OfficialExamsClient({
           ))}
         </div>
       </div>
+
+      {/* 확인 모달 */}
+      {confirmModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-sm w-full p-6 border dark:border-gray-700">
+            <h3 className="text-lg font-bold mb-3 dark:text-white">
+              {confirmModal.type === 'delete' ? '시험 삭제' : confirmModal.currentPublished ? '게시 종료' : '시험 게시'}
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              {confirmModal.type === 'delete'
+                ? `"${confirmModal.examName}" 시험을 삭제하시겠습니까? 등록된 문제도 함께 삭제됩니다.`
+                : `"${confirmModal.examName}" 시험을 ${confirmModal.currentPublished ? '게시 종료' : '게시'}하시겠습니까?`}
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmModal(null)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200"
+              >
+                취소
+              </button>
+              <button
+                onClick={confirmModal.type === 'delete' ? handleDeleteConfirm : handleToggleConfirm}
+                className={`flex-1 px-4 py-2 text-white rounded-lg text-sm font-medium ${
+                  confirmModal.type === 'delete'
+                    ? 'bg-red-600 hover:bg-red-700'
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
+              >
+                {confirmModal.type === 'delete' ? '삭제' : confirmModal.currentPublished ? '게시 종료' : '게시'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

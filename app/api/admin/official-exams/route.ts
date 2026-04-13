@@ -91,13 +91,18 @@ export async function POST(request: Request) {
       )
     }
 
-    // categoryId가 필요함 - 기본 카테고리 찾거나 생성
+    // categoryId가 필요함 - 기본 카테고리 찾거나 생성 (비활성 상태면 재활성화)
     let category = await prisma.examCategory.findFirst({
       where: { name: "공식시험" },
     })
     if (!category) {
       category = await prisma.examCategory.create({
-        data: { name: "공식시험", description: "공식 시험 카테고리" },
+        data: { name: "공식시험", description: "공식 시험 카테고리", grade: "기타" },
+      })
+    } else if (!category.isActive) {
+      category = await prisma.examCategory.update({
+        where: { id: category.id },
+        data: { isActive: true },
       })
     }
 
@@ -122,6 +127,9 @@ export async function POST(request: Request) {
         orderNo: 1,
       },
     })
+
+    // 모든 페이지 캐시 즉시 무효화 (홈, 카테고리, 시험 시작 페이지 등)
+    revalidatePath("/", "layout")
 
     return NextResponse.json({
       success: true,
@@ -161,7 +169,7 @@ export async function PUT(request: Request) {
     })
 
     if (is_published !== undefined) {
-      revalidatePath("/")
+      revalidatePath("/", "layout")
     }
 
     return NextResponse.json({ success: true, message: "수정되었습니다" })
@@ -197,6 +205,12 @@ export async function DELETE(request: Request) {
       )
     }
 
+    // 삭제 전에 카테고리 ID 저장
+    const examToDelete = await prisma.exam.findUnique({
+      where: { id: exam_id },
+      select: { categoryId: true },
+    })
+
     // FK 참조 순서에 따라 안전하게 삭제
     const questionIds = (await prisma.question.findMany({
       where: { examId: exam_id }, select: { id: true }
@@ -212,6 +226,22 @@ export async function DELETE(request: Request) {
     await prisma.question.deleteMany({ where: { examId: exam_id } })
     await prisma.subject.deleteMany({ where: { examId: exam_id } })
     await prisma.exam.delete({ where: { id: exam_id } })
+
+    // 빈 카테고리 정리: 해당 카테고리에 시험이 0개면 비활성화
+    if (examToDelete?.categoryId) {
+      const remainingExams = await prisma.exam.count({
+        where: { categoryId: examToDelete.categoryId },
+      })
+      if (remainingExams === 0) {
+        await prisma.examCategory.update({
+          where: { id: examToDelete.categoryId },
+          data: { isActive: false },
+        })
+      }
+    }
+
+    // 모든 페이지 캐시 즉시 무효화 (홈, 카테고리, 시험 시작 페이지 등)
+    revalidatePath("/", "layout")
 
     return NextResponse.json({ success: true, message: "삭제되었습니다" })
   } catch (error) {
