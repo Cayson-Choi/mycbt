@@ -120,7 +120,7 @@ const grades = [
   },
   {
     id: 'master', label: '기능장', count: 1,
-    badge: '최고 등급',
+    badge: '1개 자격증',
     cta: '전기기능장\n최고 등급에 도전',
     cardBg: 'bg-[#fff3e0]', badgeBg: 'bg-amber-500',
     icon: (
