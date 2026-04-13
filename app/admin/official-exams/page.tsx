@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import OfficialExamsClient from "@/components/admin/OfficialExamsClient"
 
+export const dynamic = 'force-dynamic'
+
 export default async function OfficialExamsPage() {
   const session = await auth()
   if (!session?.user?.id) {

@@ -2,6 +2,8 @@ import { Suspense } from "react"
 import { prisma } from "@/lib/prisma"
 import QuestionsClient from "./QuestionsClient"
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminQuestionsPage() {
   // 서버에서 시험 목록 + 초기 문제 20건을 프리페치
   const [examsRaw, questionsRaw] = await Promise.all([

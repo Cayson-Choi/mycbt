@@ -8,6 +8,8 @@ import DuplicateQuestionsSection from "@/components/DuplicateQuestionsSection"
 import ExamSettingsSection from "@/components/ExamSettingsSection"
 import LandingCardSettings from "@/components/LandingCardSettings"
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminPage() {
   const session = await auth()
 

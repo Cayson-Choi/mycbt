@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma"
 import { redirect, notFound } from "next/navigation"
 import AttemptDetailClient from "@/components/admin/AttemptDetailClient"
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminAttemptDetailPage({
   params,
 }: {

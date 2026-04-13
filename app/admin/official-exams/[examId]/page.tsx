@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma"
 import { redirect, notFound } from "next/navigation"
 import OfficialExamDetailClient from "@/components/admin/OfficialExamDetailClient"
 
+export const dynamic = 'force-dynamic'
+
 export default async function OfficialExamDetailPage({
   params,
 }: {
