@@ -531,14 +531,18 @@ const gradeDbMap: Record<string, string> = {
   etc: '기타',
 }
 
-export default function LandingContent({ gradeCounts, initialHiddenCards = [] }: { gradeCounts?: Record<string, number>; initialHiddenCards?: string[] }) {
+export default function LandingContent({ gradeCounts: initialGradeCounts, initialHiddenCards = [] }: { gradeCounts?: Record<string, number>; initialHiddenCards?: string[] }) {
   const [hiddenCards, setHiddenCards] = useState<string[]>(initialHiddenCards)
+  const [gradeCounts, setGradeCounts] = useState<Record<string, number> | undefined>(initialGradeCounts)
 
   // 서버 초기값 사용 + 클라이언트에서 최신값 갱신 (관리자 변경 즉시 반영)
   useEffect(() => {
     fetch('/api/landing-cards')
       .then(res => res.json())
-      .then(data => setHiddenCards(data.hiddenCards || []))
+      .then(data => {
+        setHiddenCards(data.hiddenCards || [])
+        if (data.gradeCounts) setGradeCounts(data.gradeCounts)
+      })
       .catch(() => {})
   }, [])
 
