@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react'
 
-const TEXT = '한국건축전기설비기술사회와 한국기계설비기술사회가 인증한 공식사이트입니다.'
+const TEXT = '전기·소방·기계 기술사가 인정한 공식 사이트'
 const CHARS = TEXT.split('')
 // 강조할 글자 인덱스 (단체명)
-const HIGHLIGHT_RANGES: [number, number][] = [[0, 11], [14, 23]]
+const HIGHLIGHT_RANGES: [number, number][] = [[0, 12]]
 function isHighlighted(i: number) { return HIGHLIGHT_RANGES.some(([s, e]) => i >= s && i <= e) }
 const CHAR_DELAY = 80        // 글자 간 딜레이 (ms)
 const CHAR_DURATION = 400    // 글자 애니메이션 지속 시간
