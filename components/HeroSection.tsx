@@ -265,7 +265,7 @@ const slides: Slide[] = [
     description: '기능사부터 기사까지\n케이슨에서 한 번에 준비하세요',
     bgColor: '#2f2a29',
     accentColor: '#fbbf24',
-    personImage: '/hero/man2.png',
+    personImage: '/hero/man2.png?v=2',
     personAlt: 'CAYSON',
     imageScale: 1.10,
     floats: [
