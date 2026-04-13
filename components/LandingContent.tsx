@@ -54,6 +54,26 @@ function SectionHeading({ label, title, subtitle, center = false }: { label: str
 /* ─── 등급 데이터 (engineerlab 이벤트 카드 스타일) ─── */
 const grades = [
   {
+    id: 'basic', label: '전기기초', count: 1,
+    badge: '입문 과정',
+    cta: '전기 입문자를 위한\n기초 학습 코스',
+    cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-teal-500',
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <defs>
+          <linearGradient id="g0a" x1="20" y1="10" x2="60" y2="60"><stop offset="0%" stopColor="#4dd0e1" /><stop offset="100%" stopColor="#00838f" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="14" ry="3" fill="#b2ebf2" opacity="0.5" />
+        <rect x="22" y="18" width="36" height="44" rx="3" fill="url(#g0a)" />
+        <rect x="28" y="26" width="24" height="3" rx="1.5" fill="#e0f7fa" opacity="0.7" />
+        <rect x="28" y="33" width="18" height="3" rx="1.5" fill="#e0f7fa" opacity="0.5" />
+        <rect x="28" y="40" width="20" height="3" rx="1.5" fill="#e0f7fa" opacity="0.5" />
+        <circle cx="40" cy="52" r="5" fill="#e0f7fa" stroke="#4dd0e1" strokeWidth="1" />
+        <path d="M38 52l2 2 4-4" stroke="#00838f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
     id: 'technician', label: '기능사', count: 4,
     badge: '4개 자격증',
     cta: '전기기능사 외 3개\n필기/실기 준비',
@@ -501,6 +521,7 @@ function WhyCaysonSection() {
 
 // gradeMap: grades 배열의 id → DB grade name 매핑
 const gradeDbMap: Record<string, string> = {
+  basic: '전기기초',
   technician: '기능사',
   industrial: '산업기사',
   engineer: '기사',

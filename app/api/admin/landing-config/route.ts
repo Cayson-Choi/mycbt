@@ -25,6 +25,7 @@ export async function GET() {
     const hiddenCards: string[] = setting ? JSON.parse(setting.value) : []
 
     const cards: Record<string, boolean> = {
+      basic: !hiddenCards.includes("basic"),
       technician: !hiddenCards.includes("technician"),
       industrial: !hiddenCards.includes("industrial"),
       engineer: !hiddenCards.includes("engineer"),
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { cardId, visible } = body as { cardId: string; visible: boolean }
 
-    const validIds = ["technician", "industrial", "engineer", "master", "public", "ncs", "etc"]
+    const validIds = ["basic", "technician", "industrial", "engineer", "master", "public", "ncs", "etc"]
     if (!validIds.includes(cardId) || typeof visible !== "boolean") {
       return NextResponse.json({ error: "잘못된 요청" }, { status: 400 })
     }

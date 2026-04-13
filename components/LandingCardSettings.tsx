@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 
 const CARD_LABELS: Record<string, string> = {
+  basic: '전기기초',
   technician: '기능사',
   industrial: '산업기사',
   engineer: '기사',
@@ -12,7 +13,7 @@ const CARD_LABELS: Record<string, string> = {
   etc: '공식시험',
 }
 
-const CARD_ORDER = ['technician', 'industrial', 'engineer', 'master', 'public', 'ncs', 'etc']
+const CARD_ORDER = ['basic', 'technician', 'industrial', 'engineer', 'master', 'public', 'ncs', 'etc']
 
 export default function LandingCardSettings() {
   const [cards, setCards] = useState<Record<string, boolean>>({})
