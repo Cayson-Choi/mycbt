@@ -185,6 +185,27 @@ const grades = [
       </svg>
     ),
   },
+  {
+    id: 'etc', label: '공식시험', count: 1,
+    badge: '실전 모의고사',
+    cta: '공식시험\n실전 환경 그대로',
+    cardBg: 'bg-[#e8eaf6]', badgeBg: 'bg-indigo-500',
+    icon: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
+        <defs>
+          <linearGradient id="g7a" x1="20" y1="14" x2="60" y2="60"><stop offset="0%" stopColor="#7986cb" /><stop offset="100%" stopColor="#303f9f" /></linearGradient>
+        </defs>
+        <ellipse cx="40" cy="68" rx="16" ry="3" fill="#c5cae9" opacity="0.5" />
+        <rect x="18" y="16" width="44" height="48" rx="4" fill="url(#g7a)" />
+        <rect x="24" y="24" width="32" height="3" rx="1.5" fill="#e8eaf6" opacity="0.6" />
+        <rect x="24" y="31" width="24" height="3" rx="1.5" fill="#e8eaf6" opacity="0.4" />
+        <rect x="24" y="38" width="28" height="3" rx="1.5" fill="#e8eaf6" opacity="0.4" />
+        <circle cx="30" cy="52" r="6" fill="#e8eaf6" stroke="#7986cb" strokeWidth="1" />
+        <path d="M28 52l2 2 4-4" stroke="#303f9f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M24 20c0-1 2-2 4-1" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
+      </svg>
+    ),
+  },
 ]
 
 /* ─── 합격 수기 데이터 ─── */
