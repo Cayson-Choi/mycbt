@@ -560,7 +560,7 @@ export default function LandingContent({ gradeCounts, initialHiddenCards = [] }:
               if (hiddenCards?.includes(g.id)) return null
               // DB에서 가져온 실제 시험 수로 덮어씌우기
               const dbGrade = gradeDbMap[g.id]
-              const realCount = gradeCounts && dbGrade ? (gradeCounts[dbGrade] ?? g.count) : g.count
+              const realCount = gradeCounts && dbGrade ? (gradeCounts[dbGrade] ?? 0) : g.count
               // 시험이 0개이고 "준비중"이 아닌 카드는 숨김
               if (realCount === 0 && g.badge !== '준비중') return null
               return (
