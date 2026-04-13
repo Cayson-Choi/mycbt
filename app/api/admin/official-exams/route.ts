@@ -197,7 +197,18 @@ export async function DELETE(request: Request) {
       )
     }
 
-    // 문제, 과목은 cascade로 삭제됨
+    // FK 참조 순서에 따라 안전하게 삭제
+    const questionIds = (await prisma.question.findMany({
+      where: { examId: exam_id }, select: { id: true }
+    })).map(q => q.id)
+
+    if (questionIds.length > 0) {
+      // 문제를 참조하는 모든 테이블 먼저 삭제
+      await prisma.wrongNoteItem.deleteMany({ where: { questionId: { in: questionIds } } })
+      await prisma.attemptItem.deleteMany({ where: { questionId: { in: questionIds } } })
+      await prisma.attemptQuestion.deleteMany({ where: { questionId: { in: questionIds } } })
+    }
+
     await prisma.question.deleteMany({ where: { examId: exam_id } })
     await prisma.subject.deleteMany({ where: { examId: exam_id } })
     await prisma.exam.delete({ where: { id: exam_id } })
