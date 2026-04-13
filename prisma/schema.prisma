@@ -26,7 +26,7 @@ model User {
   isAdmin   Boolean @default(false) @map("is_admin")
 
   // 등급/결제
-  tier          UserTier  @default(GUEST)
+  tier          UserTier  @default(FREE)
   tierExpiresAt DateTime? @map("tier_expires_at")
   billingKey    String?   @map("billing_key")
 
@@ -86,11 +86,12 @@ model VerificationToken {
 // ─── 등급/결제 ───
 
 enum UserTier {
-  GUEST
+  FREE
   BRONZE
   SILVER
   GOLD
-  DIAMOND
+  PREMIUM
+  ADMIN
 }
 
 model Payment {
@@ -132,7 +133,7 @@ model Video {
   description  String?  @db.Text
   videoUrl     String   @map("video_url")
   thumbnailUrl String?  @map("thumbnail_url")
-  minTier      UserTier @default(GUEST) @map("min_tier")
+  minTier      UserTier @default(FREE) @map("min_tier")
   price        Int?
   examId       Int?     @map("exam_id")
   sortOrder    Int      @default(0) @map("sort_order")
@@ -186,7 +187,7 @@ model Exam {
   creatorName     String?  @map("creator_name")
   creatorTitle    String?  @map("creator_title")
   sortOrder       Int      @default(0) @map("sort_order")
-  minTier         UserTier @default(GUEST) @map("min_tier")
+  minTier         UserTier @default(FREE) @map("min_tier")
   price           Int?
 
   category              ExamCategory               @relation(fields: [categoryId], references: [id], onDelete: Cascade)

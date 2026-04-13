@@ -358,21 +358,30 @@ export default function UsersClient({ initialUsers }: { initialUsers: UserData[]
                           })() : '-'}
                         </td>
                         <td className="px-2 lg:px-4 py-3 text-center">
-                          {(() => {
-                            const tierMap: Record<string, { label: string; color: string }> = {
-                              GUEST: { label: '게스트', color: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300' },
-                              BRONZE: { label: '브론즈', color: 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200' },
-                              SILVER: { label: '실버', color: 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200' },
-                              GOLD: { label: '골드', color: 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200' },
-                              DIAMOND: { label: '다이아', color: 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-200' },
-                            }
-                            const tier = tierMap[user.tier] || tierMap.GUEST
-                            return (
-                              <span className={`inline-block px-1.5 lg:px-2 py-1 rounded font-medium leading-tight text-xs ${tier.color}`}>
-                                {tier.label}
-                              </span>
-                            )
-                          })()}
+                          <select
+                            value={user.tier}
+                            onChange={async (e) => {
+                              const newTier = e.target.value
+                              try {
+                                const res = await fetch(`/api/admin/users/${user.id}`, {
+                                  method: 'PATCH',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ tier: newTier }),
+                                })
+                                if (res.ok) {
+                                  setUsers(prev => prev.map(u => u.id === user.id ? { ...u, tier: newTier } : u))
+                                }
+                              } catch {}
+                            }}
+                            className="text-xs px-1 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
+                          >
+                            <option value="FREE">무료</option>
+                            <option value="BRONZE">브론즈</option>
+                            <option value="SILVER">실버</option>
+                            <option value="GOLD">골드</option>
+                            <option value="PREMIUM">프리미엄</option>
+                            <option value="ADMIN">운영자</option>
+                          </select>
                         </td>
                         <td className="px-2 lg:px-4 py-3 text-center">
                           {user.is_admin ? (

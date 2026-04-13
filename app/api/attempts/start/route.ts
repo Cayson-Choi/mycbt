@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { hasTierAccess } from "@/lib/tier"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
     const [exam, subjects, existing, allQuestions] = await Promise.all([
       prisma.exam.findUnique({
         where: { id: examId },
-        select: { id: true, name: true, examMode: true, durationMinutes: true, isPublished: true, password: true },
+        select: { id: true, name: true, examMode: true, durationMinutes: true, isPublished: true, password: true, minTier: true },
       }),
       prisma.subject.findMany({ where: { examId }, orderBy: { orderNo: "asc" } }),
       prisma.attempt.findMany({ where: { userId: session.user.id, status: "IN_PROGRESS" }, select: { id: true } }),
@@ -41,6 +42,25 @@ export async function POST(request: Request) {
       }
       if (!password || password !== exam.password) {
         return NextResponse.json({ error: "비밀번호가 일치하지 않습니다" }, { status: 403 })
+      }
+    }
+
+    // 등급 체크
+    if (exam.minTier !== "FREE") {
+      const profile = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { tier: true, isAdmin: true },
+      })
+
+      if (!profile?.isAdmin && !hasTierAccess(profile?.tier || "FREE", exam.minTier)) {
+        return NextResponse.json(
+          {
+            error: "등급이 부족합니다",
+            required_tier: exam.minTier,
+            user_tier: profile?.tier || "FREE",
+          },
+          { status: 403 }
+        )
       }
     }
 

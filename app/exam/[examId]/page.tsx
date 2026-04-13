@@ -46,6 +46,7 @@ export default async function ExamStartPage({
     duration_minutes: ex.durationMinutes,
     is_published: ex.isPublished,
     sort_order: ex.sortOrder,
+    min_tier: ex.minTier,
   }
 
   const subjectsData = subs.map((s) => ({

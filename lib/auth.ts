@@ -135,7 +135,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.sub!
         session.user.nickname = (token.nickname as string) ?? null
         session.user.isAdmin = (token.isAdmin as boolean) ?? false
-        session.user.tier = (token.tier as any) ?? "GUEST"
+        session.user.tier = (token.tier as any) ?? "FREE"
         session.user.tierExpiresAt = (token.tierExpiresAt as Date) ?? null
         session.user.phone = (token.phone as string) ?? null
       }

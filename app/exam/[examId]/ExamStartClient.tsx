@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { TIER_LABELS, hasTierAccess } from '@/lib/tier'
 
 interface ExamData {
   id: number
@@ -12,6 +14,7 @@ interface ExamData {
   duration_minutes: number
   is_published: boolean
   sort_order: number
+  min_tier: string
 }
 
 interface SubjectData {
@@ -36,8 +39,10 @@ export default function ExamStartClient({
   officialQuestionCount,
 }: ExamStartClientProps) {
   const router = useRouter()
+  const { data: session } = useSession()
   const [starting, setStarting] = useState(false)
   const [error, setError] = useState('')
+  const [showTierPopup, setShowTierPopup] = useState(false)
 
   // 홈/취소 prefetch
   useEffect(() => {
@@ -48,6 +53,10 @@ export default function ExamStartClient({
   const [password, setPassword] = useState('')
 
   const isOfficial = exam.exam_mode === 'OFFICIAL'
+  const userTier = session?.user?.tier || 'FREE'
+  const userIsAdmin = session?.user?.isAdmin || false
+  const examMinTier = exam.min_tier || 'FREE'
+  const canAccess = userIsAdmin || hasTierAccess(userTier, examMinTier)
   const durationMinutes = exam.duration_minutes || 60
   const totalQuestions = isOfficial
     ? officialQuestionCount
@@ -211,7 +220,13 @@ export default function ExamStartClient({
               취소
             </Link>
             <button
-              onClick={() => handleStart()}
+              onClick={() => {
+                if (!canAccess) {
+                  setShowTierPopup(true)
+                  return
+                }
+                handleStart()
+              }}
               disabled={starting}
               className="flex-1 px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -220,6 +235,34 @@ export default function ExamStartClient({
           </div>
         </div>
       </div>
+
+      {/* 등급 부족 팝업 */}
+      {showTierPopup && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-sm w-full p-6 border dark:border-gray-700">
+            <div className="text-center">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-yellow-100 dark:bg-yellow-900/40 flex items-center justify-center">
+                <svg className="w-7 h-7 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H10m2-6V4m0 0L8 8m4-4l4 4" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold mb-2 dark:text-white">등급을 올려주세요</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                이 시험은 <span className="font-semibold text-blue-600 dark:text-blue-400">{TIER_LABELS[examMinTier] || examMinTier}</span> 등급 이상만 응시할 수 있습니다.
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-500 mb-6">
+                현재 등급: <span className="font-medium">{TIER_LABELS[userTier] || userTier}</span>
+              </p>
+              <button
+                onClick={() => setShowTierPopup(false)}
+                className="w-full px-4 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 text-sm font-medium"
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

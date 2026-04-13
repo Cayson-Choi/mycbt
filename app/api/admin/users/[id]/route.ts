@@ -30,11 +30,15 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { is_admin } = body
+    const { is_admin, tier } = body
+
+    const updateData: Record<string, unknown> = {}
+    if (is_admin !== undefined) updateData.isAdmin = is_admin
+    if (tier !== undefined) updateData.tier = tier
 
     const updated = await prisma.user.update({
       where: { id },
-      data: { isAdmin: is_admin },
+      data: updateData,
     })
 
     return NextResponse.json({
@@ -42,6 +46,7 @@ export async function PATCH(
         id: updated.id,
         name: updated.name,
         is_admin: updated.isAdmin,
+        tier: updated.tier,
       },
     })
   } catch (error) {
