@@ -1,7 +1,8 @@
 "use client"
 
-import { signIn } from "next-auth/react"
-import { useState } from "react"
+import { signIn, useSession } from "next-auth/react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 function isKakaoInApp() {
@@ -22,6 +23,15 @@ function openExternalBrowser(url: string) {
 }
 
 export default function LoginPage() {
+  const { status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.replace('/')
+    }
+  }, [status, router])
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [mode, setMode] = useState<"login" | "signup">("login")
