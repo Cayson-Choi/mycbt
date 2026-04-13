@@ -35,6 +35,7 @@ export default function OfficialExamsClient({
     examName: string
     currentPublished?: boolean
   } | null>(null)
+  const [alertModal, setAlertModal] = useState<{ title: string; message: string } | null>(null)
 
   // 생성 폼 상태
   const [formData, setFormData] = useState({
@@ -115,6 +116,7 @@ export default function OfficialExamsClient({
 
     setDeletingId(examId)
     setError('')
+    const examName = exams.find((ex) => ex.id === examId)?.name || ''
     try {
       const res = await fetch('/api/admin/official-exams', {
         method: 'DELETE',
@@ -125,16 +127,23 @@ export default function OfficialExamsClient({
       if (res.ok) {
         setExams((prev) => prev.filter((ex) => ex.id !== examId))
       } else {
-        // 이미 삭제된 시험(404/500 P2025)이면 목록에서 제거, 그 외는 에러 표시
         const data = await res.json().catch(() => ({}))
+        // 이미 삭제된 시험(404)이면 조용히 목록에서 제거
         if (res.status === 404 || (data.error && /찾을 수 없|exist|P2025/i.test(data.error))) {
           setExams((prev) => prev.filter((ex) => ex.id !== examId))
         } else {
-          setError(data.error || '삭제 실패')
+          // 응시 기록 있음 등의 이유 → 팝업 표시
+          setAlertModal({
+            title: '삭제할 수 없습니다',
+            message: `"${examName}"\n\n${data.error || '삭제에 실패했습니다'}`,
+          })
         }
       }
     } catch {
-      setError('삭제 중 오류가 발생했습니다')
+      setAlertModal({
+        title: '오류 발생',
+        message: '삭제 중 네트워크 오류가 발생했습니다',
+      })
     } finally {
       setDeletingId(null)
     }
@@ -352,6 +361,31 @@ export default function OfficialExamsClient({
                 {confirmModal.type === 'delete' ? '삭제' : confirmModal.currentPublished ? '게시 종료' : '게시'}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* 알림 모달 (삭제 실패 등) */}
+      {alertModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-sm w-full p-6 border dark:border-gray-700">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center shrink-0">
+                <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold dark:text-white">{alertModal.title}</h3>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 whitespace-pre-line">
+              {alertModal.message}
+            </p>
+            <button
+              onClick={() => setAlertModal(null)}
+              className="w-full px-4 py-2 bg-gray-800 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-900 dark:hover:bg-gray-500 text-sm font-medium"
+            >
+              확인
+            </button>
           </div>
         </div>
       )}
