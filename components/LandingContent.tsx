@@ -531,8 +531,15 @@ const gradeDbMap: Record<string, string> = {
   etc: '기타',
 }
 
-export default function LandingContent({ gradeCounts, hiddenCards }: { gradeCounts?: Record<string, number>; hiddenCards?: string[] }) {
+export default function LandingContent({ gradeCounts }: { gradeCounts?: Record<string, number> }) {
+  const [hiddenCards, setHiddenCards] = useState<string[]>([])
 
+  useEffect(() => {
+    fetch('/api/landing-cards')
+      .then(res => res.json())
+      .then(data => setHiddenCards(data.hiddenCards || []))
+      .catch(() => {})
+  }, [])
 
   return (
     <>
