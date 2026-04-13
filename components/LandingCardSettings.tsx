@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 
 const CARD_LABELS: Record<string, string> = {
-  basic: '전기기초',
+  basic: '진단평가',
   technician: '기능사',
   industrial: '산업기사',
   engineer: '기사',

@@ -54,9 +54,9 @@ function SectionHeading({ label, title, subtitle, center = false }: { label: str
 /* ─── 등급 데이터 (engineerlab 이벤트 카드 스타일) ─── */
 const grades = [
   {
-    id: 'basic', label: '전기기초', count: 1,
+    id: 'basic', label: '진단평가', count: 1,
     badge: '입문 과정',
-    cta: '전기 입문자를 위한\n기초 학습 코스',
+    cta: '전기 입문자를 위한\n기초 진단평가',
     cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-teal-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
@@ -521,7 +521,7 @@ function WhyCaysonSection() {
 
 // gradeMap: grades 배열의 id → DB grade name 매핑
 const gradeDbMap: Record<string, string> = {
-  basic: '전기기초',
+  basic: '진단평가',
   technician: '기능사',
   industrial: '산업기사',
   engineer: '기사',
