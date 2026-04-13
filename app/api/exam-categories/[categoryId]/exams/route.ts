@@ -29,7 +29,6 @@ export async function GET(
       where: {
         categoryId: id,
         isPublished: true,
-        examMode: "PRACTICE",
         examType: examTypeFilter,
       },
       select: {

@@ -35,10 +35,10 @@ export default async function CategoryPage({
 
       const [writtenCount, practicalCount] = await Promise.all([
         prisma.exam.count({
-          where: { categoryId: catId, isPublished: true, examMode: "PRACTICE", examType: "WRITTEN" },
+          where: { categoryId: catId, isPublished: true, examType: "WRITTEN" },
         }),
         prisma.exam.count({
-          where: { categoryId: catId, isPublished: true, examMode: "PRACTICE", examType: "PRACTICAL" },
+          where: { categoryId: catId, isPublished: true, examType: "PRACTICAL" },
         }),
       ])
 

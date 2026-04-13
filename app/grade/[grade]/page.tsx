@@ -22,7 +22,7 @@ const getCategoriesByGrade = unstable_cache(
       where: { grade: dbGrade, isActive: true },
       include: {
         exams: {
-          where: { isPublished: true, examMode: "PRACTICE" },
+          where: { isPublished: true },
           select: { id: true, examType: true },
         },
       },

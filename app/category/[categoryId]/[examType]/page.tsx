@@ -71,7 +71,6 @@ export default async function ExamTypePage({
         where: {
           categoryId: catId,
           isPublished: true,
-          examMode: "PRACTICE",
           examType: eType,
         },
         select: {
