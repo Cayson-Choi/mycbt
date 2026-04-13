@@ -224,18 +224,14 @@ export default function OfficialExamDetailClient({
 
   // 공통 상태
   const [exam, setExam] = useState<ExamData>(initialExam)
-  useEffect(() => { setExam(initialExam) }, [initialExam])
 
   // 결과 탭 상태
   const [results, setResults] = useState<ResultData[]>(initialResults)
-  useEffect(() => { setResults(initialResults) }, [initialResults])
   const [printingAttemptId, setPrintingAttemptId] = useState<number | null>(null)
 
   // 문제 관리 탭 상태
   const [questions, setQuestions] = useState<QuestionData[]>(initialQuestions)
-  useEffect(() => { setQuestions(initialQuestions) }, [initialQuestions])
   const [subjects, setSubjects] = useState<SubjectData[]>(initialSubjects)
-  useEffect(() => { setSubjects(initialSubjects) }, [initialSubjects])
   const [filterSubjectId, setFilterSubjectId] = useState<number | null>(null)
   const [searchText, setSearchText] = useState('')
   const [editorQuestion, setEditorQuestion] = useState<any | undefined>(undefined)
@@ -289,6 +285,12 @@ export default function OfficialExamDetailClient({
       /* ignored */
     }
   }, [examId])
+
+  // 클라이언트 네비게이션 시 Router Cache stale 방지 — 마운트마다 최신 데이터 fetch
+  useEffect(() => {
+    loadResults()
+    loadQuestions()
+  }, [loadQuestions])
 
   const handleDeleteQuestion = (questionId: number) => {
     setDeleteQuestionId(questionId)

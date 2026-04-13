@@ -23,7 +23,16 @@ export default function OfficialExamsClient({
 }) {
   const router = useRouter()
   const [exams, setExams] = useState<ExamData[]>(initialExams)
-  useEffect(() => { setExams(initialExams) }, [initialExams])
+
+  // 클라이언트 네비게이션 시 Router Cache가 stale 데이터를 줄 수 있으므로
+  // 마운트마다 API에서 최신 데이터를 직접 fetch
+  useEffect(() => {
+    fetch('/api/admin/official-exams')
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data)) setExams(data) })
+      .catch(() => {})
+  }, [])
+
   const [creating, setCreating] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [error, setError] = useState('')
