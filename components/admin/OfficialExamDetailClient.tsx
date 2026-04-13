@@ -224,14 +224,18 @@ export default function OfficialExamDetailClient({
 
   // 공통 상태
   const [exam, setExam] = useState<ExamData>(initialExam)
+  useEffect(() => { setExam(initialExam) }, [initialExam])
 
   // 결과 탭 상태
   const [results, setResults] = useState<ResultData[]>(initialResults)
+  useEffect(() => { setResults(initialResults) }, [initialResults])
   const [printingAttemptId, setPrintingAttemptId] = useState<number | null>(null)
 
   // 문제 관리 탭 상태
   const [questions, setQuestions] = useState<QuestionData[]>(initialQuestions)
-  const [subjects] = useState<SubjectData[]>(initialSubjects)
+  useEffect(() => { setQuestions(initialQuestions) }, [initialQuestions])
+  const [subjects, setSubjects] = useState<SubjectData[]>(initialSubjects)
+  useEffect(() => { setSubjects(initialSubjects) }, [initialSubjects])
   const [filterSubjectId, setFilterSubjectId] = useState<number | null>(null)
   const [searchText, setSearchText] = useState('')
   const [editorQuestion, setEditorQuestion] = useState<any | undefined>(undefined)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import MathText from '@/components/MathText'
@@ -67,6 +67,7 @@ export default function AttemptDetailClient({
   initialResult: AttemptResult
 }) {
   const [result, setResult] = useState<AttemptResult>(initialResult)
+  useEffect(() => { setResult(initialResult) }, [initialResult])
   const [printing, setPrinting] = useState(false)
   const [gradeInputs, setGradeInputs] = useState<Record<number, string>>({})
   const [grading, setGrading] = useState(false)
