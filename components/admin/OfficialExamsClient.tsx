@@ -63,11 +63,10 @@ export default function OfficialExamsClient({
         return
       }
 
-      // 생성 후 바로 상세 페이지(문제 출제)로 이동
+      // 생성 후 바로 상세 페이지(문제 출제)로 이동 — creating 상태 유지
       router.push(`/admin/official-exams/${data.exam_id}`)
     } catch {
       setError('오류가 발생했습니다')
-    } finally {
       setCreating(false)
     }
   }
