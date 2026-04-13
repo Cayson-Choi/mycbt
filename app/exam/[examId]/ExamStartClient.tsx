@@ -166,19 +166,6 @@ export default function ExamStartClient({
               </div>
             )}
 
-            {/* 공식 시험 주의사항 */}
-            {isOfficial && (
-              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-6">
-                <h2 className="font-bold text-lg mb-3 text-red-800 dark:text-red-200">공식 시험 안내</h2>
-                <ul className="space-y-2 text-sm text-red-700 dark:text-red-300">
-                  <li>• 전체화면 모드로 진행됩니다</li>
-                  <li>• 전체화면 탈출/탭 전환 시 이탈 기록이 저장됩니다</li>
-                  <li>• 모든 학생이 동일한 문제를 동일한 순서로 풀게 됩니다</li>
-                  <li>• 시험 결과는 일일 랭킹에 반영되지 않습니다</li>
-                </ul>
-              </div>
-            )}
-
             <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg p-6">
               <h2 className="font-bold text-lg mb-3 dark:text-white">주의사항</h2>
               <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
