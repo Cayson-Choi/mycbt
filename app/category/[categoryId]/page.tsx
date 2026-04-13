@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { unstable_cache } from "next/cache"
 
@@ -52,6 +52,14 @@ export default async function CategoryPage({
   if (!data) notFound()
 
   const { category, writtenCount, practicalCount } = data
+
+  // 한 종류만 시험이 있으면 바로 해당 타입 페이지로 이동
+  if (writtenCount > 0 && practicalCount === 0) {
+    redirect(`/category/${id}/written`)
+  }
+  if (practicalCount > 0 && writtenCount === 0) {
+    redirect(`/category/${id}/practical`)
+  }
 
   const examTypes = [
     {
