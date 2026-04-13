@@ -422,3 +422,13 @@ model AuditLog {
 
   @@map("audit_logs")
 }
+
+// ─── 사이트 설정 (key-value) ───
+
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("site_settings")
+}

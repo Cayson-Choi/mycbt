@@ -6,6 +6,7 @@ import ResetAttemptsSection from "@/components/ResetAttemptsSection"
 import CategoryAccordion from "@/components/CategoryAccordion"
 import DuplicateQuestionsSection from "@/components/DuplicateQuestionsSection"
 import ExamSettingsSection from "@/components/ExamSettingsSection"
+import LandingCardSettings from "@/components/LandingCardSettings"
 
 export default async function AdminPage() {
   const session = await auth()
@@ -192,6 +193,9 @@ export default async function AdminPage() {
             ))}
           </div>
         </div>
+
+        {/* 랜딩 페이지 카드 관리 */}
+        <LandingCardSettings />
 
         {/* 출제 문항 수 설정 */}
         <ExamSettingsSection exams={examsForProps} />

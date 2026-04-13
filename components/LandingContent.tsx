@@ -510,7 +510,7 @@ const gradeDbMap: Record<string, string> = {
   etc: '기타',
 }
 
-export default function LandingContent({ gradeCounts }: { gradeCounts?: Record<string, number> }) {
+export default function LandingContent({ gradeCounts, hiddenCards }: { gradeCounts?: Record<string, number>; hiddenCards?: string[] }) {
 
 
   return (
@@ -527,6 +527,8 @@ export default function LandingContent({ gradeCounts }: { gradeCounts?: Record<s
           {/* Royal-styled card grid */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {grades.map((g, i) => {
+              // 관리자가 숨김 처리한 카드는 표시하지 않음
+              if (hiddenCards?.includes(g.id)) return null
               // DB에서 가져온 실제 시험 수로 덮어씌우기
               const dbGrade = gradeDbMap[g.id]
               const realCount = gradeCounts && dbGrade ? (gradeCounts[dbGrade] ?? g.count) : g.count
