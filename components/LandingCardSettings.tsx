@@ -96,35 +96,63 @@ export default function LandingCardSettings() {
         </div>
       )}
 
-      <div className="space-y-2">
-        {CARD_ORDER.map((cardId) => (
-          <div
-            key={cardId}
-            className="flex items-center justify-between px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600"
-          >
-            <span className="font-medium text-gray-800 dark:text-gray-200">
-              {CARD_LABELS[cardId]}
-            </span>
-            <button
-              onClick={() => toggleCard(cardId)}
-              disabled={saving === cardId}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
-                cards[cardId]
-                  ? 'bg-blue-500'
-                  : 'bg-gray-300 dark:bg-gray-600'
-              } ${saving === cardId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-              role="switch"
-              aria-checked={cards[cardId]}
-              aria-label={`${CARD_LABELS[cardId]} ${cards[cardId] ? '표시중' : '숨김'}`}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* 왼쪽: 토글 스위치 */}
+        <div className="space-y-2">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">표시 설정</p>
+          {CARD_ORDER.map((cardId) => (
+            <div
+              key={cardId}
+              className="flex items-center justify-between px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600"
             >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200 ${
-                  cards[cardId] ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
-            </button>
+              <span className="font-medium text-gray-800 dark:text-gray-200">
+                {CARD_LABELS[cardId]}
+              </span>
+              <button
+                onClick={() => toggleCard(cardId)}
+                disabled={saving === cardId}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
+                  cards[cardId]
+                    ? 'bg-blue-500'
+                    : 'bg-gray-300 dark:bg-gray-600'
+                } ${saving === cardId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                role="switch"
+                aria-checked={cards[cardId]}
+                aria-label={`${CARD_LABELS[cardId]} ${cards[cardId] ? '표시중' : '숨김'}`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200 ${
+                    cards[cardId] ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* 오른쪽: 실시간 미리보기 */}
+        <div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">미리보기</p>
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <div className="grid grid-cols-3 gap-2">
+              {CARD_ORDER.map((cardId) => (
+                <div
+                  key={cardId}
+                  className={`px-2 py-3 rounded-lg text-center text-xs font-medium transition-all duration-300 ${
+                    cards[cardId]
+                      ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-sm border border-gray-200 dark:border-gray-700 scale-100 opacity-100'
+                      : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 scale-95 opacity-40 line-through'
+                  }`}
+                >
+                  {CARD_LABELS[cardId]}
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-3 text-center">
+              표시 {CARD_ORDER.filter(id => cards[id]).length}개 / 숨김 {CARD_ORDER.filter(id => !cards[id]).length}개
+            </p>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   )
