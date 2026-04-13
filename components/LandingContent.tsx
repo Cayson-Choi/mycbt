@@ -564,7 +564,7 @@ export default function LandingContent({ gradeCounts, initialHiddenCards = [] }:
               // 시험이 0개이고 "준비중"이 아닌 카드는 숨김
               if (realCount === 0 && g.badge !== '준비중') return null
               return (
-              <Reveal key={g.id} delay={i * 80}>
+              <Reveal key={g.id}>
                 {realCount > 0 ? (
                   <Link
                     href={`/grade/${g.id}`}
