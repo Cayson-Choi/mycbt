@@ -286,12 +286,6 @@ export default function OfficialExamDetailClient({
     }
   }, [examId])
 
-  // 클라이언트 네비게이션 시 Router Cache stale 방지 — 마운트마다 최신 데이터 fetch
-  useEffect(() => {
-    loadResults()
-    loadQuestions()
-  }, [loadQuestions])
-
   const handleDeleteQuestion = (questionId: number) => {
     setDeleteQuestionId(questionId)
   }
