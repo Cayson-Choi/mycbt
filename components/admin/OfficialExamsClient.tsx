@@ -208,7 +208,7 @@ export default function OfficialExamsClient({
                     type="number"
                     value={formData.duration_minutes}
                     onChange={(e) =>
-                      setFormData({ ...formData, duration_minutes: parseInt(e.target.value) || 60 })
+                      setFormData({ ...formData, duration_minutes: e.target.value === '' ? 0 : parseInt(e.target.value) || 0 })
                     }
                     min={1}
                     max={300}

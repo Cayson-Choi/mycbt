@@ -498,7 +498,7 @@ export default function OfficialExamDetailClient({
                 <input
                   type="number"
                   value={settingsForm.duration_minutes}
-                  onChange={(e) => setSettingsForm({ ...settingsForm, duration_minutes: parseInt(e.target.value) || 60 })}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, duration_minutes: e.target.value === '' ? 0 : parseInt(e.target.value) || 0 })}
                   min={1}
                   max={300}
                   className="px-3 py-2 border dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm w-24"
