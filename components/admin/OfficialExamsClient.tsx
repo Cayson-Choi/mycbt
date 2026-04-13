@@ -114,6 +114,7 @@ export default function OfficialExamsClient({
     setConfirmModal(null)
 
     setDeletingId(examId)
+    setError('')
     try {
       const res = await fetch('/api/admin/official-exams', {
         method: 'DELETE',
@@ -123,9 +124,17 @@ export default function OfficialExamsClient({
 
       if (res.ok) {
         setExams((prev) => prev.filter((ex) => ex.id !== examId))
+      } else {
+        // 이미 삭제된 시험(404/500 P2025)이면 목록에서 제거, 그 외는 에러 표시
+        const data = await res.json().catch(() => ({}))
+        if (res.status === 404 || (data.error && /찾을 수 없|exist|P2025/i.test(data.error))) {
+          setExams((prev) => prev.filter((ex) => ex.id !== examId))
+        } else {
+          setError(data.error || '삭제 실패')
+        }
       }
     } catch {
-      /* ignored */
+      setError('삭제 중 오류가 발생했습니다')
     } finally {
       setDeletingId(null)
     }

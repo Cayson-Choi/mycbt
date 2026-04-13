@@ -205,11 +205,18 @@ export async function DELETE(request: Request) {
       )
     }
 
-    // 삭제 전에 카테고리 ID 저장
+    // 삭제 전에 카테고리 ID 저장 — 이미 삭제된 시험이면 404 반환
     const examToDelete = await prisma.exam.findUnique({
       where: { id: exam_id },
       select: { categoryId: true },
     })
+
+    if (!examToDelete) {
+      return NextResponse.json(
+        { error: "시험을 찾을 수 없습니다 (이미 삭제되었을 수 있습니다)" },
+        { status: 404 }
+      )
+    }
 
     // FK 참조 순서에 따라 안전하게 삭제
     const questionIds = (await prisma.question.findMany({
@@ -228,7 +235,7 @@ export async function DELETE(request: Request) {
     await prisma.exam.delete({ where: { id: exam_id } })
 
     // 빈 카테고리 정리: 해당 카테고리에 시험이 0개면 비활성화
-    if (examToDelete?.categoryId) {
+    if (examToDelete.categoryId) {
       const remainingExams = await prisma.exam.count({
         where: { categoryId: examToDelete.categoryId },
       })
