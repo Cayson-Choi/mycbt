@@ -88,7 +88,6 @@ ${referenceInstruction}학생 답안의 정확성과 핵심 내용 포함 여부
     }
 
     const data = await res.json()
-    console.log('[OpenRouter] Full response:', JSON.stringify(data).substring(0, 500))
 
     const message = data.choices?.[0]?.message
     let content = message?.content || ''
@@ -117,7 +116,6 @@ ${referenceInstruction}학생 답안의 정확성과 핵심 내용 포함 여부
     const feedbackMatch = textToSearch.match(/이유\s*[:：]\s*(.+)/)
     const feedback = feedbackMatch ? feedbackMatch[1].trim() : ''
 
-    console.log(`[OpenRouter] Parsed score: ${clampedScore}/${points}, feedback: ${feedback.substring(0, 100)}`)
     return { score: clampedScore, feedback }
   } catch (error: any) {
     if (error?.name === 'AbortError') {

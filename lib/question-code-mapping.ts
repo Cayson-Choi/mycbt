@@ -4,8 +4,8 @@
  * 예: ELEC-F-TH-001
  */
 
-// 시험명 → 코드 매핑
-export const EXAM_TO_CODE: Record<string, { field: string; level: string }> = {
+// 시험명 → 코드 매핑 (내부 전용)
+const EXAM_TO_CODE: Record<string, { field: string; level: string }> = {
   // 전기기초
   '전기기초': { field: 'ELEC', level: 'B' },
 
@@ -43,8 +43,8 @@ export const EXAM_TO_CODE: Record<string, { field: string; level: string }> = {
   // '정보처리기능사': { field: 'INFO', level: 'F' },
 }
 
-// 과목명 → 코드 매핑
-export const SUBJECT_TO_CODE: Record<string, string> = {
+// 과목명 → 코드 매핑 (내부 전용)
+const SUBJECT_TO_CODE: Record<string, string> = {
   // 전기기초
   '전기상식': 'CS',
 

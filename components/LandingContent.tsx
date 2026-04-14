@@ -559,7 +559,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
 
           {/* Royal-styled card grid */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {grades.map((g, i) => {
+            {grades.map((g) => {
               // 관리자가 숨김 처리한 카드는 표시하지 않음
               if (hiddenCards?.includes(g.id)) return null
               // DB에서 가져온 실제 시험 수로 덮어씌우기

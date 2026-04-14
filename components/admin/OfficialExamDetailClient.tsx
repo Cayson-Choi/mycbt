@@ -226,7 +226,7 @@ export default function OfficialExamDetailClient({
 
   // 문제 관리 탭 상태
   const [questions, setQuestions] = useState<QuestionData[]>(initialQuestions)
-  const [subjects, setSubjects] = useState<SubjectData[]>(initialSubjects)
+  const [subjects] = useState<SubjectData[]>(initialSubjects)
   const [filterSubjectId, setFilterSubjectId] = useState<number | null>(null)
   const [searchText, setSearchText] = useState('')
   const [editorQuestion, setEditorQuestion] = useState<any | undefined>(undefined)
