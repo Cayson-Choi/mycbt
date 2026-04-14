@@ -404,9 +404,22 @@ export default function OfficialExamDetailClient({
     setEditorQuestion(undefined)
   }
 
-  const handleEditorSuccess = () => {
+  const handleEditorSuccess = (savedQuestion?: any) => {
     setShowEditor(false)
     setEditorQuestion(undefined)
+    // 서버 저장 응답을 즉시 목록에 반영 (fetch 대기 없이 0초 표시)
+    if (savedQuestion?.id) {
+      setQuestions((prev) => {
+        const idx = prev.findIndex((q) => q.id === savedQuestion.id)
+        if (idx >= 0) {
+          const next = [...prev]
+          next[idx] = { ...prev[idx], ...savedQuestion }
+          return next
+        }
+        return [...prev, savedQuestion]
+      })
+    }
+    // 서버 데이터와 silent 동기화 (DB에만 있는 필드/정렬 보정용)
     loadQuestions()
   }
 

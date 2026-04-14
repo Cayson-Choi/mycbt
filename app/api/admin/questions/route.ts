@@ -201,7 +201,7 @@ export async function POST(request: Request) {
       },
     })
 
-    // 프론트 호환 응답
+    // 프론트 호환 응답 (목록에 즉시 삽입 가능하도록 full 데이터 반환)
     return NextResponse.json({
       question: {
         id: newQuestion.id,
@@ -210,6 +210,21 @@ export async function POST(request: Request) {
         subject_id: newQuestion.subjectId,
         question_text: newQuestion.questionText,
         question_type: qType,
+        choice_1: newQuestion.choice1,
+        choice_2: newQuestion.choice2,
+        choice_3: newQuestion.choice3,
+        choice_4: newQuestion.choice4,
+        choice_1_image: newQuestion.choice1Image,
+        choice_2_image: newQuestion.choice2Image,
+        choice_3_image: newQuestion.choice3Image,
+        choice_4_image: newQuestion.choice4Image,
+        answer: newQuestion.answer,
+        answer_text: newQuestion.answerText,
+        answer_text_image: newQuestion.answerTextImage,
+        explanation: newQuestion.explanation,
+        explanation_image: newQuestion.explanationImage,
+        image_url: newQuestion.imageUrl,
+        points: newQuestion.points,
       },
     })
   } catch (error) {

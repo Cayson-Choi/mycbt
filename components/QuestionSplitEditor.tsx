@@ -7,7 +7,7 @@ import { dataUrlToBlob, normalizeLineBreaks } from '@/lib/utils'
 interface QuestionSplitEditorProps {
   question?: any
   onClose: () => void
-  onSuccess: () => void
+  onSuccess: (savedQuestion?: any) => void
   lockedExam?: { id: number; name: string; examMode?: string }
 }
 
@@ -51,6 +51,8 @@ export default function QuestionSplitEditor({
   const [saving, setSaving] = useState(false)
   const [savedQuestionId, setSavedQuestionId] = useState<number | null>(question?.id || null)
   const [hasSavedOnce, setHasSavedOnce] = useState(false)
+  // 서버 저장 응답(완성된 question 객체) — 닫을 때 부모에 전달
+  const lastSavedQuestionRef = useRef<any>(null)
   const [saveFlash, setSaveFlash] = useState(false)
   const [formError, setFormError] = useState('')
   const [showCloseConfirm, setShowCloseConfirm] = useState(false)
@@ -149,7 +151,7 @@ export default function QuestionSplitEditor({
       return
     }
     if (hasSavedOnce) {
-      onSuccess()
+      onSuccess(lastSavedQuestionRef.current || undefined)
     } else {
       onClose()
     }
@@ -158,7 +160,7 @@ export default function QuestionSplitEditor({
   const handleCloseConfirm = useCallback(() => {
     setShowCloseConfirm(false)
     if (hasSavedOnce) {
-      onSuccess()
+      onSuccess(lastSavedQuestionRef.current || undefined)
     } else {
       onClose()
     }
@@ -392,6 +394,10 @@ export default function QuestionSplitEditor({
         // 새 문제 추가 시 반환된 ID 저장 (이후 저장은 PUT)
         if (!isUpdate && data.question?.id) {
           setSavedQuestionId(data.question.id)
+        }
+        // 서버가 반환한 완성된 question 객체를 ref에 저장 (닫을 때 부모에 전달)
+        if (data.question) {
+          lastSavedQuestionRef.current = data.question
         }
         // dirty 상태 리셋
         initialFormRef.current = JSON.stringify(formData)
