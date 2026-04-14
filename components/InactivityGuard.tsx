@@ -18,32 +18,49 @@ export default function InactivityGuard() {
 
   // 시험 풀이 중인지 확인
   const isExamAttempt = pathname?.startsWith('/exam/attempt/')
+  const isLoggedIn = !!session
 
   const clearTimers = useCallback(() => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    if (warningTimerRef.current) clearTimeout(warningTimerRef.current)
-    if (countdownRef.current) clearInterval(countdownRef.current)
-    setShowWarning(false)
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    if (warningTimerRef.current) {
+      clearTimeout(warningTimerRef.current)
+      warningTimerRef.current = null
+    }
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current)
+      countdownRef.current = null
+    }
   }, [])
 
   const handleLogout = useCallback(() => {
     clearTimers()
+    setShowWarning(false)
     signOut({ callbackUrl: '/login' })
   }, [clearTimers])
 
-  const resetTimer = useCallback(() => {
-    if (!session || isExamAttempt) return
+  // resetTimer를 ref로 보관 — 이벤트 리스너가 매번 최신 버전을 호출하도록
+  const resetTimerRef = useRef<() => void>(() => {})
+
+  resetTimerRef.current = () => {
+    if (!isLoggedIn || isExamAttempt) return
 
     clearTimers()
+    setShowWarning(false)
 
-    // 9분 후 경고 표시
+    // 9분 후 경고 표시 + 카운트다운 시작
     warningTimerRef.current = setTimeout(() => {
       setShowWarning(true)
       setCountdown(60)
       countdownRef.current = setInterval(() => {
-        setCountdown(prev => {
+        setCountdown((prev) => {
           if (prev <= 1) {
-            if (countdownRef.current) clearInterval(countdownRef.current)
+            if (countdownRef.current) {
+              clearInterval(countdownRef.current)
+              countdownRef.current = null
+            }
             return 0
           }
           return prev - 1
@@ -52,32 +69,46 @@ export default function InactivityGuard() {
     }, INACTIVITY_TIMEOUT - WARNING_BEFORE)
 
     // 10분 후 로그아웃
-    timerRef.current = setTimeout(handleLogout, INACTIVITY_TIMEOUT)
-  }, [session, isExamAttempt, clearTimers, handleLogout])
+    timerRef.current = setTimeout(() => {
+      handleLogout()
+    }, INACTIVITY_TIMEOUT)
+  }
 
-  const handleActivity = useCallback(() => {
-    if (showWarning) {
-      setShowWarning(false)
-      if (countdownRef.current) clearInterval(countdownRef.current)
-    }
-    resetTimer()
-  }, [showWarning, resetTimer])
-
+  // 이벤트 리스너 설정 — 세션/경로 변경 시에만 재설정
   useEffect(() => {
-    if (!session || isExamAttempt) {
+    if (!isLoggedIn || isExamAttempt) {
       clearTimers()
+      setShowWarning(false)
       return
     }
 
-    const events = ['mousedown', 'keydown', 'touchstart', 'scroll']
-    events.forEach(e => window.addEventListener(e, handleActivity))
-    resetTimer()
+    // 안정된 핸들러 — ref로 최신 resetTimer 호출
+    const handler = () => {
+      resetTimerRef.current()
+    }
+
+    const events: (keyof WindowEventMap)[] = ['mousedown', 'keydown', 'touchstart', 'scroll']
+    events.forEach((e) => window.addEventListener(e, handler, { passive: true }))
+
+    // 초기 타이머 세팅
+    resetTimerRef.current()
 
     return () => {
-      events.forEach(e => window.removeEventListener(e, handleActivity))
+      events.forEach((e) => window.removeEventListener(e, handler))
       clearTimers()
     }
-  }, [session, isExamAttempt, handleActivity, resetTimer, clearTimers])
+    // 의도적으로 isLoggedIn, isExamAttempt만 deps — 이 값이 바뀔 때만 재설정
+    // resetTimerRef.current는 매 렌더마다 최신이라 deps 불필요
+  }, [isLoggedIn, isExamAttempt, clearTimers])
+
+  const handleContinue = () => {
+    setShowWarning(false)
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current)
+      countdownRef.current = null
+    }
+    resetTimerRef.current()
+  }
 
   if (!showWarning) return null
 
@@ -93,7 +124,7 @@ export default function InactivityGuard() {
         </p>
         <div className="flex gap-3">
           <button
-            onClick={handleActivity}
+            onClick={handleContinue}
             className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
             계속 사용하기
