@@ -82,7 +82,7 @@ export default async function OfficialExamDetailPage({
     userIds.length > 0
       ? await prisma.user.findMany({
           where: { id: { in: userIds } },
-          select: { id: true, name: true, studentId: true },
+          select: { id: true, name: true, nickname: true, studentId: true },
         })
       : []
 
@@ -98,7 +98,7 @@ export default async function OfficialExamDetailPage({
       attempt_id: a.id,
       user_id: a.userId,
       student_id: p?.studentId || "",
-      name: p?.name || "",
+      name: p?.nickname || p?.name || "",
       affiliation: "",
       total_questions: a.totalQuestions ?? 0,
       total_correct: a.totalCorrect ?? 0,

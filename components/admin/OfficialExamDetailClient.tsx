@@ -795,7 +795,7 @@ export default function OfficialExamDetailClient({
                         학번
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                        이름
+                        아이디
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
                         소속
