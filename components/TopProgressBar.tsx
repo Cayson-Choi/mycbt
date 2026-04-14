@@ -17,8 +17,15 @@ export default function TopProgressBar() {
   // Link 클릭 감지 → 진행 바 시작
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
+      // 내부 버튼이 preventDefault/stopPropagation을 한 경우 네비게이션이 취소되므로 무시
+      if (e.defaultPrevented) return
+
       const target = e.target as HTMLElement | null
       if (!target) return
+
+      // 클릭 대상이 버튼이거나 버튼 내부면 네비게이션 아님
+      if (target.closest('button')) return
+
       const anchor = target.closest('a')
       if (!anchor) return
 
@@ -42,8 +49,9 @@ export default function TopProgressBar() {
       requestAnimationFrame(() => setProgress(30))
     }
 
-    document.addEventListener('click', handleClick, true)
-    return () => document.removeEventListener('click', handleClick, true)
+    // bubble phase 사용 — 버튼 핸들러가 stopPropagation 시 이 리스너는 발동하지 않음
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
   }, [pathname])
 
   // 진행 중 점진 증가
@@ -55,6 +63,16 @@ export default function TopProgressBar() {
     }, 300)
     return () => clearTimeout(timer)
   }, [visible, progress])
+
+  // 안전 장치: 네비게이션이 취소되거나 이상하게 멈춘 경우 5초 후 자동 숨김
+  useEffect(() => {
+    if (!visible) return
+    const timer = setTimeout(() => {
+      setVisible(false)
+      setProgress(0)
+    }, 5000)
+    return () => clearTimeout(timer)
+  }, [visible])
 
   // pathname 변경 → 완료
   useEffect(() => {
