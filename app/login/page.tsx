@@ -115,7 +115,7 @@ export default function LoginPage() {
       <div className="text-center">
         <h1 className="text-3xl font-bold mb-2">로그인</h1>
         <p className="text-gray-500 dark:text-gray-400">
-          전기짱에 오신 것을 환영합니다
+          CAYSON에 오신 것을 환영합니다
         </p>
       </div>
 

@@ -1,11 +1,11 @@
-# 전기짱 v2.0 PRD (Product Requirements Document)
+# CAYSON v2.0 PRD (Product Requirements Document)
 
 ## 리뉴얼 개요
 
 Supabase 기반 → **Neon(DB) + Prisma(ORM) + NextAuth(인증) + Cloudinary(이미지) + Vercel(배포)** 전면 전환
 
 - **프로젝트명(영문)**: `mycbt` (외부 서비스, 코드, 도메인 등에서 사용)
-- **서비스명(한글)**: `전기짱` (사용자에게 보이는 브랜딩)
+- **서비스명(한글)**: `CAYSON` (사용자에게 보이는 브랜딩)
 
 ### 전환 이유
 - Supabase Auth는 카카오/네이버 OAuth 지원이 제한적 → NextAuth로 네이티브 지원
@@ -190,8 +190,8 @@ CRON_SECRET=(랜덤 시크릿)
 ### Google OAuth
 - Google Cloud Console → 프로젝트 생성
 - OAuth 동의 화면: 외부 사용자 타입
-- 승인된 JavaScript 원본: `https://전기짱도메인.vercel.app`
-- 승인된 리디렉션 URI: `https://전기짱도메인.vercel.app/api/auth/callback/google`
+- 승인된 JavaScript 원본: `https://CAYSON도메인.vercel.app`
+- 승인된 리디렉션 URI: `https://CAYSON도메인.vercel.app/api/auth/callback/google`
 
 ### 카카오 OAuth
 - 카카오 개발자 센터 → 앱 생성 (비즈 앱 전환 필요)
@@ -204,8 +204,8 @@ CRON_SECRET=(랜덤 시크릿)
 - 네이버 개발자 센터 → 앱 생성
 - 사용 API: 네이버 로그인
 - 제공 정보: 회원이름(필수), 이메일(필수), 프로필 사진(추가)
-- 서비스 URL: `https://전기짱도메인.vercel.app`
-- Callback URL: `https://전기짱도메인.vercel.app/api/auth/callback/naver`
+- 서비스 URL: `https://CAYSON도메인.vercel.app`
+- Callback URL: `https://CAYSON도메인.vercel.app/api/auth/callback/naver`
 
 ### Gmail SMTP (이메일 Magic Link 인증용)
 - 발신 계정: cayson0127@gmail.com
@@ -257,7 +257,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  // 전기짱 전용 필드
+  // CAYSON 전용 필드
   phone         String?
   studentId     String?   // 학번 (OFFICIAL 시험용)
   isAdmin       Boolean   @default(false)

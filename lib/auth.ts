@@ -70,12 +70,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const result = await transport.sendMail({
           to: email,
           from: provider.from,
-          subject: "[전기짱] 이메일 로그인 인증",
-          text: `전기짱 로그인 인증\n\n아래 링크를 클릭하면 로그인됩니다.\n${url}\n\n본인이 요청하지 않았다면 이 메일을 무시하세요.`,
+          subject: "[CAYSON] 이메일 로그인 인증",
+          text: `CAYSON 로그인 인증\n\n아래 링크를 클릭하면 로그인됩니다.\n${url}\n\n본인이 요청하지 않았다면 이 메일을 무시하세요.`,
           html: `
             <div style="max-width:480px;margin:0 auto;padding:32px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
               <div style="text-align:center;margin-bottom:32px">
-                <h1 style="font-size:28px;font-weight:bold;color:#1a1a1a;margin:0">전기짱</h1>
+                <h1 style="font-size:28px;font-weight:bold;color:#1a1a1a;margin:0">CAYSON</h1>
                 <p style="font-size:14px;color:#666;margin:8px 0 0">전기 자격시험 CBT</p>
               </div>
               <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:32px 24px;text-align:center">

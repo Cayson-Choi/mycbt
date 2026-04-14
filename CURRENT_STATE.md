@@ -104,7 +104,7 @@
 - [x] ⚡ 번개 이모지 로고 (이미지 로고 대체, 헤더/푸터 밀착 배치)
 - [x] 카테고리 카드 컴팩트 디자인 (필기/실기 배지 상단, 입장하기 하단)
 - [x] 모바일 반응형 카드 중앙 정렬 (max-w-sm)
-- [x] WHY 전기짱 섹션 스크롤 인터랙티브 효과
+- [x] WHY CAYSON 섹션 스크롤 인터랙티브 효과
   - ScrollReveal: fade-in + slide-up 애니메이션
   - CountUp: 0→100% 반복 카운트업 (3초 ease-out pow(5), 3초 유지 후 반복)
   - TypeWriter: "합격! 운이 아니라 전략입니다." 타이핑 애니메이션 (제자리 글자 등장 → 3번 깜빡임 → 반복)
@@ -246,7 +246,7 @@ components/
 ├── ThemeProvider.tsx           # 다크모드 프로바이더
 ├── ThemeToggle.tsx             # 다크모드 토글 버튼
 ├── LandingContent.tsx          # 랜딩 과정별 CBT + 합격 수기 섹션
-├── WhySection.tsx              # WHY 전기짱 섹션 (ScrollReveal/CountUp/TypeWriter)
+├── WhySection.tsx              # WHY CAYSON 섹션 (ScrollReveal/CountUp/TypeWriter)
 ├── ScrollReveal.tsx            # 스크롤 애니메이션 + CountUp + TypeWriter (named export)
 ├── MathText.tsx                # 수학 표기법 렌더링 (KaTeX)
 ├── ConfirmDialog.tsx           # 확인 다이얼로그

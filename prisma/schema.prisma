@@ -7,7 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─── 사용자 (NextAuth + 전기짱) ───
+// ─── 사용자 (NextAuth + CAYSON) ───
 
 model User {
   id            String    @id @default(cuid())
@@ -18,7 +18,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  // 전기짱 전용 필드
+  // CAYSON 전용 필드
   password  String?           // 이메일+비밀번호 로그인용 (bcrypt 해시)
   nickname  String?  @unique // 사용자 ID (한 번 설정하면 변경 불가)
   phone     String?
