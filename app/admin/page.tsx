@@ -116,6 +116,38 @@ export default async function AdminPage() {
           <p className="text-gray-600 dark:text-gray-400">시스템 관리 및 설정</p>
         </div>
 
+        {/* 관리 메뉴 */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <AdminNavCard
+            href="/admin/exams"
+            icon="📅"
+            title="시험 관리"
+            description="년도/회차 시험 생성 및 관리"
+            iconBg="bg-amber-100 dark:bg-amber-900/50"
+          />
+          <AdminNavCard
+            href="/admin/questions"
+            icon="📝"
+            title="문제 관리"
+            description="문제 추가, 수정, 삭제"
+            iconBg="bg-blue-100 dark:bg-blue-900/50"
+          />
+          <AdminNavCard
+            href="/admin/users"
+            icon="👥"
+            title="회원 관리"
+            description="회원 목록, 권한 관리"
+            iconBg="bg-green-100 dark:bg-green-900/50"
+          />
+          <AdminNavCard
+            href="/admin/official-exams"
+            icon="🎓"
+            title="공식 시험 관리"
+            description="중간고사/기말고사 출제, 결과 조회"
+            iconBg="bg-red-100 dark:bg-red-900/50"
+          />
+        </div>
+
         {/* 통계 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6 border dark:border-gray-700">
           <div className="flex items-center gap-3 flex-wrap">
@@ -208,38 +240,6 @@ export default async function AdminPage() {
 
         {/* 응시 기록 초기화 */}
         <ResetAttemptsSection exams={examsForProps} />
-
-        {/* 관리 메뉴 */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <AdminNavCard
-            href="/admin/exams"
-            icon="📅"
-            title="시험 관리"
-            description="년도/회차 시험 생성 및 관리"
-            iconBg="bg-amber-100 dark:bg-amber-900/50"
-          />
-          <AdminNavCard
-            href="/admin/questions"
-            icon="📝"
-            title="문제 관리"
-            description="문제 추가, 수정, 삭제"
-            iconBg="bg-blue-100 dark:bg-blue-900/50"
-          />
-          <AdminNavCard
-            href="/admin/users"
-            icon="👥"
-            title="회원 관리"
-            description="회원 목록, 권한 관리"
-            iconBg="bg-green-100 dark:bg-green-900/50"
-          />
-          <AdminNavCard
-            href="/admin/official-exams"
-            icon="🎓"
-            title="공식 시험 관리"
-            description="중간고사/기말고사 출제, 결과 조회"
-            iconBg="bg-red-100 dark:bg-red-900/50"
-          />
-        </div>
 
         {/* 하단 버튼 */}
         <div>
