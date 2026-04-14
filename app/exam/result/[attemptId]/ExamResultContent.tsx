@@ -29,11 +29,13 @@ interface QuestionResult {
   choice_4_image: string | null
   correct_answer: number | null
   explanation: string | null
+  explanation_image: string | null
   image_url: string | null
   subject_name: string
   points: number
   student_answer: number | null
   student_answer_text: string | null
+  student_answer_image: string | null
   is_correct: boolean | null
   awarded_points: number | null
   grading_status: string
@@ -318,8 +320,18 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                           <div className="p-3 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-blue-50 dark:bg-blue-900/20">
                             <div className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1">내 답안</div>
                             <div className="text-sm dark:text-gray-200 whitespace-pre-wrap">
-                              {question.student_answer_text || '(미작성)'}
+                              {question.student_answer_text || (question.student_answer_image ? '' : '(미작성)')}
                             </div>
+                            {question.student_answer_image && (
+                              <div className="mt-2">
+                                <img
+                                  src={question.student_answer_image}
+                                  alt="내 답안 이미지"
+                                  className="max-w-full max-h-[320px] w-auto h-auto rounded border border-blue-200 dark:border-blue-700"
+                                  loading="lazy"
+                                />
+                              </div>
+                            )}
                           </div>
                           {question.ai_feedback && (
                             <div className="p-3 border-2 border-orange-300 dark:border-orange-600 rounded-lg bg-orange-50 dark:bg-orange-900/20">
@@ -332,13 +344,25 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                         </div>
                       )}
 
-                      {question.explanation && (
+                      {(question.explanation || question.explanation_image) && (
                         <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-3">
                           <div className="text-xs font-semibold text-blue-900 dark:text-blue-300 mb-1">해설</div>
-                          <MathText
-                            text={question.explanation}
-                            className="text-sm text-blue-800 dark:text-blue-200"
-                          />
+                          {question.explanation && (
+                            <MathText
+                              text={question.explanation}
+                              className="text-sm text-blue-800 dark:text-blue-200"
+                            />
+                          )}
+                          {question.explanation_image && (
+                            <div className="mt-2">
+                              <img
+                                src={question.explanation_image}
+                                alt="해설 이미지"
+                                className="max-w-full max-h-[320px] w-auto h-auto rounded border border-blue-200 dark:border-blue-700"
+                                loading="lazy"
+                              />
+                            </div>
+                          )}
                         </div>
                       )}
                   </div>

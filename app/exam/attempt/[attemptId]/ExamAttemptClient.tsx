@@ -50,15 +50,21 @@ const QuestionCard = memo(function QuestionCard({
   index,
   selectedAnswer,
   answerText,
+  answerImage,
   onAnswer,
   onAnswerText,
+  onAnswerImage,
+  showPoints,
 }: {
   question: any
   index: number
   selectedAnswer: number | undefined
   answerText: string | undefined
+  answerImage: string | undefined
   onAnswer: (questionId: number, choice: number) => void
   onAnswerText: (questionId: number, text: string) => void
+  onAnswerImage: (questionId: number, url: string) => void
+  showPoints?: boolean
 }) {
   const questionType = question.question_type || 'MULTIPLE_CHOICE'
 
@@ -72,6 +78,11 @@ const QuestionCard = memo(function QuestionCard({
         {questionType !== 'MULTIPLE_CHOICE' && (
           <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">
             {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
+          </span>
+        )}
+        {showPoints && (
+          <span className="ml-auto text-xs font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full">
+            {question.points || 1}점
           </span>
         )}
       </div>
@@ -152,10 +163,107 @@ const QuestionCard = memo(function QuestionCard({
               className="w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none bg-white dark:bg-gray-700 dark:text-white resize-vertical"
             />
           )}
+
+          {/* 주관식일 때 이미지 첨부 (손글씨/풀이과정 스캔용) */}
+          {questionType !== 'MULTIPLE_CHOICE' && (
+            <AnswerImageUpload
+              questionId={question.question_id}
+              currentImage={answerImage}
+              onChange={onAnswerImage}
+            />
+          )}
       </div>
     </div>
   )
 })
+
+// --- AnswerImageUpload: 주관식 답안 이미지 첨부 ---
+function AnswerImageUpload({
+  questionId,
+  currentImage,
+  onChange,
+}: {
+  questionId: number
+  currentImage: string | undefined
+  onChange: (qid: number, url: string) => void
+}) {
+  const [uploading, setUploading] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleFile = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드 가능합니다')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert('이미지 크기는 5MB 이하여야 합니다')
+      return
+    }
+    try {
+      setUploading(true)
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/upload/image', { method: 'POST', body: fd })
+      if (res.ok) {
+        const data = await res.json()
+        onChange(questionId, data.url)
+      } else {
+        const data = await res.json().catch(() => ({}))
+        alert(data.error || '이미지 업로드 실패')
+      }
+    } catch {
+      alert('업로드 중 오류')
+    } finally {
+      setUploading(false)
+      if (inputRef.current) inputRef.current.value = ''
+    }
+  }
+
+  return (
+    <div className="mt-3">
+      <div className="flex items-center gap-2 flex-wrap">
+        <label className={`inline-flex items-center gap-1 px-3 py-2 text-sm rounded-lg cursor-pointer ${
+          uploading ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60'
+        }`}>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          {uploading ? '업로드 중...' : currentImage ? '이미지 교체' : '이미지 첨부 (풀이·손글씨)'}
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            disabled={uploading}
+            onChange={(e) => {
+              const f = e.target.files?.[0]
+              if (f) handleFile(f)
+            }}
+          />
+        </label>
+        {currentImage && (
+          <button
+            type="button"
+            onClick={() => onChange(questionId, '')}
+            className="px-3 py-2 text-sm bg-red-50 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/60"
+          >
+            제거
+          </button>
+        )}
+      </div>
+      {currentImage && (
+        <div className="mt-2 inline-block border-2 border-gray-200 dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-800">
+          <img
+            src={currentImage}
+            alt="답안 이미지"
+            className="max-w-full max-h-[320px] w-auto h-auto rounded"
+            loading="lazy"
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
 // --- QuitButton: isolated so opening the quit dialog doesn't re-render the question list ---
 function QuitButton({ attemptId, categoryId }: { attemptId: string; categoryId: number | null }) {
@@ -304,8 +412,10 @@ export interface PaperQuestion {
   choice_4_image: string | null
   image_url: string | null
   subject_name: string
+  points: number
   selected: number | null
   answer_text: string | null
+  answer_image: string | null
 }
 
 export interface PaperData {
@@ -346,6 +456,13 @@ export default function ExamAttemptClient({
     const map = new Map<number, string>()
     paper.questions.forEach((q) => {
       if (q.answer_text) map.set(q.question_id, q.answer_text)
+    })
+    return map
+  })
+  const [imageAnswers, setImageAnswers] = useState<Map<number, string>>(() => {
+    const map = new Map<number, string>()
+    paper.questions.forEach((q) => {
+      if (q.answer_image) map.set(q.question_id, q.answer_image)
     })
     return map
   })
@@ -392,6 +509,20 @@ export default function ExamAttemptClient({
       textSaveTimers.current.delete(questionId)
     }, 500)
     textSaveTimers.current.set(questionId, timer)
+  }, [attemptId])
+
+  const handleAnswerImage = useCallback((questionId: number, url: string) => {
+    setImageAnswers((prev) => {
+      const next = new Map(prev)
+      if (url) next.set(questionId, url)
+      else next.delete(questionId)
+      return next
+    })
+    fetch(`/api/attempts/${attemptId}/answer`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question_id: questionId, answer_image: url || null }),
+    }).catch(() => {})
   }, [attemptId])
 
   const handleExpire = useCallback(() => {
@@ -474,8 +605,11 @@ export default function ExamAttemptClient({
                 index={index}
                 selectedAnswer={answers.get(question.question_id)}
                 answerText={textAnswers.get(question.question_id)}
+                answerImage={imageAnswers.get(question.question_id)}
                 onAnswer={handleAnswer}
                 onAnswerText={handleAnswerText}
+                onAnswerImage={handleAnswerImage}
+                showPoints={paper.exam_mode === 'OFFICIAL'}
               />
             ))}
           </div>

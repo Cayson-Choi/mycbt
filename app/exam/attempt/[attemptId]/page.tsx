@@ -60,6 +60,7 @@ export default async function ExamAttemptPage({
             choice3Image: true,
             choice4Image: true,
             imageUrl: true,
+            points: true,
             subjectId: true,
             subject: { select: { name: true } },
           },
@@ -68,7 +69,7 @@ export default async function ExamAttemptPage({
     }),
     prisma.attemptItem.findMany({
       where: { attemptId: aid },
-      select: { questionId: true, selected: true, answerText: true },
+      select: { questionId: true, selected: true, answerText: true, answerImage: true },
     }),
   ])
 
@@ -114,8 +115,10 @@ export default async function ExamAttemptPage({
       choice_4_image: aq.question.choice4Image,
       image_url: aq.question.imageUrl,
       subject_name: aq.question.subject.name,
+      points: aq.question.points ?? 1,
       selected: saved?.selected ?? null,
       answer_text: saved?.answerText ?? null,
+      answer_image: saved?.answerImage ?? null,
     }
   })
 

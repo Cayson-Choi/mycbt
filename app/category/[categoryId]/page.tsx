@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
-import { unstable_cache } from "next/cache"
 
-export const revalidate = 60
+// 관리자가 시험 생성/삭제/게시 변경 시 즉시 반영 (ISR 캐시 사용 안 함)
+export const dynamic = 'force-dynamic'
 
 // 등급명 → URL 슬러그 + 표시명 매핑
 const GRADE_TO_SLUG: Record<string, { slug: string; label: string }> = {
@@ -35,28 +35,24 @@ export default async function CategoryPage({
     notFound()
   }
 
-  const getCategoryData = unstable_cache(
-    async (catId: number) => {
-      const cat = await prisma.examCategory.findUnique({
-        where: { id: catId, isActive: true },
-        select: { id: true, name: true, description: true, grade: true },
-      })
-      if (!cat) return null
+  const getCategoryData = async (catId: number) => {
+    const cat = await prisma.examCategory.findUnique({
+      where: { id: catId, isActive: true },
+      select: { id: true, name: true, description: true, grade: true },
+    })
+    if (!cat) return null
 
-      const [writtenCount, practicalCount] = await Promise.all([
-        prisma.exam.count({
-          where: { categoryId: catId, isPublished: true, examType: "WRITTEN" },
-        }),
-        prisma.exam.count({
-          where: { categoryId: catId, isPublished: true, examType: "PRACTICAL" },
-        }),
-      ])
+    const [writtenCount, practicalCount] = await Promise.all([
+      prisma.exam.count({
+        where: { categoryId: catId, isPublished: true, examType: "WRITTEN" },
+      }),
+      prisma.exam.count({
+        where: { categoryId: catId, isPublished: true, examType: "PRACTICAL" },
+      }),
+    ])
 
-      return { category: cat, writtenCount, practicalCount }
-    },
-    [`category-${id}`],
-    { revalidate: 60 }
-  )
+    return { category: cat, writtenCount, practicalCount }
+  }
 
   const data = await getCategoryData(id)
   if (!data) notFound()

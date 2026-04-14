@@ -44,12 +44,15 @@ type AttemptResult = {
     choice_4: string
     correct_answer: number
     answer_text: string | null
+    answer_text_image: string | null
     explanation: string
+    explanation_image: string | null
     image_url: string | null
     subject_name: string
     points: number
     student_answer: number | null
     student_answer_text: string | null
+    student_answer_image: string | null
     is_correct: boolean | null
     awarded_points: number | null
     grading_status: string
@@ -391,17 +394,39 @@ export default function AttemptDetailClient({
                         <div className="p-3 border-2 border-blue-300 dark:border-blue-600 rounded-lg bg-blue-50 dark:bg-blue-900/20">
                           <div className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1">학생 답안</div>
                           <div className="text-sm dark:text-gray-200 whitespace-pre-wrap">
-                            {question.student_answer_text || '(미작성)'}
+                            {question.student_answer_text || (question.student_answer_image ? '' : '(미작성)')}
                           </div>
+                          {question.student_answer_image && (
+                            <div className="mt-2">
+                              <img
+                                src={question.student_answer_image}
+                                alt="수험자 답안 이미지"
+                                className="max-w-full max-h-[400px] w-auto h-auto rounded border border-blue-200 dark:border-blue-700"
+                                loading="lazy"
+                              />
+                            </div>
+                          )}
                         </div>
 
                         {/* 참고 정답 */}
-                        {question.answer_text && (
+                        {(question.answer_text || question.answer_text_image) && (
                           <div className="p-3 border-2 border-green-300 dark:border-green-600 rounded-lg bg-green-50 dark:bg-green-900/20">
                             <div className="text-xs font-semibold text-green-700 dark:text-green-300 mb-1">참고 정답</div>
-                            <div className="text-sm dark:text-gray-200 whitespace-pre-wrap">
-                              {question.answer_text}
-                            </div>
+                            {question.answer_text && (
+                              <div className="text-sm dark:text-gray-200 whitespace-pre-wrap">
+                                {question.answer_text}
+                              </div>
+                            )}
+                            {question.answer_text_image && (
+                              <div className="mt-2">
+                                <img
+                                  src={question.answer_text_image}
+                                  alt="참고 정답 이미지"
+                                  className="max-w-full max-h-[320px] w-auto h-auto rounded border border-green-200 dark:border-green-700"
+                                  loading="lazy"
+                                />
+                              </div>
+                            )}
                           </div>
                         )}
 

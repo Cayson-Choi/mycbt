@@ -39,7 +39,9 @@ export async function PUT(
       choice_4_image,
       answer,
       answer_text,
+      answer_text_image,
       explanation,
+      explanation_image,
       image_url,
       points,
     } = body
@@ -93,7 +95,9 @@ export async function PUT(
       choice4Image: choice_4_image ?? undefined,
       answer: qType === "CHOICE" ? answer : answer || null,
       answerText: answer_text || null,
+      answerTextImage: answer_text_image ?? undefined,
       explanation: explanation || "",
+      explanationImage: explanation_image ?? undefined,
       imageUrl: image_url || null,
       points: points || 1,
     }

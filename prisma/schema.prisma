@@ -243,8 +243,10 @@ model Question {
   choice4Image String?      @map("choice_4_image")
   answer       Int?
   answerText   String?      @map("answer_text") @db.Text
+  answerTextImage String?   @map("answer_text_image")
   points       Int          @default(1)
   explanation  String?      @db.Text
+  explanationImage String?  @map("explanation_image")
   imageUrl     String?      @map("image_url")
   isActive     Boolean      @default(true) @map("is_active")
 
@@ -328,6 +330,7 @@ model AttemptItem {
   questionId    Int              @map("question_id")
   selected      Int?
   answerText    String?          @map("answer_text") @db.Text
+  answerImage   String?          @map("answer_image")
   isCorrect     Boolean?         @map("is_correct")
   awardedPoints Int?             @map("awarded_points")
   gradingStatus ItemGradingStatus? @map("grading_status")

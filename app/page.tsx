@@ -4,7 +4,9 @@ import ProfileGuard from "@/components/ProfileGuard"
 import CertifiedBanner from "@/components/CertifiedBanner"
 import { prisma } from "@/lib/prisma"
 
-export const revalidate = 60
+// gradeCounts는 관리자 삭제/생성 즉시 반영되어야 해서 캐시하지 않음
+// (카드 깜빡임 방지) — 쿼리가 가벼워서 성능 영향 미미
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const [gradeCountsRaw, hiddenSetting] = await Promise.all([

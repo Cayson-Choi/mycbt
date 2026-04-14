@@ -34,7 +34,9 @@ export default function QuestionSplitEditor({
     choice_4_image: question?.choice_4_image || '',
     answer: question?.answer || 1,
     answer_text: question?.answer_text || '',
+    answer_text_image: question?.answer_text_image || '',
     explanation: question?.explanation || '',
+    explanation_image: question?.explanation_image || '',
     image_url: question?.image_url || '',
     points: question?.points || defaultPoints,
   })
@@ -70,7 +72,9 @@ export default function QuestionSplitEditor({
     choice_4_image: question?.choice_4_image || '',
     answer: question?.answer || 1,
     answer_text: question?.answer_text || '',
+    answer_text_image: question?.answer_text_image || '',
     explanation: question?.explanation || '',
+    explanation_image: question?.explanation_image || '',
     image_url: question?.image_url || '',
     points: question?.points || defaultPoints,
   }))
@@ -1123,6 +1127,18 @@ function EditPanel({
           <p style={{ fontSize: '11px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '4px' }}>
             관리자 수동 채점 시 참고용으로 사용됩니다
           </p>
+          {renderImageField(
+            '참고 정답 이미지',
+            formData.answer_text_image,
+            'answer_text_image',
+            setFormData,
+            handleImageFileUpload,
+            handleImagePaste,
+            handleImageUrlChange,
+            isDark,
+            inputStyle,
+            labelStyle,
+          )}
         </div>
       )}
 
@@ -1153,11 +1169,114 @@ function EditPanel({
           style={{ ...inputStyle, resize: 'vertical', minHeight: '60px' }}
           rows={3}
         />
+        {renderImageField(
+          '해설 이미지',
+          formData.explanation_image,
+          'explanation_image',
+          setFormData,
+          handleImageFileUpload,
+          handleImagePaste,
+          handleImageUrlChange,
+          isDark,
+          inputStyle,
+          labelStyle,
+        )}
       </div>
 
       {/* Bottom padding for dirty indicator */}
       <div style={{ height: '40px' }} />
     </form>
+  )
+}
+
+/* ─── Render Image Field Helper (참고정답 이미지/해설 이미지 전용) ─── */
+function renderImageField(
+  label: string,
+  value: string,
+  field: string,
+  setFormData: (fn: any) => void,
+  handleImageFileUpload: (e: React.ChangeEvent<HTMLInputElement>, target?: string) => void,
+  handleImagePaste: (e: React.ClipboardEvent, target?: string) => void,
+  handleImageUrlChange: (v: string, target?: string) => void,
+  isDark: boolean,
+  inputStyle: React.CSSProperties,
+  labelStyle: React.CSSProperties,
+) {
+  const inputId = `img-upload-${field}`
+  return (
+    <div style={{ marginTop: '10px' }}>
+      <label style={{ ...labelStyle, fontSize: '12px', color: isDark ? '#9ca3af' : '#6b7280' }}>
+        {label} (선택)
+      </label>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => handleImageUrlChange(e.target.value, field)}
+          onPaste={(e) => handleImagePaste(e, field)}
+          placeholder="URL 붙여넣기 또는 아래 버튼으로 업로드"
+          style={{ ...inputStyle, flex: 1, minWidth: '200px' }}
+        />
+        <label
+          htmlFor={inputId}
+          style={{
+            padding: '6px 12px',
+            borderRadius: '6px',
+            backgroundColor: '#7c3aed',
+            color: '#ffffff',
+            cursor: 'pointer',
+            fontSize: '12px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          이미지 업로드
+        </label>
+        <input
+          id={inputId}
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImageFileUpload(e, field)}
+          style={{ display: 'none' }}
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => setFormData((prev: any) => ({ ...prev, [field]: '' }))}
+            style={{
+              padding: '6px 10px',
+              borderRadius: '6px',
+              border: 'none',
+              backgroundColor: '#ef4444',
+              color: '#ffffff',
+              cursor: 'pointer',
+              fontSize: '12px',
+            }}
+          >
+            제거
+          </button>
+        )}
+      </div>
+      {value && (
+        <div
+          style={{
+            marginTop: '8px',
+            padding: '8px',
+            borderRadius: '6px',
+            border: `1px solid ${isDark ? '#4b5563' : '#d1d5db'}`,
+            backgroundColor: isDark ? '#1f2937' : '#f9fafb',
+          }}
+        >
+          <img
+            src={value}
+            alt={label}
+            style={{ maxWidth: '100%', maxHeight: '160px', objectFit: 'contain', borderRadius: '4px' }}
+            onError={(e) => {
+              ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+            }}
+          />
+        </div>
+      )}
+    </div>
   )
 }
 

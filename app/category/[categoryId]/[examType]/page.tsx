@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
-import { unstable_cache } from "next/cache"
 
-export const revalidate = 60
+// 관리자가 시험 생성/삭제/게시 변경 시 즉시 반영 (ISR 캐시 사용 안 함)
+export const dynamic = 'force-dynamic'
 
 const EXAM_TYPE_MAP: Record<string, "WRITTEN" | "PRACTICAL"> = {
   written: "WRITTEN",
@@ -59,33 +59,29 @@ export default async function ExamTypePage({
     notFound()
   }
 
-  const getData = unstable_cache(
-    async (catId: number, eType: "WRITTEN" | "PRACTICAL") => {
-      const cat = await prisma.examCategory.findUnique({
-        where: { id: catId, isActive: true },
-        select: { id: true, name: true, description: true },
-      })
-      if (!cat) return null
+  const getData = async (catId: number, eType: "WRITTEN" | "PRACTICAL") => {
+    const cat = await prisma.examCategory.findUnique({
+      where: { id: catId, isActive: true },
+      select: { id: true, name: true, description: true },
+    })
+    if (!cat) return null
 
-      const exs = await prisma.exam.findMany({
-        where: {
-          categoryId: catId,
-          isPublished: true,
-          examType: eType,
-        },
-        select: {
-          id: true, name: true, year: true, round: true,
-          durationMinutes: true, minTier: true,
-          subjects: { select: { questionsPerAttempt: true } },
-          _count: { select: { questions: true } },
-        },
-        orderBy: [{ year: "desc" }, { round: "asc" }],
-      })
-      return { category: cat, exams: exs }
-    },
-    [`category-${id}-${examType}`],
-    { revalidate: 60 }
-  )
+    const exs = await prisma.exam.findMany({
+      where: {
+        categoryId: catId,
+        isPublished: true,
+        examType: eType,
+      },
+      select: {
+        id: true, name: true, year: true, round: true,
+        durationMinutes: true, minTier: true,
+        subjects: { select: { questionsPerAttempt: true } },
+        _count: { select: { questions: true } },
+      },
+      orderBy: [{ year: "desc" }, { round: "asc" }],
+    })
+    return { category: cat, exams: exs }
+  }
 
   const data = await getData(id, dbExamType)
   if (!data) notFound()
