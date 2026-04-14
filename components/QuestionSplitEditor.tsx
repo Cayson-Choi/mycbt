@@ -7,7 +7,7 @@ import { dataUrlToBlob, normalizeLineBreaks } from '@/lib/utils'
 interface QuestionSplitEditorProps {
   question?: any
   onClose: () => void
-  onSuccess: () => void
+  onSuccess: (savedQuestion?: any) => void
   lockedExam?: { id: number; name: string; examMode?: string }
 }
 
@@ -51,6 +51,7 @@ export default function QuestionSplitEditor({
   const [saving, setSaving] = useState(false)
   const [savedQuestionId, setSavedQuestionId] = useState<number | null>(question?.id || null)
   const [hasSavedOnce, setHasSavedOnce] = useState(false)
+  const lastSavedSnapshotRef = useRef<any>(null)
   const [saveFlash, setSaveFlash] = useState(false)
   const [formError, setFormError] = useState('')
   const [showCloseConfirm, setShowCloseConfirm] = useState(false)
@@ -149,7 +150,7 @@ export default function QuestionSplitEditor({
       return
     }
     if (hasSavedOnce) {
-      onSuccess()
+      onSuccess(lastSavedSnapshotRef.current || undefined)
     } else {
       onClose()
     }
@@ -158,7 +159,7 @@ export default function QuestionSplitEditor({
   const handleCloseConfirm = useCallback(() => {
     setShowCloseConfirm(false)
     if (hasSavedOnce) {
-      onSuccess()
+      onSuccess(lastSavedSnapshotRef.current || undefined)
     } else {
       onClose()
     }
@@ -389,9 +390,34 @@ export default function QuestionSplitEditor({
 
       if (res.ok) {
         const data = await res.json()
-        // 새 문제 추가 시 반환된 ID 저장 (이후 저장은 PUT)
+        const newId = !isUpdate && data.question?.id ? data.question.id : savedQuestionId
         if (!isUpdate && data.question?.id) {
           setSavedQuestionId(data.question.id)
+        }
+        // 낙관적 업데이트용 스냅샷 저장 (부모가 즉시 목록에 반영)
+        lastSavedSnapshotRef.current = {
+          id: newId,
+          question_code: formData.question_code,
+          exam_id: formData.exam_id,
+          subject_id: formData.subject_id,
+          question_text: formData.question_text,
+          question_type:
+            formData.question_type === 'CHOICE' ? 'MULTIPLE_CHOICE' : formData.question_type,
+          choice_1: formData.choice_1,
+          choice_2: formData.choice_2,
+          choice_3: formData.choice_3,
+          choice_4: formData.choice_4,
+          choice_1_image: formData.choice_1_image || null,
+          choice_2_image: formData.choice_2_image || null,
+          choice_3_image: formData.choice_3_image || null,
+          choice_4_image: formData.choice_4_image || null,
+          answer: formData.answer,
+          answer_text: formData.answer_text || null,
+          answer_text_image: formData.answer_text_image || null,
+          explanation: formData.explanation || '',
+          explanation_image: formData.explanation_image || null,
+          image_url: formData.image_url || null,
+          points: formData.points || 1,
         }
         // dirty 상태 리셋
         initialFormRef.current = JSON.stringify(formData)
