@@ -31,6 +31,16 @@
 - 오늘 랭킹: KST 오늘 날짜 데이터만 집계
 - 밤 12시(00:00 KST) 지나면 새로운 "오늘 랭킹" 시작
 
+### 4. 공식시험은 합격/불합격 판정 없음
+- 공식시험(OFFICIAL)에서는 점수만 표시하고 합격/불합격 판단 없음
+- 시험 시작 안내에서 "합격 기준" 문구 숨김
+- 연습시험(PRACTICE)만 60점 기준 합격/불합격 표시
+
+### 5. 10분 무활동 자동 로그아웃
+- 로그인 상태에서 마우스/키보드/터치/스크롤 없이 10분 경과 시 자동 로그아웃
+- 9분 경과 시 1분 카운트다운 경고 모달 표시
+- 시험 풀이 중(`/exam/attempt/...`)에는 비활성화 (시험 방해 방지)
+
 ## 운영 규칙
 
 ### A. 23:00~23:59(KST) 신규 시험 시작 금지
@@ -87,29 +97,50 @@
   /exam           - 시험 관련 페이지 (시작, 풀이, 결과)
   /my             - 마이페이지 (기록, 프로필, 오답노트, 탈퇴)
 /components       - 재사용 컴포넌트
-  HeroSection.tsx - 대문 인터랙티브 파티클 애니메이션
-  Leaderboard.tsx - 랭킹 (10초 폴링)
-  ExamCards.tsx   - 시험 카드 목록 (10초 폴링)
+  HeroSection.tsx       - 대문 인터랙티브 파티클 애니메이션
+  Header/Footer.tsx     - 레이아웃
+  LandingContent.tsx    - 랜딩 과정별 CBT/합격수기 섹션
+  WhySection.tsx        - WHY 섹션 (ScrollReveal/CountUp/TypeWriter)
+  ScrollReveal.tsx      - 스크롤 인터랙션 + CountUp/TypeWriter named export
+  InactivityGuard.tsx   - 10분 무활동 자동 로그아웃 (1분 전 경고)
+  ProgressBar.tsx       - 유튜브 스타일 상단 프로그레스 바 + useProgress hook
+  CertifiedBanner.tsx   - 인증 배너
+  PremiumSection.tsx    - 프리미엄 멤버십 안내
+  MathText.tsx          - 수학 표기 렌더 (KaTeX)
+  QuestionSplitEditor.tsx - 문제 편집 분할 뷰 (lazy loaded)
+  BulkUploadSplitEditor.tsx - 일괄 업로드 (lazy loaded)
+  admin/                 - 관리자 전용 (OfficialExamsClient, OfficialExamDetailClient, AttemptDetailClient)
 /lib
   /generated      - Prisma 생성 파일
+  auth.ts         - NextAuth v5 설정 (OAuth 4종 + Credentials + Magic Link)
+  prisma.ts       - Prisma 7 (PrismaPg adapter)
+  cloudinary.ts   - Cloudinary 이미지 업로드
   openrouter.ts   - OpenRouter AI 채점 (주관식/서술형)
+  tier.ts         - 등급 권한 유틸 (tierLevel, hasTierAccess)
+  question-code-mapping.ts - 문제코드 생성 유틸
 /types            - TypeScript 타입 정의
 /public/fonts     - 커스텀 폰트 (따악단단 등)
 ```
 
 ## DB 테이블 요약
 
-1. **profiles** - 회원 정보 (name, phone, is_admin)
-2. **exams** - 시험 종류 (기능사/산업기사/기사, exam_mode: PRACTICE/OFFICIAL, is_published, sort_order)
-3. **subjects** - 과목 설정 (과목당 문항 수 포함)
-4. **questions** - 문제 은행 (정답 포함, 프론트 노출 금지, question_type, points, answer_text)
-5. **attempts** - 시험 응시 기록 (grading_status: PENDING/GRADING/COMPLETED)
-6. **attempt_questions** - 시험지 스냅샷 (문제 순서)
-7. **attempt_items** - 학생 답안 (answer_text, awarded_points, grading_status, ai_feedback)
-8. **subject_scores** - 과목별 점수
-9. **daily_best_scores** - 오늘 랭킹
-10. **daily_leaderboard_snapshots** - 어제 Top5 스냅샷
-11. **audit_logs** - 관리자 변경 이력
+1. **users** - 회원 정보 (name, nickname, phone, email, is_admin, tier, tier_expires_at)
+   - UserTier enum: `FREE | BRONZE | SILVER | GOLD | PREMIUM | ADMIN`
+2. **exams** - 시험 종류 (기능사/산업기사/기사, exam_mode: PRACTICE/OFFICIAL, is_published, sort_order, min_tier)
+3. **exam_categories** - 시험 카테고리 (grade, is_active, sort_order)
+4. **subjects** - 과목 설정 (과목당 문항 수 포함)
+5. **questions** - 문제 은행 (정답 포함, 프론트 노출 금지)
+   - 필드: question_type, points, answer, answer_text, **answer_text_image** (참고정답 이미지), explanation, **explanation_image** (해설 이미지), image_url, choice_N_image
+   - 기본 배점: 공식시험 10점, 연습시험 1점
+6. **attempts** - 시험 응시 기록 (grading_status: PENDING/GRADING/COMPLETED)
+7. **attempt_questions** - 시험지 스냅샷 (문제 순서)
+8. **attempt_items** - 학생 답안 (selected, answer_text, **answer_image** (수험자 답안 이미지), awarded_points, grading_status, ai_feedback)
+9. **subject_scores** - 과목별 점수
+10. **daily_best_scores** - 오늘 랭킹
+11. **daily_leaderboard_snapshots** - 어제 Top5 스냅샷
+12. **site_settings** - 관리자 설정 (랜딩 카드 숨김 목록 등, key-value JSON)
+13. **wrong_note_items** - 오답 노트 (userId × questionId)
+14. **audit_logs** - 관리자 변경 이력
 
 ## 개발 가이드
 
@@ -134,6 +165,13 @@ npm run dev
 - 기존 로직 유지하며 개선 (rewrite 지양, refactor 중심)
 - 요청하지 않은 파일 수정 금지
 - 큰 변경은 계획(plan) 먼저 제시
+
+### 렌더링/캐싱 전략
+- **홈 / 등급 / 카테고리 / 시험목록 페이지**: `export const dynamic = 'force-dynamic'`
+  - 관리자가 시험/문제 생성·삭제 시 즉시 반영되어야 해서 ISR 캐시 사용 안 함
+  - unstable_cache도 제거됨
+- **`next.config.ts`**: `staleTimes: { dynamic: 0, static: 0 }` — 클라이언트 라우터 캐시 사실상 비활성
+- **API 변경 시**: 관련 경로에 `revalidatePath('/', 'layout')` 호출 + 클라이언트에서 `router.refresh()` 병행
 
 ## 문제 등록 프로세스 (시험 문제 추가 시 반드시 따를 것)
 
@@ -205,7 +243,7 @@ npm run dev
 - `questions` 테이블에 INSERT/UPDATE
 - 필수 컬럼: `question_code`, `exam_id`, `subject_id`, `question_type`, `question_text`, `choice_1`~`choice_4`, `answer`, `points`, `image_url`(있으면)
 - `question_type`: 'MULTIPLE_CHOICE'
-- `points`: 5 (기본)
+- `points`: 공식시험 10점, 연습시험 1점 (기본값 — API에서 exam.examMode 보고 자동 결정)
 - `is_active`: true (규정 개정 문제도 일단 올림)
 
 ### "공통" 과목 처리

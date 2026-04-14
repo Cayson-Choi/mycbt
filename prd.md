@@ -55,15 +55,16 @@ Supabase 기반 → **Neon(DB) + Prisma(ORM) + NextAuth(인증) + Cloudinary(이
 
 ## 2. 등급제 및 결제 시스템
 
-### 등급 체계
+### 등급 체계 (실제 구현 기준)
 
 | 등급 | 월 결제 금액 | 설명 |
 |------|-------------|------|
-| 게스트 (GUEST) | 0원 | 무료 가입, 제한된 콘텐츠 접근 |
+| 무료 (FREE) | 0원 | 무료 가입, 제한된 콘텐츠 접근 |
 | 브론즈 (BRONZE) | 500원/월 | |
 | 실버 (SILVER) | 1,000원/월 | |
 | 골드 (GOLD) | 3,000원/월 | |
-| 다이아몬드 (DIAMOND) | 5,000원/월 | 모든 콘텐츠 접근 |
+| 프리미엄 (PREMIUM) | 5,000원/월 | 모든 콘텐츠 접근 |
+| 운영자 (ADMIN) | - | 모든 권한 보유, 결제 불필요 |
 
 ### 등급별 접근 제한
 - 각 시험/문제/동영상에 **최소 필요 등급**을 설정 (관리자가 지정)
@@ -262,7 +263,7 @@ model User {
   isAdmin       Boolean   @default(false)
 
   // 등급/결제
-  tier          UserTier  @default(GUEST)
+  tier          UserTier  @default(FREE)
   tierExpiresAt DateTime? @map("tier_expires_at") // 등급 만료일 (결제일+30일)
   billingKey    String?   @map("billing_key")     // 토스페이먼츠 빌링키
 
@@ -321,11 +322,12 @@ model VerificationToken {
 // ─── 등급/결제 ───
 
 enum UserTier {
-  GUEST
+  FREE
   BRONZE
   SILVER
   GOLD
-  DIAMOND
+  PREMIUM
+  ADMIN
 }
 
 model Payment {
@@ -367,7 +369,7 @@ model Video {
   description  String?  @db.Text
   videoUrl     String   @map("video_url")  // 유튜브 등 외부 링크
   thumbnailUrl String?  @map("thumbnail_url")
-  minTier      UserTier @default(GUEST) @map("min_tier") // 최소 필요 등급
+  minTier      UserTier @default(FREE) @map("min_tier") // 최소 필요 등급
   price        Int?     // 개별 구매 가격 (null이면 개별 구매 불가)
   examId       Int?     @map("exam_id")    // 관련 시험 (nullable)
   sortOrder    Int      @default(0) @map("sort_order")
@@ -416,7 +418,7 @@ model Exam {
   creatorName     String?      @map("creator_name")
   creatorTitle    String?      @map("creator_title")
   sortOrder       Int          @default(0) @map("sort_order")
-  minTier         UserTier     @default(GUEST) @map("min_tier") // 최소 필요 등급
+  minTier         UserTier     @default(FREE) @map("min_tier") // 최소 필요 등급
   price           Int?         // 개별 구매 가격 (null이면 개별 구매 불가)
 
   category  ExamCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -860,7 +862,7 @@ NEW 규칙: 어제 Top5에 없었는데 오늘 Top5에 들어오면 NEW
 입력: { tier }
 1. 로그인 확인
 2. 빌링키 확인 (없으면 먼저 /api/payments/billing-key로 카드 등록)
-3. 토스페이먼츠 빌링키 결제 API 호출 (금액: BRONZE=500, SILVER=1000, GOLD=3000, DIAMOND=5000)
+3. 토스페이먼츠 빌링키 결제 API 호출 (금액: BRONZE=500, SILVER=1000, GOLD=3000, PREMIUM=5000)
 4. 결제 성공 → User.tier 업데이트, tierExpiresAt = now + 30일
 5. Payment 레코드 생성 (type=SUBSCRIPTION)
 6. 결과 반환
@@ -883,7 +885,7 @@ NEW 규칙: 어제 Top5에 없었는데 오늘 Top5에 들어오면 NEW
 1. Webhook Signature 검증
 2. 결제 상태 업데이트 (Payment.status)
 3. 정기결제 성공 → tier, tierExpiresAt 갱신
-4. 정기결제 실패 → 유예 후 GUEST로 다운그레이드
+4. 정기결제 실패 → 유예 후 FREE로 다운그레이드
 ```
 
 ### 10-8) 콘텐츠 접근 권한 확인 로직
@@ -924,13 +926,13 @@ function canAccess(user, content):
 - `ThemeToggle.tsx` - 다크/라이트 토글
 
 ### 시험
-- `CategoryCards.tsx` - 홈 카테고리 카드 (전기기초/기능사/산업기사/기사)
-- `ExamCards.tsx` - 카테고리 내 시험 카드 목록 (무료 + 연도/회차별, 등급 표시)
-
+- `LandingContent.tsx` - 랜딩 과정별 CBT 카드 + 합격 수기 섹션
+- 카테고리/시험 목록 페이지는 서버 컴포넌트(`app/category/[categoryId]/...`)에서 직접 렌더링
 - `ExamPaperPrint.ts` - 시험지 인쇄
 
-### 랭킹
-- `Leaderboard.tsx` - 전체 리더보드 (홈 랭킹 표시는 제거됨)
+### UX
+- `InactivityGuard.tsx` - 10분 무활동 자동 로그아웃 (경고 모달)
+- `ProgressBar.tsx` - 유튜브 스타일 상단 프로그레스 바 + `useProgress` hook
 
 ### 문제 관리 (관리자)
 - `QuestionSplitEditor.tsx` - 단일 문제 편집기

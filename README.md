@@ -28,25 +28,27 @@ npm run dev
 
 ## 주요 기능
 
-- 소셜 로그인 (Google, Kakao)
-- 랜덤 문제 출제 (시작 순간 고정)
-- 서버 사이드 채점 (보안)
-- 시간 제한 시험 (관리자 설정)
-- 실시간 랭킹 (오늘/어제 Top5)
-- KST 기준 일별 집계
-- 공식 시험 (비밀번호, 이탈 감지)
-- 주관식/서술형 문제 + AI 자동 채점
-- 인터랙티브 대문 (전기 파티클 애니메이션)
+- 소셜 로그인 (Google / Kakao / Naver) + 이메일+비밀번호 로그인
+- 6단계 등급제 (FREE / BRONZE / SILVER / GOLD / PREMIUM / ADMIN)
+- 랜덤 문제 출제 (시작 순간 고정, 시험지 스냅샷)
+- 서버 사이드 채점 (정답은 프론트로 절대 전송 안 함)
+- 시간 제한 시험 + 10분 무활동 자동 로그아웃
+- 실시간 랭킹 (KST 기준 오늘/어제 Top5)
+- 공식시험 — 비밀번호 접근 제어, 이미지/손글씨 답안 첨부, 수동/AI 채점
+- 주관식/서술형 문제 + AI 자동 채점 (OpenRouter)
+- 유튜브 스타일 상단 프로그레스 바 (페이지 이동/비동기 작업 진행 표시)
+- 인터랙티브 대문 (전기 파티클 Canvas 애니메이션)
 
 ## 기술 스택
 
-- **Frontend**: Next.js 15, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes
-- **Database**: Neon (PostgreSQL)
-- **ORM**: Prisma
-- **Auth**: NextAuth v5 (Google, Kakao OAuth)
-- **Storage**: Cloudinary
-- **AI**: OpenRouter API
+- **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes (Vercel Fluid Compute)
+- **Database**: Neon PostgreSQL (Singapore region)
+- **ORM**: Prisma 7 (PrismaPg adapter)
+- **Auth**: NextAuth v5 (OAuth 3종 + Credentials + Nodemailer)
+- **Storage**: Cloudinary (문제/답안 이미지)
+- **AI**: OpenRouter API (deepseek/deepseek-v3.2)
+- **배포**: Vercel
 
 ## 문서
 

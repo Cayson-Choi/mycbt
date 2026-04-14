@@ -1,7 +1,7 @@
 # 현재 개발 상태
 
 ## 최종 업데이트
-2026-04-06
+2026-04-14
 
 ## 기술 스택
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS
@@ -116,16 +116,37 @@
 ### 10. 페이지 로딩 최적화
 - [x] 서버 컴포넌트 전환 (19개 중 16개, 나머지 3개는 클라이언트 필수)
 - [x] PrismaNeon 어댑터 (HTTP 연결, 콜드 스타트 100~200ms)
-- [x] 3단 캐싱: ISR(4페이지) + unstable_cache(3곳) + staleTimes(dynamic 60초, static 300초)
 - [x] Prefetch 확대: 시험 풀이→결과, 결과→마이페이지, 시작→홈, 오답→마이페이지
-- [x] generateStaticParams: 카테고리, 시험 시작 페이지
 - [x] Promise.all 병렬 DB 조회 (13곳)
 - [x] KaTeX 동적 임포트 (264KB 초기 로드 방지)
+- [x] 홈/등급/카테고리/시험목록 force-dynamic (ISR/unstable_cache 제거) — 관리자 변경 즉시 반영
+- [x] `next.config.ts` staleTimes dynamic/static 모두 0 (클라이언트 라우터 캐시 최소화)
 
-### 11. 등급 시스템 (DB 구조만)
-- [x] UserTier enum (GUEST/BRONZE/SILVER/GOLD/DIAMOND)
+### 11. 등급 시스템
+- [x] UserTier enum: FREE / BRONZE / SILVER / GOLD / PREMIUM / ADMIN
 - [x] 관리자 페이지에 등급 뱃지 표시
+- [x] 시험별 min_tier 설정 (등급 이상만 응시 가능)
+- [x] tier.ts 유틸 (tierLevel, hasTierAccess)
 - [ ] 결제 연동 등급 승급 로직
+
+### 12. UX 개선
+- [x] 10분 무활동 자동 로그아웃 (1분 전 경고 모달, 시험 중에는 비활성)
+- [x] 유튜브 스타일 상단 프로그레스 바 (ProgressBar.tsx)
+  - 모든 내부 링크 클릭 자동 감지, 경로 변경 시 자동 완료
+  - 버튼 클릭 시 바 시작 안 함 (Link 내부 button의 stopPropagation 존중)
+  - `useProgress().run(promise)` API로 비동기 작업 수동 제어 지원
+- [x] 관리자 페이지 상단에 시험/문제/회원/공식시험 관리 카드 4개 배치
+
+### 13. 공식 시험 확장 기능
+- [x] 참고정답 이미지 (answer_text_image) — 관리자 채점 참고용
+- [x] 해설 이미지 (explanation_image) — 응시 결과 화면 노출
+- [x] 수험자 답안 이미지 (answer_image) — 주관식/서술형에서 손글씨·풀이 이미지 첨부
+- [x] 편집기 Ctrl+V 이미지 붙여넣기 (문제, 보기, 참고정답, 해설 textarea 모두)
+- [x] 공식시험 기본 배점 10점 (연습시험은 1점)
+- [x] 응시 시 각 문제 오른쪽 상단 배점 배지 표시
+- [x] 공식시험 합격/불합격 판정 없음 (점수만 표시, "채점 완료" 배지)
+- [x] 채점 대기 중인 공식시험 결과: 점수/합불 대신 "채점 대기 중" 노출
+- [x] 응시자 목록에 로그인 아이디(nickname) 표시
 
 ## 문제 데이터 현황
 
@@ -174,7 +195,7 @@
 ```
 app/
 ├── layout.tsx                  # 루트 레이아웃 (Header, Footer, AuthProvider, ThemeProvider)
-├── page.tsx                    # 홈 (HeroSection + ExamCards + WhySection)
+├── page.tsx                    # 홈 (HeroSection + LandingContent + ProfileGuard + CertifiedBanner)
 ├── globals.css                 # 전역 스타일 + 애니메이션
 ├── login/page.tsx              # 로그인 (소셜 3종 + 이메일+비밀번호)
 ├── complete-profile/page.tsx   # 추가정보기입 (아이디, 전화번호, 개인정보 동의)
@@ -219,29 +240,42 @@ app/
 
 components/
 ├── HeroSection.tsx             # 대문 인터랙티브 파티클 애니메이션 (Canvas)
-├── Header.tsx                  # 네비게이션 (⚡ 이모지 로고)
-├── Footer.tsx                  # 푸터 (⚡ 이모지 로고)
+├── Header.tsx                  # 네비게이션
+├── Footer.tsx                  # 푸터
 ├── AuthProvider.tsx            # NextAuth SessionProvider
-├── ThemeProvider.tsx            # 다크모드 프로바이더
-├── ThemeToggle.tsx              # 다크모드 토글 버튼
-├── ExamCards.tsx               # 카테고리 카드 (필기/실기 배지 + 입장하기)
-├── HomeExamCards.tsx           # 홈페이지 카테고리 카드 (서버 컴포넌트)
-├── WhySection.tsx              # WHY 전기짱 섹션 (인터랙티브 클라이언트 컴포넌트)
-├── ScrollReveal.tsx            # 스크롤 애니메이션 + CountUp + TypeWriter 컴포넌트
-├── MathText.tsx                # 수학 표기법 렌더링
+├── ThemeProvider.tsx           # 다크모드 프로바이더
+├── ThemeToggle.tsx             # 다크모드 토글 버튼
+├── LandingContent.tsx          # 랜딩 과정별 CBT + 합격 수기 섹션
+├── WhySection.tsx              # WHY 전기짱 섹션 (ScrollReveal/CountUp/TypeWriter)
+├── ScrollReveal.tsx            # 스크롤 애니메이션 + CountUp + TypeWriter (named export)
+├── MathText.tsx                # 수학 표기법 렌더링 (KaTeX)
 ├── ConfirmDialog.tsx           # 확인 다이얼로그
 ├── ExamSettingsSection.tsx     # 시험 설정 관리
 ├── ResetAttemptsSection.tsx    # 응시 기록 초기화
 ├── DuplicateQuestionsSection.tsx # 중복 문제 관리
+├── LandingCardSettings.tsx     # 랜딩 카드 표시/숨김 관리
+├── CategoryAccordion.tsx       # 관리자 대시보드 카테고리 아코디언
+├── AdminNavCard.tsx            # 관리자 네비게이션 카드 (시험/문제/회원/공식시험)
+├── CertifiedBanner.tsx         # 인증 배너
+├── PremiumSection.tsx          # 프리미엄 멤버십 안내
+├── InactivityGuard.tsx         # 10분 무활동 자동 로그아웃
+├── ProgressBar.tsx             # 유튜브 스타일 상단 프로그레스 바 + useProgress hook
 ├── QuestionSplitEditor.tsx     # 문제 편집 분할 뷰 (lazy loaded)
 ├── BulkUploadSplitEditor.tsx   # 일괄 업로드 분할 뷰 (lazy loaded)
-└── ProfileGuard.tsx            # 프로필 미완성 감지 리다이렉트
+├── ProfileGuard.tsx            # 프로필 미완성 감지 리다이렉트
+├── ExamPaperPrint.ts           # 시험지 인쇄 헬퍼
+└── admin/
+    ├── OfficialExamsClient.tsx       # 공식시험 목록 관리
+    ├── OfficialExamDetailClient.tsx  # 공식시험 상세 (문제 + 결과 탭)
+    └── AttemptDetailClient.tsx       # 개별 응시자 결과/수동 채점
 
 lib/
-├── auth.ts                     # NextAuth v5 설정 (Google/Kakao/Naver/Credentials/Nodemailer)
-├── prisma.ts                   # Prisma 7 클라이언트 (PrismaPg adapter)
+├── auth.ts                     # NextAuth v5 (Google/Kakao/Naver/Credentials/Nodemailer)
+├── prisma.ts                   # Prisma 7 (PrismaPg adapter)
 ├── cloudinary.ts               # Cloudinary 이미지 업로드/삭제
 ├── openrouter.ts               # OpenRouter AI 채점
+├── tier.ts                     # 등급 권한 유틸 (tierLevel, hasTierAccess)
+├── utils.ts                    # 공통 유틸 (dataUrlToBlob, normalizeLineBreaks)
 ├── question-code-mapping.ts    # 문제코드 매핑 유틸
 └── generated/prisma/           # Prisma 생성 클라이언트
 
