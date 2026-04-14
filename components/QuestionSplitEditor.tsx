@@ -1118,16 +1118,18 @@ function EditPanel({
               type="text"
               value={formData.answer_text}
               onChange={(e) => update('answer_text', e.target.value)}
+              onPaste={(e) => handleImagePaste(e, 'answer_text_image')}
               style={inputStyle}
-              placeholder="채점 참고용 정답 (선택)"
+              placeholder="채점 참고용 정답 (선택, 이미지는 Ctrl+V로 붙여넣기)"
             />
           ) : (
             <textarea
               value={formData.answer_text}
               onChange={(e) => update('answer_text', e.target.value)}
+              onPaste={(e) => handleImagePaste(e, 'answer_text_image')}
               style={{ ...inputStyle, resize: 'vertical', minHeight: '80px' }}
               rows={4}
-              placeholder="채점 참고용 모범답안 (선택)"
+              placeholder="채점 참고용 모범답안 (선택, 이미지는 Ctrl+V로 붙여넣기)"
             />
           )}
           <p style={{ fontSize: '11px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '4px' }}>
@@ -1172,8 +1174,10 @@ function EditPanel({
         <textarea
           value={formData.explanation}
           onChange={(e) => update('explanation', e.target.value)}
+          onPaste={(e) => handleImagePaste(e, 'explanation_image')}
           style={{ ...inputStyle, resize: 'vertical', minHeight: '60px' }}
           rows={3}
+          placeholder="해설 (이미지는 Ctrl+V로 붙여넣기 가능)"
         />
         {renderImageField(
           '해설 이미지',
