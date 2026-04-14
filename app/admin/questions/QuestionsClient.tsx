@@ -678,14 +678,6 @@ export default function QuestionsClient({
           )
         })()}
 
-        {/* 하단 버튼 */}
-        <Link
-          href="/admin"
-          className="inline-block px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
-        >
-          ← 관리자 페이지
-        </Link>
-
         {/* 문제 추가/수정 분할 편집기 */}
         {(showAddForm || editingQuestion) && (
           <Suspense fallback={null}>
