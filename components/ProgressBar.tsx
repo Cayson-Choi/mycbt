@@ -45,6 +45,7 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
   const trickleRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const hideRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const resetRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const safetyRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const activeRef = useRef(false)
   const pendingCountRef = useRef(0)
 
@@ -61,7 +62,13 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
       clearTimeout(resetRef.current)
       resetRef.current = null
     }
+    if (safetyRef.current) {
+      clearTimeout(safetyRef.current)
+      safetyRef.current = null
+    }
   }, [])
+
+  const doneRef = useRef<() => void>(() => {})
 
   const start = useCallback(() => {
     if (activeRef.current) return
@@ -80,6 +87,10 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
         })
       }, TRICKLE_INTERVAL)
     })
+    // 안전장치: 8초 안에 route change/manual done()이 없으면 강제 종료
+    safetyRef.current = setTimeout(() => {
+      if (activeRef.current) doneRef.current()
+    }, 8000)
   }, [clearTimers])
 
   const done = useCallback(() => {
@@ -94,6 +105,10 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
       }, FADE_MS)
     }, COMPLETE_HOLD)
   }, [clearTimers])
+
+  useEffect(() => {
+    doneRef.current = done
+  }, [done])
 
   const run = useCallback(
     async <T,>(task: Promise<T>): Promise<T> => {
@@ -112,9 +127,11 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
   useEffect(() => () => clearTimers(), [clearTimers])
 
   // 앵커 클릭 전역 감지: next/link 포함 모든 내부 링크
+  // bubble phase로 실행해서 React의 preventDefault/stopPropagation이 먼저 처리되도록 함
+  // (Link 안쪽 버튼이 stopPropagation 하면 여기로 이벤트가 오지 않아 바가 시작되지 않음)
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (e.defaultPrevented || e.button !== 0) return
+      if (e.button !== 0) return
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
 
       const target = e.target as HTMLElement | null
@@ -132,7 +149,6 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
       try {
         const url = new URL(href, window.location.href)
         if (url.origin !== window.location.origin) return
-        if (url.pathname === window.location.pathname && url.search === window.location.search && url.hash) return
         if (url.pathname === window.location.pathname && url.search === window.location.search) return
       } catch {
         return
@@ -141,8 +157,8 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
       start()
     }
 
-    document.addEventListener('click', handleClick, { capture: true })
-    return () => document.removeEventListener('click', handleClick, { capture: true })
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
   }, [start])
 
   // 뒤로/앞으로 버튼

@@ -95,6 +95,8 @@ export default function OfficialExamsClient({
         setExams((prev) =>
           prev.map((ex) => (ex.id === examId ? { ...ex, is_published: !currentPublished } : ex))
         )
+        // 홈/카테고리 페이지의 클라이언트 라우터 캐시 무효화 (게시 상태 변경 즉시 반영)
+        router.refresh()
       }
     } catch {
       /* ignored */
@@ -126,6 +128,8 @@ export default function OfficialExamsClient({
 
       if (res.ok) {
         setExams((prev) => prev.filter((ex) => ex.id !== examId))
+        // 홈/카테고리 페이지의 클라이언트 라우터 캐시 무효화 (삭제 후 잔상 방지)
+        router.refresh()
       } else {
         const data = await res.json().catch(() => ({}))
         // 이미 삭제된 시험(404)이면 조용히 목록에서 제거

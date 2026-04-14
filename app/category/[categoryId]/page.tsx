@@ -5,6 +5,16 @@ import { unstable_cache } from "next/cache"
 
 export const revalidate = 60
 
+// 등급명 → URL 슬러그 + 표시명 매핑
+const GRADE_TO_SLUG: Record<string, { slug: string; label: string }> = {
+  "진단평가": { slug: "basic", label: "진단평가" },
+  "기능사": { slug: "technician", label: "기능사" },
+  "산업기사": { slug: "industrial", label: "산업기사" },
+  "기사": { slug: "engineer", label: "기사" },
+  "기능장": { slug: "master", label: "기능장" },
+  "기타": { slug: "etc", label: "공식시험" },
+}
+
 export async function generateStaticParams() {
   const categories = await prisma.examCategory.findMany({
     where: { isActive: true },
@@ -29,7 +39,7 @@ export default async function CategoryPage({
     async (catId: number) => {
       const cat = await prisma.examCategory.findUnique({
         where: { id: catId, isActive: true },
-        select: { id: true, name: true, description: true },
+        select: { id: true, name: true, description: true, grade: true },
       })
       if (!cat) return null
 
@@ -52,6 +62,8 @@ export default async function CategoryPage({
   if (!data) notFound()
 
   const { category, writtenCount, practicalCount } = data
+  const gradeKey = category.grade || "기타"
+  const gradeInfo = GRADE_TO_SLUG[gradeKey] || { slug: "etc", label: gradeKey }
 
   const examTypes = [
     {
@@ -90,13 +102,13 @@ export default async function CategoryPage({
         {/* 헤�� */}
         <div className="mb-10">
           <Link
-            href="/"
+            href={`/grade/${gradeInfo.slug}`}
             className="inline-flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mb-4"
           >
             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            홈으로
+            {gradeInfo.label}
           </Link>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             {category.name}

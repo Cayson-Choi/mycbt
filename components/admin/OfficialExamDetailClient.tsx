@@ -897,7 +897,7 @@ export default function OfficialExamDetailClient({
           question={editorQuestion}
           onClose={handleEditorClose}
           onSuccess={handleEditorSuccess}
-          lockedExam={{ id: parseInt(examId), name: exam.name }}
+          lockedExam={{ id: parseInt(examId), name: exam.name, examMode: 'OFFICIAL' }}
         />
       )}
 

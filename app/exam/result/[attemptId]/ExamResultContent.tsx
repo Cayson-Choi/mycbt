@@ -68,6 +68,9 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
 
   const passed = (result.total_score ?? 0) >= 60
   const isOfficial = result.exam_mode === 'OFFICIAL'
+  const isPendingGrading =
+    result.grading_status === 'PENDING' || result.grading_status === 'GRADING'
+  const hideScore = isOfficial && isPendingGrading
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
@@ -86,29 +89,42 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
           </h1>
 
           <div className="mb-6">
-            <div
-              className={`text-4xl sm:text-6xl font-bold mb-2 ${
-                passed ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-              }`}
-            >
-              {result.total_score}점
-            </div>
-            <div className="text-gray-600 dark:text-gray-400">
-              {isOfficial
-                ? `${result.total_score} / ${result.questions.reduce((sum, q) => sum + (q.points || 1), 0)}점`
-                : `${result.total_correct} / ${result.total_questions} 문제 정답`
-              }
-            </div>
-            {result.grading_status === 'PENDING_MANUAL' && (
-              <div className="mt-3 inline-block px-4 py-2 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 rounded-lg text-sm font-semibold">
-                주관식 채점 대기 중 (임시 점수)
-              </div>
+            {hideScore ? (
+              <>
+                <div className="text-4xl sm:text-5xl font-bold mb-2 text-yellow-600 dark:text-yellow-400">
+                  채점 대기 중
+                </div>
+                <div className="text-gray-600 dark:text-gray-400 text-sm">
+                  관리자가 채점을 완료하면 점수가 공개됩니다
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className={`text-4xl sm:text-6xl font-bold mb-2 ${
+                    passed ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                  }`}
+                >
+                  {result.total_score}점
+                </div>
+                <div className="text-gray-600 dark:text-gray-400">
+                  {isOfficial
+                    ? `${result.total_score} / ${result.questions.reduce((sum, q) => sum + (q.points || 1), 0)}점`
+                    : `${result.total_correct} / ${result.total_questions} 문제 정답`
+                  }
+                </div>
+                {isPendingGrading && !isOfficial && (
+                  <div className="mt-3 inline-block px-4 py-2 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 rounded-lg text-sm font-semibold">
+                    주관식 채점 대기 중 (임시 점수)
+                  </div>
+                )}
+              </>
             )}
           </div>
 
-          {result.grading_status === 'PENDING_MANUAL' ? (
+          {hideScore ? (
             <div className="inline-block px-4 py-2 sm:px-6 sm:py-3 rounded-full text-base sm:text-xl font-bold bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">
-              채점 대기
+              채점 대기 중
             </div>
           ) : (
             <div

@@ -165,6 +165,13 @@ export async function POST(request: Request) {
         ? "SHORT_ANSWER"
         : "ESSAY"
 
+    // 공식시험이면 기본 배점 10점, 그 외 1점
+    const exam = await prisma.exam.findUnique({
+      where: { id: exam_id },
+      select: { examMode: true },
+    })
+    const defaultPoints = exam?.examMode === "OFFICIAL" ? 10 : 1
+
     const newQuestion = await prisma.question.create({
       data: {
         questionCode: question_code,
@@ -184,7 +191,7 @@ export async function POST(request: Request) {
         answerText: answer_text || null,
         explanation: explanation || "",
         imageUrl: image_url || null,
-        points: points || 1,
+        points: points || defaultPoints,
       },
     })
 

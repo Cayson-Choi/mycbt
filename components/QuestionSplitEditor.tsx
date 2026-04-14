@@ -8,7 +8,7 @@ interface QuestionSplitEditorProps {
   question?: any
   onClose: () => void
   onSuccess: () => void
-  lockedExam?: { id: number; name: string }
+  lockedExam?: { id: number; name: string; examMode?: string }
 }
 
 export default function QuestionSplitEditor({
@@ -17,6 +17,7 @@ export default function QuestionSplitEditor({
   onSuccess,
   lockedExam,
 }: QuestionSplitEditorProps) {
+  const defaultPoints = lockedExam?.examMode === 'OFFICIAL' ? 10 : 1
   const [formData, setFormData] = useState({
     question_code: question?.question_code || '',
     exam_id: question?.exam_id || lockedExam?.id || 1,
@@ -35,7 +36,7 @@ export default function QuestionSplitEditor({
     answer_text: question?.answer_text || '',
     explanation: question?.explanation || '',
     image_url: question?.image_url || '',
-    points: question?.points || 1,
+    points: question?.points || defaultPoints,
   })
   const [subjects, setSubjects] = useState<any[]>([])
   const [uploadingImage, setUploadingImage] = useState(false)
@@ -71,7 +72,7 @@ export default function QuestionSplitEditor({
     answer_text: question?.answer_text || '',
     explanation: question?.explanation || '',
     image_url: question?.image_url || '',
-    points: question?.points || 1,
+    points: question?.points || defaultPoints,
   }))
 
   const isDirty = JSON.stringify(formData) !== initialFormRef.current
@@ -697,8 +698,9 @@ function EditPanel({
   handleImagePaste: (e: React.ClipboardEvent, targetField?: string) => void
   handleImageFileUpload: (e: React.ChangeEvent<HTMLInputElement>, targetField?: string) => void
   handleSubmit: (e?: React.FormEvent) => void
-  lockedExam?: { id: number; name: string }
+  lockedExam?: { id: number; name: string; examMode?: string }
 }) {
+  const defaultPoints = lockedExam?.examMode === 'OFFICIAL' ? 10 : 1
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '8px 12px',
@@ -1133,11 +1135,11 @@ function EditPanel({
             min={1}
             max={100}
             value={formData.points}
-            onChange={(e) => update('points', parseInt(e.target.value) || 1)}
+            onChange={(e) => update('points', parseInt(e.target.value) || defaultPoints)}
             style={{ ...inputStyle, width: '120px' }}
           />
           <p style={{ fontSize: '11px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '4px' }}>
-            공식 시험 배점 (기본 1점)
+            공식 시험 배점 (기본 {defaultPoints}점)
           </p>
         </div>
       )}
