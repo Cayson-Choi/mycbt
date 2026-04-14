@@ -136,7 +136,15 @@ export default function ProgressProvider({ children }: { children: ReactNode }) 
 
       const target = e.target as HTMLElement | null
       if (!target) return
+
+      // 버튼 클릭은 무시 (Link 내부 버튼이 stopPropagation 못 해도 바가 안 시작되도록)
+      // — 버튼은 자체 액션(모달 오픈 등)이 기본이고, 네비게이션 의도면 Link를 써야 함
+      const button = target.closest('button')
       const anchor = target.closest('a')
+      if (button) {
+        // 버튼이 anchor보다 더 가까운 조상이면 버튼 클릭으로 간주 → 바 시작 안 함
+        if (!anchor || button.contains(anchor) === false) return
+      }
       if (!anchor) return
 
       const href = anchor.getAttribute('href')
