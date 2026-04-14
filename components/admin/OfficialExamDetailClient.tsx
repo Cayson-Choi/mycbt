@@ -404,24 +404,9 @@ export default function OfficialExamDetailClient({
     setEditorQuestion(undefined)
   }
 
-  const handleEditorSuccess = (savedQuestion?: any) => {
+  const handleEditorSuccess = () => {
     setShowEditor(false)
     setEditorQuestion(undefined)
-    // 낙관적 업데이트: 저장된 문제를 즉시 목록에 반영 (2-3초 깜빡임 제거)
-    if (savedQuestion?.id) {
-      setQuestions((prev) => {
-        const idx = prev.findIndex((q) => q.id === savedQuestion.id)
-        if (idx >= 0) {
-          // 기존 문제 수정 → 해당 항목 교체
-          const next = [...prev]
-          next[idx] = { ...prev[idx], ...savedQuestion }
-          return next
-        }
-        // 새 문제 → 뒤에 추가
-        return [...prev, savedQuestion]
-      })
-    }
-    // 서버 데이터와 동기화 (백그라운드)
     loadQuestions()
   }
 
