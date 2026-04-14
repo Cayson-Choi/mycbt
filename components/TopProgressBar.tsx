@@ -53,12 +53,48 @@ export default function TopProgressBar() {
     recompute()
   }
 
-  // 1) fetch 가로채기
+  // 1) fetch 가로채기 — 단, Next.js prefetch 등 백그라운드 요청은 제외
   useEffect(() => {
     if (typeof window === 'undefined') return
     const originalFetch = window.fetch
 
+    const isBackgroundRequest = (input: RequestInfo | URL, init?: RequestInit): boolean => {
+      try {
+        // Request 객체 또는 RequestInit의 headers 확인
+        let headers: Headers | null = null
+        if (input instanceof Request) {
+          headers = input.headers
+        } else if (init?.headers) {
+          headers = new Headers(init.headers as HeadersInit)
+        }
+
+        // Next.js prefetch 요청 (hover/viewport 진입 시 자동 발생) → 제외
+        if (headers) {
+          if (headers.get('next-router-prefetch') === '1') return true
+          if (headers.get('purpose') === 'prefetch') return true
+          if (headers.get('sec-purpose')?.startsWith('prefetch')) return true
+        }
+
+        // URL 기반 추가 필터: session 자동 폴링 등
+        const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url
+        if (url) {
+          // NextAuth 세션 자동 폴링 제외 (사용자 액션이 아님)
+          if (/\/api\/auth\/session(\?|$)/.test(url)) return true
+          // _next/* 내부 요청 제외
+          if (/\/_next\//.test(url)) return true
+        }
+      } catch {
+        /* ignore */
+      }
+      return false
+    }
+
     window.fetch = async (...args: Parameters<typeof fetch>) => {
+      const [input, init] = args
+      if (isBackgroundRequest(input, init)) {
+        return originalFetch(...args)
+      }
+
       fetchCountRef.current++
       recompute()
       try {
