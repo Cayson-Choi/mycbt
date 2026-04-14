@@ -78,7 +78,7 @@ function printExamPaper(data: any) {
   .info-table td { padding: 6px 12px; border: 1px solid #ccc; font-size: 13px; }
   .info-table td:first-child { background: #f5f5f5; font-weight: 600; width: 80px; }
   .score-box { text-align: center; padding: 12px; background: #f0f9ff; border: 2px solid #3b82f6; border-radius: 8px; margin-bottom: 16px; }
-  .score-box .score { font-size: 28px; font-weight: 700; color: ${data.total_score >= 60 ? '#16a34a' : '#dc2626'}; }
+  .score-box .score { font-size: 28px; font-weight: 700; color: #2563eb; }
   @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 </style>
 </head><body>
@@ -117,12 +117,9 @@ function printResultsSummary(examName: string, results: any[]) {
   const avgScore = gradedOnly.length > 0
     ? Math.round(gradedOnly.reduce((sum: number, r: any) => sum + r.total_score, 0) / gradedOnly.length)
     : 0
-  const passCount = gradedOnly.filter((r: any) => r.total_score >= 60).length
-  const failCount = gradedOnly.filter((r: any) => r.total_score < 60).length
-
   const rows = results.map((r: any, idx: number) => {
     const isPending = r.grading_status === 'PENDING_MANUAL'
-    const scoreColor = isPending ? '#ca8a04' : r.total_score >= 60 ? '#16a34a' : '#dc2626'
+    const scoreColor = isPending ? '#ca8a04' : '#2563eb'
     const scoreText = isPending ? `${r.total_score}점 (대기)` : `${r.total_score}점`
     return `
     <tr>
@@ -155,8 +152,6 @@ function printResultsSummary(examName: string, results: any[]) {
 <div class="stats">
   <span>응시자: ${results.length}명</span>
   <span>평균: ${avgScore}점</span>
-  <span>합격: ${passCount}명</span>
-  <span>불합격: ${failCount}명</span>
   ${pendingOnly.length > 0 ? `<span>채점 대기: ${pendingOnly.length}명</span>` : ''}
 </div>
 <table>
@@ -433,9 +428,6 @@ export default function OfficialExamDetailClient({
   const avgScore = gradedResults.length > 0
     ? Math.round(gradedResults.reduce((sum, r) => sum + r.total_score, 0) / gradedResults.length)
     : 0
-  const passCount = gradedResults.filter((r) => r.total_score >= 60).length
-  const failCount = gradedResults.filter((r) => r.total_score < 60).length
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -760,16 +752,6 @@ export default function OfficialExamDetailClient({
                   <span className="text-gray-500 dark:text-gray-400">평균</span>
                   <span className="font-bold text-purple-600 dark:text-purple-400">{avgScore}점</span>
                 </div>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-gray-500 dark:text-gray-400">합격</span>
-                  <span className="font-bold text-green-600 dark:text-green-400">{passCount}명</span>
-                </div>
-                <span className="text-gray-300 dark:text-gray-600">|</span>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-gray-500 dark:text-gray-400">불합격</span>
-                  <span className="font-bold text-red-600 dark:text-red-400">{failCount}명</span>
-                </div>
                 {pendingResults.length > 0 && (
                   <>
                     <span className="text-gray-300 dark:text-gray-600">|</span>
@@ -840,9 +822,7 @@ export default function OfficialExamDetailClient({
                               className={`font-bold ${
                                 r.grading_status === 'PENDING_MANUAL'
                                   ? 'text-yellow-600 dark:text-yellow-400'
-                                  : r.total_score >= 60
-                                    ? 'text-green-600 dark:text-green-400'
-                                    : 'text-red-600 dark:text-red-400'
+                                  : 'text-blue-600 dark:text-blue-400'
                               }`}
                             >
                               {r.total_score}점

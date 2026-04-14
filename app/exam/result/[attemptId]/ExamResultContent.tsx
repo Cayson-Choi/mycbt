@@ -104,7 +104,11 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
               <>
                 <div
                   className={`text-4xl sm:text-6xl font-bold mb-2 ${
-                    passed ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                    isOfficial
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : passed
+                        ? 'text-green-600 dark:text-green-400'
+                        : 'text-red-600 dark:text-red-400'
                   }`}
                 >
                   {result.total_score}점
@@ -127,6 +131,10 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
           {hideScore ? (
             <div className="inline-block px-4 py-2 sm:px-6 sm:py-3 rounded-full text-base sm:text-xl font-bold bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">
               채점 대기 중
+            </div>
+          ) : isOfficial ? (
+            <div className="inline-block px-4 py-2 sm:px-6 sm:py-3 rounded-full text-base sm:text-xl font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">
+              채점 완료
             </div>
           ) : (
             <div

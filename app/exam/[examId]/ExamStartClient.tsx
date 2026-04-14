@@ -142,10 +142,12 @@ export default function ExamStartClient({
                   <span className="text-gray-600 dark:text-gray-400">시험 시간:</span>
                   <span className="font-semibold dark:text-gray-200">{durationMinutes}분</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">합격 기준:</span>
-                  <span className="font-semibold dark:text-gray-200">60점 이상</span>
-                </div>
+                {!isOfficial && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 dark:text-gray-400">합격 기준:</span>
+                    <span className="font-semibold dark:text-gray-200">60점 이상</span>
+                  </div>
+                )}
               </div>
             </div>
 

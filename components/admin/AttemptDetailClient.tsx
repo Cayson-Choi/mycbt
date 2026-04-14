@@ -144,8 +144,6 @@ export default function AttemptDetailClient({
     }
   }
 
-  const passed = result.total_score >= 60
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-5xl mx-auto px-4">
@@ -184,24 +182,11 @@ export default function AttemptDetailClient({
 
           {/* 점수 */}
           <div className="flex items-center gap-6">
-            <div
-              className={`text-4xl font-bold ${
-                passed ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-              }`}
-            >
+            <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">
               {result.total_score}점
             </div>
             <div className="text-gray-600 dark:text-gray-400">
               {result.total_score} / {result.questions.reduce((sum, q) => sum + (q.points || 1), 0)}점
-            </div>
-            <div
-              className={`px-3 py-1 rounded-full text-sm font-bold ${
-                passed
-                  ? 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300'
-                  : 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
-              }`}
-            >
-              {passed ? '합격' : '불합격'}
             </div>
             {result.grading_status === 'PENDING_MANUAL' && (
               <div className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 rounded-full text-sm font-semibold">
