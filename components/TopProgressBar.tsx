@@ -4,42 +4,117 @@ import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 /**
- * 전역 진행 바 — 페이지 이동 + 모든 fetch 작업 중 상단에 표시.
- * - Link 클릭 → 진행 바 시작 → pathname 변경 시 종료
- * - fetch() 호출 → 진행 바 시작 → 응답 도착 시 종료
- * - 두 작업이 겹치면 모두 완료될 때까지 표시 유지
+ * YouTube/NProgress 스타일 상단 진행 바.
+ *
+ * 동작:
+ * 1. 작업 시작 시 (시각적 피드백 필요)
+ *    - 10%로 점프 + opacity 1
+ *    - 이후 300ms 간격으로 서서히 증가 (90% 상한, 점점 느리게)
+ * 2. 작업 완료 시
+ *    - 100%로 스냅 (150ms 내 도달)
+ *    - 150ms 대기 후 opacity를 0으로 페이드 (250ms)
+ *    - 페이드 완료 후 width=0으로 리셋
+ * 3. 새 작업이 페이드 중 발생하면
+ *    - 현재 위치에서 다시 트리클 재개 (10%로 리셋 안 함)
+ *
+ * 추적 대상:
+ * - Link 클릭으로 인한 페이지 이동 (pathname 변경까지)
+ * - window.fetch로 보낸 네트워크 요청 (prefetch/세션 폴링 제외)
+ *
+ * 제외:
+ * - 랜딩 페이지(/) 이동
+ * - hover prefetch, NextAuth 세션 폴링, _next/* 내부 요청
  */
 export default function TopProgressBar() {
   const pathname = usePathname()
-  const [progress, setProgress] = useState(0)
-  const [visible, setVisible] = useState(false)
+  const [progress, setProgress] = useState(0) // 0 = 숨김
+  const [opacity, setOpacity] = useState(0)
 
-  // 작업 카운터 (fetch + 네비게이션)
   const fetchCountRef = useRef(0)
   const navPendingRef = useRef(false)
   const navTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const trickleRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const completionTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
+  const progressRef = useRef(0)
 
-  const recompute = () => {
-    const active = fetchCountRef.current > 0 || navPendingRef.current
-    setVisible((prev) => {
-      if (active && !prev) setProgress(10)
-      return active
+  // ─── 헬퍼 ───
+  const updateProgress = (val: number | ((p: number) => number)) => {
+    setProgress((prev) => {
+      const next = typeof val === 'function' ? val(prev) : val
+      progressRef.current = next
+      return next
     })
-    if (!active) {
-      setProgress(100)
-      setTimeout(() => setProgress(0), 250)
+  }
+
+  const clearCompletionTimers = () => {
+    completionTimersRef.current.forEach(clearTimeout)
+    completionTimersRef.current = []
+  }
+
+  const startTrickle = () => {
+    if (trickleRef.current) return
+    trickleRef.current = setInterval(() => {
+      updateProgress((p) => {
+        if (p >= 90) return p
+        // ease-out: 시작은 빠르게, 90%에 가까울수록 느리게
+        const increment = Math.max(0.5, (90 - p) * 0.15)
+        return Math.min(90, p + increment)
+      })
+    }, 300)
+  }
+
+  const stopTrickle = () => {
+    if (trickleRef.current) {
+      clearInterval(trickleRef.current)
+      trickleRef.current = null
+    }
+  }
+
+  const checkActive = () => {
+    const active = fetchCountRef.current > 0 || navPendingRef.current
+
+    if (active) {
+      // 완료 애니메이션이 진행 중이었다면 취소하고 현재 위치에서 재개
+      clearCompletionTimers()
+      if (progressRef.current === 0) {
+        // 새 시작
+        setOpacity(1)
+        updateProgress(10)
+      } else if (progressRef.current >= 100) {
+        // 완료 직후 새 작업 시작 → 10%로 리셋하고 재시작
+        setOpacity(1)
+        updateProgress(10)
+      } else {
+        // 진행 중에 추가 작업 시작 → opacity만 보장
+        setOpacity(1)
+      }
+      startTrickle()
+    } else {
+      // 모든 작업 종료 → 100%로 스냅 후 페이드
+      stopTrickle()
+      updateProgress(100)
+      clearCompletionTimers()
+      // 150ms (width transition 완료) → opacity 0으로 페이드
+      const t1 = setTimeout(() => {
+        setOpacity(0)
+        // 250ms 페이드 완료 후 width=0으로 리셋
+        const t2 = setTimeout(() => {
+          updateProgress(0)
+        }, 250)
+        completionTimersRef.current.push(t2)
+      }, 150)
+      completionTimersRef.current.push(t1)
     }
   }
 
   const startNav = () => {
     if (navPendingRef.current) return
     navPendingRef.current = true
-    recompute()
-    // 안전 장치: 네비게이션이 10초 내 완료 안 되면 강제 종료
+    checkActive()
     if (navTimeoutRef.current) clearTimeout(navTimeoutRef.current)
     navTimeoutRef.current = setTimeout(() => {
       navPendingRef.current = false
-      recompute()
+      checkActive()
     }, 10000)
   }
 
@@ -50,17 +125,16 @@ export default function TopProgressBar() {
       clearTimeout(navTimeoutRef.current)
       navTimeoutRef.current = null
     }
-    recompute()
+    checkActive()
   }
 
-  // 1) fetch 가로채기 — 단, Next.js prefetch 등 백그라운드 요청은 제외
+  // ─── 1) fetch 가로채기 ───
   useEffect(() => {
     if (typeof window === 'undefined') return
     const originalFetch = window.fetch
 
     const isBackgroundRequest = (input: RequestInfo | URL, init?: RequestInit): boolean => {
       try {
-        // Request 객체 또는 RequestInit의 headers 확인
         let headers: Headers | null = null
         if (input instanceof Request) {
           headers = input.headers
@@ -68,26 +142,26 @@ export default function TopProgressBar() {
           headers = new Headers(init.headers as HeadersInit)
         }
 
-        // Next.js prefetch 요청 (hover/viewport 진입 시 자동 발생) → 제외
+        // prefetch 요청
         if (headers) {
           if (headers.get('next-router-prefetch') === '1') return true
           if (headers.get('purpose') === 'prefetch') return true
           if (headers.get('sec-purpose')?.startsWith('prefetch')) return true
         }
 
-        // URL 기반 추가 필터: session 자동 폴링 등
         const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url
         if (url) {
-          // NextAuth 세션 자동 폴링 제외 (사용자 액션이 아님)
           if (/\/api\/auth\/session(\?|$)/.test(url)) return true
-          // _next/* 내부 요청 제외
           if (/\/_next\//.test(url)) return true
 
-          // 랜딩 페이지로의 RSC 네비게이션은 진행 바에서 제외
+          // 랜딩 페이지 RSC 네비게이션
           try {
             const parsed = new URL(url, window.location.origin)
             if (parsed.pathname === '/') {
-              const isRSC = headers?.get('rsc') === '1' || headers?.get('RSC') === '1' || parsed.searchParams.has('_rsc')
+              const isRSC =
+                headers?.get('rsc') === '1' ||
+                headers?.get('RSC') === '1' ||
+                parsed.searchParams.has('_rsc')
               if (isRSC) return true
             }
           } catch {
@@ -107,12 +181,12 @@ export default function TopProgressBar() {
       }
 
       fetchCountRef.current++
-      recompute()
+      checkActive()
       try {
         return await originalFetch(...args)
       } finally {
         fetchCountRef.current = Math.max(0, fetchCountRef.current - 1)
-        recompute()
+        checkActive()
       }
     }
 
@@ -122,7 +196,7 @@ export default function TopProgressBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // 2) Link 클릭 감지 → 네비게이션 시작
+  // ─── 2) Link 클릭 감지 ───
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (e.defaultPrevented) return
@@ -142,7 +216,7 @@ export default function TopProgressBar() {
         const url = new URL(href, window.location.origin)
         if (url.origin !== window.location.origin) return
         if (url.pathname === pathname) return
-        // 랜딩 페이지로의 이동은 진행 바 제외
+        // 랜딩 페이지 제외
         if (url.pathname === '/') return
       } catch {
         return
@@ -156,42 +230,42 @@ export default function TopProgressBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
-  // 3) pathname 변경 → 네비게이션 완료
+  // ─── 3) pathname 변경 → 네비게이션 완료 ───
   useEffect(() => {
     endNav()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
-  // 4) 진행 바 점진적 증가 (90%까지)
+  // ─── 4) 30s 안전장치 ───
   useEffect(() => {
-    if (!visible) return
-    if (progress >= 90) return
-    const timer = setTimeout(() => {
-      setProgress((p) => Math.min(90, p + (90 - p) * 0.15))
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [visible, progress])
-
-  // 5) 안전 장치: 30초 넘게 유지되면 강제 종료
-  useEffect(() => {
-    if (!visible) return
+    if (progress === 0) return
     const timer = setTimeout(() => {
       fetchCountRef.current = 0
       navPendingRef.current = false
-      setVisible(false)
-      setProgress(0)
+      checkActive()
     }, 30000)
     return () => clearTimeout(timer)
-  }, [visible])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progress])
 
-  if (!visible && progress === 0) return null
+  // ─── 5) 언마운트 정리 ───
+  useEffect(() => {
+    return () => {
+      stopTrickle()
+      clearCompletionTimers()
+      if (navTimeoutRef.current) clearTimeout(navTimeoutRef.current)
+    }
+  }, [])
+
+  if (progress === 0) return null
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[100] h-[3px] bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.7)] transition-[width,opacity] duration-200 ease-out pointer-events-none"
+      className="fixed top-0 left-0 right-0 z-[100] h-[3px] bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)] pointer-events-none"
       style={{
         width: `${progress}%`,
-        opacity: visible ? 1 : 0,
+        opacity,
+        transition: 'width 150ms ease-out, opacity 250ms ease-out',
       }}
     />
   )
