@@ -82,6 +82,17 @@ export default function TopProgressBar() {
           if (/\/api\/auth\/session(\?|$)/.test(url)) return true
           // _next/* 내부 요청 제외
           if (/\/_next\//.test(url)) return true
+
+          // 랜딩 페이지로의 RSC 네비게이션은 진행 바에서 제외
+          try {
+            const parsed = new URL(url, window.location.origin)
+            if (parsed.pathname === '/') {
+              const isRSC = headers?.get('rsc') === '1' || headers?.get('RSC') === '1' || parsed.searchParams.has('_rsc')
+              if (isRSC) return true
+            }
+          } catch {
+            /* ignore */
+          }
         }
       } catch {
         /* ignore */
@@ -131,6 +142,8 @@ export default function TopProgressBar() {
         const url = new URL(href, window.location.origin)
         if (url.origin !== window.location.origin) return
         if (url.pathname === pathname) return
+        // 랜딩 페이지로의 이동은 진행 바 제외
+        if (url.pathname === '/') return
       } catch {
         return
       }
