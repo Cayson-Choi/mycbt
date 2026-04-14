@@ -15,6 +15,8 @@ interface ExamData {
   is_published: boolean
   sort_order: number
   min_tier: string
+  category_id: number | null
+  category_name: string
 }
 
 interface SubjectData {
@@ -106,9 +108,25 @@ export default function ExamStartClient({
     }
   }
 
+  const backHref = exam.category_id
+    ? `/category/${exam.category_id}/${exam.exam_type === 'PRACTICAL' ? 'practical' : 'written'}`
+    : '/'
+  const backLabel = exam.category_name
+    ? `${exam.category_name} ${exam.exam_type === 'PRACTICAL' ? '실기' : '필기'}`
+    : '홈으로'
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-3xl mx-auto px-4">
+        <Link
+          href={backHref}
+          className="inline-flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 mb-4"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          {backLabel}
+        </Link>
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 border dark:border-gray-700">
           <h1 className="text-3xl font-bold text-center mb-2 dark:text-white flex items-center justify-center gap-2">
             <span className={`text-xs font-bold px-2 py-0.5 rounded ${
