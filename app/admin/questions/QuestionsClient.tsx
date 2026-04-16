@@ -66,12 +66,8 @@ export default function QuestionsClient({
       .catch(() => {})
   }, [])
 
-  const skipInitialLoad = useRef(!!initialQuestions && imageFilter === 'all')
+  // 필터 변경 시 + 마운트 시 항상 전체 문제 로드 (SSR 초기 데이터는 일부만이므로)
   useEffect(() => {
-    if (skipInitialLoad.current) {
-      skipInitialLoad.current = false
-      return
-    }
     loadQuestions()
   }, [examFilter, categoryFilter, examTypeFilter, imageFilter])
 
@@ -349,16 +345,26 @@ export default function QuestionsClient({
           </div>
         </div>
 
-        {/* 삭제 오류 메시지 */}
+        {/* 삭제 오류 모달 */}
         {deleteError && (
-          <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg flex items-center justify-between">
-            <span className="text-red-700 dark:text-red-300">{deleteError}</span>
-            <button
-              onClick={() => setDeleteError(null)}
-              className="text-red-500 hover:text-red-700 dark:hover:text-red-300 ml-4"
-            >
-              ✕
-            </button>
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-sm w-full mx-4 border dark:border-gray-700">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center shrink-0">
+                  <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold dark:text-white">삭제 실패</h3>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">{deleteError}</p>
+              <button
+                onClick={() => setDeleteError(null)}
+                className="w-full px-4 py-2 bg-gray-800 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-900 dark:hover:bg-gray-500 text-sm font-medium"
+              >
+                확인
+              </button>
+            </div>
           </div>
         )}
 
