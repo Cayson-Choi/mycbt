@@ -458,7 +458,7 @@ ${questionsHtml}
                 선택 삭제 ({selectedQuestions.size})
               </button>
             )}
-            {filteredQuestions.length > 0 && (
+            {examFilter !== 'all' && filteredQuestions.length > 0 && (
               <button
                 onClick={handlePrintExam}
                 className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-500 text-sm"
