@@ -357,6 +357,7 @@ export default function QuestionsClient({
     column-gap: 16px;
     column-rule: 1px solid #ddd;
     column-fill: auto;
+    height: 200000px;
   }
   .exam-title {
     column-span: all;
