@@ -353,14 +353,8 @@ export default function QuestionsClient({
     font-size: 10px;
     line-height: 1.45;
     color: #111;
-    column-count: 2;
-    column-gap: 16px;
-    column-rule: 1px solid #ddd;
-    column-fill: auto;
-    height: 200000px;
   }
   .exam-title {
-    column-span: all;
     text-align: center;
     font-size: 16px;
     font-weight: 700;
@@ -368,8 +362,14 @@ export default function QuestionsClient({
     border-bottom: 2px solid #333;
     margin-bottom: 10px;
   }
+  .questions-wrap {
+    column-count: 2;
+    column-gap: 16px;
+    column-rule: 1px solid #ddd;
+    column-fill: auto;
+    height: 200000px;
+  }
   .answer-page {
-    column-span: all;
     break-before: page;
     padding-top: 20px;
   }
@@ -441,7 +441,9 @@ export default function QuestionsClient({
 </style>
 </head><body>
 <div class="exam-title">${escHtml(examTitle)} (${filteredQuestions.length}문제)</div>
+<div class="questions-wrap">
 ${questionsHtml}
+</div>
 <div class="answer-page">
   <h2>${escHtml(examTitle)} 정답표</h2>
   <div class="answer-grid">
