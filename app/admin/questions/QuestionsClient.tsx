@@ -161,6 +161,13 @@ export default function QuestionsClient({
           .map((e: any) => e.id)
         if (catExamIds.length > 0) {
           url = `/api/admin/questions?exam_ids=${catExamIds.join(',')}`
+        } else {
+          // 해당 카테고리+유형에 시험이 없으면 빈 결과 반환
+          if (requestId === loadRequestId.current) {
+            setQuestions([])
+            setLoading(false)
+          }
+          return
         }
       }
 
