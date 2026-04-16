@@ -295,6 +295,127 @@ export default function QuestionsClient({
     }
   }
 
+  // 시험지 인쇄 (A4 세로 2단)
+  const handlePrintExam = () => {
+    if (filteredQuestions.length === 0) return
+
+    // 시험명 결정
+    let examTitle = '시험지'
+    if (examFilter !== 'all') {
+      const ex = exams.find((e: any) => e.id.toString() === examFilter)
+      if (ex) examTitle = ex.name
+    } else if (categoryFilter !== 'all') {
+      examTitle = categoryFilter + (examTypeFilter !== 'all' ? (examTypeFilter === 'WRITTEN' ? ' 필기' : ' 실기') : '')
+    }
+
+    const escHtml = (s: string) => s?.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') || ''
+
+    // 수식 처리: $...$ → KaTeX 렌더링용
+    const renderText = (text: string) => {
+      if (!text) return ''
+      return escHtml(text)
+        .replace(/\$\$(.+?)\$\$/g, '<span class="math-block">\\($1\\)</span>')
+        .replace(/\$(.+?)\$/g, '<span class="math-inline">\\($1\\)</span>')
+        .replace(/\n/g, '<br/>')
+    }
+
+    const questionsHtml = filteredQuestions.map((q, i) => {
+      const num = i + 1
+      const choices = [q.choice_1, q.choice_2, q.choice_3, q.choice_4].filter(Boolean)
+      return `
+        <div class="q-block">
+          <div class="q-header"><span class="q-num">${num}</span> ${renderText(q.question_text)}</div>
+          ${q.image_url ? `<div class="q-img"><img src="${escHtml(q.image_url)}" /></div>` : ''}
+          <div class="q-choices">
+            ${choices.map((c, ci) => {
+              const hasImg = q[`choice_${ci+1}_image`]
+              return `<div class="choice"><span class="choice-num">${ci+1}</span> ${hasImg ? `<img src="${escHtml(hasImg)}" class="choice-img"/>` : renderText(c)}</div>`
+            }).join('')}
+          </div>
+        </div>`
+    }).join('')
+
+    const w = window.open('', '_blank')
+    if (!w) return
+    w.document.write(`<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>${escHtml(examTitle)}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'\\\\[',right:'\\\\]',display:true}]})"></script>
+<style>
+  @page { size: A4 portrait; margin: 12mm 10mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    font-size: 10px;
+    line-height: 1.45;
+    color: #111;
+    column-count: 2;
+    column-gap: 16px;
+    column-rule: 1px solid #ddd;
+  }
+  .exam-title {
+    column-span: all;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 6px 0 10px;
+    border-bottom: 2px solid #333;
+    margin-bottom: 10px;
+  }
+  .q-block {
+    break-inside: avoid;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dotted #ccc;
+  }
+  .q-header {
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .q-num {
+    display: inline-block;
+    min-width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    background: #333;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 9px;
+    font-weight: 700;
+    margin-right: 4px;
+  }
+  .q-img { margin: 4px 0; }
+  .q-img img { max-width: 100%; max-height: 120px; }
+  .q-choices { padding-left: 22px; }
+  .choice { margin: 1px 0; }
+  .choice-num {
+    display: inline-block;
+    width: 14px; height: 14px; line-height: 14px;
+    text-align: center;
+    border: 1px solid #999;
+    border-radius: 50%;
+    font-size: 8px;
+    margin-right: 3px;
+  }
+  .choice-img { max-height: 24px; vertical-align: middle; }
+  .math-inline, .math-block { font-size: 11px; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head><body>
+<div class="exam-title">${escHtml(examTitle)} (${filteredQuestions.length}문제)</div>
+${questionsHtml}
+</body></html>`)
+    w.document.close()
+    setTimeout(() => w.print(), 800)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       {/* 로딩 오버레이 */}
@@ -335,6 +456,14 @@ export default function QuestionsClient({
                 className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600 text-sm"
               >
                 선택 삭제 ({selectedQuestions.size})
+              </button>
+            )}
+            {filteredQuestions.length > 0 && (
+              <button
+                onClick={handlePrintExam}
+                className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-500 text-sm"
+              >
+                🖨️ 시험지 출력
               </button>
             )}
             <button
