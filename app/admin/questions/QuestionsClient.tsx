@@ -367,7 +367,6 @@ export default function QuestionsClient({
     column-gap: 16px;
     column-rule: 1px solid #ddd;
     column-fill: auto;
-    height: 200000px;
   }
   .answer-page {
     break-before: page;
@@ -456,7 +455,20 @@ ${questionsHtml}
 </div>
 </body></html>`)
     w.document.close()
-    setTimeout(() => w.print(), 800)
+    // 렌더 후: 1단 높이 측정 → 정확한 높이 설정 → 2단 전환 → 인쇄
+    setTimeout(() => {
+      const wrap = w.document.querySelector('.questions-wrap') as HTMLElement
+      if (wrap) {
+        // 1) 일시적으로 1단으로 변경하여 전체 높이 측정
+        wrap.style.columnCount = '1'
+        wrap.style.height = 'auto'
+        const singleColHeight = wrap.scrollHeight
+        // 2) 측정한 높이를 설정하고 2단으로 복원
+        wrap.style.height = singleColHeight + 'px'
+        wrap.style.columnCount = '2'
+      }
+      setTimeout(() => w.print(), 500)
+    }, 800)
   }
 
   return (
