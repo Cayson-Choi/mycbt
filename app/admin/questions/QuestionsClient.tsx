@@ -356,6 +356,7 @@ export default function QuestionsClient({
     column-count: 2;
     column-gap: 16px;
     column-rule: 1px solid #ddd;
+    column-fill: auto;
   }
   .exam-title {
     column-span: all;
@@ -366,6 +367,35 @@ export default function QuestionsClient({
     border-bottom: 2px solid #333;
     margin-bottom: 10px;
   }
+  .answer-page {
+    column-span: all;
+    break-before: page;
+    padding-top: 20px;
+  }
+  .answer-page h2 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #333;
+  }
+  .answer-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px 4px;
+    max-width: 500px;
+    margin: 0 auto;
+    font-size: 11px;
+  }
+  .answer-cell {
+    text-align: center;
+    padding: 4px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  .answer-cell .a-num { font-weight: 700; }
+  .answer-cell .a-ans { color: #2563eb; font-weight: 700; }
   .q-block {
     break-inside: avoid;
     margin-bottom: 8px;
@@ -411,6 +441,16 @@ export default function QuestionsClient({
 </head><body>
 <div class="exam-title">${escHtml(examTitle)} (${filteredQuestions.length}문제)</div>
 ${questionsHtml}
+<div class="answer-page">
+  <h2>${escHtml(examTitle)} 정답표</h2>
+  <div class="answer-grid">
+    ${filteredQuestions.map((q, i) => {
+      const num = i + 1
+      const ans = q.answer || '-'
+      return `<div class="answer-cell"><div class="a-num">${num}</div><div class="a-ans">${ans}</div></div>`
+    }).join('')}
+  </div>
+</div>
 </body></html>`)
     w.document.close()
     setTimeout(() => w.print(), 800)
