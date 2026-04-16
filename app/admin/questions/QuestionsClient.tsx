@@ -295,11 +295,10 @@ export default function QuestionsClient({
     }
   }
 
-  // 시험지 인쇄 (A4 세로 2단)
+  // 시험지 인쇄 (A4 세로 2단 — JS 수동 배분)
   const handlePrintExam = () => {
     if (filteredQuestions.length === 0) return
 
-    // 시험명 결정
     let examTitle = '시험지'
     if (examFilter !== 'all') {
       const ex = exams.find((e: any) => e.id.toString() === examFilter)
@@ -309,8 +308,6 @@ export default function QuestionsClient({
     }
 
     const escHtml = (s: string) => s?.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') || ''
-
-    // 수식 처리: $...$ → KaTeX 렌더링용
     const renderText = (text: string) => {
       if (!text) return ''
       return escHtml(text)
@@ -322,17 +319,20 @@ export default function QuestionsClient({
     const questionsHtml = filteredQuestions.map((q, i) => {
       const num = i + 1
       const choices = [q.choice_1, q.choice_2, q.choice_3, q.choice_4].filter(Boolean)
-      return `
-        <div class="q-block">
-          <div class="q-header"><span class="q-num">${num}</span> ${renderText(q.question_text)}</div>
-          ${q.image_url ? `<div class="q-img"><img src="${escHtml(q.image_url)}" /></div>` : ''}
-          <div class="q-choices">
-            ${choices.map((c, ci) => {
-              const hasImg = q[`choice_${ci+1}_image`]
-              return `<div class="choice"><span class="choice-num">${ci+1}</span> ${hasImg ? `<img src="${escHtml(hasImg)}" class="choice-img"/>` : renderText(c)}</div>`
-            }).join('')}
-          </div>
-        </div>`
+      return `<div class="q-block" data-idx="${i}">
+        <div class="q-header"><span class="q-num">${num}</span> ${renderText(q.question_text)}</div>
+        ${q.image_url ? `<div class="q-img"><img src="${escHtml(q.image_url)}" /></div>` : ''}
+        <div class="q-choices">
+          ${choices.map((c, ci) => {
+            const hasImg = q[`choice_${ci+1}_image`]
+            return `<div class="choice"><span class="choice-num">${ci+1}</span> ${hasImg ? `<img src="${escHtml(hasImg)}" class="choice-img"/>` : renderText(c)}</div>`
+          }).join('')}
+        </div>
+      </div>`
+    }).join('')
+
+    const answerHtml = filteredQuestions.map((q, i) => {
+      return `<div class="answer-cell"><div class="a-num">${i+1}</div><div class="a-ans">${q.answer || '-'}</div></div>`
     }).join('')
 
     const w = window.open('', '_blank')
@@ -342,133 +342,106 @@ export default function QuestionsClient({
 <meta charset="utf-8">
 <title>${escHtml(examTitle)}</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js" crossorigin="anonymous"><\/script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/contrib/auto-render.min.js" crossorigin="anonymous"
-  onload="renderMathInElement(document.body, {delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'\\\\[',right:'\\\\]',display:true}]})"></script>
+  onload="renderMathInElement(document.body, {delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'\\\\[',right:'\\\\]',display:true}]})"><\/script>
 <style>
   @page { size: A4 portrait; margin: 12mm 10mm; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-    font-size: 10px;
-    line-height: 1.45;
-    color: #111;
-  }
-  .exam-title {
-    text-align: center;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 6px 0 10px;
-    border-bottom: 2px solid #333;
-    margin-bottom: 10px;
-  }
-  .questions-wrap {
-    column-count: 2;
-    column-gap: 16px;
-    column-rule: 1px solid #ddd;
-    column-fill: auto;
-  }
-  .answer-page {
-    break-before: page;
-    padding-top: 20px;
-  }
-  .answer-page h2 {
-    text-align: center;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #333;
-  }
-  .answer-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 6px 4px;
-    max-width: 500px;
-    margin: 0 auto;
-    font-size: 11px;
-  }
-  .answer-cell {
-    text-align: center;
-    padding: 4px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  .answer-cell .a-num { font-weight: 700; }
-  .answer-cell .a-ans { color: #2563eb; font-weight: 700; }
-  .q-block {
-    break-inside: avoid;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px dotted #ccc;
-  }
-  .q-header {
-    font-weight: 600;
-    margin-bottom: 3px;
-  }
-  .q-num {
-    display: inline-block;
-    min-width: 18px;
-    height: 18px;
-    line-height: 18px;
-    text-align: center;
-    background: #333;
-    color: #fff;
-    border-radius: 50%;
-    font-size: 9px;
-    font-weight: 700;
-    margin-right: 4px;
-  }
+  body { font-family: 'Malgun Gothic', sans-serif; font-size: 10px; line-height: 1.45; color: #111; }
+  .exam-title { text-align: center; font-size: 16px; font-weight: 700; padding: 6px 0 10px; border-bottom: 2px solid #333; margin-bottom: 10px; }
+  /* 측정용 숨김 컨테이너 */
+  #measure { position: absolute; left: -9999px; width: 340px; }
+  /* 페이지별 2단 레이아웃 */
+  .page { display: flex; gap: 16px; page-break-after: always; }
+  .page:last-of-type { page-break-after: auto; }
+  .col { flex: 1; min-width: 0; }
+  .col + .col { border-left: 1px solid #ddd; padding-left: 16px; }
+  .q-block { margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dotted #ccc; }
+  .q-header { font-weight: 600; margin-bottom: 3px; }
+  .q-num { display: inline-block; min-width: 18px; height: 18px; line-height: 18px; text-align: center; background: #333; color: #fff; border-radius: 50%; font-size: 9px; font-weight: 700; margin-right: 4px; }
   .q-img { margin: 4px 0; }
   .q-img img { max-width: 100%; max-height: 120px; }
   .q-choices { padding-left: 22px; }
   .choice { margin: 1px 0; }
-  .choice-num {
-    display: inline-block;
-    width: 14px; height: 14px; line-height: 14px;
-    text-align: center;
-    border: 1px solid #999;
-    border-radius: 50%;
-    font-size: 8px;
-    margin-right: 3px;
-  }
+  .choice-num { display: inline-block; width: 14px; height: 14px; line-height: 14px; text-align: center; border: 1px solid #999; border-radius: 50%; font-size: 8px; margin-right: 3px; }
   .choice-img { max-height: 24px; vertical-align: middle; }
   .math-inline, .math-block { font-size: 11px; }
-  @media print {
-    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  }
+  .answer-page { page-break-before: always; padding-top: 20px; }
+  .answer-page h2 { text-align: center; font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #333; }
+  .answer-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px 4px; max-width: 500px; margin: 0 auto; font-size: 11px; }
+  .answer-cell { text-align: center; padding: 4px 0; border: 1px solid #ddd; border-radius: 4px; }
+  .answer-cell .a-num { font-weight: 700; }
+  .answer-cell .a-ans { color: #2563eb; font-weight: 700; }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 </style>
 </head><body>
 <div class="exam-title">${escHtml(examTitle)} (${filteredQuestions.length}문제)</div>
-<div class="questions-wrap">
-${questionsHtml}
-</div>
+<!-- 측정용: 1열 너비로 높이 측정 -->
+<div id="measure">${questionsHtml}</div>
+<!-- 실제 출력: JS가 채움 -->
+<div id="pages"></div>
 <div class="answer-page">
   <h2>${escHtml(examTitle)} 정답표</h2>
-  <div class="answer-grid">
-    ${filteredQuestions.map((q, i) => {
-      const num = i + 1
-      const ans = q.answer || '-'
-      return `<div class="answer-cell"><div class="a-num">${num}</div><div class="a-ans">${ans}</div></div>`
-    }).join('')}
-  </div>
+  <div class="answer-grid">${answerHtml}</div>
 </div>
+<script>
+// KaTeX 렌더 후 실행 (1.2초 대기)
+setTimeout(function() {
+  var PAGE_H = 980; // A4 content area (273mm at ~96dpi)
+  var TITLE_H = 50; // 첫 페이지 타이틀 높이
+  var blocks = document.querySelectorAll('#measure .q-block');
+  var heights = [];
+  for (var i = 0; i < blocks.length; i++) {
+    heights.push(blocks[i].getBoundingClientRect().height + 8);
+  }
+
+  // 페이지별 좌/우 배분
+  var pages = [];
+  var leftHtml = [], rightHtml = [];
+  var leftH = 0, rightH = 0;
+  var fillingRight = false;
+  var isFirstPage = true;
+  var pageMax = isFirstPage ? PAGE_H - TITLE_H : PAGE_H;
+
+  for (var i = 0; i < blocks.length; i++) {
+    var h = heights[i];
+    if (!fillingRight) {
+      if (leftH + h <= pageMax) {
+        leftHtml.push(blocks[i].outerHTML);
+        leftH += h;
+      } else {
+        fillingRight = true;
+        i--; // 이 문제를 우측에서 다시 시도
+      }
+    } else {
+      if (rightH + h <= pageMax) {
+        rightHtml.push(blocks[i].outerHTML);
+        rightH += h;
+      } else {
+        // 양쪽 다 찼음 → 페이지 완료
+        pages.push('<div class="page"><div class="col">' + leftHtml.join('') + '</div><div class="col">' + rightHtml.join('') + '</div></div>');
+        leftHtml = []; rightHtml = [];
+        leftH = 0; rightH = 0;
+        fillingRight = false;
+        isFirstPage = false;
+        pageMax = PAGE_H;
+        i--; // 이 문제를 다음 페이지 좌측에서 다시 시도
+      }
+    }
+  }
+  // 마지막 페이지
+  if (leftHtml.length || rightHtml.length) {
+    pages.push('<div class="page"><div class="col">' + leftHtml.join('') + '</div><div class="col">' + rightHtml.join('') + '</div></div>');
+  }
+
+  document.getElementById('measure').style.display = 'none';
+  document.getElementById('pages').innerHTML = pages.join('');
+  setTimeout(function() { window.print(); }, 300);
+}, 1200);
+<\/script>
 </body></html>`)
     w.document.close()
-    // 렌더 후: 1단 높이 측정 → 정확한 높이 설정 → 2단 전환 → 인쇄
-    setTimeout(() => {
-      const wrap = w.document.querySelector('.questions-wrap') as HTMLElement
-      if (wrap) {
-        // 1) 일시적으로 1단으로 변경하여 전체 높이 측정
-        wrap.style.columnCount = '1'
-        wrap.style.height = 'auto'
-        const singleColHeight = wrap.scrollHeight
-        // 2) 측정한 높이를 설정하고 2단으로 복원
-        wrap.style.height = singleColHeight + 'px'
-        wrap.style.columnCount = '2'
-      }
-      setTimeout(() => w.print(), 500)
-    }, 800)
   }
 
   return (
