@@ -4,9 +4,8 @@ import ProfileGuard from "@/components/ProfileGuard"
 import CertifiedBanner from "@/components/CertifiedBanner"
 import { prisma } from "@/lib/prisma"
 
-// gradeCounts는 관리자 삭제/생성 즉시 반영되어야 해서 캐시하지 않음
-// (카드 깜빡임 방지) — 쿼리가 가벼워서 성능 영향 미미
-export const dynamic = 'force-dynamic'
+// 10초 캐시: 관리자 변경 시 최대 10초 후 반영, 일반 사용자는 캐시 히트로 빠름
+export const revalidate = 10
 
 export default async function Home() {
   const [gradeCountsRaw, hiddenSetting] = await Promise.all([

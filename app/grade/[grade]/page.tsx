@@ -2,8 +2,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 
-// 관리자가 시험 생성/삭제/게시 변경 시 즉시 반영 (ISR 캐시 사용 안 함)
-export const dynamic = 'force-dynamic'
+// 10초 ISR 캐시: 관리자 변경 시 최대 10초 후 반영
+export const revalidate = 10
 
 const gradeMap: Record<string, { dbGrade: string; title: string; description: string }> = {
   basic: { dbGrade: '진단평가', title: '진단평가', description: '자격증 입문자를 위한 기초 진단평가' },
