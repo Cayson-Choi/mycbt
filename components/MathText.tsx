@@ -37,7 +37,7 @@ interface MathTextProps {
 // Convert LaTeX $...$ and $$...$$ segments to KaTeX HTML
 function renderLatex(text: string, katex: KaTeX['default']): string {
   // Process $$...$$ (display math) first, then $...$ (inline math)
-  return text
+  const withMath = text
     .replace(/\$\$(.+?)\$\$/g, (_match, tex: string) => {
       try {
         return katex.renderToString(tex, { displayMode: true, throwOnError: false })
@@ -52,9 +52,11 @@ function renderLatex(text: string, katex: KaTeX['default']): string {
         return _match
       }
     })
+  // Convert newlines to <br/>
+  return withMath.replace(/\n/g, '<br/>')
 }
 
-// Sanitize HTML: only allow <sub>, <sup>, and <frac> tags
+// Sanitize HTML: only allow <sub>, <sup>, <br>, and <frac> tags
 function sanitizeHtml(html: string): string {
   // First, convert <frac> tags to proper fraction HTML
   let processed = html.replace(
@@ -62,10 +64,14 @@ function sanitizeHtml(html: string): string {
     '<sup>$1</sup>⁄<sub>$2</sub>'
   )
 
-  // Allow only <sub>, </sub>, <sup>, </sup> tags
+  // Allow only <sub>, </sub>, <sup>, </sup>, <br> tags
   processed = processed
-    .replace(/<(?!\/?(?:sub|sup)\b)[^>]*>/gi, '') // Remove all tags except sub/sup
-    .replace(/<(sub|sup)([^>]*)>/gi, '<$1>') // Remove attributes from sub/sup tags
+    .replace(/<(?!\/?(?:sub|sup|br)\b)[^>]*>/gi, '')
+    .replace(/<(sub|sup)([^>]*)>/gi, '<$1>')
+    .replace(/<br\s*\/?>/gi, '<br/>')
+
+  // Convert raw newlines to <br/>
+  processed = processed.replace(/\n/g, '<br/>')
 
   return processed
 }
@@ -113,7 +119,7 @@ export default memo(function MathText({ text, className = '' }: MathTextProps) {
     <span
       className={`${className} [&>sub]:text-[0.7em] [&>sub]:align-sub [&>sup]:text-[0.7em] [&>sup]:align-super`}
       dangerouslySetInnerHTML={{ __html: html }}
-      style={{ color: 'inherit' }}
+      style={{ color: 'inherit', whiteSpace: 'pre-line' }}
     />
   )
 })
