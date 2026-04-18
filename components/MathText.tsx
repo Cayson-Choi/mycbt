@@ -36,8 +36,13 @@ interface MathTextProps {
 
 // Convert LaTeX $...$ and $$...$$ segments to KaTeX HTML
 function renderLatex(text: string, katex: KaTeX['default']): string {
+  // Convert user-intended newlines to a marker BEFORE KaTeX runs.
+  // KaTeX's SVG path outputs contain real newlines that must NOT become <br/>.
+  const BR_MARKER = '\u0001BR\u0001'
+  const withMarkers = text.replace(/\n/g, BR_MARKER)
+
   // Process $$...$$ (display math) first, then $...$ (inline math)
-  const withMath = text
+  const withMath = withMarkers
     .replace(/\$\$(.+?)\$\$/g, (_match, tex: string) => {
       try {
         return katex.renderToString(tex, { displayMode: true, throwOnError: false })
@@ -52,8 +57,9 @@ function renderLatex(text: string, katex: KaTeX['default']): string {
         return _match
       }
     })
-  // Convert newlines to <br/>
-  return withMath.replace(/\n/g, '<br/>')
+
+  // Restore user newlines as <br/>; KaTeX's internal newlines stay intact.
+  return withMath.split(BR_MARKER).join('<br/>')
 }
 
 // Sanitize HTML: only allow <sub>, <sup>, <br>, and <frac> tags
