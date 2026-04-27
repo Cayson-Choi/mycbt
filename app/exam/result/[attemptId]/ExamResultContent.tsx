@@ -274,8 +274,13 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                       {/* 객관식 보기 */}
                       {!isSubjective && (
                         <div className="space-y-2 mb-4">
+                          {question.correct_answer === 0 && (
+                            <div className="p-2 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-600 text-xs text-yellow-700 dark:text-yellow-300 font-semibold">
+                              ⚠️ 정답불명 — 관리자 확인 필요 (채점 제외)
+                            </div>
+                          )}
                           {[1, 2, 3, 4].map((choice) => {
-                            const isCorrect = choice === question.correct_answer
+                            const isCorrect = question.correct_answer !== 0 && choice === question.correct_answer
                             const isSelected = choice === question.student_answer
 
                             return (
@@ -306,7 +311,7 @@ export default function ExamResultContent({ result }: { result: ExamResultData }
                                       <img
                                         src={question[`choice_${choice}_image` as keyof QuestionResult] as string}
                                         alt={`선택지 ${choice}`}
-                                        className="inline-block max-h-32 align-middle"
+                                        className="inline-block max-h-48 max-w-full align-middle rounded border border-gray-200 dark:border-gray-600 bg-white p-1"
                                       />
                                     ) : (
                                       <MathText text={question[`choice_${choice}` as keyof QuestionResult] as string || ''} />

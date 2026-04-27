@@ -1100,6 +1100,7 @@ function EditPanel({
               onChange={(e) => update('answer', parseInt(e.target.value))}
               style={inputStyle}
             >
+              <option value={0}>0번 (정답불명)</option>
               <option value={1}>1번</option>
               <option value={2}>2번</option>
               <option value={3}>3번</option>

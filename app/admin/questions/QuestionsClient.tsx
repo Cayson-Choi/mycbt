@@ -788,6 +788,11 @@ setTimeout(function() {
                             </div>
                           )}
                           <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                            {q.answer === 0 && (
+                              <div className="text-xs font-semibold text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-600 rounded px-2 py-1">
+                                ⚠️ 정답불명 (0번)
+                              </div>
+                            )}
                             {[1, 2, 3, 4].map((n) => {
                               const hasImage = q[`choice_${n}_image` as keyof typeof q]
                               return (

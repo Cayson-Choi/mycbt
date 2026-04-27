@@ -83,11 +83,15 @@ export async function POST(
         subjectStats.set(subjectId, { correct: 0, total: 0, pointsEarned: 0, pointsTotal: 0 })
       }
       const stats = subjectStats.get(subjectId)!
-      stats.total++
-      stats.pointsTotal += questionPoints
+      // answer=0은 정답불명 — 채점 대상에서 제외 (점수 합산 안 함)
+      const isUnknownAnswer = q.answer === 0
+      if (!isUnknownAnswer) {
+        stats.total++
+        stats.pointsTotal += questionPoints
+      }
 
       if (q.questionType === "MULTIPLE_CHOICE") {
-        const isCorrect = studentItem?.selected === q.answer
+        const isCorrect = !isUnknownAnswer && studentItem?.selected === q.answer
         if (isCorrect) {
           totalCorrect++
           totalPointsEarned += questionPoints
@@ -190,43 +194,6 @@ export async function POST(
         gradingStatus: hasSubjective ? "PENDING" : "COMPLETED",
       },
     })
-
-    // daily_best_scores 업데이트 (PRACTICE만)
-    if (!isOfficial) {
-      const kstDate = new Date(submittedAt.getTime() + 9 * 60 * 60 * 1000)
-      const kstDateOnly = new Date(kstDate.toISOString().split("T")[0])
-
-      const existingBest = await prisma.dailyBestScore.findUnique({
-        where: {
-          kstDate_examId_userId: {
-            kstDate: kstDateOnly,
-            examId: attempt.examId,
-            userId: session.user.id,
-          },
-        },
-      })
-
-      if (!existingBest || totalScore > existingBest.bestScore) {
-        await prisma.dailyBestScore.upsert({
-          where: {
-            kstDate_examId_userId: {
-              kstDate: kstDateOnly,
-              examId: attempt.examId,
-              userId: session.user.id,
-            },
-          },
-          update: { bestScore: totalScore, bestSubmittedAt: submittedAt, attemptId: aid },
-          create: {
-            kstDate: kstDateOnly,
-            examId: attempt.examId,
-            userId: session.user.id,
-            bestScore: totalScore,
-            bestSubmittedAt: submittedAt,
-            attemptId: aid,
-          },
-        })
-      }
-    }
 
     // 결과 페이지 캐시 무효화
     revalidatePath(`/exam/result/${aid}`)
