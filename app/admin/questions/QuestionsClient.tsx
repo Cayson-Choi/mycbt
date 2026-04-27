@@ -114,31 +114,21 @@ export default function QuestionsClient({
     setCurrentPage(1)
   }, [subjectFilter, imageFilter, searchQuery, examFilter, categoryFilter, examTypeFilter])
 
+  const subjectsRequestId = useRef(0)
   const loadSubjects = async () => {
+    const reqId = ++subjectsRequestId.current
+    // 시험이 선택되지 않으면 과목 드롭다운은 숨겨지므로 미리 로드할 필요 없음
+    if (examFilter === 'all') {
+      setSubjects([])
+      return
+    }
     try {
-      if (examFilter === 'all') {
-        // 전체 선택 시 모든 시험의 과목을 불러와서 합치기
-        const allSubjects: any[] = []
-        for (const exam of exams) {
-          const res = await fetch(`/api/exams/${exam.id}/subjects`)
-          if (res.ok) {
-            const data = await res.json()
-            allSubjects.push(...data)
-          }
-        }
-
-        // 중복 제거 (같은 id의 과목은 하나만)
-        const uniqueSubjects = Array.from(
-          new Map(allSubjects.map((s) => [s.id, s])).values()
-        )
-        setSubjects(uniqueSubjects)
-      } else {
-        // 특정 시험 선택 시
-        const res = await fetch(`/api/exams/${examFilter}/subjects`)
-        if (res.ok) {
-          const data = await res.json()
-          setSubjects(data || [])
-        }
+      const res = await fetch(`/api/exams/${examFilter}/subjects`)
+      if (reqId !== subjectsRequestId.current) return
+      if (res.ok) {
+        const data = await res.json()
+        if (reqId !== subjectsRequestId.current) return
+        setSubjects(data || [])
       }
     } catch {
       /* ignored */
@@ -797,25 +787,28 @@ setTimeout(function() {
                               />
                             </div>
                           )}
-                          <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                            {[1, 2, 3, 4].map((n) => (
-                              <div key={n} className="flex items-center gap-1.5">
-                                <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold flex-shrink-0 ${
-                                  q.answer === n
-                                    ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
-                                }`}>{n}</span>
-                                {q[`choice_${n}_image` as keyof typeof q] ? (
-                                  <img
-                                    src={q[`choice_${n}_image` as keyof typeof q] as string}
-                                    alt={`선택지 ${n}`}
-                                    className="inline-block max-h-10 align-middle"
-                                  />
-                                ) : (
-                                  <MathText text={q[`choice_${n}` as keyof typeof q] as string} />
-                                )}
-                              </div>
-                            ))}
+                          <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                            {[1, 2, 3, 4].map((n) => {
+                              const hasImage = q[`choice_${n}_image` as keyof typeof q]
+                              return (
+                                <div key={n} className={`flex ${hasImage ? 'items-start' : 'items-center'} gap-2`}>
+                                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold flex-shrink-0 ${
+                                    q.answer === n
+                                      ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
+                                      : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+                                  } ${hasImage ? 'mt-1' : ''}`}>{n}</span>
+                                  {hasImage ? (
+                                    <img
+                                      src={hasImage as string}
+                                      alt={`선택지 ${n}`}
+                                      className="max-h-32 max-w-xs object-contain rounded border border-gray-200 dark:border-gray-700 bg-white"
+                                    />
+                                  ) : (
+                                    <MathText text={q[`choice_${n}` as keyof typeof q] as string} />
+                                  )}
+                                </div>
+                              )
+                            })}
                           </div>
                         </div>
                         <div className="flex gap-2 flex-shrink-0">
