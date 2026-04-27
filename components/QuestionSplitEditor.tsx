@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import MathText from '@/components/MathText'
-import { dataUrlToBlob, normalizeLineBreaks } from '@/lib/utils'
+import { dataUrlToBlob } from '@/lib/utils'
 
 interface QuestionSplitEditorProps {
   question?: any
@@ -1453,7 +1453,7 @@ function PreviewPanel({
                   wordBreak: 'break-word',
                 }}
               >
-                <MathText text={normalizeLineBreaks(formData.question_text)} />
+                <MathText text={formData.question_text} />
               </div>
 
               {/* Image */}
@@ -1536,7 +1536,7 @@ function PreviewPanel({
                               style={{ display: 'inline-block', maxHeight: '64px', verticalAlign: 'middle' }}
                             />
                           ) : (
-                            <MathText text={normalizeLineBreaks(String(choiceText))} />
+                            <MathText text={String(choiceText)} />
                           )}
                           {isCorrect && (
                             <span
@@ -1623,7 +1623,7 @@ function PreviewPanel({
                       wordBreak: 'break-word',
                     }}
                   >
-                    <MathText text={normalizeLineBreaks(formData.explanation)} />
+                    <MathText text={formData.explanation} />
                   </div>
                 </div>
               )}
