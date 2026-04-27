@@ -336,7 +336,7 @@ export default function QuestionsClient({
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/contrib/auto-render.min.js" crossorigin="anonymous"
   onload="renderMathInElement(document.body, {delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'\\\\[',right:'\\\\]',display:true}]})"><\/script>
 <style>
-  @page { size: A4 portrait; margin: 12mm 10mm; }
+  @page { size: A4 portrait; margin: 12mm 25mm; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Malgun Gothic', sans-serif; font-size: 10px; line-height: 1.45; color: #111; }
   .exam-title { text-align: center; font-size: 16px; font-weight: 700; padding: 6px 0 10px; border-bottom: 2px solid #333; margin-bottom: 10px; }
@@ -483,6 +483,15 @@ setTimeout(function() {
               >
                 🖨️ 시험지 출력
               </button>
+            )}
+            {process.env.NODE_ENV === 'development' && examFilter !== 'all' && filteredQuestions.length > 0 && (
+              <a
+                href={`/api/admin/exams/${examFilter}/export-docx`}
+                className="px-4 py-2 bg-blue-700 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-800 dark:hover:bg-blue-500 text-sm"
+                title="로컬 개발 환경 전용 — Pandoc으로 변환 (수식 많을 때 10~30초 소요)"
+              >
+                📝 Word 다운로드
+              </a>
             )}
             <button
               onClick={() => setShowBulkUpload(true)}
