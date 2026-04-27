@@ -548,7 +548,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           </Reveal>
 
           {/* Royal-styled card grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
             {grades.map((g) => {
               // 관리자가 숨김 처리한 카드는 표시하지 않음
               if (hiddenCards?.includes(g.id)) return null
@@ -562,37 +562,37 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
                 {realCount > 0 ? (
                   <Link
                     href={`/grade/${g.id}`}
-                    className={`group block relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-5 sm:p-7 h-full min-h-[170px] sm:min-h-[210px] transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A84C]/15 hover:-translate-y-1 cursor-pointer border border-[#C9A84C]/15 dark:border-gray-700`}
+                    className={`group block relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-5 h-full min-h-[120px] sm:min-h-[150px] transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A84C]/15 hover:-translate-y-1 cursor-pointer border border-[#C9A84C]/15 dark:border-gray-700`}
                   >
                     {/* 좌상단: 제목 */}
-                    <h3 className="text-base sm:text-2xl font-bold text-[#1B2A4A] dark:text-white leading-tight">
+                    <h3 className="text-base sm:text-xl font-bold text-[#1B2A4A] dark:text-white leading-tight">
                       {g.label}
                     </h3>
                     {/* 우상단: 뱃지 */}
-                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
+                    <div className={`absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
                       {g.badge}
                     </div>
                     {/* 좌하단: CTA 설명 */}
-                    <p className="absolute bottom-3 left-5 sm:bottom-5 sm:left-7 text-[10px] sm:text-xs text-[#1B2A4A]/60 dark:text-gray-400 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                    <p className="absolute bottom-2.5 left-4 sm:bottom-3.5 sm:left-5 text-[10px] sm:text-xs text-[#1B2A4A]/60 dark:text-gray-400 font-medium leading-snug whitespace-pre-line max-w-[60%]">
                       {g.cta} <span className="inline-block ml-0.5 transition-transform group-hover:translate-x-0.5 text-[#C9A84C]">&rarr;</span>
                     </p>
                     {/* 우하단: 일러스트 아이콘 */}
-                    <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-[52px] h-[52px] sm:w-[72px] sm:h-[72px] transition-transform duration-300 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] transition-transform duration-300 group-hover:scale-110 opacity-80 group-hover:opacity-100">
                       {g.icon}
                     </div>
                   </Link>
                 ) : (
-                  <div className={`relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-5 sm:p-7 h-full min-h-[170px] sm:min-h-[210px] opacity-50 border border-[#C9A84C]/10 dark:border-gray-700`}>
-                    <h3 className="text-base sm:text-2xl font-bold text-gray-500 dark:text-gray-400 leading-tight">
+                  <div className={`relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-5 h-full min-h-[120px] sm:min-h-[150px] opacity-50 border border-[#C9A84C]/10 dark:border-gray-700`}>
+                    <h3 className="text-base sm:text-xl font-bold text-gray-500 dark:text-gray-400 leading-tight">
                       {g.label}
                     </h3>
-                    <div className={`absolute top-3 right-3 sm:top-5 sm:right-5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
+                    <div className={`absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
                       {g.badge}
                     </div>
-                    <p className="absolute bottom-3 left-5 sm:bottom-5 sm:left-7 text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                    <p className="absolute bottom-2.5 left-4 sm:bottom-3.5 sm:left-5 text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium leading-snug whitespace-pre-line max-w-[60%]">
                       {g.cta}
                     </p>
-                    <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-[52px] h-[52px] sm:w-[72px] sm:h-[72px] opacity-30">
+                    <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] opacity-30">
                       {g.icon}
                     </div>
                   </div>
