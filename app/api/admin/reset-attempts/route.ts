@@ -33,9 +33,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (scope === "all") {
-      // 전체 초기화: Prisma cascade 활용하여 attempts 삭제 시 관련 테이블도 삭제
-      await prisma.dailyLeaderboardSnapshot.deleteMany({})
-      await prisma.dailyBestScore.deleteMany({})
       await prisma.subjectScore.deleteMany({})
       await prisma.attemptItem.deleteMany({})
       await prisma.attemptQuestion.deleteMany({})
@@ -68,24 +65,6 @@ export async function POST(request: NextRequest) {
         message: "삭제할 응시 기록이 없습니다",
         scope,
         deleted_count: 0,
-      })
-    }
-
-    // FK 순서대로 삭제
-    if (scope === "user") {
-      const snapshotWhere: any = { userId: user_id! }
-      if (exam_id) snapshotWhere.examId = exam_id
-      await prisma.dailyLeaderboardSnapshot.deleteMany({ where: snapshotWhere })
-
-      const bestWhere: any = { userId: user_id! }
-      if (exam_id) bestWhere.examId = exam_id
-      await prisma.dailyBestScore.deleteMany({ where: bestWhere })
-    } else if (scope === "exam") {
-      await prisma.dailyLeaderboardSnapshot.deleteMany({
-        where: { examId: exam_id! },
-      })
-      await prisma.dailyBestScore.deleteMany({
-        where: { examId: exam_id! },
       })
     }
 

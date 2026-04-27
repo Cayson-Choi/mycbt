@@ -28,30 +28,7 @@ export async function POST() {
       )
     }
 
-    // ★ 오늘 KST 날짜 계산
-    const now = new Date()
-    const kstOffset = 9 * 60
-    const kstDate = new Date(now.getTime() + kstOffset * 60 * 1000)
-    const todayKST = kstDate.toISOString().split("T")[0]
-
-    // 1. daily_best_scores 삭제 (오늘 날짜)
-    await prisma.dailyBestScore.deleteMany({
-      where: {
-        userId,
-        kstDate: new Date(todayKST),
-      },
-    })
-
-    // 2. daily_leaderboard_snapshots 익명 처리
-    await prisma.dailyLeaderboardSnapshot.updateMany({
-      where: { userId },
-      data: {
-        userId: null,
-        userNameDisplay: "(탈퇴한 사용자)",
-      },
-    })
-
-    // 3. 사용자 삭제 (Prisma onDelete: Cascade로 관련 데이터 자동 삭제)
+    // 사용자 삭제 (Prisma onDelete: Cascade로 관련 데이터 자동 삭제)
     //    - accounts, sessions, attempts (-> attemptQuestions, attemptItems, subjectScores), payments, purchasedContents
     await prisma.user.delete({
       where: { id: userId },

@@ -306,7 +306,7 @@ export default function ResetAttemptsSection({ exams }: Props) {
       <ConfirmDialog
         open={confirmOpen}
         title="응시 기록 초기화"
-        message={`${getScopeLabel()}을(를) 삭제합니다.\n랭킹 데이터도 함께 삭제됩니다.\n\n이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?`}
+        message={`${getScopeLabel()}을(를) 삭제합니다.\n\n이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?`}
         confirmText="초기화"
         confirmColor="red"
         onConfirm={handleReset}

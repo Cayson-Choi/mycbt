@@ -31,7 +31,6 @@ model User {
   billingKey    String?   @map("billing_key")
 
   attempts          Attempt[]
-  dailyBestScores   DailyBestScore[]
   payments          Payment[]
   purchasedContents PurchasedContent[]
   wrongNoteItems    WrongNoteItem[]
@@ -194,8 +193,6 @@ model Exam {
   subjects              Subject[]
   questions             Question[]
   attempts              Attempt[]
-  dailyBestScores       DailyBestScore[]
-  dailyLeaderboardSnaps DailyLeaderboardSnapshot[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -297,7 +294,6 @@ model Attempt {
   attemptQuestions AttemptQuestion[]
   attemptItems     AttemptItem[]
   subjectScores    SubjectScore[]
-  dailyBestScore   DailyBestScore[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -374,39 +370,6 @@ model SubjectScore {
 
   @@id([attemptId, subjectId])
   @@map("subject_scores")
-}
-
-// ─── 랭킹 ───
-
-model DailyBestScore {
-  kstDate         DateTime @map("kst_date") @db.Date
-  examId          Int      @map("exam_id")
-  userId          String   @map("user_id")
-  bestScore       Int      @map("best_score")
-  bestSubmittedAt DateTime @map("best_submitted_at")
-  attemptId       Int      @map("attempt_id")
-
-  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  attempt Attempt @relation(fields: [attemptId], references: [id])
-
-  @@id([kstDate, examId, userId])
-  @@map("daily_best_scores")
-}
-
-model DailyLeaderboardSnapshot {
-  kstDate         DateTime @map("kst_date") @db.Date
-  examId          Int      @map("exam_id")
-  rank            Int
-  userId          String?  @map("user_id")
-  userNameDisplay String   @map("user_name_display")
-  score           Int
-  submittedAt     DateTime @map("submitted_at")
-
-  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
-
-  @@id([kstDate, examId, rank])
-  @@map("daily_leaderboard_snapshots")
 }
 
 // ─── 관리자 로그 ───

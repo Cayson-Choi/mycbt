@@ -137,7 +137,7 @@ const QuestionCard = memo(function QuestionCard({
                       <img
                         src={question[`choice_${choice}_image` as keyof PaperQuestion] as string}
                         alt={`선택지 ${choice}`}
-                        className="inline-block max-h-32 align-middle"
+                        className="inline-block max-h-48 max-w-full align-middle rounded border border-gray-200 dark:border-gray-600 bg-white p-1"
                       />
                     ) : (
                       <MathText text={question[`choice_${choice}`]} />
