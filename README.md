@@ -38,6 +38,7 @@ npm run dev
 - 주관식/서술형 문제 + AI 자동 채점 (OpenRouter)
 - 유튜브 스타일 상단 프로그레스 바 (페이지 이동/비동기 작업 진행 표시)
 - 인터랙티브 대문 (전기 파티클 Canvas 애니메이션)
+- 시험지 Word(.docx) 출력 — 관리자 로컬 dev 전용, Pandoc + 2단 레이아웃, KaTeX 수식 OMML 변환
 
 ## 기술 스택
 

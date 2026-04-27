@@ -68,11 +68,13 @@ export async function GET(
   if (noImages) args.push("--no-images")
   if (withExplanation) args.push("--with-explanation")
 
+  const startedAt = Date.now()
   try {
     await execFileAsync("python", args, {
       cwd: process.cwd(),
       maxBuffer: 50 * 1024 * 1024,
       timeout: 120_000,
+      env: { ...process.env, PYTHONIOENCODING: "utf-8" },
     })
   } catch (e: unknown) {
     const err = e as { stderr?: string; stdout?: string; message?: string }
@@ -86,6 +88,7 @@ export async function GET(
       { status: 500 }
     )
   }
+  console.log(`[export-docx] exam=${examId} done in ${Date.now() - startedAt}ms`)
 
   const buf = await fs.readFile(outPath)
   await fs.rm(tmpDir, { recursive: true, force: true }).catch(() => {})

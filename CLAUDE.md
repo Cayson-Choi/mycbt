@@ -293,6 +293,52 @@ CLOUDINARY_API_SECRET=P1HI0k-tz5-guQFTr5Zw6UVVgWg
 | `scripts/update-db-ocr.py` | OCR 결과를 DB에 반영 |
 | `scripts/fix-frac-display.py` | 보기의 `\frac` → `\dfrac` 일괄 변환 |
 | `scripts/update-review-xlsx.py` | 문제 검토 오류목록 Excel 생성 (2018~2025 통합) |
+| `scripts/export-exam-to-docx.py` | 시험을 Word(.docx) 시험지로 내보내기 (Pandoc 기반) |
+
+## 시험지 Word(.docx) 출력
+
+관리자 전용 — 시험을 골라 Word 시험지 파일로 다운로드.
+
+### 동작 방식
+1. 관리자 `📝 Word 다운로드` 버튼 클릭 (`/admin/questions`, 시험 선택 후 표시)
+2. API `GET /api/admin/exams/[examId]/export-docx` 호출
+3. 서버가 `python scripts/export-exam-to-docx.py --exam-id N --out tmp.docx` 실행
+4. Pandoc이 KaTeX 수식 → Word 네이티브 OMML로 변환
+5. python-docx 후처리: 2단 레이아웃, 머릿말, 가는 회색 구분선, 글자 크기, 이미지 리사이즈
+6. 생성된 .docx를 응답으로 다운로드
+
+### 의존성 (로컬 PC)
+- `pip install psycopg2-binary pypandoc-binary python-docx` (Pandoc 바이너리 포함)
+- Python 3.9+ (PATH에 `python` 명령)
+
+### 로컬 dev 환경 전용 (중요)
+- API와 버튼 모두 `process.env.NODE_ENV === 'development'`일 때만 활성
+- Vercel 프로덕션 배포에는 Pandoc 바이너리가 없으므로 동작 불가
+- 코드는 빌드 시 자동으로 제외됨 (버튼 JSX, API의 dev 가드)
+
+### 출력 형식
+- A4 세로, 2단 레이아웃 (컬럼 사이 수직 구분선)
+- 여백: 상하좌우 2.5cm, 머릿말 1.2cm
+- 머릿말: `{년도}년 {회차}회 {시험명}` (가운데, 굵게)
+- 본문 글자: 10pt
+- 분수 안 텍스트: 15pt (OMML inline math가 자동 축소되는 문제 우회)
+- 문제 사이: 0.5pt 가는 회색 단일 선 (#BBBBBB)
+- 이미지 최대 7×5cm (비율 유지하며 축소)
+- 출력 위치: `data/exports/{년도}_{회차}_{시험명}.docx` (CLI 사용 시) 또는 응답으로 직접 다운로드
+
+### CLI 사용법
+```bash
+python scripts/export-exam-to-docx.py --list                       # 시험 목록
+python scripts/export-exam-to-docx.py --exam-id 290                # 정답·이미지 포함 (기본)
+python scripts/export-exam-to-docx.py --exam-id 290 --no-answers   # 정답 제외
+python scripts/export-exam-to-docx.py --exam-id 290 --no-images    # 이미지 제외
+python scripts/export-exam-to-docx.py --exam-id 290 --with-explanation  # 해설 포함
+```
+
+### 인쇄용 별도 기능
+- `🖨️ 시험지 출력` 버튼 (`/admin/questions`)은 브라우저 인쇄 다이얼로그로 직접 출력
+  - A4 세로 2단, `@page margin: 12mm 25mm` (좌우 여백 넉넉)
+  - 별도 .docx 생성 없이 브라우저 PDF 저장 가능
 
 ## 문제 검토 현황 (2026-04-06)
 - 전체 2,100문제 AI 검토 완료 → `data/전기기사_문제검토_오류목록.xlsx`
