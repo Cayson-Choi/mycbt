@@ -48,8 +48,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.KAKAO_CLIENT_SECRET!,
       // 카카오는 client_secret_post 방식 필수 (에러 E-009 방지)
       client: { token_endpoint_auth_method: "client_secret_post" },
-      // email scope 명시 — 미수신 시 새 user 가 생기지 않도록 signIn 콜백에서 차단
-      authorization: { params: { scope: "account_email profile_nickname profile_image" } },
+      // scope 는 카카오 개발자 콘솔의 동의항목 설정을 그대로 따름.
+      // email 미수신 케이스는 signIn 콜백에서 안내 메시지로 처리됨.
       allowDangerousEmailAccountLinking: true,
     }),
     Naver({
