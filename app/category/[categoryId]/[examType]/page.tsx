@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
+import ExamCard, { type ExamItem } from "./ExamCard"
 
 // 10초 ISR 캐시: 관리자 변경 시 최대 10초 후 반영
 export const revalidate = 10
@@ -15,41 +16,6 @@ const EXAM_TYPE_LABEL: Record<string, string> = {
   practical: "실기",
 }
 
-interface ExamItem {
-  id: number
-  name: string
-  year: number | null
-  round: number | null
-  duration_minutes: number
-  min_tier: string
-  total_questions: number
-  questions_per_attempt: number
-}
-
-const roundColors = [
-  "from-blue-500 to-blue-700",
-  "from-emerald-500 to-emerald-700",
-  "from-amber-500 to-amber-700",
-  "from-rose-500 to-rose-700",
-]
-
-const TIER_LABEL: Record<string, string> = {
-  FREE: '무료',
-  BRONZE: '브론즈',
-  SILVER: '실버',
-  GOLD: '골드',
-  PREMIUM: '프리미엄',
-  ADMIN: '관리자',
-}
-
-const TIER_BADGE: Record<string, string> = {
-  FREE: 'bg-emerald-400/90 text-white',
-  BRONZE: 'bg-amber-700/90 text-white',
-  SILVER: 'bg-slate-300/90 text-slate-800',
-  GOLD: 'bg-yellow-400/95 text-yellow-900',
-  PREMIUM: 'bg-violet-500/90 text-white',
-  ADMIN: 'bg-rose-500/90 text-white',
-}
 
 export async function generateStaticParams() {
   const categories = await prisma.examCategory.findMany({
@@ -216,98 +182,3 @@ export default async function ExamTypePage({
   )
 }
 
-function ExamCard({
-  exam,
-  categoryName,
-  colorIndex,
-}: {
-  exam: ExamItem
-  categoryName: string
-  colorIndex: number
-}) {
-  const hasQuestions = exam.total_questions > 0
-  const color = roundColors[colorIndex % roundColors.length]
-
-  const cardContent = (
-    <div
-      className={`relative overflow-hidden rounded-xl p-4 sm:p-5 h-full transition-all ${
-        hasQuestions
-          ? `bg-gradient-to-br ${color} text-white shadow-lg hover:shadow-xl hover:-translate-y-1 cursor-pointer`
-          : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border border-gray-200 dark:border-gray-700 cursor-not-allowed"
-      }`}
-    >
-      {hasQuestions && (
-        <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-bl-full" />
-      )}
-
-      <div className="flex items-center justify-between mb-3">
-        {exam.round ? (
-          <span
-            className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-              hasQuestions
-                ? "bg-white/20 text-white"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
-            }`}
-          >
-            {exam.round}회차
-          </span>
-        ) : (
-          <span
-            className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-              hasQuestions
-                ? "bg-white/20 text-white"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
-            }`}
-          >
-            연습
-          </span>
-        )}
-        <span
-          className={`text-xs px-2 py-0.5 rounded-full ${
-            hasQuestions ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"
-          }`}
-        >
-          {exam.duration_minutes}분
-        </span>
-      </div>
-
-      <h3 className="font-bold text-sm sm:text-base mb-1">
-        {exam.year ? `${categoryName} ${exam.year}년 ${exam.round}회` : exam.name}
-      </h3>
-
-      <p
-        className={`text-xs mb-3 ${
-          hasQuestions ? "text-white/70" : "text-gray-400 dark:text-gray-500"
-        }`}
-      >
-        {hasQuestions ? `${exam.questions_per_attempt}문항 출제` : "준비 중"}
-      </p>
-
-      {hasQuestions ? (
-        <div className="flex items-center text-xs font-medium text-white/90">
-          시험 응시하기
-          <svg className="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      ) : (
-        <div className="text-xs">문제 등록 대기</div>
-      )}
-
-      {/* 등급 라벨 우하단 */}
-      {hasQuestions && (
-        <span className={`absolute bottom-3 right-3 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full shadow-sm ${TIER_BADGE[exam.min_tier] ?? TIER_BADGE.FREE}`}>
-          {TIER_LABEL[exam.min_tier] ?? exam.min_tier}
-        </span>
-      )}
-    </div>
-  )
-
-  if (!hasQuestions) return cardContent
-
-  return (
-    <Link href={`/exam/${exam.id}`} className="block">
-      {cardContent}
-    </Link>
-  )
-}
