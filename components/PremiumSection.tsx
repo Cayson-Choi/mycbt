@@ -94,6 +94,8 @@ export default function PremiumSection() {
 
       {/* ───── 하단: 채용 연계 ───── */}
       <div className="relative bg-[#02060f] pt-8 pb-10 md:pt-12 md:pb-14">
+        {/* 디바이더 중앙 포인트 (overflow-hidden 밖에 두어 잘리지 않도록) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-amber-400 z-10 pointer-events-none" />
         {/* 배경 레이어 */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* 상단 디바이더 셰엔 (양 끝까지 보이도록) */}
@@ -133,7 +135,7 @@ export default function PremiumSection() {
 
           {/* 섹션 헤더 — 에디토리얼 풍 */}
           <Reveal>
-            <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-end pb-6 md:pb-8 border-b border-white/[0.06]">
+            <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-end pb-6 md:pb-8">
               <div className="md:col-span-7">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="block w-8 h-px bg-amber-400/70" />
@@ -155,7 +157,7 @@ export default function PremiumSection() {
 
           {/* 핵심 지표 스트립 */}
           <Reveal delay={100}>
-            <div className="grid grid-cols-3 divide-x divide-white/[0.06] py-5 md:py-6 border-b border-white/[0.06]">
+            <div className="grid grid-cols-3 py-5 md:py-6">
               {[
                 { k: '취업 연계 기업', target: 350, suffix: '+', sub: '전국 전기 관련 기업' },
                 { k: '연 매칭 건수', target: 1200, suffix: '+', sub: '회원 → 기업 추천' },
@@ -190,17 +192,18 @@ export default function PremiumSection() {
                 </div>
 
                 <ol className="relative">
-                  <div className="absolute left-[15px] top-3 bottom-3 w-px bg-white/[0.08]" />
-
                   {[
-                    { num: '01', title: '자격증 취득', desc: 'CAYSON에서 학습하고 정기 시험에 합격합니다.' },
-                    { num: '02', title: '이력서 등록', desc: '학력·경력·희망 지역을 입력하면 매칭 풀에 자동 등록됩니다.' },
-                    { num: '03', title: '기업 매칭', desc: '경력 요건과 직무 적합도 기반으로 협력 기업을 추천받습니다.' },
-                    { num: '04', title: '면접 · 채용', desc: '협력 기업 인사담당자에게 우선 면접 기회가 제공됩니다.' },
-                  ].map((s, i) => (
+                    { num: 1, title: '자격증 취득', desc: 'CAYSON에서 학습하고 정기 시험에 합격합니다.' },
+                    { num: 2, title: '이력서 등록', desc: '학력·경력·희망 지역을 입력하면 매칭 풀에 자동 등록됩니다.' },
+                    { num: 3, title: '기업 매칭', desc: '경력 요건과 직무 적합도 기반으로 협력 기업을 추천받습니다.' },
+                    { num: 4, title: '면접 · 채용', desc: '협력 기업 인사담당자에게 우선 면접 기회가 제공됩니다.' },
+                  ].map((s, i, arr) => (
                     <li key={i} className="relative pl-12 pb-7 last:pb-0">
-                      <div className="absolute left-0 top-0 flex items-center justify-center w-[32px] h-[32px] rounded-full bg-[#0a1426] ring-1 ring-white/15">
-                        <span className="text-amber-400/90 text-[11px] font-semibold tabular-nums tracking-wider">{s.num}</span>
+                      {i < arr.length - 1 && (
+                        <div className="absolute left-[15px] top-8 bottom-0 w-px bg-white/40" />
+                      )}
+                      <div className="absolute left-0 top-0 flex items-center justify-center w-[32px] h-[32px] rounded-full bg-amber-400">
+                        <span className="text-[#0a1426] text-[14px] font-bold tabular-nums">{s.num}</span>
                       </div>
                       <h4 className="text-white text-[15px] font-semibold tracking-tight mb-1.5">{s.title}</h4>
                       <p className="text-white/75 text-[13px] leading-relaxed">{s.desc}</p>
@@ -248,7 +251,7 @@ export default function PremiumSection() {
 
           {/* CTA — 절제된 라인 버튼 */}
           <Reveal delay={300}>
-            <div className="mt-6 md:mt-8 pt-5 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+            <div className="mt-6 md:mt-8 pt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
               <div>
                 <div className="text-white text-lg sm:text-xl font-semibold tracking-tight mb-1">프리미엄 멤버십에서 모든 혜택을 만나보세요.</div>
                 <div className="text-white/70 text-sm">합격 이후의 다음 단계까지 원스톱으로 지원합니다.</div>
