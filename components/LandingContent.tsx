@@ -422,61 +422,37 @@ function WhyCaysonSection() {
       tab: '원본 대조',
       title: '시험지 원본과 한 문제씩 직접 대조',
       desc: '인터넷에 떠도는 문제를 그대로 복사하지 않습니다. 실제 시험지 원본과 정답, 선택지를 한 문제씩 대조하여 검증합니다.',
-      visual: (
-        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
-          <Image src="/tab-graphics/wonbon.png" alt="원본 대조" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-        </div>
-      ),
+      image: '/tab-graphics/wonbon.png',
     },
     {
       tab: 'AI 이중 검증',
       title: 'AI + 수동 이중 검증 시스템',
       desc: 'AI가 전체 문제를 자동 검토한 후, 수동으로 한 번 더 확인합니다. 이중 검증을 통해 정답 오류를 원천 차단합니다.',
-      visual: (
-        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
-          <Image src="/tab-graphics/ai.png" alt="AI 이중 검증" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-        </div>
-      ),
+      image: '/tab-graphics/ai.png',
     },
     {
       tab: '즉시 수정',
       title: '오류 발견 즉시 수정, 방치 없음',
       desc: '오류를 발견하면 방치하지 않습니다. 확인 즉시 수정하고 규정 개정 사항도 실시간으로 반영합니다.',
-      visual: (
-        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
-          <Image src="/tab-graphics/jeuksi.png" alt="즉시 수정" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-        </div>
-      ),
+      image: '/tab-graphics/jeuksi.png',
     },
     {
       tab: '실전 CBT',
       title: '한국산업인력공단 CBT 동일 구현',
       desc: '단순 문제풀이가 아닙니다. 실제 시험과 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
-      visual: (
-        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
-          <Image src="/tab-graphics/cbt.png" alt="실전 CBT" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-        </div>
-      ),
+      image: '/tab-graphics/cbt.png',
     },
     {
       tab: '약점 분석',
       title: '과목별 약점을 자동으로 분석',
       desc: '시험 종료 즉시 과목별 정답률과 약점을 자동 분석합니다. 어디가 부족한지 한눈에 파악하고 집중 학습하세요.',
-      visual: (
-        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
-          <Image src="/tab-graphics/yakjeom.png" alt="약점 분석" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-        </div>
-      ),
+      image: '/tab-graphics/yakjeom.png',
     },
     {
       tab: '실시간 반영',
       title: '규정 개정 사항 실시간 반영',
       desc: '전기 관련 법규와 규정이 바뀌면 즉시 문제에 반영합니다. 항상 최신 기준으로 학습할 수 있습니다.',
-      visual: (
-        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
-          <Image src="/tab-graphics/realtime.png" alt="실시간 반영" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-        </div>
-      ),
+      image: '/tab-graphics/realtime.png',
     },
   ]
 
@@ -527,10 +503,20 @@ function WhyCaysonSection() {
         {/* 콘텐츠 카드 */}
         <div className={`bg-white dark:bg-gray-900 rounded-2xl border ${tabStyle.border} ring-2 ${tabStyle.ring} shadow-lg shadow-[#C9A84C]/5 transition-all duration-500 overflow-hidden`}>
           <div className="grid lg:grid-cols-2 gap-0">
-            {/* 좌: 비주얼 */}
+            {/* 좌: 비주얼 — 6장 모두 렌더링하고 활성 탭만 보이게 (탭 전환 시 추가 다운로드 없음) */}
             <div className="p-5 sm:p-8">
-              <div className="transition-all duration-500" key={activeFeature}>
-                {f.visual}
+              <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
+                {features.map((ft, i) => (
+                  <Image
+                    key={ft.image}
+                    src={ft.image}
+                    alt={ft.tab}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority={i === 0}
+                    className={`object-cover transition-opacity duration-500 ${i === activeFeature ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                ))}
               </div>
             </div>
             {/* 우: 설명 */}
