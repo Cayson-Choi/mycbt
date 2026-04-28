@@ -166,7 +166,7 @@ export default function PremiumSection() {
                     <span className="text-amber-400/80 text-sm font-semibold">350+ 기업</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     {fields.map((f, i) => (
                       <div key={i}
                         className="px-5 py-4 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 group"
