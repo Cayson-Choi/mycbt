@@ -55,7 +55,15 @@ export default async function MyPage() {
         })
       : []
 
-  const scoresByAttempt = new Map<number, unknown[]>()
+  type AttemptSubjectScore = {
+    attempt_id: number
+    subject_id: number
+    subject_score: number
+    subject_correct: number
+    subject_questions: number
+    subjects: { name: string }
+  }
+  const scoresByAttempt = new Map<number, AttemptSubjectScore[]>()
   for (const s of allSubjectScores) {
     const list = scoresByAttempt.get(s.attemptId) || []
     list.push({
