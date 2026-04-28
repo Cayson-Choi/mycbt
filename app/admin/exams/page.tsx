@@ -49,6 +49,7 @@ export default async function AdminExamsPage() {
     exam_type: e.examType,
     duration_minutes: e.durationMinutes,
     is_published: e.isPublished,
+    min_tier: e.minTier,
     subjects: e.subjects.map((s) => ({
       id: s.id,
       name: s.name,
