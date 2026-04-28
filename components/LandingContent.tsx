@@ -80,7 +80,7 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
         <div className="flex-[2] min-h-0 bg-[#F5F0E6] dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
           {v.thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={v.thumbnailUrl} alt={v.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <img src={v.thumbnailUrl} alt={v.title} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105" />
           ) : (
             <svg className="w-8 h-8 sm:w-10 sm:h-10 text-[#C9A84C]/40 dark:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
           )}
