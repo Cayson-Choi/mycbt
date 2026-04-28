@@ -60,7 +60,7 @@ export default function PremiumSection() {
   return (
     <section className="relative overflow-hidden">
       {/* ───── 상단: 프리미엄 혜택 ───── */}
-      <div className="relative bg-[#0d1a2e] pt-20 pb-10 md:pt-28 md:pb-14">
+      <div className="relative bg-[#0d1a2e] pt-12 pb-8 md:pt-16 md:pb-10">
         {/* 배경 장식 */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
@@ -74,18 +74,18 @@ export default function PremiumSection() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
           {/* 헤더 */}
           <Reveal>
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-4">
                 <svg className="w-4 h-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
                 <span className="text-amber-400 text-sm font-semibold tracking-wide">PREMIUM MEMBERSHIP</span>
               </div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 tracking-wider" style={{ lineHeight: 1.1 }}>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-3 tracking-wider" style={{ lineHeight: 1.1 }}>
                 <span className="block">프리미엄 회원만의</span>
-                <span className="block mt-3 md:mt-4 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
+                <span className="block mt-2 md:mt-3 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
               </h2>
-              <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto">
                 합격부터 취업까지 원스톱으로 지원합니다
               </p>
             </div>
@@ -100,7 +100,7 @@ export default function PremiumSection() {
                 { value: 350, suffix: '+', label: '제휴 기업 수' },
                 { value: 98, suffix: '%', label: '프리미엄회원 만족도' },
               ].map((stat, i) => (
-                <div key={i} className="text-center py-6 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                <div key={i} className="text-center py-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                   <div className="text-2xl md:text-3xl font-black text-amber-400 mb-1">
                     <CountUp target={stat.value} suffix={stat.suffix} />
                   </div>
@@ -113,29 +113,29 @@ export default function PremiumSection() {
       </div>
 
       {/* ───── 하단: 취업 연계 ───── */}
-      <div className="relative bg-gradient-to-b from-[#0d1a2e] via-[#1B2A4A] to-[#0d1a2e] pt-10 pb-20 md:pt-14 md:pb-28">
+      <div className="relative bg-gradient-to-b from-[#0d1a2e] via-[#1B2A4A] to-[#0d1a2e] pt-8 pb-12 md:pt-10 md:pb-16">
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* 왼쪽: 텍스트 */}
             <Reveal>
               <div>
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-4">
                   <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-emerald-400 text-sm font-semibold">취업 연계 프로그램</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-black text-white mb-6 tracking-wider" style={{ lineHeight: 1.1 }}>
+                <h2 className="text-3xl md:text-4xl font-black text-white mb-4 tracking-wider" style={{ lineHeight: 1.1 }}>
                   자격증 취득부터 <span className="relative inline-block text-amber-400">취업<span className="absolute -top-5 md:-top-7 left-0 w-full flex justify-around pointer-events-none"><span className="text-[8px] md:text-[10px]">●</span><span className="text-[8px] md:text-[10px]">●</span></span></span>까지<br />
                   <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">모두 책임져</span> 드립니다
                 </h2>
-                <p className="text-gray-400 leading-relaxed mb-8">
+                <p className="text-gray-400 leading-relaxed mb-6">
                   <span className="text-amber-400 font-bold">CAYSON</span>은 전국 350개+ 전기 관련 기업과 파트너십을 맺고 있습니다.
                   자격증을 취득하는 순간, 여러분의 이력서가 파트너 기업 인사담당자에게
                   직접 전달됩니다. 더 이상 혼자 취업 준비하지 마세요.
                 </p>
 
                 {/* 프로세스 */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {[
                     { step: '01', title: '자격증 취득', desc: 'CAYSON으로 학습하고 시험에 합격하세요' },
                     { step: '02', title: '이력서 등록', desc: '간단한 이력 정보를 입력하면 끝' },
@@ -191,7 +191,7 @@ export default function PremiumSection() {
 
           {/* CTA */}
           <Reveal delay={300}>
-            <div className="mt-16 md:mt-20 text-center">
+            <div className="mt-10 md:mt-12 text-center">
               <button className="group relative px-8 py-4 rounded-xl font-bold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20">
                   <div className="absolute inset-0 bg-gradient-to-r from-amber-600 via-yellow-300 to-amber-600 background-animate" />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent shimmer-animate" />

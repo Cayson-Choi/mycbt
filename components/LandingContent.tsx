@@ -435,7 +435,7 @@ function WhyCaysonSection() {
 
   return (
     <section className="bg-[#FEFDF5] dark:bg-gray-950 overflow-hidden">
-      <div ref={triggerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+      <div ref={triggerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <Reveal>
           <div className="text-center mb-12 sm:mb-16">
             <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">Why CAYSON</p>
@@ -542,7 +542,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           SECTION 1 -- 과정별 CBT (등급 탭 + 카드)
          ════════════════════════════════════════ */}
       <section id="exams" className="bg-[#FEFDF5] dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <Reveal>
             <SectionHeading label="CBT Practice" title="과정별 CBT" />
           </Reveal>
@@ -608,7 +608,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           SECTION 2 -- 동영상 강의 (airklass 스타일)
          ════════════════════════════════════════ */}
       <section className="bg-white dark:bg-gray-900 border-t border-[#C9A84C]/10 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <Reveal>
             <SectionHeading label="Video Lectures" title="동영상 강의" />
           </Reveal>
@@ -637,10 +637,6 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
               { title: '전기자기학 핵심 이론 완성', stars: '4.8(52)', hours: '32시간' },
               { title: '전력공학 핵심 공식 마스터', stars: '4.7(29)', hours: '28시간' },
               { title: '전기기기 구조와 원리 총정리', stars: '4.9(67)', hours: '26시간' },
-              { title: '회로이론 및 제어공학 집중반', stars: '4.5(41)', hours: '30시간' },
-              { title: '전기설비기술기준 조문 해설', stars: '4.8(33)', hours: '18시간' },
-              { title: '전기기사 필기 실전 모의고사', stars: '4.6(38)', hours: '24시간' },
-              { title: '전기기사 과목별 오답 분석 특강', stars: '4.9(45)', hours: '16시간' },
             ].map((lec, i) => (
               <Reveal key={lec.title} delay={(i + 1) * 80}>
                 <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1">
@@ -675,7 +671,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           SECTION 3 -- 합격 수기
          ════════════════════════════════════════ */}
       <section className="bg-[#FEFDF5] dark:bg-gray-950/50 overflow-hidden border-t border-[#C9A84C]/10 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <Reveal>
             <div className="mb-12 sm:mb-16 text-center">
               <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">
@@ -748,7 +744,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
         {/* Gold line at top */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/50 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
             {/* 좌측: 텍스트 */}
             <Reveal>
