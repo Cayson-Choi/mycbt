@@ -15,10 +15,19 @@ interface ExamItem {
   exam_type: string
   duration_minutes: number
   is_published: boolean
+  min_tier: string
   subjects: { id: number; name: string; questions_per_attempt: number }[]
   question_count: number
   attempt_count: number
 }
+
+const TIER_OPTIONS = [
+  { value: 'FREE', label: '무료' },
+  { value: 'BRONZE', label: '브론즈' },
+  { value: 'SILVER', label: '실버' },
+  { value: 'GOLD', label: '골드' },
+  { value: 'PREMIUM', label: '프리미엄' },
+]
 
 interface Category {
   id: number
@@ -113,6 +122,23 @@ export default function ExamsClient({
       })
       if (res.ok) reloadExams()
     } catch {}
+  }
+
+  const handleChangeTier = async (exam: ExamItem, tier: string) => {
+    setExams((prev) => prev.map((e) => (e.id === exam.id ? { ...e, min_tier: tier } : e)))
+    try {
+      const res = await fetch(`/api/admin/exams/${exam.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ min_tier: tier }),
+      })
+      if (!res.ok) {
+        alert("등급 변경 실패")
+        reloadExams()
+      }
+    } catch {
+      reloadExams()
+    }
   }
 
   const handleDelete = async () => {
@@ -357,6 +383,9 @@ export default function ExamsClient({
                         시간
                       </th>
                       <th className="px-4 py-3 text-center font-medium text-gray-600 dark:text-gray-300">
+                        등급
+                      </th>
+                      <th className="px-4 py-3 text-center font-medium text-gray-600 dark:text-gray-300">
                         상태
                       </th>
                       <th className="px-4 py-3 text-center font-medium text-gray-600 dark:text-gray-300">
@@ -409,6 +438,17 @@ export default function ExamsClient({
                         </td>
                         <td className="px-4 py-3 text-center dark:text-gray-300">
                           {exam.duration_minutes}분
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <select
+                            value={exam.min_tier}
+                            onChange={(e) => handleChangeTier(exam, e.target.value)}
+                            className="px-2 py-1 text-xs rounded border dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-gray-200"
+                          >
+                            {TIER_OPTIONS.map((t) => (
+                              <option key={t.value} value={t.value}>{t.label}</option>
+                            ))}
+                          </select>
                         </td>
                         <td className="px-4 py-3 text-center">
                           <button

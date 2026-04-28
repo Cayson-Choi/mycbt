@@ -33,6 +33,24 @@ const roundColors = [
   "from-rose-500 to-rose-700",
 ]
 
+const TIER_LABEL: Record<string, string> = {
+  FREE: '무료',
+  BRONZE: '브론즈',
+  SILVER: '실버',
+  GOLD: '골드',
+  PREMIUM: '프리미엄',
+  ADMIN: '관리자',
+}
+
+const TIER_BADGE: Record<string, string> = {
+  FREE: 'bg-emerald-400/90 text-white',
+  BRONZE: 'bg-amber-700/90 text-white',
+  SILVER: 'bg-slate-300/90 text-slate-800',
+  GOLD: 'bg-yellow-400/95 text-yellow-900',
+  PREMIUM: 'bg-violet-500/90 text-white',
+  ADMIN: 'bg-rose-500/90 text-white',
+}
+
 export async function generateStaticParams() {
   const categories = await prisma.examCategory.findMany({
     where: { isActive: true },
@@ -274,6 +292,13 @@ function ExamCard({
         </div>
       ) : (
         <div className="text-xs">문제 등록 대기</div>
+      )}
+
+      {/* 등급 라벨 우하단 */}
+      {hasQuestions && (
+        <span className={`absolute bottom-3 right-3 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full shadow-sm ${TIER_BADGE[exam.min_tier] ?? TIER_BADGE.FREE}`}>
+          {TIER_LABEL[exam.min_tier] ?? exam.min_tier}
+        </span>
       )}
     </div>
   )

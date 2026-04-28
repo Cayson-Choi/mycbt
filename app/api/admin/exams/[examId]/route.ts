@@ -29,7 +29,7 @@ export async function PUT(
       return NextResponse.json({ error: "잘못된 시험 ID" }, { status: 400 })
 
     const body = await request.json()
-    const { is_published, duration_minutes } = body
+    const { is_published, duration_minutes, min_tier } = body
 
     const data: any = {}
     if (typeof is_published === "boolean") data.isPublished = is_published
@@ -41,6 +41,13 @@ export async function PUT(
         )
       }
       data.durationMinutes = duration_minutes
+    }
+    if (typeof min_tier === "string") {
+      const allowed = ["FREE", "BRONZE", "SILVER", "GOLD", "PREMIUM", "ADMIN"]
+      if (!allowed.includes(min_tier)) {
+        return NextResponse.json({ error: "잘못된 등급" }, { status: 400 })
+      }
+      data.minTier = min_tier
     }
 
     if (Object.keys(data).length === 0) {
@@ -55,8 +62,8 @@ export async function PUT(
       data,
     })
 
-    // is_published 변경 시 캐시 무효화
-    if (typeof is_published === "boolean") {
+    // 게시 상태/등급 변경 시 캐시 무효화
+    if (typeof is_published === "boolean" || typeof min_tier === "string") {
       revalidatePath("/", "layout")
     }
 

@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import PremiumSection from './PremiumSection'
 import VideoPlayerModal from './VideoPlayerModal'
+import { hasTierAccess } from '@/lib/tier'
 
 export type LandingVideo = {
   id: number
@@ -89,9 +91,9 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
       <button
         type="button"
         onClick={() => onPlay(v)}
-        className="text-left w-full group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1"
+        className="text-left w-full group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col"
       >
-        <div className="aspect-[16/9] bg-[#F5F0E6] dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
+        <div className="flex-[2] min-h-0 bg-[#F5F0E6] dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
           {v.thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={v.thumbnailUrl} alt={v.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
@@ -104,24 +106,26 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
             </span>
           </span>
         </div>
-        <div className="p-3 sm:p-4">
-          <h4 className="text-base sm:text-lg font-bold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-2">{v.title}</h4>
-          <p className="text-sm sm:text-base font-semibold text-[#1B2A4A]/80 dark:text-gray-300 mb-2">
-            {v.price && v.price > 0 ? `${v.price.toLocaleString()}원` : '무료'}
-          </p>
-          {(v.ratingText || v.durationText) && (
-            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-[#1B2A4A]/70 dark:text-gray-400">
-              {v.ratingText && (
-                <>
-                  <span className="text-[#C9A84C]">&#9733;</span>
-                  <span>{v.ratingText}</span>
-                </>
-              )}
-              {v.ratingText && v.durationText && <span className="text-[#C9A84C]/30">|</span>}
-              {v.durationText && <span>{v.durationText}</span>}
-            </div>
-          )}
-          <p className={`text-lg sm:text-xl font-extrabold mt-2 text-right tracking-wide ${TIER_COLOR[v.minTier] ?? 'text-gray-500'}`}>
+        <div className="flex-1 min-h-0 p-2.5 sm:p-3 flex flex-col justify-between">
+          <div>
+            <h4 className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1">{v.title}</h4>
+            <p className="text-xs sm:text-sm font-semibold text-[#1B2A4A]/80 dark:text-gray-300 mb-1">
+              {v.price && v.price > 0 ? `${v.price.toLocaleString()}원` : '무료'}
+            </p>
+            {(v.ratingText || v.durationText) && (
+              <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#1B2A4A]/70 dark:text-gray-400">
+                {v.ratingText && (
+                  <>
+                    <span className="text-[#C9A84C]">&#9733;</span>
+                    <span>{v.ratingText}</span>
+                  </>
+                )}
+                {v.ratingText && v.durationText && <span className="text-[#C9A84C]/30">|</span>}
+                {v.durationText && <span>{v.durationText}</span>}
+              </div>
+            )}
+          </div>
+          <p className={`text-sm sm:text-base font-extrabold tracking-wide text-right ${TIER_COLOR[v.minTier] ?? 'text-gray-500'}`}>
             {TIER_LABEL[v.minTier] ?? v.minTier}
           </p>
         </div>
@@ -133,21 +137,23 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
 function VideoPreparingCard({ lec, idx }: { lec: FallbackLecture; idx: number }) {
   return (
     <Reveal delay={(idx + 1) * 80}>
-      <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1">
-        <div className="aspect-[16/9] bg-[#F5F0E6] dark:bg-gray-800 flex flex-col items-center justify-center">
+      <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col">
+        <div className="flex-[2] min-h-0 bg-[#F5F0E6] dark:bg-gray-800 flex flex-col items-center justify-center">
           <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#C9A84C]/40 dark:text-gray-600 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
           <span className="text-[9px] sm:text-[10px] text-[#C9A84C]/50 dark:text-gray-500 font-medium tracking-wider">준비중</span>
         </div>
-        <div className="p-3 sm:p-4">
-          <h4 className="text-base sm:text-lg font-bold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-2">{lec.title}</h4>
-          <p className="text-sm sm:text-base font-semibold text-[#1B2A4A]/80 dark:text-gray-300 mb-2">무료</p>
-          <div className="flex items-center gap-1.5 text-xs sm:text-sm text-[#1B2A4A]/70 dark:text-gray-400">
-            <span className="text-[#C9A84C]">&#9733;</span>
-            <span>{lec.stars}</span>
-            <span className="text-[#C9A84C]/30">|</span>
-            <span>{lec.hours}</span>
+        <div className="flex-1 min-h-0 p-2.5 sm:p-3 flex flex-col justify-between">
+          <div>
+            <h4 className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1">{lec.title}</h4>
+            <p className="text-xs sm:text-sm font-semibold text-[#1B2A4A]/80 dark:text-gray-300 mb-1">무료</p>
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#1B2A4A]/70 dark:text-gray-400">
+              <span className="text-[#C9A84C]">&#9733;</span>
+              <span>{lec.stars}</span>
+              <span className="text-[#C9A84C]/30">|</span>
+              <span>{lec.hours}</span>
+            </div>
           </div>
-          <p className="text-lg sm:text-xl font-extrabold mt-2 text-right tracking-wide text-emerald-600 dark:text-emerald-400">무료</p>
+          <p className="text-sm sm:text-base font-extrabold tracking-wide text-right text-emerald-600 dark:text-emerald-400">무료</p>
         </div>
       </div>
     </Reveal>
@@ -685,6 +691,22 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
   const [hiddenCards] = useState<string[]>(initialHiddenCards)
   const [gradeCounts] = useState<Record<string, number> | undefined>(initialGradeCounts)
   const [playing, setPlaying] = useState<LandingVideo | null>(null)
+  const [locked, setLocked] = useState<LandingVideo | null>(null)
+  const { data: session } = useSession()
+  const userTier = (session?.user as { tier?: string } | undefined)?.tier ?? 'FREE'
+  const userIsAdmin = (session?.user as { isAdmin?: boolean } | undefined)?.isAdmin ?? false
+
+  const handlePlay = (v: LandingVideo) => {
+    if (!session?.user) {
+      window.location.href = `/login?redirect=${encodeURIComponent('/')}`
+      return
+    }
+    if (!userIsAdmin && !hasTierAccess(userTier, v.minTier)) {
+      setLocked(v)
+      return
+    }
+    setPlaying(v)
+  }
   // 카테고리별 비디오 분리 (이름 정확 매칭 — '전기기능사'와 '전기기사'가 부분 매칭 충돌하지 않도록 주의)
   const engineerVideos = videos.filter((v) => {
     const n = v.categoryName ?? ''
@@ -840,7 +862,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 mb-5 sm:mb-6">
             <VideoYBanner subtitle="Engineer" title="전기기사" bg="bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A]" />
             {engineerFeatured.length > 0
-              ? engineerFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={setPlaying} />)
+              ? engineerFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={handlePlay} />)
               : ENGINEER_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
           </div>
 
@@ -848,7 +870,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 mb-5 sm:mb-6">
             <VideoYBanner subtitle="Technician" title="전기기능사" bg="bg-gradient-to-br from-[#0d3d33] to-[#1f5d4f]" />
             {technicianFeatured.length > 0
-              ? technicianFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={setPlaying} />)
+              ? technicianFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={handlePlay} />)
               : TECHNICIAN_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
           </div>
 
@@ -856,7 +878,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
             <VideoYBanner subtitle="Elevator" title="승강기기능사" bg="bg-gradient-to-br from-[#3d2d5c] to-[#5a4485]" />
             {elevatorFeatured.length > 0
-              ? elevatorFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={setPlaying} />)
+              ? elevatorFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={handlePlay} />)
               : ELEVATOR_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
           </div>
         </div>
@@ -1006,6 +1028,31 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
         videoUrl={playing?.videoUrl ?? ''}
         title={playing?.title}
       />
+
+      {locked && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setLocked(null)}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-xl">🔒</div>
+              <h3 className="text-lg font-bold dark:text-white">등급을 올려주세요</h3>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+              이 강의는 <span className={`font-bold ${TIER_COLOR[locked.minTier] ?? ''}`}>{TIER_LABEL[locked.minTier] ?? locked.minTier}</span> 등급 이상만 시청할 수 있습니다.
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+              현재 등급: <span className="font-medium">{TIER_LABEL[userTier] ?? userTier}</span>
+            </p>
+            <div className="flex gap-2 justify-end">
+              <button onClick={() => setLocked(null)} className="px-4 py-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 text-sm font-medium">
+                닫기
+              </button>
+              <Link href="/my" className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-lg hover:from-amber-600 hover:to-yellow-600 text-sm font-bold">
+                등급 업그레이드
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
