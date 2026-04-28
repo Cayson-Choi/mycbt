@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import PremiumSection from './PremiumSection'
@@ -421,24 +422,9 @@ function WhyCaysonSection() {
       tab: '원본 대조',
       title: '시험지 원본과 한 문제씩 직접 대조',
       desc: '인터넷에 떠도는 문제를 그대로 복사하지 않습니다. 실제 시험지 원본과 정답, 선택지를 한 문제씩 대조하여 검증합니다.',
-      accent: 'blue',
       visual: (
-        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 rounded-xl flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center gap-3 sm:gap-6 px-4">
-            <div className="w-[42%] bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 border border-gray-200 dark:border-gray-700 transform -rotate-2 transition-transform duration-500 hover:rotate-0">
-              <div className="h-2 w-16 bg-gray-200 dark:bg-gray-600 rounded mb-2" />
-              <div className="h-2 w-12 bg-gray-100 dark:bg-gray-700 rounded mb-3" />
-              <div className="space-y-1.5">{[1,2,3,4].map(n => <div key={n} className="flex items-center gap-2"><span className="w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-600 text-[8px] flex items-center justify-center text-gray-500 font-bold">{n}</span><div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded flex-1" /></div>)}</div>
-              <p className="text-[8px] sm:text-[10px] text-gray-400 mt-2 text-center">원본 시험지</p>
-            </div>
-            <svg className={`w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 transition-all duration-700 ${visible ? 'text-blue-500 scale-100 opacity-100' : 'text-gray-300 scale-50 opacity-0'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            <div className="w-[42%] bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 border-2 border-blue-400 dark:border-blue-500 transform rotate-2 transition-transform duration-500 hover:rotate-0">
-              <div className="h-2 w-16 bg-blue-200 dark:bg-blue-800 rounded mb-2" />
-              <div className="h-2 w-12 bg-blue-100 dark:bg-blue-900 rounded mb-3" />
-              <div className="space-y-1.5">{[1,2,3,4].map(n => <div key={n} className="flex items-center gap-2"><span className="w-4 h-4 rounded-full bg-blue-500 text-[8px] flex items-center justify-center text-white font-bold">{n}</span><div className="h-1.5 bg-blue-100 dark:bg-blue-900 rounded flex-1" /></div>)}</div>
-              <p className="text-[8px] sm:text-[10px] text-blue-500 mt-2 text-center font-semibold">CAYSON 검증</p>
-            </div>
-          </div>
+        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
+          <Image src="/tab-graphics/wonbon.png" alt="원본 대조" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
         </div>
       ),
     },
@@ -446,24 +432,9 @@ function WhyCaysonSection() {
       tab: 'AI 이중 검증',
       title: 'AI + 수동 이중 검증 시스템',
       desc: 'AI가 전체 문제를 자동 검토한 후, 수동으로 한 번 더 확인합니다. 이중 검증을 통해 정답 오류를 원천 차단합니다.',
-      accent: 'emerald',
       visual: (
-        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950/30 dark:to-emerald-900/20 rounded-xl flex items-center justify-center overflow-hidden">
-          <div className="flex flex-col items-center gap-2 sm:gap-3">
-            <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-700 ${visible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-200 dark:border-gray-700 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">1차 AI 검토</div>
-              <div className="w-8 sm:w-12 h-0.5 bg-emerald-300" />
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-            </div>
-            <svg className="w-4 h-4 text-emerald-300" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clipRule="evenodd" /></svg>
-            <div className={`flex items-center gap-2 sm:gap-3 transition-all duration-700 delay-300 ${visible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}>
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-3 py-2 sm:px-4 sm:py-2.5 border border-gray-200 dark:border-gray-700 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">2차 수동 검증</div>
-              <div className="w-8 sm:w-12 h-0.5 bg-emerald-300" />
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-            </div>
-            <svg className="w-4 h-4 text-emerald-300" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clipRule="evenodd" /></svg>
-            <div className={`bg-emerald-500 text-white rounded-lg shadow-lg px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-bold transition-all duration-700 delay-500 ${visible ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`}>검증 완료</div>
-          </div>
+        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
+          <Image src="/tab-graphics/ai.png" alt="AI 이중 검증" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
         </div>
       ),
     },
@@ -471,22 +442,9 @@ function WhyCaysonSection() {
       tab: '즉시 수정',
       title: '오류 발견 즉시 수정, 방치 없음',
       desc: '오류를 발견하면 방치하지 않습니다. 확인 즉시 수정하고 규정 개정 사항도 실시간으로 반영합니다.',
-      accent: 'amber',
       visual: (
-        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/20 rounded-xl flex items-center justify-center overflow-hidden px-4">
-          <div className="flex items-center gap-3 sm:gap-5 w-full max-w-xs sm:max-w-sm">
-            <div className={`flex-1 bg-white dark:bg-gray-800 rounded-lg shadow border border-red-200 dark:border-red-800 p-3 sm:p-4 transition-all duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}>
-              <div className="flex items-center gap-1.5 mb-2"><div className="w-2 h-2 rounded-full bg-red-400" /><span className="text-[9px] sm:text-[11px] text-red-500 font-semibold">오류 발견</span></div>
-              <div className="h-1.5 bg-red-100 dark:bg-red-900/40 rounded w-full mb-1" />
-              <div className="h-1.5 bg-red-100 dark:bg-red-900/40 rounded w-3/4" />
-            </div>
-            <svg className={`w-5 h-5 sm:w-7 sm:h-7 text-amber-500 flex-shrink-0 transition-all duration-700 delay-300 ${visible ? 'rotate-0 opacity-100' : 'rotate-180 opacity-0'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 7l5 5m0 0l-5 5m5-5H6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            <div className={`flex-1 bg-white dark:bg-gray-800 rounded-lg shadow border-2 border-emerald-400 dark:border-emerald-500 p-3 sm:p-4 transition-all duration-500 delay-500 ${visible ? 'opacity-100' : 'opacity-0'}`}>
-              <div className="flex items-center gap-1.5 mb-2"><div className="w-2 h-2 rounded-full bg-emerald-400" /><span className="text-[9px] sm:text-[11px] text-emerald-600 font-semibold">수정 완료</span></div>
-              <div className="h-1.5 bg-emerald-100 dark:bg-emerald-900/40 rounded w-full mb-1" />
-              <div className="h-1.5 bg-emerald-100 dark:bg-emerald-900/40 rounded w-3/4" />
-            </div>
-          </div>
+        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
+          <Image src="/tab-graphics/jeuksi.png" alt="즉시 수정" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
         </div>
       ),
     },
@@ -494,17 +452,9 @@ function WhyCaysonSection() {
       tab: '실전 CBT',
       title: '한국산업인력공단 CBT 동일 구현',
       desc: '단순 문제풀이가 아닙니다. 실제 시험과 동일한 과목 구성, 문항 수, 제한 시간으로 실전 감각을 잡아드립니다.',
-      accent: 'violet',
       visual: (
-        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-violet-50 to-violet-100 dark:from-violet-950/30 dark:to-violet-900/20 rounded-xl flex items-center justify-center overflow-hidden">
-          <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 w-[85%] sm:w-[75%] p-3 sm:p-4 transition-all duration-700 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            <div className="flex items-center justify-between mb-2 sm:mb-3">
-              <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-violet-500" /><span className="text-[9px] sm:text-xs font-bold text-gray-700 dark:text-gray-300">전기기사 필기 CBT</span></div>
-              <span className="text-[8px] sm:text-[10px] font-mono text-red-500 font-bold bg-red-50 dark:bg-red-950/40 px-1.5 py-0.5 rounded">02:29:45</span>
-            </div>
-            <div className="flex gap-1 mb-2">{['전기자기학','전력공학','전기기기','회로이론','전기설비'].map((s,i) => <span key={s} className={`text-[6px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 rounded font-medium ${i===0 ? 'bg-violet-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'}`}>{s}</span>)}</div>
-            <div className="space-y-1">{[1,2,3].map(n => <div key={n} className="flex items-start gap-2"><span className="text-[8px] sm:text-[10px] font-bold text-gray-400 mt-0.5">{n}.</span><div className="flex-1"><div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded w-full mb-1" /><div className="grid grid-cols-2 gap-1">{[1,2,3,4].map(c => <div key={c} className={`h-3 sm:h-4 rounded text-[6px] sm:text-[7px] flex items-center justify-center font-medium ${c===2 ? 'bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 ring-1 ring-violet-300' : 'bg-gray-50 dark:bg-gray-700 text-gray-400'}`}>{c}</div>)}</div></div></div>)}</div>
-          </div>
+        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
+          <Image src="/tab-graphics/cbt.png" alt="실전 CBT" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
         </div>
       ),
     },
@@ -512,26 +462,9 @@ function WhyCaysonSection() {
       tab: '약점 분석',
       title: '과목별 약점을 자동으로 분석',
       desc: '시험 종료 즉시 과목별 정답률과 약점을 자동 분석합니다. 어디가 부족한지 한눈에 파악하고 집중 학습하세요.',
-      accent: 'pink',
       visual: (
-        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-950/30 dark:to-pink-900/20 rounded-xl flex items-center justify-center overflow-hidden px-4 sm:px-6">
-          <div className="w-full max-w-xs sm:max-w-sm space-y-2 sm:space-y-2.5">
-            {[
-              { name: '전기자기학', pct: 95, color: 'bg-blue-500' },
-              { name: '전력공학', pct: 72, color: 'bg-emerald-500' },
-              { name: '전기기기', pct: 88, color: 'bg-violet-500' },
-              { name: '회로이론', pct: 45, color: 'bg-pink-500' },
-              { name: '전기설비', pct: 80, color: 'bg-amber-500' },
-            ].map((sub, i) => (
-              <div key={sub.name} className="flex items-center gap-2 sm:gap-3">
-                <span className="text-[8px] sm:text-[10px] font-semibold text-gray-500 dark:text-gray-400 w-12 sm:w-16 text-right flex-shrink-0">{sub.name}</span>
-                <div className="flex-1 h-3 sm:h-4 bg-white dark:bg-gray-800 rounded-full overflow-hidden shadow-inner">
-                  <div className={`h-full ${sub.color} rounded-full transition-all duration-1000 ease-out`} style={{ width: visible ? `${sub.pct}%` : '0%', transitionDelay: `${i * 150}ms` }} />
-                </div>
-                <span className={`text-[9px] sm:text-xs font-bold tabular-nums ${sub.pct < 60 ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'}`}>{visible ? sub.pct : 0}%</span>
-              </div>
-            ))}
-          </div>
+        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
+          <Image src="/tab-graphics/yakjeom.png" alt="약점 분석" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
         </div>
       ),
     },
@@ -539,38 +472,22 @@ function WhyCaysonSection() {
       tab: '실시간 반영',
       title: '규정 개정 사항 실시간 반영',
       desc: '전기 관련 법규와 규정이 바뀌면 즉시 문제에 반영합니다. 항상 최신 기준으로 학습할 수 있습니다.',
-      accent: 'teal',
       visual: (
-        <div className="relative w-full aspect-[16/10] bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-950/30 dark:to-teal-900/20 rounded-xl flex items-center justify-center overflow-hidden">
-          <div className="flex flex-col items-center gap-2 sm:gap-3">
-            {[
-              { label: '규정 개정 감지', delay: '0ms' },
-              { label: '문제 자동 업데이트', delay: '200ms' },
-              { label: '최신 기준 적용 완료', delay: '400ms' },
-            ].map((step, i) => (
-              <div key={step.label} className={`flex items-center gap-2 sm:gap-3 transition-all duration-500 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`} style={{ transitionDelay: step.delay }}>
-                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-white text-xs font-bold ${i === 2 ? 'bg-teal-500' : 'bg-teal-400'}`}>{i + 1}</div>
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-200 dark:border-gray-700 text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300">{step.label}</div>
-                {i < 2 && <svg className="w-3 h-3 text-teal-300 rotate-90 -ml-1 hidden sm:block" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clipRule="evenodd" /></svg>}
-              </div>
-            ))}
-          </div>
+        <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden">
+          <Image src="/tab-graphics/realtime.png" alt="실시간 반영" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
         </div>
       ),
     },
   ]
 
-  const accentMap: Record<string, { tab: string; border: string; ring: string }> = {
-    blue: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
-    emerald: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
-    amber: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
-    violet: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
-    pink: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
-    teal: { tab: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25', border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20', ring: 'ring-[#C9A84C]/10' },
+  // 모든 탭이 동일한 royal-navy + 골드 계열을 공유 (이전엔 색상별 분기였으나 디자인 통일됨)
+  const tabStyle = {
+    active: 'bg-[#1B2A4A] text-white shadow-[#1B2A4A]/25',
+    border: 'border-[#C9A84C]/30 dark:border-[#C9A84C]/20',
+    ring: 'ring-[#C9A84C]/10',
   }
 
   const f = features[activeFeature]
-  const a = accentMap[f.accent]
 
   return (
     <section className="bg-[#FEFDF5] dark:bg-gray-950 overflow-hidden">
@@ -596,7 +513,7 @@ function WhyCaysonSection() {
                 onClick={() => setActiveFeature(i)}
                 className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 border ${
                   i === activeFeature
-                    ? `${accentMap[ft.accent].tab} shadow-lg scale-105 border-[#1B2A4A]`
+                    ? `${tabStyle.active} shadow-lg scale-105 border-[#1B2A4A]`
                     : 'bg-white dark:bg-gray-800 text-[#1B2A4A]/60 dark:text-gray-400 border-[#C9A84C]/20 hover:border-[#C9A84C]/50 hover:text-[#1B2A4A] dark:hover:text-gray-200'
                 }`}
                
@@ -608,7 +525,7 @@ function WhyCaysonSection() {
         </Reveal>
 
         {/* 콘텐츠 카드 */}
-        <div className={`bg-white dark:bg-gray-900 rounded-2xl border ${a.border} ring-2 ${a.ring} shadow-lg shadow-[#C9A84C]/5 transition-all duration-500 overflow-hidden`}>
+        <div className={`bg-white dark:bg-gray-900 rounded-2xl border ${tabStyle.border} ring-2 ${tabStyle.ring} shadow-lg shadow-[#C9A84C]/5 transition-all duration-500 overflow-hidden`}>
           <div className="grid lg:grid-cols-2 gap-0">
             {/* 좌: 비주얼 */}
             <div className="p-5 sm:p-8">
@@ -944,13 +861,19 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           SECTION 5 -- 고객센터 + CTA (British Royal dark)
          ════════════════════════════════════════ */}
       <section className="relative bg-[#1B2A4A] overflow-hidden">
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23C9A84C\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+        {/* 미니멀 골드 도트 콘스텔레이션 */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: `
+            radial-gradient(circle at 14px 14px, rgba(201,168,76,0.18) 1px, transparent 1.5px),
+            radial-gradient(circle at 42px 42px, rgba(201,168,76,0.10) 0.5px, transparent 1px)
+          `,
+          backgroundSize: '28px 28px, 56px 56px'
+        }} />
         {/* Gold line at top */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/50 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+          <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
             {/* 좌측: 텍스트 */}
             <Reveal>
               <div className="lg:flex-shrink-0 lg:w-[380px]">
@@ -967,39 +890,79 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
             {/* 우측: 2개 카드 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 w-full">
               <Reveal delay={100}>
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/15 hover:border-[#C9A84C]/30 transition-colors">
-                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider">CAYSON</h4>
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-4">고객센터</h4>
-                  <div className="text-sm text-white/60 space-y-1.5 mb-auto">
-                    <p>평일: 10:00~18:00</p>
-                    <p>점심시간: 12:30~13:30</p>
-                    <p className="text-[#C9A84C]/80">주말, 공휴일 휴무</p>
+                <div className="relative overflow-hidden bg-white/[0.04] backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors" style={{
+                  boxShadow: 'inset 0 1px 0 rgba(201,168,76,0.15), 0 8px 24px -12px rgba(0,0,0,0.4)'
+                }}>
+                  {/* ── 질감 레이어 ── */}
+                  <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden">
+                    {/* 상단 골드 셰엔 */}
+                    <div className="absolute top-0 left-0 right-0 h-px" style={{
+                      background: 'linear-gradient(90deg, rgba(201,168,76,0.3) 0%, rgba(201,168,76,0.7) 50%, rgba(201,168,76,0.3) 100%)'
+                    }} />
+                    {/* 그레인 */}
+                    <svg className="absolute inset-0 w-full h-full opacity-[0.20]" preserveAspectRatio="none">
+                      <filter id="grain-card-1">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
+                      </filter>
+                      <rect width="100%" height="100%" filter="url(#grain-card-1)" />
+                    </svg>
                   </div>
-                  <a href="https://open.kakao.com/o/smarimpi" target="_blank" rel="noopener noreferrer" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider">
-                    카카오톡 문의하기
-                  </a>
+
+                  {/* ── 콘텐츠 ── */}
+                  <div className="relative z-10 flex flex-col h-full">
+                    <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider">CAYSON</h4>
+                    <h4 className="text-white font-bold text-base sm:text-lg mb-4">고객센터</h4>
+                    <div className="text-sm text-white/60 space-y-1.5 mb-auto">
+                      <p>평일: 10:00~18:00</p>
+                      <p>점심시간: 12:30~13:30</p>
+                      <p className="text-[#C9A84C]/80">주말, 공휴일 휴무</p>
+                    </div>
+                    <a href="https://open.kakao.com/o/smarimpi" target="_blank" rel="noopener noreferrer" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider bg-[#1B2A4A]/30">
+                      카카오톡 문의하기
+                    </a>
+                  </div>
                 </div>
               </Reveal>
 
               <Reveal delay={200}>
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/15 hover:border-[#C9A84C]/30 transition-colors">
-                  <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider">오류 신고</h4>
-                  <h4 className="text-white font-bold text-base sm:text-lg mb-4">센터</h4>
-                  <div className="text-sm text-white/60 space-y-1.5 mb-auto">
-                    <p>24시간 접수 가능</p>
-                    <p>확인 후 즉시 수정</p>
-                    <p className="text-[#C9A84C]/80">규정 개정 실시간 반영</p>
+                <div className="relative overflow-hidden bg-white/[0.04] backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors" style={{
+                  boxShadow: 'inset 0 1px 0 rgba(201,168,76,0.15), 0 8px 24px -12px rgba(0,0,0,0.4)'
+                }}>
+                  {/* ── 질감 레이어 ── */}
+                  <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden">
+                    {/* 상단 골드 셰엔 */}
+                    <div className="absolute top-0 left-0 right-0 h-px" style={{
+                      background: 'linear-gradient(90deg, rgba(201,168,76,0.3) 0%, rgba(201,168,76,0.7) 50%, rgba(201,168,76,0.3) 100%)'
+                    }} />
+                    {/* 그레인 */}
+                    <svg className="absolute inset-0 w-full h-full opacity-[0.20]" preserveAspectRatio="none">
+                      <filter id="grain-card-2">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
+                      </filter>
+                      <rect width="100%" height="100%" filter="url(#grain-card-2)" />
+                    </svg>
                   </div>
-                  <a href="mailto:cayson0127@gmail.com?subject=[오류신고]%20문제%20오류%20신고합니다" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider">
-                    오류 신고하기
-                  </a>
+
+                  {/* ── 콘텐츠 ── */}
+                  <div className="relative z-10 flex flex-col h-full">
+                    <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider">오류 신고</h4>
+                    <h4 className="text-white font-bold text-base sm:text-lg mb-4">센터</h4>
+                    <div className="text-sm text-white/60 space-y-1.5 mb-auto">
+                      <p>24시간 접수 가능</p>
+                      <p>확인 후 즉시 수정</p>
+                      <p className="text-[#C9A84C]/80">규정 개정 실시간 반영</p>
+                    </div>
+                    <a href="mailto:cayson0127@gmail.com?subject=[오류신고]%20문제%20오류%20신고합니다" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider bg-[#1B2A4A]/30">
+                      오류 신고하기
+                    </a>
+                  </div>
                 </div>
               </Reveal>
 
             </div>
           </div>
 
-          <p className="text-white/30 text-xs mt-10 text-center lg:text-right">
+          <p className="text-white/30 text-xs mt-5 text-center lg:text-right">
             * 문의는 이메일로 접수되며, 영업일 기준 24시간 이내 답변드립니다.
           </p>
         </div>

@@ -751,7 +751,7 @@ setTimeout(function() {
 
               {paginatedQuestions.length > 0 ? (
                 <div className="space-y-4">
-                  {paginatedQuestions.map((q: any) => (
+                  {paginatedQuestions.map((q: any, idx: number) => (
                     <div
                       key={q.id}
                       className="border dark:border-gray-600 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700"
@@ -780,10 +780,15 @@ setTimeout(function() {
                               </span>
                             )}
                           </div>
-                          <MathText
-                            text={q.question_text}
-                            className="font-medium mb-2 dark:text-white block"
-                          />
+                          <div className="flex items-start gap-2 mb-2">
+                            <span className="font-bold text-[#1B2A4A] dark:text-white shrink-0 tabular-nums">
+                              {startIndex + idx + 1}.
+                            </span>
+                            <MathText
+                              text={q.question_text}
+                              className="font-medium dark:text-white block flex-1"
+                            />
+                          </div>
                           {q.image_url && (
                             <div className="mb-3">
                               <Image

@@ -101,7 +101,7 @@ export function CountUp({ target, suffix = '', className = '' }: { target: numbe
     return () => { cancelled = true }
   }, [started, target])
 
-  return <span ref={ref} className={className}>{count}{suffix}</span>
+  return <span ref={ref} className={className}>{count.toLocaleString()}{suffix}</span>
 }
 
 // 타이핑 애니메이션: 한 글자씩 제자리에서 나타남 → 3번 깜빡임 → 다시 반복

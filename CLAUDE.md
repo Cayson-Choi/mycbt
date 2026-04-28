@@ -105,7 +105,7 @@
   InactivityGuard.tsx   - 10분 무활동 자동 로그아웃 (1분 전 경고)
   ProgressBar.tsx       - 유튜브 스타일 상단 프로그레스 바 + useProgress hook
   CertifiedBanner.tsx   - 인증 배너
-  PremiumSection.tsx    - 프리미엄 멤버십 안내
+  PremiumSection.tsx    - 프리미엄 멤버십 + 채용 연계 섹션 (분야 분포 차트 / 4단계 타임라인 / 핵심 지표 스트립)
   MathText.tsx          - 수학 표기 렌더 (KaTeX)
   QuestionSplitEditor.tsx - 문제 편집 분할 뷰 (lazy loaded)
   BulkUploadSplitEditor.tsx - 일괄 업로드 (lazy loaded)
@@ -401,6 +401,26 @@ python scripts/export-exam-to-docx.py --exam-id 290 --with-explanation  # 해설
 - 5과목 (산업재해 예방·인간공학·기계기구·전기화학·건설안전), 각 20문제
 - 회차 매핑: 3월=1회 / 4-5월=2회 / 8월=3회, 2020-06=2회(통합)
 - 등급: 2018 이전=FREE / 2019-2020=BRONZE
+
+## 랜딩 페이지 디자인 시스템
+
+### CAYSON이 다른 이유 — 6탭 그래픽
+- 위치: `components/LandingContent.tsx` `WhyCaysonSection`
+- 자산: `public/tab-graphics/{wonbon,ai,jeuksi,cbt,yakjeom,realtime}.png` (6장)
+- next/image `fill` + `sizes="(max-width: 1024px) 100vw, 50vw"` 로 렌더 — 자동 webp/avif 최적화
+- 탭 스타일은 단일 royal-navy + 골드 액센트로 통일 (`tabStyle` 객체)
+
+### 채용 연계 섹션 (PremiumSection 하단)
+- 에디토리얼 헤더 + 12-grid (제목 7 / 설명 5)
+- 핵심 지표 스트립 3개 (`grid-cols-3 divide-x`) — 연계 기업 350+, 연 매칭 1,200+, 평균 입사 43일
+  - `CountUp` 사용, `toLocaleString()`로 천 단위 콤마 표기
+- 좌: 4단계 타임라인 (32px 원형 번호 + 1px 세로 연결선)
+- 우: 6분야 가로 막대 차트 (전기설비·시공 90 = 100% 기준 비율 표시)
+- 단일 앰버 액센트, 외부 기업명·이모지·픽토그램 미사용 (의도적 절제)
+
+### 다크 카드 질감 (Section 5 — 고객센터/오류 신고)
+- `feTurbulence` 그레인 SVG 필터 + 상단 골드 셰엔(linear-gradient line) + 콘텐츠 z-10 분리
+- 배경: 도트 콘스텔레이션(2-stack radial-gradient)
 
 ## 문제 검토 현황 (2026-04-06)
 - 전체 2,100문제 AI 검토 완료 → `data/전기기사_문제검토_오류목록.xlsx`
