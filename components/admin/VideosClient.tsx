@@ -4,6 +4,16 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
+type TierKey = "FREE" | "BRONZE" | "SILVER" | "GOLD" | "PREMIUM"
+
+const TIERS: { value: TierKey; label: string }[] = [
+  { value: "FREE", label: "무료" },
+  { value: "BRONZE", label: "브론즈" },
+  { value: "SILVER", label: "실버" },
+  { value: "GOLD", label: "골드" },
+  { value: "PREMIUM", label: "프리미엄" },
+]
+
 type Video = {
   id: number
   title: string
@@ -16,6 +26,7 @@ type Video = {
   price: number | null
   sortOrder: number
   isActive: boolean
+  minTier: string
 }
 
 type Category = { id: number; name: string; grade: string }
@@ -31,6 +42,7 @@ type FormState = {
   price: string
   sortOrder: string
   isActive: boolean
+  minTier: TierKey
 }
 
 const EMPTY_FORM: FormState = {
@@ -43,6 +55,7 @@ const EMPTY_FORM: FormState = {
   price: "",
   sortOrder: "0",
   isActive: true,
+  minTier: "FREE",
 }
 
 export default function VideosClient({
@@ -83,6 +96,7 @@ export default function VideosClient({
       price: v.price != null ? String(v.price) : "",
       sortOrder: String(v.sortOrder),
       isActive: v.isActive,
+      minTier: (TIERS.find((t) => t.value === v.minTier)?.value) ?? "FREE",
     })
     setThumbTab("url")
     setShowForm(true)
@@ -123,6 +137,7 @@ export default function VideosClient({
         price: form.price ? parseInt(form.price, 10) : null,
         sortOrder: form.sortOrder ? parseInt(form.sortOrder, 10) : 0,
         isActive: form.isActive,
+        minTier: form.minTier,
       }
       const url = form.id ? `/api/admin/videos/${form.id}` : "/api/admin/videos"
       const method = form.id ? "PUT" : "POST"
@@ -150,6 +165,7 @@ export default function VideosClient({
         price: saved.price,
         sortOrder: saved.sortOrder,
         isActive: saved.isActive,
+        minTier: saved.minTier,
       }
       setVideos((prev) => {
         if (form.id) return prev.map((v) => (v.id === form.id ? merged : v))
@@ -285,6 +301,18 @@ export default function VideosClient({
                     className="mt-2 max-h-32 rounded border dark:border-gray-600"
                   />
                 )}
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">등급 (카드 라벨)</label>
+                <select
+                  value={form.minTier}
+                  onChange={(e) => setForm((p) => ({ ...p, minTier: e.target.value as TierKey }))}
+                  className="w-full px-3 py-2 border dark:border-gray-600 rounded bg-white dark:bg-gray-700 dark:text-white"
+                >
+                  {TIERS.map((t) => (
+                    <option key={t.value} value={t.value}>{t.label}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">카테고리</label>

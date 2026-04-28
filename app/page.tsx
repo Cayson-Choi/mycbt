@@ -42,6 +42,7 @@ export default async function Home() {
     durationText: v.durationText,
     ratingText: v.ratingText,
     price: v.price,
+    minTier: v.minTier,
   }))
 
   return (

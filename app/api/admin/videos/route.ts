@@ -42,6 +42,7 @@ export async function POST(request: Request) {
       price,
       sortOrder,
       isActive,
+      minTier,
     } = body
 
     if (!title || !videoUrl) {
@@ -59,6 +60,7 @@ export async function POST(request: Request) {
         price: price ?? null,
         sortOrder: sortOrder ?? 0,
         isActive: isActive ?? true,
+        minTier: minTier || "FREE",
       },
     })
 

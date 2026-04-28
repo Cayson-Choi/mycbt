@@ -15,6 +15,25 @@ export type LandingVideo = {
   durationText: string | null
   ratingText: string | null
   price: number | null
+  minTier: string
+}
+
+const TIER_LABEL: Record<string, string> = {
+  FREE: '무료',
+  BRONZE: '브론즈',
+  SILVER: '실버',
+  GOLD: '골드',
+  PREMIUM: '프리미엄',
+  ADMIN: '관리자',
+}
+
+const TIER_COLOR: Record<string, string> = {
+  FREE: 'text-emerald-600 dark:text-emerald-400',
+  BRONZE: 'text-amber-700 dark:text-amber-500',
+  SILVER: 'text-slate-500 dark:text-slate-300',
+  GOLD: 'text-yellow-600 dark:text-yellow-400',
+  PREMIUM: 'text-violet-600 dark:text-violet-400',
+  ADMIN: 'text-rose-600 dark:text-rose-400',
 }
 
 type FallbackLecture = { title: string; stars: string; hours: string }
@@ -51,12 +70,12 @@ function VideoYBanner({ subtitle, title, bg }: { subtitle: string; title: string
           CAYSON
         </span>
         <div className="relative z-10">
-          <p className="text-[10px] sm:text-[11px] font-semibold text-[#C9A84C]/70 tracking-[0.22em] uppercase mb-1">{subtitle}</p>
-          <h3 className="text-sm sm:text-base font-bold text-white leading-tight">
+          <p className="text-xs sm:text-sm font-semibold text-[#C9A84C]/80 tracking-[0.25em] uppercase mb-1.5">{subtitle}</p>
+          <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">
             {title}<br />동영상 강의
           </h3>
         </div>
-        <p className="relative z-10 text-[10px] sm:text-[11px] text-[#C9A84C]/80 font-medium mt-2">
+        <p className="relative z-10 text-xs sm:text-sm text-[#C9A84C]/90 font-semibold mt-2">
           더 보러 가기 <span className="ml-0.5 inline-block transition-transform group-hover:translate-x-1">&rsaquo;</span>
         </p>
       </div>
@@ -85,11 +104,13 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
             </span>
           </span>
         </div>
-        <div className="p-2 sm:p-2.5">
-          <h4 className="text-[11px] sm:text-xs font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-1 mb-0.5">{v.title}</h4>
-          <p className="text-[9px] sm:text-[10px] text-[#C9A84C]/60 mb-1 tracking-wider">CAYSON</p>
+        <div className="p-3 sm:p-4">
+          <h4 className="text-base sm:text-lg font-bold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-2">{v.title}</h4>
+          <p className="text-sm sm:text-base font-semibold text-[#1B2A4A]/80 dark:text-gray-300 mb-2">
+            {v.price && v.price > 0 ? `${v.price.toLocaleString()}원` : '무료'}
+          </p>
           {(v.ratingText || v.durationText) && (
-            <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-[#1B2A4A]/50 dark:text-gray-500">
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-[#1B2A4A]/70 dark:text-gray-400">
               {v.ratingText && (
                 <>
                   <span className="text-[#C9A84C]">&#9733;</span>
@@ -100,8 +121,8 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
               {v.durationText && <span>{v.durationText}</span>}
             </div>
           )}
-          <p className="text-[11px] sm:text-xs font-bold text-[#1B2A4A] dark:text-white mt-1 text-right">
-            {v.price && v.price > 0 ? `${v.price.toLocaleString()}원` : '무료'}
+          <p className={`text-lg sm:text-xl font-extrabold mt-2 text-right tracking-wide ${TIER_COLOR[v.minTier] ?? 'text-gray-500'}`}>
+            {TIER_LABEL[v.minTier] ?? v.minTier}
           </p>
         </div>
       </button>
@@ -117,16 +138,16 @@ function VideoPreparingCard({ lec, idx }: { lec: FallbackLecture; idx: number })
           <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#C9A84C]/40 dark:text-gray-600 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
           <span className="text-[9px] sm:text-[10px] text-[#C9A84C]/50 dark:text-gray-500 font-medium tracking-wider">준비중</span>
         </div>
-        <div className="p-2 sm:p-2.5">
-          <h4 className="text-[11px] sm:text-xs font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-1 mb-0.5">{lec.title}</h4>
-          <p className="text-[9px] sm:text-[10px] text-[#C9A84C]/60 mb-1 tracking-wider">CAYSON</p>
-          <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-[#1B2A4A]/50 dark:text-gray-500">
+        <div className="p-3 sm:p-4">
+          <h4 className="text-base sm:text-lg font-bold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-2">{lec.title}</h4>
+          <p className="text-sm sm:text-base font-semibold text-[#1B2A4A]/80 dark:text-gray-300 mb-2">무료</p>
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm text-[#1B2A4A]/70 dark:text-gray-400">
             <span className="text-[#C9A84C]">&#9733;</span>
             <span>{lec.stars}</span>
             <span className="text-[#C9A84C]/30">|</span>
             <span>{lec.hours}</span>
           </div>
-          <p className="text-[11px] sm:text-xs font-bold text-[#1B2A4A] dark:text-white mt-1 text-right">무료</p>
+          <p className="text-lg sm:text-xl font-extrabold mt-2 text-right tracking-wide text-emerald-600 dark:text-emerald-400">무료</p>
         </div>
       </div>
     </Reveal>

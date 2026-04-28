@@ -39,6 +39,7 @@ export default async function AdminVideosPage() {
     price: v.price,
     sortOrder: v.sortOrder,
     isActive: v.isActive,
+    minTier: v.minTier,
   }))
 
   return <VideosClient initialVideos={initialVideos} categories={categories} />

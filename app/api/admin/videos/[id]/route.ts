@@ -30,7 +30,7 @@ export async function PUT(
     const data: Record<string, unknown> = {}
     const fields = [
       "title", "videoUrl", "thumbnailUrl", "categoryId",
-      "durationText", "ratingText", "price", "sortOrder", "isActive",
+      "durationText", "ratingText", "price", "sortOrder", "isActive", "minTier",
     ] as const
     for (const k of fields) {
       if (k in body) data[k] = body[k]
