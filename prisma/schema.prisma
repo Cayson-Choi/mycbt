@@ -34,6 +34,7 @@ model User {
   payments          Payment[]
   purchasedContents PurchasedContent[]
   wrongNoteItems    WrongNoteItem[]
+  videoMemos        VideoMemo[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -142,11 +143,28 @@ model Video {
   isActive     Boolean  @default(true) @map("is_active")
 
   category ExamCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  memos    VideoMemo[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("videos")
+}
+
+model VideoMemo {
+  id        Int      @id @default(autoincrement())
+  userId    String   @map("user_id")
+  videoId   Int      @map("video_id")
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, videoId])
+  @@index([userId, updatedAt(sort: Desc)])
+  @@map("video_memos")
 }
 
 // ─── 시험 카테고리 + 시험 ───

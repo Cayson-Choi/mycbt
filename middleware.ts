@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 2-1. 공개 경로 접두사 → 즉시 통과
-  if (pathname.startsWith("/grade/") || pathname.startsWith("/category/") || pathname.startsWith("/forgot-password") || pathname.startsWith("/reset-password") || pathname.startsWith("/find-email")) {
+  if (pathname.startsWith("/grade/") || pathname.startsWith("/category/") || pathname.startsWith("/videos/") || pathname.startsWith("/forgot-password") || pathname.startsWith("/reset-password") || pathname.startsWith("/find-email")) {
     return NextResponse.next()
   }
 

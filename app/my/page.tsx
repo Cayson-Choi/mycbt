@@ -223,6 +223,12 @@ export default async function MyPage() {
           >
             오답노트
           </Link>
+          <Link
+            href="/my/memos"
+            className="flex-1 px-3 py-2.5 bg-amber-500 dark:bg-amber-500 text-white text-center rounded-lg hover:bg-amber-600 dark:hover:bg-amber-600 text-sm"
+          >
+            📝 학습 메모
+          </Link>
         </div>
       </div>
     </div>

@@ -61,10 +61,10 @@ const ELEVATOR_FALLBACK: FallbackLecture[] = [
   { title: '에스컬레이터 점검 가이드', stars: '4.7(19)', hours: '12시간' },
 ]
 
-function VideoYBanner({ subtitle, title, bg }: { subtitle: string; title: string; bg: string }) {
+function VideoYBanner({ subtitle, title, bg, href }: { subtitle: string; title: string; bg: string; href: string }) {
   return (
     <Reveal>
-      <div className={`rounded-xl overflow-hidden h-full ${bg} p-4 sm:p-5 flex flex-col justify-between min-h-[140px] sm:min-h-[170px] relative cursor-pointer group border border-[#C9A84C]/20`}>
+      <Link href={href} className={`block rounded-xl overflow-hidden h-full ${bg} p-4 sm:p-5 flex flex-col justify-between min-h-[110px] sm:min-h-[280px] relative cursor-pointer group border border-[#C9A84C]/20 hover:shadow-xl hover:shadow-[#C9A84C]/20 hover:-translate-y-0.5 transition-all`}>
         <span
           className="absolute top-1/2 left-1/2 text-[60px] sm:text-[80px] font-black text-[#C9A84C]/10 select-none leading-none tracking-tight whitespace-nowrap transition-transform duration-500 group-hover:scale-110"
           style={{ transform: 'translate(-50%, -50%) rotate(-25deg)' }}
@@ -80,7 +80,7 @@ function VideoYBanner({ subtitle, title, bg }: { subtitle: string; title: string
         <p className="relative z-10 text-xs sm:text-sm text-[#C9A84C]/90 font-semibold mt-2">
           더 보러 가기 <span className="ml-0.5 inline-block transition-transform group-hover:translate-x-1">&rsaquo;</span>
         </p>
-      </div>
+      </Link>
     </Reveal>
   )
 }
@@ -91,7 +91,7 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
       <button
         type="button"
         onClick={() => onPlay(v)}
-        className="text-left w-full group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col"
+        className="text-left w-full group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full min-h-[260px] sm:min-h-[280px] bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col"
       >
         <div className="flex-[2] min-h-0 bg-[#F5F0E6] dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
           {v.thumbnailUrl ? (
@@ -137,7 +137,7 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
 function VideoPreparingCard({ lec, idx }: { lec: FallbackLecture; idx: number }) {
   return (
     <Reveal delay={(idx + 1) * 80}>
-      <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col">
+      <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full min-h-[260px] sm:min-h-[280px] bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col">
         <div className="flex-[2] min-h-0 bg-[#F5F0E6] dark:bg-gray-800 flex flex-col items-center justify-center">
           <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#C9A84C]/40 dark:text-gray-600 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
           <span className="text-[9px] sm:text-[10px] text-[#C9A84C]/50 dark:text-gray-500 font-medium tracking-wider">준비중</span>
@@ -860,7 +860,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
 
           {/* 전기기사 그룹 */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 mb-5 sm:mb-6">
-            <VideoYBanner subtitle="Engineer" title="전기기사" bg="bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A]" />
+            <div className="col-span-2 sm:col-span-1"><VideoYBanner subtitle="Engineer" title="전기기사" bg="bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A]" href="/videos/engineer" /></div>
             {engineerFeatured.length > 0
               ? engineerFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={handlePlay} />)
               : ENGINEER_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
@@ -868,7 +868,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
 
           {/* 전기기능사 그룹 */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 mb-5 sm:mb-6">
-            <VideoYBanner subtitle="Technician" title="전기기능사" bg="bg-gradient-to-br from-[#0d3d33] to-[#1f5d4f]" />
+            <div className="col-span-2 sm:col-span-1"><VideoYBanner subtitle="Technician" title="전기기능사" bg="bg-gradient-to-br from-[#0d3d33] to-[#1f5d4f]" href="/videos/technician" /></div>
             {technicianFeatured.length > 0
               ? technicianFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={handlePlay} />)
               : TECHNICIAN_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
@@ -876,7 +876,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
 
           {/* 승강기기능사 그룹 */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
-            <VideoYBanner subtitle="Elevator" title="승강기기능사" bg="bg-gradient-to-br from-[#3d2d5c] to-[#5a4485]" />
+            <div className="col-span-2 sm:col-span-1"><VideoYBanner subtitle="Elevator" title="승강기기능사" bg="bg-gradient-to-br from-[#3d2d5c] to-[#5a4485]" href="/videos/elevator" /></div>
             {elevatorFeatured.length > 0
               ? elevatorFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={handlePlay} />)
               : ELEVATOR_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
@@ -1025,8 +1025,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
       <VideoPlayerModal
         open={!!playing}
         onClose={() => setPlaying(null)}
-        videoUrl={playing?.videoUrl ?? ''}
-        title={playing?.title}
+        video={playing}
       />
 
       {locked && (
