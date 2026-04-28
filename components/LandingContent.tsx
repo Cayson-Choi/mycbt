@@ -874,9 +874,9 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
             </Reveal>
 
             {/* 우측: 2개 카드 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 w-full">
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 flex-1 w-full">
               <Reveal delay={100}>
-                <div className="relative overflow-hidden bg-white/[0.04] backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors" style={{
+                <div className="relative overflow-hidden bg-white/[0.04] backdrop-blur-sm rounded-xl p-4 sm:p-7 h-full flex flex-col border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors" style={{
                   boxShadow: 'inset 0 1px 0 rgba(201,168,76,0.15), 0 8px 24px -12px rgba(0,0,0,0.4)'
                 }}>
                   {/* ── 질감 레이어 ── */}
@@ -898,12 +898,12 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
                   <div className="relative z-10 flex flex-col h-full">
                     <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider">CAYSON</h4>
                     <h4 className="text-white font-bold text-base sm:text-lg mb-4">고객센터</h4>
-                    <div className="text-sm text-white/60 space-y-1.5 mb-auto">
+                    <div className="text-xs sm:text-sm text-white/60 space-y-1.5 mb-auto">
                       <p>평일: 10:00~18:00</p>
                       <p>점심시간: 12:30~13:30</p>
                       <p className="text-[#C9A84C]/80">주말, 공휴일 휴무</p>
                     </div>
-                    <a href="https://open.kakao.com/o/smarimpi" target="_blank" rel="noopener noreferrer" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider bg-[#1B2A4A]/30">
+                    <a href="https://open.kakao.com/o/smarimpi" target="_blank" rel="noopener noreferrer" className="mt-4 sm:mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2 sm:py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-xs sm:text-sm tracking-wider bg-[#1B2A4A]/30">
                       카카오톡 문의하기
                     </a>
                   </div>
@@ -911,7 +911,7 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
               </Reveal>
 
               <Reveal delay={200}>
-                <div className="relative overflow-hidden bg-white/[0.04] backdrop-blur-sm rounded-xl p-6 sm:p-7 h-full flex flex-col border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors" style={{
+                <div className="relative overflow-hidden bg-white/[0.04] backdrop-blur-sm rounded-xl p-4 sm:p-7 h-full flex flex-col border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors" style={{
                   boxShadow: 'inset 0 1px 0 rgba(201,168,76,0.15), 0 8px 24px -12px rgba(0,0,0,0.4)'
                 }}>
                   {/* ── 질감 레이어 ── */}
@@ -933,12 +933,12 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
                   <div className="relative z-10 flex flex-col h-full">
                     <h4 className="text-[#C9A84C] font-semibold text-base sm:text-lg mb-1 tracking-wider">오류 신고</h4>
                     <h4 className="text-white font-bold text-base sm:text-lg mb-4">센터</h4>
-                    <div className="text-sm text-white/60 space-y-1.5 mb-auto">
+                    <div className="text-xs sm:text-sm text-white/60 space-y-1.5 mb-auto">
                       <p>24시간 접수 가능</p>
                       <p>확인 후 즉시 수정</p>
                       <p className="text-[#C9A84C]/80">규정 개정 실시간 반영</p>
                     </div>
-                    <a href="mailto:cayson0127@gmail.com?subject=[오류신고]%20문제%20오류%20신고합니다" className="mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-sm tracking-wider bg-[#1B2A4A]/30">
+                    <a href="mailto:cayson0127@gmail.com?subject=[오류신고]%20문제%20오류%20신고합니다" className="mt-4 sm:mt-6 block text-center border border-[#C9A84C]/30 text-[#C9A84C] font-semibold py-2 sm:py-2.5 rounded-lg hover:bg-[#C9A84C]/10 transition-colors text-xs sm:text-sm tracking-wider bg-[#1B2A4A]/30">
                       오류 신고하기
                     </a>
                   </div>
