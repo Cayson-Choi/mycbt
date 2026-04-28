@@ -177,13 +177,13 @@ function SectionHeading({ label, title, subtitle, center = false }: { label: str
   )
 }
 
-/* ─── 등급 데이터 (engineerlab 이벤트 카드 스타일) ─── */
+/* ─── 등급 데이터 — Premium dark gradient + CAYSON 워터마크 ─── */
 const grades = [
   {
     id: 'basic', label: '진단평가', count: 1,
     badge: '입문 과정',
     cta: '자격증 입문자를 위한\n기초 진단평가',
-    cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-teal-500',
+    cardBg: 'bg-gradient-to-br from-[#0a3d4d] to-[#155571]', badgeBg: 'bg-teal-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -203,7 +203,7 @@ const grades = [
     id: 'technician', label: '기능사', count: 4,
     badge: '4개 자격증',
     cta: '전기기능사 외 3개\n필기/실기 준비',
-    cardBg: 'bg-[#e8f5e9]', badgeBg: 'bg-emerald-500',
+    cardBg: 'bg-gradient-to-br from-[#0d3d33] to-[#1f5d4f]', badgeBg: 'bg-emerald-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -223,7 +223,7 @@ const grades = [
     id: 'industrial', label: '산업기사', count: 6,
     badge: '6개 자격증',
     cta: '전기산업기사 외 5개\n현장 전문가 도약',
-    cardBg: 'bg-[#f3e5f5]', badgeBg: 'bg-violet-500',
+    cardBg: 'bg-gradient-to-br from-[#3d2d5c] to-[#5a4485]', badgeBg: 'bg-violet-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -244,7 +244,7 @@ const grades = [
     id: 'engineer', label: '기사', count: 4,
     badge: '4개 자격증',
     cta: '전기기사 외 3개\n체계적 합격 전략',
-    cardBg: 'bg-[#e3f2fd]', badgeBg: 'bg-blue-500',
+    cardBg: 'bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A]', badgeBg: 'bg-blue-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -268,7 +268,7 @@ const grades = [
     id: 'master', label: '기능장', count: 1,
     badge: '1개 자격증',
     cta: '전기기능장\n최고 등급에 도전',
-    cardBg: 'bg-[#fff3e0]', badgeBg: 'bg-amber-500',
+    cardBg: 'bg-gradient-to-br from-[#5c3d1a] to-[#8b5e2e]', badgeBg: 'bg-amber-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -291,7 +291,7 @@ const grades = [
     id: 'public', label: '공기업', count: 0,
     badge: '준비중',
     cta: '한국전력공사 등\n공기업 채용 대비',
-    cardBg: 'bg-[#e0f7fa]', badgeBg: 'bg-gray-400',
+    cardBg: 'bg-gradient-to-br from-[#2d3548] to-[#3f4860]', badgeBg: 'bg-gray-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -313,7 +313,7 @@ const grades = [
     id: 'ncs', label: '과정평가형', count: 0,
     badge: '준비중',
     cta: 'NCS 과정평가형\n교육훈련 자격 취득',
-    cardBg: 'bg-[#fce4ec]', badgeBg: 'bg-gray-400',
+    cardBg: 'bg-gradient-to-br from-[#5c1f3d] to-[#7d2f55]', badgeBg: 'bg-gray-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -335,7 +335,7 @@ const grades = [
     id: 'etc', label: '공식시험', count: 1,
     badge: '실전 모의고사',
     cta: '공식시험\n실전 환경 그대로',
-    cardBg: 'bg-[#e8eaf6]', badgeBg: 'bg-indigo-500',
+    cardBg: 'bg-gradient-to-br from-[#1f2d5c] to-[#3d4985]', badgeBg: 'bg-indigo-500',
     icon: (
       <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
         <defs>
@@ -699,39 +699,45 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
                 {realCount > 0 ? (
                   <Link
                     href={`/grade/${g.id}`}
-                    className={`group block relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-5 h-full min-h-[120px] sm:min-h-[150px] transition-all duration-300 hover:shadow-lg hover:shadow-[#C9A84C]/15 hover:-translate-y-1 cursor-pointer border border-[#C9A84C]/15 dark:border-gray-700`}
+                    className={`group block relative overflow-hidden rounded-xl ${g.cardBg} p-4 sm:p-5 h-full min-h-[140px] sm:min-h-[170px] transition-all duration-300 hover:shadow-xl hover:shadow-[#C9A84C]/20 hover:-translate-y-1 cursor-pointer border border-white/10`}
                   >
+                    {/* 배경 CAYSON 사선 워터마크 */}
+                    <span
+                      className="absolute top-1/2 left-1/2 text-[44px] sm:text-[64px] font-black text-white/[0.06] select-none leading-none tracking-tight whitespace-nowrap transition-transform duration-500 group-hover:scale-110"
+                      style={{ transform: 'translate(-50%, -50%) rotate(-25deg)' }}
+                    >
+                      CAYSON
+                    </span>
                     {/* 좌상단: 제목 */}
-                    <h3 className="text-base sm:text-xl font-bold text-[#1B2A4A] dark:text-white leading-tight">
+                    <h3 className="relative z-10 text-base sm:text-xl font-bold text-white leading-tight">
                       {g.label}
                     </h3>
                     {/* 우상단: 뱃지 */}
-                    <div className={`absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
+                    <div className={`absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider z-10`}>
                       {g.badge}
                     </div>
                     {/* 좌하단: CTA 설명 */}
-                    <p className="absolute bottom-2.5 left-4 sm:bottom-3.5 sm:left-5 text-[10px] sm:text-xs text-[#1B2A4A]/60 dark:text-gray-400 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                    <p className="absolute bottom-2.5 left-4 sm:bottom-3.5 sm:left-5 text-[10px] sm:text-xs text-white/70 font-medium leading-snug whitespace-pre-line max-w-[80%] z-10">
                       {g.cta} <span className="inline-block ml-0.5 transition-transform group-hover:translate-x-0.5 text-[#C9A84C]">&rarr;</span>
                     </p>
-                    {/* 우하단: 일러스트 아이콘 */}
-                    <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] transition-transform duration-300 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                      {g.icon}
-                    </div>
                   </Link>
                 ) : (
-                  <div className={`relative overflow-hidden rounded-xl ${g.cardBg} dark:bg-gray-800 p-4 sm:p-5 h-full min-h-[120px] sm:min-h-[150px] opacity-50 border border-[#C9A84C]/10 dark:border-gray-700`}>
-                    <h3 className="text-base sm:text-xl font-bold text-gray-500 dark:text-gray-400 leading-tight">
+                  <div className={`relative overflow-hidden rounded-xl ${g.cardBg} p-4 sm:p-5 h-full min-h-[140px] sm:min-h-[170px] opacity-50 border border-white/5`}>
+                    <span
+                      className="absolute top-1/2 left-1/2 text-[44px] sm:text-[64px] font-black text-white/[0.05] select-none leading-none tracking-tight whitespace-nowrap"
+                      style={{ transform: 'translate(-50%, -50%) rotate(-25deg)' }}
+                    >
+                      CAYSON
+                    </span>
+                    <h3 className="relative z-10 text-base sm:text-xl font-bold text-white/80 leading-tight">
                       {g.label}
                     </h3>
-                    <div className={`absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider`}>
+                    <div className={`absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 ${g.badgeBg} text-white text-[8px] sm:text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full tracking-wider z-10`}>
                       {g.badge}
                     </div>
-                    <p className="absolute bottom-2.5 left-4 sm:bottom-3.5 sm:left-5 text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium leading-snug whitespace-pre-line max-w-[60%]">
+                    <p className="absolute bottom-2.5 left-4 sm:bottom-3.5 sm:left-5 text-[10px] sm:text-xs text-white/50 font-medium leading-snug whitespace-pre-line max-w-[80%] z-10">
                       {g.cta}
                     </p>
-                    <div className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] opacity-30">
-                      {g.icon}
-                    </div>
                   </div>
                 )}
               </Reveal>
