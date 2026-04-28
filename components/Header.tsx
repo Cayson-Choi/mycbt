@@ -24,7 +24,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-14">
           {/* 로고 */}
           <Link href="/" className="flex items-center gap-1.5">
-            <Image src="/logo.png" alt="CAYSON" width={32} height={32} className="rounded-lg" />
+            <Image src="/logo_new.png" alt="CAYSON" width={32} height={32} className="rounded-full" />
             <span className="text-xl font-black tracking-tight animate-rainbow-text">CAYSON</span>
           </Link>
 

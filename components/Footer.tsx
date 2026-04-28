@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <Image src="/logo.png" alt="CAYSON" width={32} height={32} className="rounded-lg" />
+              <Image src="/logo_new.png" alt="CAYSON" width={32} height={32} className="rounded-full" />
               <span className="text-xl text-white font-black">CAYSON</span>
             </div>
           </div>
