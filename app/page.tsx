@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma"
 export const revalidate = 10
 
 export default async function Home() {
-  const [gradeCountsRaw, hiddenSetting] = await Promise.all([
+  const [gradeCountsRaw, hiddenSetting, videosRaw] = await Promise.all([
     prisma.examCategory.findMany({
       where: { isActive: true },
       select: {
@@ -17,6 +17,11 @@ export default async function Home() {
       },
     }),
     prisma.siteSetting.findUnique({ where: { key: 'landing_hidden_cards' } }),
+    prisma.video.findMany({
+      where: { isActive: true },
+      include: { category: { select: { id: true, name: true } } },
+      orderBy: [{ categoryId: 'asc' }, { sortOrder: 'asc' }, { id: 'desc' }],
+    }),
   ])
 
   const countByGrade: Record<string, number> = {}
@@ -27,6 +32,18 @@ export default async function Home() {
 
   const initialHiddenCards: string[] = hiddenSetting ? JSON.parse(hiddenSetting.value) : []
 
+  const videos = videosRaw.map((v) => ({
+    id: v.id,
+    title: v.title,
+    videoUrl: v.videoUrl,
+    thumbnailUrl: v.thumbnailUrl,
+    categoryId: v.categoryId,
+    categoryName: v.category?.name ?? null,
+    durationText: v.durationText,
+    ratingText: v.ratingText,
+    price: v.price,
+  }))
+
   return (
     <div>
       <ProfileGuard />
@@ -35,7 +52,7 @@ export default async function Home() {
         <HeroSection />
       </section>
       <div className="h-px bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
-      <LandingContent gradeCounts={countByGrade} initialHiddenCards={initialHiddenCards} />
+      <LandingContent gradeCounts={countByGrade} initialHiddenCards={initialHiddenCards} videos={videos} />
     </div>
   )
 }

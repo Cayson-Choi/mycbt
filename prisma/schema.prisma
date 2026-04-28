@@ -135,8 +135,13 @@ model Video {
   minTier      UserTier @default(FREE) @map("min_tier")
   price        Int?
   examId       Int?     @map("exam_id")
+  categoryId   Int?     @map("category_id")
+  durationText String?  @map("duration_text")
+  ratingText   String?  @map("rating_text")
   sortOrder    Int      @default(0) @map("sort_order")
   isActive     Boolean  @default(true) @map("is_active")
+
+  category ExamCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -154,7 +159,8 @@ model ExamCategory {
   sortOrder   Int     @default(0) @map("sort_order")
   isActive    Boolean @default(true) @map("is_active")
 
-  exams Exam[]
+  exams  Exam[]
+  videos Video[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

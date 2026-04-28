@@ -146,6 +146,13 @@ export default async function AdminPage() {
             description="중간고사/기말고사 출제, 결과 조회"
             iconBg="bg-red-100 dark:bg-red-900/50"
           />
+          <AdminNavCard
+            href="/admin/videos"
+            icon="🎬"
+            title="동영상 관리"
+            description="강의 동영상 등록·노출 관리"
+            iconBg="bg-purple-100 dark:bg-purple-900/50"
+          />
         </div>
 
         {/* 통계 */}

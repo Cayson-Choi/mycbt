@@ -3,6 +3,132 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import PremiumSection from './PremiumSection'
+import VideoPlayerModal from './VideoPlayerModal'
+
+export type LandingVideo = {
+  id: number
+  title: string
+  videoUrl: string
+  thumbnailUrl: string | null
+  categoryId: number | null
+  categoryName: string | null
+  durationText: string | null
+  ratingText: string | null
+  price: number | null
+}
+
+type FallbackLecture = { title: string; stars: string; hours: string }
+
+const ENGINEER_FALLBACK: FallbackLecture[] = [
+  { title: '전기자기학 핵심 이론 완성', stars: '4.8(52)', hours: '32시간' },
+  { title: '전력공학 핵심 공식 마스터', stars: '4.7(29)', hours: '28시간' },
+  { title: '전기기기 구조와 원리 총정리', stars: '4.9(67)', hours: '26시간' },
+]
+
+const TECHNICIAN_FALLBACK: FallbackLecture[] = [
+  { title: '전기이론 기초부터 실전까지', stars: '4.7(38)', hours: '20시간' },
+  { title: '전기기기 핵심 구조 이해', stars: '4.8(45)', hours: '18시간' },
+  { title: '전기설비 시공 실무 정리', stars: '4.6(31)', hours: '16시간' },
+]
+
+const ELEVATOR_FALLBACK: FallbackLecture[] = [
+  { title: '엘리베이터 구조와 원리', stars: '4.7(33)', hours: '18시간' },
+  { title: '권상기·제어반 핵심 정리', stars: '4.8(27)', hours: '16시간' },
+  { title: '승강기 안전관리 실무', stars: '4.6(22)', hours: '14시간' },
+]
+
+function VideoYBanner({ subtitle, title, bg }: { subtitle: string; title: string; bg: string }) {
+  return (
+    <Reveal>
+      <div className={`rounded-xl overflow-hidden h-full ${bg} p-5 sm:p-6 flex flex-col justify-between min-h-[220px] sm:min-h-[280px] relative cursor-pointer group border border-[#C9A84C]/20`}>
+        <span
+          className="absolute top-1/2 left-1/2 text-[60px] sm:text-[80px] font-black text-[#C9A84C]/10 select-none leading-none tracking-tight whitespace-nowrap transition-transform duration-500 group-hover:scale-110"
+          style={{ transform: 'translate(-50%, -50%) rotate(-25deg)' }}
+        >
+          CAYSON
+        </span>
+        <div className="relative z-10">
+          <p className="text-[10px] sm:text-xs font-semibold text-[#C9A84C]/70 tracking-[0.25em] uppercase mb-1">{subtitle}</p>
+          <h3 className="text-base sm:text-xl font-bold text-white leading-tight">
+            {title}<br />동영상 강의
+          </h3>
+        </div>
+        <p className="relative z-10 text-xs sm:text-sm text-[#C9A84C]/80 font-medium mt-4">
+          더 보러 가기 <span className="ml-0.5 inline-block transition-transform group-hover:translate-x-1">&rsaquo;</span>
+        </p>
+      </div>
+    </Reveal>
+  )
+}
+
+function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onPlay: (v: LandingVideo) => void }) {
+  return (
+    <Reveal delay={(idx + 1) * 80}>
+      <button
+        type="button"
+        onClick={() => onPlay(v)}
+        className="text-left w-full group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1"
+      >
+        <div className="aspect-[4/3] bg-[#F5F0E6] dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
+          {v.thumbnailUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={v.thumbnailUrl} alt={v.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+          ) : (
+            <svg className="w-8 h-8 sm:w-10 sm:h-10 text-[#C9A84C]/40 dark:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          )}
+          <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/30">
+            <span className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" fill="#1B2A4A" className="w-5 h-5 sm:w-6 sm:h-6 ml-0.5"><path d="M8 5v14l11-7z" /></svg>
+            </span>
+          </span>
+        </div>
+        <div className="p-3 sm:p-4">
+          <h4 className="text-xs sm:text-sm font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1">{v.title}</h4>
+          <p className="text-[10px] sm:text-xs text-[#C9A84C]/60 mb-2 tracking-wider">CAYSON</p>
+          {(v.ratingText || v.durationText) && (
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#1B2A4A]/50 dark:text-gray-500">
+              {v.ratingText && (
+                <>
+                  <span className="text-[#C9A84C]">&#9733;</span>
+                  <span>{v.ratingText}</span>
+                </>
+              )}
+              {v.ratingText && v.durationText && <span className="text-[#C9A84C]/30">|</span>}
+              {v.durationText && <span>{v.durationText}</span>}
+            </div>
+          )}
+          <p className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white mt-2 text-right">
+            {v.price && v.price > 0 ? `${v.price.toLocaleString()}원` : '무료'}
+          </p>
+        </div>
+      </button>
+    </Reveal>
+  )
+}
+
+function VideoPreparingCard({ lec, idx }: { lec: FallbackLecture; idx: number }) {
+  return (
+    <Reveal delay={(idx + 1) * 80}>
+      <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1">
+        <div className="aspect-[4/3] bg-[#F5F0E6] dark:bg-gray-800 flex flex-col items-center justify-center">
+          <svg className="w-8 h-8 sm:w-10 sm:h-10 text-[#C9A84C]/40 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <span className="text-[10px] sm:text-xs text-[#C9A84C]/50 dark:text-gray-500 font-medium tracking-wider">준비중</span>
+        </div>
+        <div className="p-3 sm:p-4">
+          <h4 className="text-xs sm:text-sm font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1">{lec.title}</h4>
+          <p className="text-[10px] sm:text-xs text-[#C9A84C]/60 mb-2 tracking-wider">CAYSON</p>
+          <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#1B2A4A]/50 dark:text-gray-500">
+            <span className="text-[#C9A84C]">&#9733;</span>
+            <span>{lec.stars}</span>
+            <span className="text-[#C9A84C]/30">|</span>
+            <span>{lec.hours}</span>
+          </div>
+          <p className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white mt-2 text-right">무료</p>
+        </div>
+      </div>
+    </Reveal>
+  )
+}
 
 /* ─── 스크롤 등장 ─── */
 function Reveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -531,9 +657,20 @@ const gradeDbMap: Record<string, string> = {
   etc: '기타',
 }
 
-export default function LandingContent({ gradeCounts: initialGradeCounts, initialHiddenCards = [] }: { gradeCounts?: Record<string, number>; initialHiddenCards?: string[] }) {
+export default function LandingContent({ gradeCounts: initialGradeCounts, initialHiddenCards = [], videos = [] }: { gradeCounts?: Record<string, number>; initialHiddenCards?: string[]; videos?: LandingVideo[] }) {
   const [hiddenCards] = useState<string[]>(initialHiddenCards)
   const [gradeCounts] = useState<Record<string, number> | undefined>(initialGradeCounts)
+  const [playing, setPlaying] = useState<LandingVideo | null>(null)
+  // 카테고리별 비디오 분리 (이름 정확 매칭 — '전기기능사'와 '전기기사'가 부분 매칭 충돌하지 않도록 주의)
+  const engineerVideos = videos.filter((v) => {
+    const n = v.categoryName ?? ''
+    return n.includes('전기기사') && !n.includes('산업기사') && !n.includes('기능사')
+  })
+  const technicianVideos = videos.filter((v) => (v.categoryName ?? '').includes('전기기능사'))
+  const elevatorVideos = videos.filter((v) => (v.categoryName ?? '').includes('승강기'))
+  const engineerFeatured = engineerVideos.slice(0, 3)
+  const technicianFeatured = technicianVideos.slice(0, 3)
+  const elevatorFeatured = elevatorVideos.slice(0, 3)
   // 서버 데이터가 10초 캐시로 충분히 fresh하므로 클라이언트 추가 fetch 불필요
 
   return (
@@ -613,51 +750,28 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
             <SectionHeading label="Video Lectures" title="동영상 강의" />
           </Reveal>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            {/* Y 프로모 배너 카드 — 전기기사 */}
-            <Reveal>
-              <div className="rounded-xl overflow-hidden h-full bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A] p-5 sm:p-6 flex flex-col justify-between min-h-[220px] sm:min-h-[280px] relative cursor-pointer group border border-[#C9A84C]/20">
-                {/* 배경 큰 Y 글자 */}
-                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] sm:text-[220px] font-black text-[#C9A84C]/10 select-none leading-none transition-transform duration-500 group-hover:scale-110">
-                  Y
-                </span>
-                <div className="relative z-10">
-                  <p className="text-[10px] sm:text-xs font-semibold text-[#C9A84C]/70 tracking-[0.25em] uppercase mb-1">Engineer</p>
-                  <h3 className="text-base sm:text-xl font-bold text-white leading-tight">
-                    전기기사<br />동영상 강의
-                  </h3>
-                </div>
-                <p className="relative z-10 text-xs sm:text-sm text-[#C9A84C]/80 font-medium mt-4">
-                  더 보러 가기 <span className="ml-0.5 inline-block transition-transform group-hover:translate-x-1">&rsaquo;</span>
-                </p>
-              </div>
-            </Reveal>
+          {/* 전기기사 그룹 */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mb-5 sm:mb-6">
+            <VideoYBanner subtitle="Engineer" title="전기기사" bg="bg-gradient-to-br from-[#1B2A4A] to-[#2A3F6A]" />
+            {engineerFeatured.length > 0
+              ? engineerFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={setPlaying} />)
+              : ENGINEER_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
+          </div>
 
-            {[
-              { title: '전기자기학 핵심 이론 완성', stars: '4.8(52)', hours: '32시간' },
-              { title: '전력공학 핵심 공식 마스터', stars: '4.7(29)', hours: '28시간' },
-              { title: '전기기기 구조와 원리 총정리', stars: '4.9(67)', hours: '26시간' },
-            ].map((lec, i) => (
-              <Reveal key={lec.title} delay={(i + 1) * 80}>
-                <div className="group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1">
-                  <div className="aspect-[4/3] bg-[#F5F0E6] dark:bg-gray-800 flex flex-col items-center justify-center">
-                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-[#C9A84C]/40 dark:text-gray-600 mb-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                    <span className="text-[10px] sm:text-xs text-[#C9A84C]/50 dark:text-gray-500 font-medium tracking-wider">준비중</span>
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <h4 className="text-xs sm:text-sm font-semibold text-[#1B2A4A] dark:text-white leading-snug line-clamp-2 mb-1">{lec.title}</h4>
-                    <p className="text-[10px] sm:text-xs text-[#C9A84C]/60 mb-2 tracking-wider">CAYSON</p>
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#1B2A4A]/50 dark:text-gray-500">
-                      <span className="text-[#C9A84C]">&#9733;</span>
-                      <span>{lec.stars}</span>
-                      <span className="text-[#C9A84C]/30">|</span>
-                      <span>{lec.hours}</span>
-                    </div>
-                    <p className="text-xs sm:text-sm font-bold text-[#1B2A4A] dark:text-white mt-2 text-right">무료</p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
+          {/* 전기기능사 그룹 */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mb-5 sm:mb-6">
+            <VideoYBanner subtitle="Technician" title="전기기능사" bg="bg-gradient-to-br from-[#0d3d33] to-[#1f5d4f]" />
+            {technicianFeatured.length > 0
+              ? technicianFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={setPlaying} />)
+              : TECHNICIAN_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
+          </div>
+
+          {/* 승강기기능사 그룹 */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+            <VideoYBanner subtitle="Elevator" title="승강기기능사" bg="bg-gradient-to-br from-[#3d2d5c] to-[#5a4485]" />
+            {elevatorFeatured.length > 0
+              ? elevatorFeatured.map((v, i) => <VideoCardFromDb key={v.id} v={v} idx={i} onPlay={setPlaying} />)
+              : ELEVATOR_FALLBACK.map((lec, i) => <VideoPreparingCard key={lec.title} lec={lec} idx={i} />)}
           </div>
         </div>
       </section>
@@ -799,6 +913,13 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           </p>
         </div>
       </section>
+
+      <VideoPlayerModal
+        open={!!playing}
+        onClose={() => setPlaying(null)}
+        videoUrl={playing?.videoUrl ?? ''}
+        title={playing?.title}
+      />
     </>
   )
 }
