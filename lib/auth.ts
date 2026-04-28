@@ -48,6 +48,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.KAKAO_CLIENT_SECRET!,
       // 카카오는 client_secret_post 방식 필수 (에러 E-009 방지)
       client: { token_endpoint_auth_method: "client_secret_post" },
+      // email scope 명시 — 미수신 시 새 user 가 생기지 않도록 signIn 콜백에서 차단
+      authorization: { params: { scope: "account_email profile_nickname profile_image" } },
       allowDangerousEmailAccountLinking: true,
     }),
     Naver({
@@ -104,9 +106,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
+    async signIn({ account, user }) {
+      // OAuth 로그인은 email 이 있어야 함
+      // (카카오 등에서 email scope 미동의 시 새 계정이 생성되는 것을 차단)
+      if (account && account.provider !== "credentials" && account.provider !== "nodemailer") {
+        if (!user?.email) {
+          return "/login?error=NoEmail"
+        }
+      }
+      return true
+    },
     async jwt({ token, user, trigger }) {
-      if (user || trigger === "update" || !token.nickname) {
-        // 첫 로그인, 세션 갱신, 또는 nickname 미설정 시 DB에서 가져오기
+      // 1) 로그인/세션 update 시: 항상 DB 에서 최신 프로필 로드
+      // 2) 그 외: nickname 이 비어있고 마지막 갱신이 60초 이상 지났을 때만 DB 조회
+      //    (가입 직후처럼 nickname 이 영구히 null 상태에서 매 요청마다 DB hit 하는 것을 방지)
+      const now = Math.floor(Date.now() / 1000)
+      const lastFetched = (token.lastFetched as number) ?? 0
+      const stale = !token.nickname && now - lastFetched > 60
+      const shouldRefresh = !!user || trigger === "update" || stale
+
+      if (shouldRefresh) {
         const userId = user?.id || token.sub
         if (userId) {
           const dbUser = await prisma.user.findUnique({
@@ -126,6 +145,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.tierExpiresAt = dbUser.tierExpiresAt
             token.phone = dbUser.phone
           }
+          token.lastFetched = now
         }
       }
       return token

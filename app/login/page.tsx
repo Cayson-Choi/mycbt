@@ -2,7 +2,7 @@
 
 import { signIn, useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 
 function isKakaoInApp() {
@@ -25,6 +25,7 @@ function openExternalBrowser(url: string) {
 export default function LoginPage() {
   const { status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -40,6 +41,12 @@ export default function LoginPage() {
   const [emailSent, setEmailSent] = useState(false)
   const [kakaoAlert, setKakaoAlert] = useState(false)
   const [socialLoading, setSocialLoading] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (searchParams.get('error') === 'NoEmail') {
+      setError('SNS 로그인에 이메일 권한이 필요합니다. 동의 화면에서 이메일 항목을 허용하거나 다른 방법으로 로그인해주세요.')
+    }
+  }, [searchParams])
 
   const handleGoogleLogin = () => {
     if (isKakaoInApp()) {

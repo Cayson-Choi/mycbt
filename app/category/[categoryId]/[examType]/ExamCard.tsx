@@ -113,7 +113,7 @@ export default function ExamCard({
 
       {hasQuestions && (
         <span
-          className={`absolute bottom-3 right-3 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full shadow-sm ${
+          className={`absolute bottom-3 right-3 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full shadow-md ring-1 ring-white/60 ${
             TIER_BADGE[exam.min_tier] ?? TIER_BADGE.FREE
           }`}
         >

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import PremiumSection from './PremiumSection'
 import VideoPlayerModal from './VideoPlayerModal'
-import { hasTierAccess, TIER_LABELS as TIER_LABEL, TIER_TEXT_COLOR as TIER_COLOR } from '@/lib/tier'
+import { hasTierAccess, TIER_LABELS as TIER_LABEL, TIER_TEXT_COLOR as TIER_COLOR, TIER_BADGE_LIGHT as TIER_BADGE } from '@/lib/tier'
 
 export type LandingVideo = {
   id: number
@@ -109,9 +109,9 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
               </div>
             )}
           </div>
-          <p className={`text-sm sm:text-base font-extrabold tracking-wide text-right ${TIER_COLOR[v.minTier] ?? 'text-gray-500'}`}>
+          <span className={`inline-flex items-center self-end px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold tracking-wide ${TIER_BADGE[v.minTier] ?? TIER_BADGE.FREE}`}>
             {TIER_LABEL[v.minTier] ?? v.minTier}
-          </p>
+          </span>
         </div>
       </button>
     </Reveal>
