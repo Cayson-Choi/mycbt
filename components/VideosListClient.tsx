@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import VideoPlayerModal from "./VideoPlayerModal"
-import { hasTierAccess, TIER_LABELS } from "@/lib/tier"
+import { hasTierAccess, TIER_LABELS, TIER_TEXT_COLOR as TIER_COLOR } from "@/lib/tier"
 
 export type VideoListItem = {
   id: number
@@ -17,15 +17,6 @@ export type VideoListItem = {
   ratingText: string | null
   price: number | null
   minTier: string
-}
-
-const TIER_COLOR: Record<string, string> = {
-  FREE: "text-emerald-600 dark:text-emerald-400",
-  BRONZE: "text-amber-700 dark:text-amber-500",
-  SILVER: "text-slate-500 dark:text-slate-300",
-  GOLD: "text-yellow-600 dark:text-yellow-400",
-  PREMIUM: "text-violet-600 dark:text-violet-400",
-  ADMIN: "text-rose-600 dark:text-rose-400",
 }
 
 export default function VideosListClient({ videos }: { videos: VideoListItem[] }) {

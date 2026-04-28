@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import { hasTierAccess, TIER_LABELS } from "@/lib/tier"
+import { hasTierAccess, TIER_LABELS, TIER_BADGE_LIGHT as TIER_BADGE, TIER_TEXT_COLOR as TIER_TEXT } from "@/lib/tier"
 
 const roundColors = [
   "from-blue-500 to-blue-700",
@@ -12,24 +12,6 @@ const roundColors = [
   "from-amber-500 to-amber-700",
   "from-rose-500 to-rose-700",
 ]
-
-const TIER_BADGE: Record<string, string> = {
-  FREE: "bg-emerald-400/90 text-white",
-  BRONZE: "bg-amber-700/90 text-white",
-  SILVER: "bg-slate-300/90 text-slate-800",
-  GOLD: "bg-yellow-400/95 text-yellow-900",
-  PREMIUM: "bg-violet-500/90 text-white",
-  ADMIN: "bg-rose-500/90 text-white",
-}
-
-const TIER_TEXT: Record<string, string> = {
-  FREE: "text-emerald-600",
-  BRONZE: "text-amber-700",
-  SILVER: "text-slate-500",
-  GOLD: "text-yellow-600",
-  PREMIUM: "text-violet-600",
-  ADMIN: "text-rose-600",
-}
 
 export type ExamItem = {
   id: number

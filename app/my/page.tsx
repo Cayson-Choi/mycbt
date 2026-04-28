@@ -3,16 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import AttemptHistoryClient from "./AttemptHistoryClient"
-import { TIER_LABELS } from "@/lib/tier"
-
-const TIER_BADGE_STYLE: Record<string, string> = {
-  FREE: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
-  BRONZE: "bg-amber-700/30 text-amber-300 border-amber-700/40",
-  SILVER: "bg-slate-400/20 text-slate-200 border-slate-400/40",
-  GOLD: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40",
-  PREMIUM: "bg-violet-500/20 text-violet-300 border-violet-500/40",
-  ADMIN: "bg-rose-500/20 text-rose-300 border-rose-500/40",
-}
+import { TIER_LABELS, TIER_BADGE_DARK as TIER_BADGE_STYLE } from "@/lib/tier"
 
 export default async function MyPage() {
   const session = await auth()

@@ -294,6 +294,8 @@ CLOUDINARY_API_SECRET=P1HI0k-tz5-guQFTr5Zw6UVVgWg
 | `scripts/fix-frac-display.py` | 보기의 `\frac` → `\dfrac` 일괄 변환 |
 | `scripts/update-review-xlsx.py` | 문제 검토 오류목록 Excel 생성 (2018~2025 통합) |
 | `scripts/export-exam-to-docx.py` | 시험을 Word(.docx) 시험지로 내보내기 (Pandoc 기반) |
+| `scripts/fetch-cbtbank-batch.py` | cbtbank.kr 다중 시험 일괄 다운로드 + JSON 추출 |
+| `scripts/insert-cbtbank-safety.py` | 산업안전산업기사 cbtbank 14개 시험 DB 일괄 입력 |
 
 ## 시험지 Word(.docx) 출력
 
@@ -339,6 +341,66 @@ python scripts/export-exam-to-docx.py --exam-id 290 --with-explanation  # 해설
 - `🖨️ 시험지 출력` 버튼 (`/admin/questions`)은 브라우저 인쇄 다이얼로그로 직접 출력
   - A4 세로 2단, `@page margin: 12mm 25mm` (좌우 여백 넉넉)
   - 별도 .docx 생성 없이 브라우저 PDF 저장 가능
+
+## 동영상 강의 시스템
+
+랜딩에 카테고리별 영상 그룹(전기기사·전기기능사·승강기기능사) + 카테고리별 영상 모음 페이지(`/videos/{key}`) + 사이트 안 모달 재생 + 학습 메모.
+
+### 핵심 모델
+- `Video` (prisma 스키마) — categoryId, durationText, ratingText, minTier 등
+- `VideoMemo` — userId × videoId 유니크, content TEXT, updatedAt 인덱스
+
+### 등급 기반 접근 제어
+- `Video.minTier` + 사용자 `User.tier` 비교 (`lib/tier.ts`의 `hasTierAccess`)
+- 영상 클릭 시: 미로그인→`/login` 리다이렉트, 등급 부족→잠금 모달 표시
+- 모든 등급 라벨/색상 매핑은 `lib/tier.ts`로 통합 (`TIER_LABELS`, `TIER_TEXT_COLOR`, `TIER_BADGE_LIGHT`, `TIER_BADGE_DARK`)
+
+### 카테고리별 영상 페이지 (`/videos/{key}`)
+- `engineer` / `technician` / `elevator` 3개 카테고리
+- 다크 그라데이션 헤더 + CAYSON 워터마크 + 노이즈 질감
+- 필터(전체/무료/유료), 등급 잠금 모달, 빈 상태 처리
+- 카드 클릭 → `VideoPlayerModal`(메모 자동 로드)
+- middleware 공개 경로: `/videos/`
+
+### 학습 메모 (`/my/memos`)
+- 풀스크린 영상 모달 우측 사이드바에서 800ms debounce 자동 저장
+- API: `GET/PUT/DELETE /api/my/video-memos/[videoId]`, `GET /api/my/video-memos` (목록)
+- 마이페이지에서 "학습 메모" 카드 → 메모 모음 페이지
+- 카드 클릭 시 영상 모달 재생(메모 자동 로드)
+
+### 관리자 동영상 관리 (`/admin/videos`)
+- CRUD + 활성 토글 + 등급 드롭다운 + 썸네일 URL/파일 업로드 탭
+- 카테고리(시험 카테고리 재사용) 매핑
+
+## 마이페이지 (`/my`)
+
+상용 수준 재디자인 — 다크 프로필 히어로 + KPI + 빠른 메뉴 + 시험별 성적 + 응시 기록.
+
+- 프로필 히어로: 이니셜 아바타 + 등급 뱃지(색상별) + 운영자 뱃지 + 가입일
+- KPI 4카드: 총 응시 / 평균 / 최고 / 합격률
+- 빠른 메뉴 4카드: 학습 메모(개수) / 오답노트(개수) / 프로필 / 홈
+- 시험별 성적 + 평균 점수 진행도 바
+- 응시 기록 (`AttemptHistoryClient` 재사용)
+
+## 외부 데이터 임포트 (cbtbank.kr)
+
+산업안전산업기사 등 외부 사이트 기출문제를 일괄 가져와 DB 입력.
+
+### 파이프라인
+1. `scripts/fetch-cbtbank-batch.py` — URL 목록 정의 → HTML 다운로드 → BeautifulSoup 파싱 → JSON 저장 (`data/cbtbank/{code}.json`)
+2. `scripts/insert-cbtbank-safety.py` — JSON 읽어 카테고리별 5과목 배치(20문제씩) + DB 일괄 INSERT
+
+### HTML 구조 (cbtbank.kr)
+- `.exam-box` = 한 문제 컨테이너
+- `.exam-title > .exam-number` = 번호, 본문은 그 형제
+- `.question-choice ol.circlednumbers[correct=N]` = 보기 + 정답
+- `.exam-cpercent` = 정답률, `.reply-comment` = 해설 (CBT문제은행AI 댓글)
+
+### 입력된 시험
+- **산업안전산업기사** 14개 시험 × 100문제 = 1,400문제 (2016~2020)
+- 5과목 (산업재해 예방·인간공학·기계기구·전기화학·건설안전), 각 20문제
+- 회차 매핑: 3월=1회 / 4-5월=2회 / 8월=3회, 2020-06=2회(통합)
+- 등급: 2018 이전=FREE / 2019-2020=BRONZE
 
 ## 문제 검토 현황 (2026-04-06)
 - 전체 2,100문제 AI 검토 완료 → `data/전기기사_문제검토_오류목록.xlsx`
