@@ -75,9 +75,9 @@ function VideoCardFromDb({ v, idx, onPlay }: { v: LandingVideo; idx: number; onP
       <button
         type="button"
         onClick={() => onPlay(v)}
-        className="text-left w-full group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full min-h-[260px] sm:min-h-[280px] bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col"
+        className="text-left w-full group rounded-xl border border-[#C9A84C]/15 dark:border-gray-700 overflow-hidden h-full bg-[#FEFDF5] dark:bg-gray-900 hover:shadow-lg hover:shadow-[#C9A84C]/10 transition-all hover:-translate-y-1 flex flex-col"
       >
-        <div className="flex-[2] min-h-0 bg-[#F5F0E6] dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
+        <div className="aspect-[4/3] w-full bg-[#F5F0E6] dark:bg-gray-800 flex items-center justify-center overflow-hidden relative">
           {v.thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={v.thumbnailUrl} alt={v.title} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105" />
