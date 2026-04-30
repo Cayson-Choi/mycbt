@@ -472,9 +472,9 @@ function WhyCaysonSection() {
 
   return (
     <section className="bg-[#FEFDF5] dark:bg-gray-950 overflow-hidden">
-      <div ref={triggerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div ref={triggerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-12 sm:pb-16">
         <Reveal>
-          <div className="text-center mb-12 sm:mb-16">
+          <div className="text-center mb-6 sm:mb-8">
             <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">Why CAYSON</p>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B2A4A] dark:text-white tracking-tight leading-snug">
               왜 {'CAYSON'.split('').map((ch, i) => (
@@ -485,25 +485,7 @@ function WhyCaysonSection() {
           </div>
         </Reveal>
 
-        {/* 탭 네비 */}
-        <Reveal delay={100}>
-          <div className="flex gap-1.5 sm:gap-2 justify-center flex-wrap mb-10 sm:mb-12">
-            {features.map((ft, i) => (
-              <button
-                key={ft.tab}
-                onClick={() => setActiveFeature(i)}
-                className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 border ${
-                  i === activeFeature
-                    ? `${tabStyle.active} shadow-lg scale-105 border-[#1B2A4A]`
-                    : 'bg-white dark:bg-gray-800 text-[#1B2A4A]/60 dark:text-gray-400 border-[#C9A84C]/20 hover:border-[#C9A84C]/50 hover:text-[#1B2A4A] dark:hover:text-gray-200'
-                }`}
-               
-              >
-                {ft.tab}
-              </button>
-            ))}
-          </div>
-        </Reveal>
+        <div className="mb-4 sm:mb-6" />
 
         {/* 콘텐츠 카드 */}
         <div className={`bg-white dark:bg-gray-900 rounded-2xl border ${tabStyle.border} ring-2 ${tabStyle.ring} shadow-lg shadow-[#C9A84C]/5 transition-all duration-500 overflow-hidden`}>
@@ -547,8 +529,8 @@ function WhyCaysonSection() {
 
         {/* CTA */}
         <Reveal delay={300}>
-          <div className="mt-12 sm:mt-16 text-center">
-            <p className="text-[#1B2A4A]/50 dark:text-gray-400 text-sm mb-5">검증된 문제로 공부하면 합격이 가까워집니다</p>
+          <div className="mt-6 sm:mt-8 text-center">
+            <p className="text-[#1B2A4A]/50 dark:text-gray-400 text-sm mb-3 sm:mb-4">검증된 문제로 공부하면 합격이 가까워집니다</p>
             <Link
               href="/login"
               className="group/btn relative inline-flex items-center gap-2 bg-gradient-to-r from-[#1B2A4A] via-[#2A3F6A] to-[#1B2A4A] text-white font-semibold px-10 py-4 rounded-xl text-sm sm:text-base transition-all hover:shadow-xl hover:shadow-[#1B2A4A]/20 hover:scale-[1.03] active:scale-[0.97] overflow-hidden border border-[#C9A84C]/30"
@@ -784,9 +766,9 @@ export default function LandingContent({ gradeCounts: initialGradeCounts, initia
           SECTION 3 -- 합격 수기
          ════════════════════════════════════════ */}
       <section className="bg-[#FEFDF5] dark:bg-gray-950/50 overflow-hidden border-t border-[#C9A84C]/10 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-4 sm:pb-6">
           <Reveal>
-            <div className="mb-12 sm:mb-16 text-center">
+            <div className="mb-6 sm:mb-8 text-center">
               <p className="text-xs font-semibold text-[#C9A84C] dark:text-[#C9A84C] tracking-[0.25em] uppercase mb-3">
                 Testimonials
               </p>

@@ -70,8 +70,8 @@ export default function PremiumSection() {
               <span className="block">프리미엄 회원만의</span>
               <span className="block bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">특별한 혜택</span>
             </h2>
-            <p className="text-white text-2xl md:text-3xl lg:text-4xl max-w-3xl mx-auto font-semibold tracking-tight mt-3 md:mt-4" style={{ lineHeight: 1.3 }}>
-              합격을 넘어 <span className="text-amber-400" style={{ fontFamily: "'Nanum Pen Script', cursive", fontSize: '2em', letterSpacing: '0.04em', verticalAlign: '-0.15em' }}><span className="stamp-char stamp-char-1">취</span><span className="stamp-char stamp-char-2">업</span></span>까지 <span className="text-white/40">—</span> 끝까지 책임집니다
+            <p className="text-white max-w-4xl mx-auto font-semibold tracking-tight mt-3 md:mt-4 whitespace-nowrap" style={{ lineHeight: 1.3, fontSize: 'clamp(1rem, 4.6vw, 2.25rem)' }}>
+              합격을 넘어 <span className="text-amber-400" style={{ fontFamily: "'Nanum Pen Script', cursive", fontSize: '2em', letterSpacing: '0.04em', verticalAlign: '-0.15em' }}><span className="stamp-char stamp-char-1">취</span><span className="stamp-char stamp-char-2">업</span></span>까지 책임집니다.
             </p>
           </div>
         </Reveal>
