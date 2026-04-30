@@ -798,6 +798,7 @@ setTimeout(function() {
                                 height={160}
                                 className="max-w-xs max-h-40 object-contain rounded border border-gray-300 dark:border-gray-600"
                                 loading="lazy"
+                                unoptimized
                               />
                             </div>
                           )}
@@ -807,27 +808,45 @@ setTimeout(function() {
                                 ⚠️ 정답불명 (0번)
                               </div>
                             )}
-                            {[1, 2, 3, 4].map((n) => {
-                              const hasImage = q[`choice_${n}_image` as keyof typeof q]
-                              return (
-                                <div key={n} className={`flex ${hasImage ? 'items-start' : 'items-center'} gap-2`}>
-                                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold flex-shrink-0 ${
-                                    q.answer === n
-                                      ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                                      : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
-                                  } ${hasImage ? 'mt-1' : ''}`}>{n}</span>
-                                  {hasImage ? (
-                                    <img
-                                      src={hasImage as string}
-                                      alt={`선택지 ${n}`}
-                                      className="max-h-32 max-w-xs object-contain rounded border border-gray-200 dark:border-gray-700 bg-white"
-                                    />
-                                  ) : (
-                                    <MathText text={q[`choice_${n}` as keyof typeof q] as string} />
-                                  )}
-                                </div>
-                              )
-                            })}
+                            {(q as any).question_type === "CHOICE" ? (
+                              [1, 2, 3, 4].map((n) => {
+                                const hasImage = q[`choice_${n}_image` as keyof typeof q]
+                                return (
+                                  <div key={n} className={`flex ${hasImage ? 'items-start' : 'items-center'} gap-2`}>
+                                    <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold flex-shrink-0 ${
+                                      q.answer === n
+                                        ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
+                                        : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+                                    } ${hasImage ? 'mt-1' : ''}`}>{n}</span>
+                                    {hasImage ? (
+                                      <img
+                                        src={hasImage as string}
+                                        alt={`선택지 ${n}`}
+                                        className="max-h-32 max-w-xs object-contain rounded border border-gray-200 dark:border-gray-700 bg-white"
+                                      />
+                                    ) : (
+                                      <MathText text={q[`choice_${n}` as keyof typeof q] as string} />
+                                    )}
+                                  </div>
+                                )
+                              })
+                            ) : (
+                              <div className="space-y-1.5 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/50 rounded-md px-3 py-2">
+                                <div className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 tracking-wider uppercase">참고 정답</div>
+                                {(q as any).answer_text ? (
+                                  <MathText text={(q as any).answer_text as string} className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap" />
+                                ) : (
+                                  <span className="text-xs text-gray-500 italic">(정답 미입력)</span>
+                                )}
+                                {(q as any).answer_text_image && (
+                                  <img
+                                    src={(q as any).answer_text_image as string}
+                                    alt="참고 정답 이미지"
+                                    className="mt-2 max-h-40 max-w-md object-contain rounded border border-emerald-300 dark:border-emerald-700 bg-white"
+                                  />
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="flex gap-2 flex-shrink-0">

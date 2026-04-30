@@ -30,7 +30,6 @@ export async function GET() {
       industrial: !hiddenCards.includes("industrial"),
       engineer: !hiddenCards.includes("engineer"),
       master: !hiddenCards.includes("master"),
-      public: !hiddenCards.includes("public"),
       ncs: !hiddenCards.includes("ncs"),
       etc: !hiddenCards.includes("etc"),
     }
@@ -58,7 +57,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { cardId, visible } = body as { cardId: string; visible: boolean }
 
-    const validIds = ["basic", "technician", "industrial", "engineer", "master", "public", "ncs", "etc"]
+    const validIds = ["basic", "technician", "industrial", "engineer", "master", "ncs", "etc"]
     if (!validIds.includes(cardId) || typeof visible !== "boolean") {
       return NextResponse.json({ error: "잘못된 요청" }, { status: 400 })
     }

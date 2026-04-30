@@ -83,6 +83,8 @@ function sanitizeHtml(html: string): string {
 }
 
 export default memo(function MathText({ text, className = '' }: MathTextProps) {
+  // null/undefined 가드 — 단답형·주관식의 빈 보기 등
+  if (!text) return null
   // If text has no $, no katex needed — process synchronously
   const needsKatex = text.includes('$')
 

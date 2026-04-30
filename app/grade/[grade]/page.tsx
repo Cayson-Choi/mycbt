@@ -11,6 +11,7 @@ const gradeMap: Record<string, { dbGrade: string; title: string; description: st
   industrial: { dbGrade: '산업기사', title: '산업기사', description: '전문 기술인의 시작, 산업 현장의 핵심 인력' },
   engineer: { dbGrade: '기사', title: '기사', description: '엔지니어의 필수 자격, 전문성을 증명하세요' },
   master: { dbGrade: '기능장', title: '기능장', description: '최고 등급 자격증에 도전하세요' },
+  ncs: { dbGrade: '과정평가형', title: '과정평가형', description: 'NCS 기반 과정평가형 교육훈련 자격 취득' },
   etc: { dbGrade: '기타', title: '공식시험', description: '실전 환경 그대로, 공식 모의고사' },
 }
 

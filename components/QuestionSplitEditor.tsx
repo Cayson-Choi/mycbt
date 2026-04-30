@@ -1475,13 +1475,12 @@ function PreviewPanel({
                 </div>
               )}
 
-              {/* Choices or Subjective indicator */}
+              {/* 학생 시험 화면 그대로 — 정답 표시·참고 정답 노출 안 됨 */}
               {formData.question_type === 'CHOICE' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {[1, 2, 3, 4].map((choice) => {
                     const choiceText = formData[`choice_${choice}` as keyof typeof formData]
                     if (!choiceText) return null
-                    const isCorrect = formData.answer === choice
                     return (
                       <div
                         key={choice}
@@ -1491,14 +1490,8 @@ function PreviewPanel({
                           gap: '12px',
                           padding: '14px',
                           borderRadius: '8px',
-                          border: `2px solid ${
-                            isCorrect
-                              ? isDark ? '#22c55e' : '#16a34a'
-                              : isDark ? '#374151' : '#e5e7eb'
-                          }`,
-                          backgroundColor: isCorrect
-                            ? isDark ? 'rgba(34, 197, 94, 0.1)' : '#f0fdf4'
-                            : isDark ? 'rgba(55, 65, 81, 0.3)' : '#ffffff',
+                          border: `2px solid ${isDark ? '#374151' : '#e5e7eb'}`,
+                          backgroundColor: isDark ? 'rgba(55, 65, 81, 0.3)' : '#ffffff',
                         }}
                       >
                         <span
@@ -1512,12 +1505,8 @@ function PreviewPanel({
                             justifyContent: 'center',
                             fontSize: '13px',
                             fontWeight: 700,
-                            backgroundColor: isCorrect
-                              ? isDark ? '#ffffff' : '#111827'
-                              : isDark ? '#4b5563' : '#e5e7eb',
-                            color: isCorrect
-                              ? isDark ? '#111827' : '#ffffff'
-                              : isDark ? '#d1d5db' : '#4b5563',
+                            backgroundColor: isDark ? '#4b5563' : '#e5e7eb',
+                            color: isDark ? '#d1d5db' : '#4b5563',
                           }}
                         >
                           {choice}
@@ -1538,95 +1527,70 @@ function PreviewPanel({
                           ) : (
                             <MathText text={String(choiceText)} />
                           )}
-                          {isCorrect && (
-                            <span
-                              style={{
-                                marginLeft: '8px',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                color: isDark ? '#4ade80' : '#16a34a',
-                              }}
-                            >
-                              (정답)
-                            </span>
-                          )}
                         </span>
                       </div>
                     )
                   })}
                 </div>
               ) : (
-                <div
-                  style={{
-                    padding: '16px',
-                    borderRadius: '8px',
-                    border: `2px dashed ${isDark ? '#4b5563' : '#d1d5db'}`,
-                    backgroundColor: isDark ? 'rgba(55, 65, 81, 0.3)' : '#f9fafb',
-                    textAlign: 'center',
-                  }}
-                >
-                  <div style={{
-                    fontSize: '14px',
-                    color: isDark ? '#9ca3af' : '#6b7280',
-                    marginBottom: formData.answer_text ? '8px' : 0,
-                  }}>
-                    {formData.question_type === 'SHORT_ANSWER' ? '단답형 주관식' : '서술형 주관식'}
-                    {' '} - 학생이 직접 답안을 작성합니다
-                  </div>
-                  {formData.answer_text && (
-                    <div style={{
-                      fontSize: '13px',
-                      color: isDark ? '#d1d5db' : '#374151',
-                      padding: '8px',
-                      borderRadius: '6px',
-                      backgroundColor: isDark ? 'rgba(34, 197, 94, 0.1)' : '#f0fdf4',
-                      border: `1px solid ${isDark ? '#22c55e40' : '#bbf7d0'}`,
-                      textAlign: 'left',
-                      whiteSpace: 'pre-wrap',
-                    }}>
-                      <span style={{ fontSize: '11px', fontWeight: 600, color: isDark ? '#4ade80' : '#16a34a' }}>
-                        참고 정답:
-                      </span>{' '}
-                      {formData.answer_text}
-                    </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {formData.question_type === 'SHORT_ANSWER' ? (
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="답을 입력하세요"
+                      style={{
+                        width: '100%',
+                        padding: '14px',
+                        fontSize: '15px',
+                        border: `2px solid ${isDark ? '#374151' : '#e5e7eb'}`,
+                        borderRadius: '8px',
+                        backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                        color: isDark ? '#9ca3af' : '#9ca3af',
+                      }}
+                    />
+                  ) : (
+                    <textarea
+                      disabled
+                      placeholder="답안을 작성하세요"
+                      rows={5}
+                      style={{
+                        width: '100%',
+                        padding: '14px',
+                        fontSize: '15px',
+                        border: `2px solid ${isDark ? '#374151' : '#e5e7eb'}`,
+                        borderRadius: '8px',
+                        backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                        color: isDark ? '#9ca3af' : '#9ca3af',
+                        resize: 'none',
+                        fontFamily: 'inherit',
+                      }}
+                    />
                   )}
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '8px 12px',
+                      fontSize: '14px',
+                      borderRadius: '8px',
+                      backgroundColor: isDark ? 'rgba(37, 99, 235, 0.2)' : '#eff6ff',
+                      color: isDark ? '#93c5fd' : '#1d4ed8',
+                      cursor: 'not-allowed',
+                      opacity: 0.85,
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    이미지 첨부 (풀이·손글씨)
+                  </div>
                 </div>
               )}
 
-              {/* Explanation */}
-              {formData.explanation && (
-                <div
-                  style={{
-                    marginTop: '16px',
-                    padding: '14px',
-                    borderRadius: '8px',
-                    border: `1px solid ${isDark ? '#1e3a5f' : '#bfdbfe'}`,
-                    backgroundColor: isDark ? 'rgba(37, 99, 235, 0.1)' : '#eff6ff',
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      marginBottom: '6px',
-                      color: isDark ? '#93c5fd' : '#1d4ed8',
-                    }}
-                  >
-                    해설
-                  </p>
-                  <div
-                    style={{
-                      fontSize: '14px',
-                      lineHeight: '1.6',
-                      color: isDark ? '#d1d5db' : '#374151',
-                      whiteSpace: 'pre-wrap',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    <MathText text={formData.explanation} />
-                  </div>
-                </div>
-              )}
+              {/* 해설은 시험 중 학생이 보지 않으므로 미리보기에서 제외 */}
             </div>
           </div>
         </div>

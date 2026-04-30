@@ -48,6 +48,7 @@ function ExamTimer({ expiresAt, onExpire }: { expiresAt: string; onExpire: () =>
 const QuestionCard = memo(function QuestionCard({
   question,
   index,
+  examName,
   selectedAnswer,
   answerText,
   answerImage,
@@ -58,6 +59,7 @@ const QuestionCard = memo(function QuestionCard({
 }: {
   question: any
   index: number
+  examName: string
   selectedAnswer: number | undefined
   answerText: string | undefined
   answerImage: string | undefined
@@ -69,28 +71,46 @@ const QuestionCard = memo(function QuestionCard({
   const questionType = question.question_type || 'MULTIPLE_CHOICE'
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 border dark:border-gray-700">
-      <div className="flex items-center gap-2 mb-3">
-        <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/40 rounded-full font-bold text-sm text-blue-700 dark:text-blue-300">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 sm:p-8 border border-gray-200 dark:border-gray-700">
+      <div className="flex items-start gap-4">
+        {/* 번호 뱃지 (큰 원형) */}
+        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-lg font-bold text-blue-700 dark:text-blue-300">
           {index + 1}
-        </span>
-        <span className="text-sm text-gray-600 dark:text-gray-400">{question.subject_name}</span>
-        {questionType !== 'MULTIPLE_CHOICE' && (
-          <span className="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-medium">
-            {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
-          </span>
-        )}
-        {showPoints && (
-          <span className="ml-auto text-xs font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full">
-            {question.points || 1}점
-          </span>
-        )}
-      </div>
-      <div>
-        <MathText
-          text={question.question_text}
-          className="text-sm sm:text-base font-medium mb-4 block dark:text-white"
-        />
+        </div>
+        <div className="flex-1 min-w-0">
+          {/* 상단 뱃지 row: 시험명 + 과목 + (단답/서술) + (점수) + 코드 */}
+          <div className="flex items-center gap-1.5 flex-wrap mb-2">
+            <span className="text-[11px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
+              {examName}
+            </span>
+            <span className="text-[11px] px-2 py-0.5 rounded bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">
+              {question.subject_name}
+            </span>
+            {questionType !== 'MULTIPLE_CHOICE' && (
+              <span className="text-[11px] px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-medium">
+                {questionType === 'SHORT_ANSWER' ? '단답형' : '서술형'}
+              </span>
+            )}
+            {question.question_code && (
+              <span className="text-[11px] px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-mono">
+                {question.question_code}
+              </span>
+            )}
+            {showPoints && (
+              <span className="ml-auto text-[11px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded">
+                {question.points || 1}점
+              </span>
+            )}
+          </div>
+          {/* 과목명 (별도 줄) */}
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+            {question.subject_name}
+          </div>
+          {/* 문제 본문 */}
+          <MathText
+            text={question.question_text}
+            className="text-base sm:text-lg font-medium mb-4 block text-gray-900 dark:text-white whitespace-pre-wrap"
+          />
 
           {question.image_url && (
             <div className="mb-4">
@@ -101,19 +121,20 @@ const QuestionCard = memo(function QuestionCard({
                 height={280}
                 className="max-w-[280px] sm:max-w-sm max-h-[200px] sm:max-h-[280px] w-auto h-auto rounded border border-gray-200"
                 loading="lazy"
+                unoptimized
               />
             </div>
           )}
 
           {questionType === 'MULTIPLE_CHOICE' ? (
-            <div className="space-y-3">
+            <div className="flex flex-col gap-2.5">
               {[1, 2, 3, 4].map((choice) => (
                 <label
                   key={choice}
-                  className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer transition-colors ${
+                  className={`flex items-start gap-3 p-3.5 border-2 rounded-lg cursor-pointer transition-colors ${
                     selectedAnswer === choice
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800/50 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
                   <input
@@ -124,7 +145,7 @@ const QuestionCard = memo(function QuestionCard({
                     className="sr-only"
                   />
                   <span
-                    className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+                    className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors ${
                       selectedAnswer === choice
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
@@ -132,7 +153,7 @@ const QuestionCard = memo(function QuestionCard({
                   >
                     {choice}
                   </span>
-                  <span className="flex-1 text-sm sm:text-base dark:text-gray-200">
+                  <span className="flex-1 text-sm sm:text-[15px] text-gray-900 dark:text-gray-200">
                     {question[`choice_${choice}_image` as keyof PaperQuestion] ? (
                       <img
                         src={question[`choice_${choice}_image` as keyof PaperQuestion] as string}
@@ -172,6 +193,7 @@ const QuestionCard = memo(function QuestionCard({
               onChange={onAnswerImage}
             />
           )}
+        </div>
       </div>
     </div>
   )
@@ -603,6 +625,7 @@ export default function ExamAttemptClient({
                 key={question.question_id}
                 question={question}
                 index={index}
+                examName={paper.exam_name}
                 selectedAnswer={answers.get(question.question_id)}
                 answerText={textAnswers.get(question.question_id)}
                 answerImage={imageAnswers.get(question.question_id)}

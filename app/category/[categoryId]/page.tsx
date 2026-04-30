@@ -12,6 +12,7 @@ const GRADE_TO_SLUG: Record<string, { slug: string; label: string }> = {
   "산업기사": { slug: "industrial", label: "산업기사" },
   "기사": { slug: "engineer", label: "기사" },
   "기능장": { slug: "master", label: "기능장" },
+  "과정평가형": { slug: "ncs", label: "과정평가형" },
   "기타": { slug: "etc", label: "공식시험" },
 }
 

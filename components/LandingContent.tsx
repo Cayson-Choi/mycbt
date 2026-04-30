@@ -302,30 +302,8 @@ const grades = [
     ),
   },
   {
-    id: 'public', label: '공기업', count: 0,
-    badge: '준비중',
-    cta: '한국전력공사 등\n공기업 채용 대비',
-    cardBg: 'bg-gradient-to-br from-[#2d3548] to-[#3f4860]', badgeBg: 'bg-gray-500',
-    icon: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full">
-        <defs>
-          <linearGradient id="g5a" x1="20" y1="18" x2="60" y2="68"><stop offset="0%" stopColor="#b0bec5" /><stop offset="100%" stopColor="#607d8b" /></linearGradient>
-        </defs>
-        <ellipse cx="40" cy="68" rx="18" ry="3" fill="#b0bec5" opacity="0.4" />
-        <rect x="22" y="30" width="36" height="34" rx="2" fill="url(#g5a)" />
-        <rect x="22" y="30" width="36" height="6" fill="#546e7a" rx="2" />
-        <path d="M40 16l-22 14h44L40 16z" fill="#78909c" />
-        <path d="M40 16l-22 14h44" fill="none" stroke="#546e7a" strokeWidth="1.5" />
-        <circle cx="40" cy="20" r="2" fill="#cfd8dc" />
-        {[[27,38],[35,38],[43,38],[51,38],[27,48],[35,48],[43,48],[51,48]].map(([x,y],i) => <rect key={i} x={x} y={y} width="5" height="5" rx="0.5" fill="#eceff1" />)}
-        <rect x="36" y="56" width="8" height="8" rx="1" fill="#90a4ae" />
-        <rect x="36" y="56" width="8" height="4" rx="1" fill="#b0bec5" />
-      </svg>
-    ),
-  },
-  {
     id: 'ncs', label: '과정평가형', count: 0,
-    badge: '준비중',
+    badge: '2개 자격증',
     cta: 'NCS 과정평가형\n교육훈련 자격 취득',
     cardBg: 'bg-gradient-to-br from-[#5c1f3d] to-[#7d2f55]', badgeBg: 'bg-gray-500',
     icon: (
@@ -555,7 +533,6 @@ const gradeDbMap: Record<string, string> = {
   industrial: '산업기사',
   engineer: '기사',
   master: '기능장',
-  public: '공기업',
   ncs: '과정평가형',
   etc: '기타',
 }
