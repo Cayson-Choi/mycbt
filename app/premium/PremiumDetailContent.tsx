@@ -69,13 +69,14 @@ function GoldOrnament({ className = '' }: { className?: string }) {
 }
 
 /* ─── Tier 데이터 ─── */
-const TIERS = [
+type Tier = { key: string; name: string; en: string; color: string; recommended?: boolean }
+const TIERS: readonly Tier[] = [
   { key: 'FREE',    name: '무료',     en: 'Free',    color: '#9c9c9c' },
   { key: 'BRONZE',  name: '브론즈',   en: 'Bronze',  color: '#c98a5e' },
   { key: 'SILVER',  name: '실버',     en: 'Silver',  color: '#cfd2d6' },
   { key: 'GOLD',    name: '골드',     en: 'Gold',    color: '#e6c266' },
   { key: 'PREMIUM', name: '프리미엄', en: 'Premium', color: C.gold, recommended: true },
-] as const
+]
 
 /* values 인덱스: [FREE, BRONZE, SILVER, GOLD, PREMIUM]
  * '○' = 포함, '×' = 미포함, 문자열 = 세부 내용
