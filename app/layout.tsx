@@ -47,6 +47,13 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
+        {/* Nanum Pen Script: 강조용 손글씨 폰트 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap"
+        />
         {/* KaTeX CSS: 비동기 로드 (수학 표기가 없는 페이지에서 렌더 블로킹 방지) */}
         <link
           rel="preload"

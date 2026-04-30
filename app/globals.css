@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'HanaHandwriting';
+  src: url('/fonts/HanaHandwriting.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -158,11 +164,73 @@ body {
   50.01%, 100% { transform: translateX(-100%); }
 }
 
+/* CTA 버튼 내부 출렁임 — 빛이 좌우로 슬로싱(sloshing)하며 흐름 */
+@keyframes ctaSloshA {
+  0%, 100% { transform: translateX(-35%) translateY(8%); }
+  50%      { transform: translateX(35%)  translateY(-8%); }
+}
+@keyframes ctaSloshB {
+  0%, 100% { transform: translateX(40%)  translateY(-6%); }
+  50%      { transform: translateX(-40%) translateY(10%); }
+}
+@keyframes ctaSloshC {
+  0%, 100% { transform: translateX(0%)   translateY(-12%) scale(1); }
+  50%      { transform: translateX(0%)   translateY(12%)  scale(1.15); }
+}
+.cta-slosh-a {
+  animation: ctaSloshA 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  background: radial-gradient(closest-side, rgba(255,255,255,0.9), rgba(255,255,255,0) 70%);
+}
+.cta-slosh-b {
+  animation: ctaSloshB 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  background: radial-gradient(closest-side, rgba(255,255,255,0.7), rgba(255,255,255,0) 70%);
+}
+.cta-slosh-c {
+  animation: ctaSloshC 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  background: radial-gradient(closest-side, rgba(255,236,170,0.85), rgba(255,236,170,0) 75%);
+}
+
+/* 도장 찍기 애니메이션 — "취업" 글자가 위에서 쿵 떨어지듯 박힘 */
+@keyframes stampDrop {
+  0%, 4%   { opacity: 0; transform: scale(2.6) rotate(-6deg); filter: blur(6px); }
+  10%      { opacity: 1; transform: scale(0.9) rotate(0deg); filter: blur(0); }   /* 임팩트 */
+  15%      { transform: scale(1.08) rotate(0deg); }                                /* 살짝 반동 */
+  20%      { transform: scale(1) rotate(0deg); }                                   /* 안정 */
+  78%      { opacity: 1; transform: scale(1) rotate(0deg); filter: blur(0); }      /* 유지 */
+  88%, 100% { opacity: 0; transform: scale(1) rotate(0deg); filter: blur(0); }     /* 소멸 후 짧게 대기 */
+}
+
+@keyframes stampDropDelayed {
+  0%, 22%  { opacity: 0; transform: scale(2.6) rotate(-6deg); filter: blur(6px); } /* 첫 글자보다 늦게 시작 */
+  28%      { opacity: 1; transform: scale(0.9) rotate(0deg); filter: blur(0); }
+  33%      { transform: scale(1.08) rotate(0deg); }
+  38%      { transform: scale(1) rotate(0deg); }
+  78%      { opacity: 1; transform: scale(1) rotate(0deg); filter: blur(0); }
+  88%, 100% { opacity: 0; transform: scale(1) rotate(0deg); filter: blur(0); }
+}
+
+.stamp-char {
+  display: inline-block;
+  transform-origin: 50% 60%;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.stamp-char-1 { animation-name: stampDrop; }
+.stamp-char-2 { animation-name: stampDropDelayed; }
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .float-animation,
   .float-animation-delay,
   .float-animation-delay2 {
     animation: none;
+  }
+  .stamp-char-1,
+  .stamp-char-2 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }

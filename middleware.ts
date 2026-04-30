@@ -11,7 +11,7 @@ const PUBLIC_API_PREFIXES = [
 ]
 
 // 공개 페이지
-const PUBLIC_PAGES = new Set(["/", "/login", "/complete-profile"])
+const PUBLIC_PAGES = new Set(["/", "/login", "/complete-profile", "/premium"])
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
