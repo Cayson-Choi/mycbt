@@ -56,5 +56,8 @@ data/ocr-images-*/
 data/diagram-images/
 data/diagram-originals/
 data/exports/
+data/func-pages/
+data/func-crops/
+data/func-db-dump/
 test_*.png
 hwp_mcp_server.log

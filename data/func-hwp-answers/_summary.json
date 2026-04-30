@@ -1,0 +1,260 @@
+[
+  {
+    "year": 2016,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      46
+    ]
+  },
+  {
+    "year": 2016,
+    "round": 2,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      52
+    ]
+  },
+  {
+    "year": 2016,
+    "round": 3,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2016,
+    "round": 4,
+    "count": 60,
+    "answer_missing": 2,
+    "missing_q": [
+      44,
+      57
+    ]
+  },
+  {
+    "year": 2017,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      60
+    ]
+  },
+  {
+    "year": 2017,
+    "round": 3,
+    "count": 59,
+    "answer_missing": 2,
+    "missing_q": [
+      48,
+      52
+    ]
+  },
+  {
+    "year": 2017,
+    "round": 4,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      50
+    ]
+  },
+  {
+    "year": 2018,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 3,
+    "missing_q": [
+      42,
+      43,
+      51
+    ]
+  },
+  {
+    "year": 2018,
+    "round": 2,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2018,
+    "round": 3,
+    "count": 60,
+    "answer_missing": 2,
+    "missing_q": [
+      46,
+      59
+    ]
+  },
+  {
+    "year": 2019,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 6,
+    "missing_q": [
+      8,
+      15,
+      17,
+      44,
+      46,
+      51
+    ]
+  },
+  {
+    "year": 2019,
+    "round": 2,
+    "count": 60,
+    "answer_missing": 2,
+    "missing_q": [
+      11,
+      57
+    ]
+  },
+  {
+    "year": 2019,
+    "round": 3,
+    "count": 60,
+    "answer_missing": 2,
+    "missing_q": [
+      45,
+      54
+    ]
+  },
+  {
+    "year": 2019,
+    "round": 4,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2020,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      42
+    ]
+  },
+  {
+    "year": 2020,
+    "round": 2,
+    "count": 60,
+    "answer_missing": 2,
+    "missing_q": [
+      41,
+      45
+    ]
+  },
+  {
+    "year": 2020,
+    "round": 3,
+    "count": 60,
+    "answer_missing": 2,
+    "missing_q": [
+      5,
+      13
+    ]
+  },
+  {
+    "year": 2020,
+    "round": 4,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2021,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2021,
+    "round": 2,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2021,
+    "round": 3,
+    "count": 60,
+    "answer_missing": 2,
+    "missing_q": [
+      1,
+      2
+    ]
+  },
+  {
+    "year": 2021,
+    "round": 4,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      15
+    ]
+  },
+  {
+    "year": 2022,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2022,
+    "round": 2,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      27
+    ]
+  },
+  {
+    "year": 2022,
+    "round": 3,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2022,
+    "round": 4,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      10
+    ]
+  },
+  {
+    "year": 2023,
+    "round": 1,
+    "count": 60,
+    "answer_missing": 0,
+    "missing_q": []
+  },
+  {
+    "year": 2023,
+    "round": 2,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      42
+    ]
+  },
+  {
+    "year": 2023,
+    "round": 3,
+    "count": 60,
+    "answer_missing": 1,
+    "missing_q": [
+      45
+    ]
+  }
+]
